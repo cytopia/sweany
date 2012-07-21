@@ -1,0 +1,15 @@
+14.06.2012
+
+1.) jedes layout braucht eigenen controller
+-------------------------------------------
+Wir nutzen ja ein layout fuer viele Seiten,
+da waer es praktisch wenn wir sachen, die auf vielen seiten zu sehen sein sollen
+(wie beispielsweise das "show my messages OR login link" rechts oben)
+direkt ins template zu packen!
+
+Da das beispiel oben, aber durch einen block gerendert wird, muss das layout an sich auch
+in der lage sein, blocks zu attachen, damit das dann ganz bequem geht und wir das nicht fuer
+jede einzelne Seite machen muessen.
+Dafuer braucht es aber einen controller, welcher dem layout die funktion gibt.
+Hierzu muessen wir ma nachdenken, wie wir das sauber einbauen, ohne das der rest
+uns um die ohren fliegt

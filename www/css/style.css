@@ -1,0 +1,307 @@
+/**************************************************************************************************************
+ *
+ *    FRAMEWORK 
+ *
+ **************************************************************************************************************/
+/* For ajax.js */
+.livesearchResultRows{
+	color:#00A9FD;
+}
+.livesearchResultRows:hover{
+	cursor:pointer;
+	cursor:hand;
+	color:#FF6903; 	
+}
+
+/**************************************************************************************************************
+ *
+ *     H T M L 
+ *
+ **************************************************************************************************************/
+
+/*************************** BASICS ***************************/
+*{
+padding:0px;
+}
+
+body{
+	padding:0px;
+	margin:0px;
+	font: normal 0.7em halvetica, arial, sans-serif;
+	color:#000;
+	background-color:#f8f8f8;
+	text-shadow: rgba(0, 0, 0, .01) 0 0 1px
+	
+}
+h1, h2, h3, h4, h5, h6, p, blockquote {
+	margin: 0;
+	padding:0.1em 0.5em;
+	margin:1em 0.5em;
+	border-bottom:1px dotted #888;
+}
+h1 {
+	color: #333;
+	font-size: 1.7em;
+	
+
+}
+h2 {
+	color: #555;
+	font-size: 1em;
+}
+h3 {
+	color: #777;
+	font-size: 0.7em;
+}
+p {
+	margin:1.5em 3em;
+	color: #777;
+	font-size:1.2em;
+	border:none;
+}
+td, th {
+	font-size:1em;
+	text-align:left;
+	vertical-align:middle;
+	padding:0.5em;
+}
+
+hr {
+	border-bottom:1px dotted #888;
+}
+
+/*************************** LINKS ***************************/
+
+a			{ text-decoration: none; font-size:1em }
+a:link		{ color: #08A; }
+a:visited	{ color: #5A8; }
+a:active	{ color: #777; }
+a:hover		{ color: #777; border-bottom:1px solid red}
+
+/*************************** fake links Classes ***************************/
+.fakeOnClickLink  {
+	display: block;
+	color: #00A9FD;
+}
+.fakeOnClickLink:hover {
+	cursor:pointer;
+	cursor:hand;
+	color: #FF6903; 
+}
+
+
+
+/*************************** FORMS - GENERAL ****************************/
+label {
+	float:left;
+	width:15em;
+	margin-right:0.7em;
+	padding-top:0.3em;
+	text-align:right;
+	font-weight:bold;
+}
+legend {
+	padding: 0.2em 0.5em;
+	border:1px solid #BBB;
+	font-size:1.2em;
+	text-align:left;
+	margin-left:1em;
+	color:#777;
+}
+fieldset {
+	margin:1.5em 5em;
+	padding:2em;
+	border:1px solid #BBB;
+}
+
+	
+/*************************** FORMS - FIELDS ****************************/
+input {background-color:#333;padding:0.1em 0.3em;width:15em;color: #FFF; height:1.5em;border: solid 1px #333;}
+
+input[type=text]:hover {
+	border: solid 1px #FF6903;
+
+}
+input[type=password]:hover {
+	border: solid 1px #FF6903;
+}
+input[type=button] {
+	height:1.8em;
+	background:#333;
+	border-top:1px solid red;
+}
+input[type=button]:hover {
+	background:#00A9FD;
+	border: solid 1px #2F2F2F;
+}
+input[type=submit] {
+	height:1.8em;
+	background:#333;
+	border-top:1px solid red;
+}
+input[type=submit]:hover {
+	background:#00A9FD;
+	border: solid 1px #2F2F2F;
+}
+input[type=reset] {
+	height:1.8em;
+	background:#333;
+	border-top:1px solid red;
+}
+input[type=reset]:hover {
+	background:#00A9FD;
+	border: solid 1px #2F2F2F;
+}
+
+select {
+
+	height:1.8em;
+	background-color:#333;
+	border: solid 1px #2F2F2F;
+	color: #FFF;
+}
+select option {
+}
+
+
+
+img 
+{
+border:none;
+
+}
+
+/**************************************************************************************************************
+ *
+ *    E L E M E N T S
+ *
+ **************************************************************************************************************/
+
+ 
+
+/*************************** fake hover box link (put border around) ***************************/
+.borderMe {
+	border:1px dotted #2F2F2F; 
+ 
+}
+.borderMe:hover {
+	cursor:pointer;
+	cursor:hand;
+	border: solid 1px #F00; 	
+}
+
+.txthighlight
+{
+font-weight:bold;
+color:black;
+}
+
+
+/**************************************************************************************************************
+ *
+ *    F O R U M
+ *
+ **************************************************************************************************************/
+/*
+forumPostTitle forumPostBody
+forumNavi
+forumUsername
+forumForumLink
+forumCategoryName
+forumEntryLink
+forumEntryime
+*/
+
+h1.forum
+{
+border:none;
+}
+
+.forumPostTitle
+{	
+
+}
+
+.forumThreadTitle
+{
+font-weight:bold;
+color:black;
+margin:1em 0.2em;
+padding-bottom:0.3em;
+
+border-bottom:1px dotted black;
+}
+
+.forumThreadTitleLink
+{
+}
+
+.forum pre
+{
+	width:70%
+}
+
+.forumPostBody
+{
+margin:1em 0.2em;
+}
+
+h1.forum{
+	margin: 0;
+	color:	#fff;
+	padding:10px;
+	color: 	#333;
+	font-size:16.5px;
+}
+table.forum p
+{
+color:#333;
+}
+
+table.forum {
+	font-size: 10pt;
+	color: #	;
+	width:100%;
+	
+}
+
+table.forum  th{
+	background-color:#333;
+	font-size: 9pt;
+	text-align: left;
+	color:#FFF;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:3px;
+	padding-bottom:3px;
+}
+table.forum td{
+	background-color:#EEE;
+	font-weight: normal;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:1em;
+	padding-bottom:3px;
+	font-size: 9pt;
+	vertical-align:top;	
+}
+
+/* Styles */
+.threadUsername {
+	color:red;	
+	font-weight:bold;
+	font-size:16px;
+}
+
+
+/* hover Boxes */
+.bbCodeIcons {
+	/*border: solid 1px #FDFDFD;
+	padding-right:2px;
+	float:left;*/
+}
+.bbCodeIcons:hover {
+	/*cursor:pointer;
+	cursor:hand;
+	border: solid 1px #FF6903;*/ 	
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<form_legend>Kontakt Formular</form_legend>
+	<form_note>Bitte fülle alle Felder aus und wähle einen passenden Betreff.</form_note>
+	<form_label_name>Name</form_label_name>
+	<form_label_email>Email</form_label_email>
+	<form_label_subject>Betreff</form_label_subject>
+	<form_label_message>Nachricht</form_label_message>
+	<form_input_subject>- Bitte auswählen -</form_input_subject>
+	<form_btn_submit>Senden</form_btn_submit>
+	<form_err_name>Gib deinen Namen an</form_err_name>
+	<form_err_email>ungültige Email Adresse</form_err_email>
+	<form_err_subject>ungültige Auswahl</form_err_subject>
+	<form_err_message>Bitte schreibe eine Nachricht</form_err_message>
+</root>

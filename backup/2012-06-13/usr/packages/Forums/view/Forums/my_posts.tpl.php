@@ -1,0 +1,1 @@
+<?php echo $blocks['myLatestPosts']['content']; ?>

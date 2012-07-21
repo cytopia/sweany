@@ -1,0 +1,1 @@
+<?phpclass ContactBlockModel extends BlockModel{	protected $tables	= array('Contact');}?>

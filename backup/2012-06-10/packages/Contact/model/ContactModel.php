@@ -1,0 +1,1 @@
+<?phpclass ContactModel extends ControllerModel{	protected $tables	= array('Contact');	protected $package	= 'Contact';}?>

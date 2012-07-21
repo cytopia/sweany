@@ -1,0 +1,1 @@
+<?phpclass LayoutController extends BaseController{	public function __construct()	{		parent::__construct();		// default Layout		$this->view($GLOBALS['DEFAULT_LAYOUT']);	}}

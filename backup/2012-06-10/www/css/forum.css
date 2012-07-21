@@ -1,0 +1,50 @@
+h1.forum{
+	margin: 0;
+	color:	#fff;
+	padding:10px;
+	color: 	#FF6903;
+	font-size:16.5px;
+}
+
+table.forum {
+	font-size: 10pt;
+	color: lightgray;
+	width:100%;
+}
+table.forum  th{
+	background-color: #313131;
+	font-size: 9pt;
+	text-align: left;
+
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:3px;
+	padding-bottom:3px;
+}
+table.forum td{
+	background-color: #414141;
+	font-weight: normal;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:3px;
+	padding-bottom:3px;
+	font-size: 9pt;
+}
+/* Styles */
+.threadUsername {
+	font-weight:bold;
+	font-size:16px;
+}
+
+
+/* hover Boxes */
+.bbCodeIcons {
+	border: solid 1px #FDFDFD;
+	padding-right:2px;
+	float:left;
+}
+.bbCodeIcons:hover {
+	cursor:pointer;
+	cursor:hand;
+	border: solid 1px #FF6903; 	
+}

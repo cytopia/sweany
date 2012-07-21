@@ -1,0 +1,1 @@
+<?phpclass FrameworkDefaultModel extends PageModel{	public $helpers = array('Html', 'HtmlTemplate', 'Form');	}?>

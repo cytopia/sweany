@@ -1,0 +1,1 @@
+<?phpclass MenuBlock extends Block{	public function profilesRightMenu($active_menu = null)	{		$this->set('active_menu', $active_menu);		$this->view('right_menu.tpl.php');	}}

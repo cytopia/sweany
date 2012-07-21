@@ -1,0 +1,1 @@
+<?phpclass Contact extends Controller{	public $helpers		= array('Html', 'Form');		public function show()	{		if ( !$this->user->isAdmin() )			$this->redirectBackend('Login', 'enter');					$contacts		= $this->model->Contact->getAll(NULL, array('id' => 'DESC'));				$this->set('contacts', $contacts);				$this->view('show.tpl.php');	}}?>
