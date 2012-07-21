@@ -1,1 +1,0 @@
-<h1>Index Page</h1><p>Find me in usr/FE/view/Site/index.tpl.php</p>

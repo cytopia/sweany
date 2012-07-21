@@ -1,1 +1,0 @@
-<?php include($render_element); ?>

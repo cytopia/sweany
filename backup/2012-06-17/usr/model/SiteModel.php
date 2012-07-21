@@ -1,1 +1,0 @@
-<?phpclass SiteModel extends PageModel{	protected $tables = array();}?>

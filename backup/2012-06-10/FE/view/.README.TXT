@@ -1,3 +1,0 @@
-Folder Layout
-
-<ControllerName>/view_name.tpl.php
