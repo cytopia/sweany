@@ -1436,4 +1436,7 @@
 2012-08-05 17:26:12	['.WARNING.'] [Callback]	no url request made - using default controller
 2012-08-05 17:26:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
 2012-08-05 17:26:12	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 17:31:17	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 17:31:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 17:31:17	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
 
