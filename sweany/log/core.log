@@ -1,0 +1,1439 @@
+2012-08-04 17:15:46	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:15:46	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:16:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:16:24	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:17:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:17:29	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-04 17:17:29	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-04 17:17:29	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-04 17:17:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:17:29	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 17:17:29	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-04 17:17:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:17:34	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 17:17:34	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-04 17:17:34	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-04 17:17:34	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-04 17:17:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:17:34	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 17:17:34	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-04 17:18:10	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:10	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 17:18:10	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="info_message"][copyright] does not exist
+2012-08-04 17:18:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:15	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:18:18	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:18	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:18:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:19	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-04 17:18:19	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-04 17:18:19	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-04 17:18:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:19	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 17:18:19	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-04 17:18:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:21	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 17:18:21	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="info_message"][copyright] does not exist
+2012-08-04 17:18:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:23	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:24	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:18:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:18:25	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:20:07	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:20:07	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:20:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:20:25	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:20:47	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:20:47	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:21:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:21:00	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:21:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:21:37	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:21:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:21:43	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:22:10	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:22:10	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:22:28	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:22:28	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:22:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:22:39	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:23:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:23:09	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:23:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:23:39	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:24:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:24:02	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:24:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:24:35	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:24:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:24:58	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:25:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:25:45	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:26:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:26:32	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:26:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:26:40	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:26:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:26:45	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:29:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:29:02	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:29:42	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:29:42	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:30:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:30:13	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-04 17:30:13	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-04 17:30:13	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-04 17:30:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:30:13	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 17:30:13	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-04 17:30:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:30:24	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:30:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:30:53	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:31:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:31:37	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:32:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:32:22	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:33:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:33:41	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:33:49	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:33:49	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:34:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:34:01	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:34:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:34:43	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:34:49	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:34:49	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:34:51	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:34:51	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 17:34:52	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:34:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:35:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:35:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:35:03	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 17:35:04	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:36:51	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-04 18:36:51	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:36:51	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-04 18:36:51	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-04 18:36:51	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:36:51	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-04 18:36:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:36:53	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:36:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:36:53	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:23	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:23	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:23	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:23	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:25	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:25	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:27	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-04 18:37:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:27	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-04 18:37:27	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-04 18:37:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:27	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-04 18:37:28	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:28	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:28	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:28	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:32	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:32	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:34	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:37:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:37:34	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:38:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:38:16	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:38:16	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 18:38:16	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="info_message"][copyright] does not exist
+2012-08-04 18:38:20	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:38:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:38:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:38:32	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 18:38:32	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="info_message"][copyright] does not exist
+2012-08-04 18:39:42	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:39:43	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 18:39:43	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/pages/view/FrameworkDefault/ does not exist
+2012-08-04 18:39:46	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:39:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:40:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:40:01	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 18:40:01	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="info_message"][copyright] does not exist
+2012-08-04 18:40:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:40:12	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-04 18:40:12	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/pages/view/FrameworkDefault/ does not exist
+2012-08-04 18:40:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:42:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:42:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:42:51	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:43:08	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:43:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:44:10	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:44:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:44:38	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:45:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:45:07	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:46:10	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:46:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:46:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:38	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:42	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:47:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:30	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:35	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:48:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:35	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:48:42	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:42	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:48:48	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:48	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:48:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:53	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:48:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:48:58	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:49:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:49:02	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:49:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:49:26	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:49:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:49:27	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:49:30	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:49:30	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:50:38	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:50:38	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:51:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:51:15	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:51:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:51:35	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:51:47	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:51:47	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:52:16	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:52:16	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:52:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:52:28	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 18:52:52	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 18:52:52	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:03:42	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:03:42	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:03:47	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:03:47	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:03:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:03:50	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:03:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:03:58	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:04:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:04:02	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:04:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:04:05	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:10:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:10:34	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:10:38	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:10:38	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:11:04	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:04	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:11:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:18	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:18	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:20	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:20	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:11:20	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:20	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:11:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:21	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:11:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:21	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-04 19:11:22	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-04 19:11:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:22	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-04 19:11:22	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-04 19:11:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:11:22	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-04 19:56:51	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-04 19:56:51	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-04 19:56:51	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 09:26:14	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 09:26:14	['.WARNING.'] [Language]	[Choose] Session does not exist - Using default
+2012-08-05 09:26:14	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:26:14	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 09:27:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:27:16	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:27:16	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:27:18	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:27:18	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:37:06	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:37:06	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:38:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:38:01	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:39:49	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:39:49	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:39:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:39:56	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:40:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:40:17	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:40:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:40:22	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:40:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:40:55	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:43:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:43:41	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:44:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:44:05	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:50:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:50:39	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:51:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:51:00	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:51:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:51:19	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:51:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:51:32	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:52:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:52:19	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:53:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:53:41	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:54:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:54:33	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:55:06	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:55:06	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:55:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:55:24	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:55:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:55:45	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:56:28	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:56:28	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:56:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:56:36	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:58:03	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:58:03	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:58:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:58:24	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 09:58:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 09:58:32	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 10:00:06	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 10:00:06	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:00:06	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 10:00:24	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 10:00:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:00:24	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 10:00:29	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 10:00:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:00:29	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 10:00:34	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 10:00:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:00:34	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 10:00:40	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 10:00:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:00:40	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 10:01:40	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 10:01:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:01:40	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 10:02:15	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 10:02:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:02:15	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 10:02:23	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 10:02:23	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:02:23	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 10:02:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:02:35	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 10:02:35	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 10:02:35	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 10:02:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:02:35	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:02:35	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:02:38	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:02:38	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:02:38	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="info_message"][copyright] does not exist
+2012-08-05 10:02:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:02:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:02:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:03:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:03:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:03:06	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:03:10	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:03:10	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:03:14	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:03:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:10:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:11:20	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:13:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:13:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:13:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:13:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:16:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:16:47	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:16:49	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:17:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:19:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:20:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:24:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:24:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:24:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:24:57	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:24:57	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:24:57	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/pages/view/FrameworkDefault/ does not exist
+2012-08-05 10:24:57	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 10:24:57	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 10:24:57	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 10:24:57	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:24:57	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:24:57	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:25:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:25:59	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:25:59	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/pages/view/FrameworkDefault/ does not exist
+2012-08-05 10:25:59	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 10:25:59	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 10:25:59	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 10:25:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:25:59	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:25:59	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:26:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:00	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:00	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/pages/view/FrameworkDefault/ does not exist
+2012-08-05 10:26:00	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 10:26:00	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 10:26:00	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 10:26:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:00	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:00	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:26:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:01	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:26:01	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:26:01	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:26:01	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:26:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:01	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:01	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:26:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:01	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:01	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:26:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:02	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:26:02	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:26:02	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:26:02	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:26:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:02	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:02	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:26:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:02	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:02	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:26:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:29	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:26:29	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:26:29	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:26:29	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:26:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:29	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:29	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:26:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:29	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:29	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:26:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:34	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:26:34	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:26:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:34	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:26:34	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:26:34	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:34	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:26:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:26:34	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:26:34	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:31:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:31:40	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:31:40	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:31:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:31:40	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:31:40	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:31:40	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:31:40	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:31:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:31:40	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:31:40	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:32:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:32:58	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:32:58	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:32:58	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:32:58	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:32:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:32:58	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:32:58	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:32:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:32:58	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:32:58	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:42:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:42:44	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:42:44	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:42:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:42:44	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:42:44	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:42:44	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:42:44	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:42:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:42:44	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:42:44	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:43:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:43:17	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:43:17	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:43:17	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 10:43:17	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 10:43:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:43:17	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:43:17	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 10:43:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 10:43:17	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 10:43:17	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:11	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:11	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:11	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:11	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:11	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:11	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:11	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:11	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:22	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:22	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:22	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:22	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:22	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:22	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:22	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:22	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:34	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:34	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:34	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:34	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:34	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:34	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:34	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:34	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:37	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:37	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:37	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:37	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:37	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:37	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:37	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:37	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:37	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:37	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:37	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:04:37	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:04:37	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:37	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:04:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:04:37	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:04:37	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:07:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:07:31	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:07:31	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:07:31	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:07:31	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:07:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:07:31	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:07:31	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:07:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:07:31	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:07:31	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:07:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:07:32	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:07:32	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:07:32	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:07:32	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:07:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:07:32	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:07:32	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:07:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:07:32	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:07:32	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:09:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:09:12	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:09:12	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:09:12	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:09:12	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:09:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:09:12	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:09:12	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:09:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:09:12	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:09:12	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:10:48	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:10:48	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:10:48	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:10:48	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:10:48	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:10:48	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:10:48	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:10:48	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:10:48	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:10:48	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:10:48	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:15:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:15:05	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:15:05	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:15:05	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:15:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:15:05	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:15:05	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:15:05	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:15:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:15:05	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:15:05	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:15:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:15:14	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:15:14	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:15:14	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:15:14	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:15:14	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:15:14	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:15:14	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:15:14	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:15:14	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:15:14	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:15:32	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:15:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:15:32	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:16:46	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS t from `sweany` like 'users'' at line 1show tables AS t from `sweany` like 'users'; Query took 0.000057 seconds
+2012-08-05 11:16:46	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:16:46	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS t from `sweany` like 'users'' at line 1show tables AS t from `sweany` like 'users'; Query took 0.000052 seconds
+2012-08-05 11:16:46	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:16:46	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:16:46	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:16:46	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:16:46	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:16:46	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS t from `sweany` like 'users'' at line 1show tables AS t from `sweany` like 'users'; Query took 0.000104 seconds
+2012-08-05 11:16:46	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:16:46	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:16:46	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:16:46	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:16:46	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:16:53	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS t' at line 1show tables from `sweany` like 'users' AS t ; Query took 0.000057 seconds
+2012-08-05 11:16:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:16:53	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS t' at line 1show tables from `sweany` like 'users' AS t ; Query took 0.000057 seconds
+2012-08-05 11:16:53	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:16:53	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:16:53	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS t' at line 1show tables from `sweany` like 'users' AS t ; Query took 0.000044 seconds
+2012-08-05 11:16:53	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:16:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:16:53	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:16:53	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:16:53	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:16:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:16:53	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:16:53	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:17:09	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS t from `sweany` like 'users'' at line 1show tables  AS t from `sweany` like 'users'; Query took 0.000055 seconds
+2012-08-05 11:17:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:17:09	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS t from `sweany` like 'users'' at line 1show tables  AS t from `sweany` like 'users'; Query took 0.000049 seconds
+2012-08-05 11:17:09	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:17:09	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:17:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:17:09	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS t from `sweany` like 'users'' at line 1show tables  AS t from `sweany` like 'users'; Query took 0.000055 seconds
+2012-08-05 11:17:09	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:17:09	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:17:09	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:17:09	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:17:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:17:09	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:17:09	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:17:15	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from `sweany` like 'users'' at line 1show table  from `sweany` like 'users'; Query took 0.000048 seconds
+2012-08-05 11:17:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:17:15	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from `sweany` like 'users'' at line 1show table  from `sweany` like 'users'; Query took 0.000043 seconds
+2012-08-05 11:17:15	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:17:15	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:17:15	['.ERROR.'] [select]	1064: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from `sweany` like 'users'' at line 1show table  from `sweany` like 'users'; Query took 0.000042 seconds
+2012-08-05 11:17:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:17:15	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:17:15	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:17:15	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:17:15	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:17:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:17:15	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:17:15	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:17:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:17:19	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:17:19	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:17:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:17:19	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:17:19	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:17:19	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:17:19	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:17:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:17:19	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:17:19	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:18:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:18:43	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:18:43	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:18:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:18:43	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:18:43	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:18:43	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:18:43	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:18:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:18:43	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:18:43	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:30:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:30:13	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:30:13	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:30:13	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:30:13	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:30:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:30:13	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:30:13	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:30:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:30:13	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:30:13	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:31:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:31:15	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:31:15	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:31:15	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:31:15	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:31:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:31:15	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:31:15	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:31:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:31:15	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:31:15	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:32:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:32:55	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:32:55	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:32:55	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:32:55	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:32:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:32:55	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:32:55	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:32:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:32:55	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:32:55	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:34:10	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:34:10	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:34:10	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:34:10	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:34:10	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:34:10	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:34:10	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:34:10	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:34:10	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:34:10	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:34:10	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:34:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:34:50	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:34:50	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:34:50	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:34:50	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:34:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:34:50	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:34:50	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:34:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:34:50	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:34:50	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:36:23	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:36:24	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:36:24	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:36:24	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:36:24	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:36:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:36:24	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:36:24	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:36:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:36:24	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:36:24	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:36:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:36:45	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:36:45	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:36:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:36:45	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:36:45	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:36:45	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:36:45	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:36:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:36:45	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:36:45	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:37:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:37:31	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:37:31	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:37:31	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:37:31	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:37:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:37:31	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:37:31	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:37:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:37:31	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:37:31	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:12	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:12	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:12	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:12	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:12	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:12	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:12	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:12	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:13	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:13	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:13	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:13	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:13	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:13	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:13	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:13	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:16	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:16	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:16	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:16	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:16	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:16	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:16	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:16	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:16	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:16	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:16	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:17	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:17	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:17	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:17	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:17	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:17	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:17	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:17	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:18	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:18	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:18	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:18	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:18	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:18	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:18	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:18	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:18	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:18	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:18	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:25	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:25	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Site&gt;
+2012-08-05 11:38:25	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:25	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;img&gt; not found.
+2012-08-05 11:38:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:25	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:25	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:38:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:38:25	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:38:25	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:40:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:19	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-05 11:40:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+2012-08-05 11:40:22	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showForum"][copyright] does not exist
+2012-08-05 11:40:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:22	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:40:22	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:22	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:40:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:25	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showThread"][copyright] does not exist
+2012-08-05 11:40:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:25	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:40:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:25	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:40:31	['.WARNING.'] [Auto-Loader]	Class not found Nachrichten in all paths
+2012-08-05 11:40:31	['.WARNING.'] [Callback]	class &lt;Nachrichten&gt; does not exist.
+2012-08-05 11:40:31	['.WARNING.'] [Callback]	Wrong request: class &lt;Nachrichten&gt; and method &lt;write&gt; not found.
+2012-08-05 11:40:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:31	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:40:31	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:40:31	['.WARNING.'] [Auto-Loader]	Class not found Nachrichten in all paths
+2012-08-05 11:40:31	['.WARNING.'] [Callback]	class &lt;Nachrichten&gt; does not exist.
+2012-08-05 11:40:31	['.WARNING.'] [Callback]	Wrong request: class &lt;Nachrichten&gt; and method &lt;write&gt; not found.
+2012-08-05 11:40:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:31	['.WARNING.'] [Auto-Loader]	Class not found Nachrichten in all paths
+2012-08-05 11:40:31	['.WARNING.'] [Callback]	class &lt;Nachrichten&gt; does not exist.
+2012-08-05 11:40:31	['.WARNING.'] [Callback]	Wrong request: class &lt;Nachrichten&gt; and method &lt;write&gt; not found.
+2012-08-05 11:40:31	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:40:31	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:40:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:31	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:40:31	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:40:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:33	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showThread"][copyright] does not exist
+2012-08-05 11:40:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:33	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:40:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:33	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:40:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:40:56	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:40:56	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:40:56	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:40:56	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:40:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:40:56	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:40:56	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:41:39	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:41:39	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:41:39	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:41:39	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:41:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:41:39	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:41:39	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:41:39	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:41:40	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:41:40	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:41:40	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:41:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:41:40	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:41:40	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:42:44	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:42:44	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:42:44	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:42:44	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:42:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:42:44	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:42:44	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:42:45	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:42:45	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:42:45	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:42:45	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:42:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:42:45	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:42:45	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:42:46	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:42:46	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:42:46	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:42:46	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:42:46	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:42:46	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:42:46	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:42:56	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:42:57	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:42:57	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:42:57	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:42:57	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:42:57	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:42:57	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:42:57	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:42:57	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:42:57	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:42:57	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:42:57	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:42:57	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:42:57	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:45:30	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:45:30	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:45:30	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:45:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:17	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:46:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:17	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:46:18	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:18	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-05 11:46:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+2012-08-05 11:46:21	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showForum"][copyright] does not exist
+2012-08-05 11:46:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:21	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:21	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:25	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-05 11:46:25	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Forums&gt;
+2012-08-05 11:46:25	['.WARNING.'] [Callback]	Wrong request: class &lt;Forums&gt; and method &lt;img&gt; not found.
+2012-08-05 11:46:25	['.WARNING.'] [Callback]	method &lt;img&gt; does not exist in class &lt;Forums&gt;
+2012-08-05 11:46:25	['.WARNING.'] [Callback]	Wrong request: class &lt;Forums&gt; and method &lt;img&gt; not found.
+2012-08-05 11:46:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:25	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:46:25	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:46:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:25	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:46:25	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:46:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+2012-08-05 11:46:26	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showForum"][copyright] does not exist
+2012-08-05 11:46:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:26	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:26	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:27	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showThread"][copyright] does not exist
+2012-08-05 11:46:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:27	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:27	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+2012-08-05 11:46:31	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showForum"][copyright] does not exist
+2012-08-05 11:46:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:31	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:31	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:33	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="addThread"][copyright] does not exist
+2012-08-05 11:46:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:33	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:33	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+2012-08-05 11:46:36	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showForum"][copyright] does not exist
+2012-08-05 11:46:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:36	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:46:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:46:36	['.ERROR.'] [View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany2.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-05 11:47:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+2012-08-05 11:47:19	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showForum"][copyright] does not exist
+2012-08-05 11:47:20	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:20	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+2012-08-05 11:47:20	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="showForum"][copyright] does not exist
+2012-08-05 11:47:23	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:47:23	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:23	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:47:23	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:47:23	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:23	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:47:26	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:47:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:26	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:47:30	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:30	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:47:30	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:47:30	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:47:30	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:30	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:47:30	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:47:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:35	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:47:35	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="info_message"][copyright] does not exist
+2012-08-05 11:47:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:44	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-05 11:47:52	['.WARNING.'] [Auto-Loader]	Class not found Profile in all paths
+2012-08-05 11:47:52	['.WARNING.'] [Callback]	class &lt;Profile&gt; does not exist.
+2012-08-05 11:47:52	['.WARNING.'] [Callback]	Wrong request: class &lt;Profile&gt; and method &lt;index&gt; not found.
+2012-08-05 11:47:52	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:52	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:47:52	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:47:55	['.WARNING.'] [Auto-Loader]	Class not found Profile in all paths
+2012-08-05 11:47:55	['.WARNING.'] [Callback]	class &lt;Profile&gt; does not exist.
+2012-08-05 11:47:55	['.WARNING.'] [Callback]	Wrong request: class &lt;Profile&gt; and method &lt;index&gt; not found.
+2012-08-05 11:47:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:47:55	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:47:55	['.ERROR.'] [Language]	[/root/usr/PageSection/FrameworkDefault/page id="url_not_found"][copyright] does not exist
+2012-08-05 11:49:02	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:49:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:49:02	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:50:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:50:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:50:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:50:37	['.ERROR.'] [Language]	[/root/plugins/Contact/PageSection/page id="index"][copyright] does not exist
+2012-08-05 11:50:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:50:40	['.ERROR.'] [Language]	[/root/plugins/Forums/PageSection/page id="index"][copyright] does not exist
+2012-08-05 11:50:44	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:50:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:50:44	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:50:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:50:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:54:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:54:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:54:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:54:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:57:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:57:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:57:57	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:57:57	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:57:57	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:57:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:57:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:57:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:57:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:58:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:58:00	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:58:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:58:00	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:58:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:58:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-05 11:58:05	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 11:58:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:58:05	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 11:58:06	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:58:06	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:58:06	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:58:06	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:58:06	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:58:06	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:58:08	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:58:08	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:58:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:59:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:59:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:59:21	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 11:59:21	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 11:59:21	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 11:59:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:59:21	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 11:59:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 11:59:36	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][home] does not exist
+2012-08-05 11:59:36	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][forums] does not exist
+2012-08-05 11:59:36	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][contact] does not exist
+2012-08-05 11:59:36	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][test] does not exist
+2012-08-05 12:00:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:00:05	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 12:00:05	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 12:00:05	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 12:00:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:00:05	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 12:00:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:00:11	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][home] does not exist
+2012-08-05 12:00:11	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][forums] does not exist
+2012-08-05 12:00:11	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][contact] does not exist
+2012-08-05 12:00:11	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][test] does not exist
+2012-08-05 12:00:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:00:19	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][home] does not exist
+2012-08-05 12:00:19	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][forums] does not exist
+2012-08-05 12:00:19	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][contact] does not exist
+2012-08-05 12:00:19	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][test] does not exist
+2012-08-05 12:00:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:00:25	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][home] does not exist
+2012-08-05 12:00:25	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][forums] does not exist
+2012-08-05 12:00:25	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][contact] does not exist
+2012-08-05 12:00:25	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][test] does not exist
+2012-08-05 12:01:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:01:44	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][forums] does not exist
+2012-08-05 12:01:44	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][contact] does not exist
+2012-08-05 12:01:44	['.ERROR.'] [Language]	[/root/usr/LayoutSection/Layouts/layout id="FrontPage"][test] does not exist
+2012-08-05 12:02:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:30	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:30	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 12:02:30	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 12:02:30	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 12:02:30	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:30	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 12:02:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:31	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 12:02:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:35	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:02:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:35	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:02:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:36	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 12:02:36	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 12:02:36	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 12:02:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:36	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 12:02:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:37	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 12:02:38	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:40	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 12:02:40	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 12:02:40	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 12:02:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:40	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 12:02:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:41	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 12:02:42	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:43	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:02:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:43	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:02:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:44	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:02:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:44	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:02:44	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:45	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:02:45	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:45	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:02:46	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:48	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:02:48	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:48	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:02:49	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:54	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:02:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:54	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:02:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:57	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:58	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:02:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:58	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:02:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:02:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:03:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:03:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:03:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:03:01	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:03:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:03:01	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:03:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:03:03	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:03:03	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:03:04	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:03:04	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:03:04	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:03:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:04:30	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:04:30	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:04:30	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:06:08	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:06:08	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:06:08	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:08:16	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:08:16	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:08:16	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:09:35	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:09:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:09:35	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:12:37	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:12:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:12:37	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:12:58	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:12:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:12:58	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:13:54	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:13:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:13:54	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:14:25	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:14:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:14:25	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:45:02	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:45:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:45:02	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:45:03	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:45:03	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:45:03	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:45:03	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:45:03	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:45:03	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:48:56	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:48:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:48:56	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:48:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:48:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:00	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:49:00	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:00	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:49:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:03	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:49:03	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:03	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:49:03	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:04	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:04	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:04	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:05	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:49:05	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:05	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:49:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:13	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:19	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:49:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:49:19	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:52:56	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:52:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:52:56	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:56:32	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 12:56:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:56:32	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 12:56:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:56:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:56:35	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-05 12:56:35	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-05 12:56:35	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-05 12:56:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:56:35	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 12:56:37	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:56:37	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 12:56:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 12:56:40	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 13:11:48	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 13:11:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 13:11:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 13:11:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 13:11:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 13:11:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 13:11:56	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 13:11:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 13:11:56	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 13:13:07	['.WARNING.'] [Auto-Loader]	Class not found ?5 in all paths
+2012-08-05 13:13:07	['.WARNING.'] [Callback]	class &lt;?5&gt; does not exist.
+2012-08-05 13:13:07	['.WARNING.'] [Callback]	Wrong request: class &lt;?5&gt; and method &lt;index&gt; not found.
+2012-08-05 13:13:07	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 13:13:07	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 14:36:26	['.WARNING.'] [Auto-Loader]	Class not found ?5 in all paths
+2012-08-05 14:36:26	['.WARNING.'] [Callback]	class &lt;?5&gt; does not exist.
+2012-08-05 14:36:26	['.WARNING.'] [Callback]	Wrong request: class &lt;?5&gt; and method &lt;index&gt; not found.
+2012-08-05 14:36:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 14:36:26	['.WARNING.'] [loadModel]	(Fast: If: 2/2): FrameworkDefaultModel already in Memory, but have to redeclare 
+2012-08-05 15:55:25	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 15:55:25	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 15:55:25	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 15:55:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 15:55:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 15:55:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 15:55:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 15:55:34	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 15:55:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 15:55:34	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:02:32	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:02:32	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:02:32	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:02:50	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:02:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:02:50	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:02:50	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:02:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:02:50	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:03:19	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:03:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:03:19	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:06:27	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:06:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:06:27	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:07:27	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:07:27	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:07:27	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:08:54	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:08:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:08:54	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:10:15	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:10:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:10:15	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:13:19	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:13:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:13:19	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:14:17	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:14:17	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:14:17	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:14:19	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:14:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:14:19	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:14:58	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:14:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:14:58	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:15:19	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:15:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:15:19	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:15:30	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:15:30	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:15:30	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:19:26	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:19:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:19:26	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:26:53	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:26:53	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:26:53	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:26:55	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:26:55	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:26:55	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:27:02	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:27:02	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:27:02	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:33:29	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:33:29	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:33:29	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:33:38	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:33:38	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:33:38	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:34:33	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:34:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:34:33	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:35:11	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:35:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:35:11	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:35:59	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:35:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:35:59	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 16:58:50	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 16:58:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 16:58:50	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 17:11:11	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 17:11:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 17:11:11	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 17:20:24	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 17:20:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 17:20:24	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+2012-08-05 17:26:12	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-05 17:26:12	['.WARNING.'] [fetchField]	returning empty field: SELECT `username` FROM `users` WHERE id = 0
+2012-08-05 17:26:12	['.WARNING.'] [loadModel]	(Fast: If: 2/2): SiteModel already in Memory, but have to redeclare 
+

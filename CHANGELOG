@@ -1,0 +1,11 @@
+2012-08-05
+-----------------
++ Core Logging facilities have been improved
++ Performance Optimization
++ Project specific Configuration has been extended
++ bugfixing for running on windows servers
+
+2012-06-17
+-----------------
+Layouts have their own model|view|controller architecture now.
+This let them enable to also use blocks.

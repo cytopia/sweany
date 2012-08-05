@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- Do not delete the core part,      -->
+	<!-- But feel free to adjust the text. -->
+	<core>
+		<settings>
+			<lang_name>Deutsch</lang_name>
+			<lang_short>de</lang_short>
+			<lang_long>de-DE</lang_long>
+		</settings>
+		<default>
+			<page id="notFound">
+				<title>Seite nicht gefunden</title>
+				<text>Die gesuchte Seite konnte nicht gefunden werden.</text>
+			</page>
+			<page id="redirect">
+				<title>Weiterleitung</title>
+				<text>Klicke hier, falls dein Browser dich nicht automatisch weiterleitet.</text>
+			</page>
+			<page id="changeLanguage">
+				<title>Sprache wechseln</title>
+				<text>Die neuen Spracheinstellungen werden jetzt angewandt.</text>
+			</page>
+		</default>
+	</core>
+	<!-- /do not delete the core part -->
+
+
+	<!-- Normal Page Controller Defines -->
+	<usr>
+		<PageSection>
+			<Site>
+				<page id="index">
+					<html_title>Home</html_title>
+					<menu_contact>Kontakt</menu_contact>
+				</page>
+			</Site>
+			<User>
+				<page id="logout">
+					<title>Ausloggen...</title>
+					<note>Danke fuer den Besuch</note>
+				</page>
+				<page id="login">
+					<title>Einloggen / Registrieren</title>
+					<accountLocked>Das Benutzerkonto wurde gesperrt</accountLocked>
+					<accountDeleted>Das Benutzerkonto wurde geloescht</accountDeleted>
+					<accountDisabled>Das Benutzerkonto wurde noch nicht aktiviert</accountDisabled>
+					<registerCompleteTitle>Registration erfolgreich</registerCompleteTitle>
+					<registerCompleteBody>Wir haben dir eine Email mit dem Validierungs Link gesendet, um deine Registrierung abzuschliesse. Bitte schaue in deinem Postfach nach.</registerCompleteBody>
+				</page>
+				<page id="validate">
+					<accountActivatedTitle>Benutzerkonto wurde aktiviert</accountActivatedTitle>
+					<accountActivatedBody>Dein Konto wurde erfolgreich aktiviert. Du kannst dich jetzt einloggen.</accountActivatedBody>
+					<invalidKeyTitle>Ungueltiger Schluessel</invalidKeyTitle>
+					<invalidKeyBody>Der angegebene Aktivierungscode ist ungueltig oder wurde bereits aktiviert.</invalidKeyBody>
+					<here>hier</here>
+				</page>
+			</User>
+		</PageSection>
+
+		<BlockSection>
+			<UserBlock>
+				<block id="loginLink">
+					<welcome>Wilkommen bei</welcome>
+					<site_name>dieser Seite</site_name>
+					<login>Einloggen</login>
+					<signup>Registrieren</signup>
+					<or>oder</or>
+				</block>
+				<block id="logoutLink">
+					<logout>Ausloggen</logout>
+				</block>
+			</UserBlock>
+		</BlockSection>
+
+		<LayoutSection>
+			<Layouts>
+				<layout id="FrontPage">
+					<home>Anfang</home>
+					<forums>Forum</forums>
+					<contact>Kontakt</contact>
+					<test>Test</test>
+					<copyright>© 2012 Copyright Notiz.</copyright>
+				</layout>
+			</Layouts>
+		</LayoutSection>
+	</usr>
+	<!-- /Normal Page Controller Defines -->
+
+
+	<!-- Framework Plugins -->
+	<plugins>
+		<Forums>
+			<PageSection>
+				<page id="index">
+					<forum>Forum</forum>
+					<lastEntry>Letzter Beitrag</lastEntry>
+					<threads>Themen</threads>
+					<posts>Antworten</posts>
+					<by>von</by>
+				</page>
+				<page id="showForum">
+					<forum>Forum</forum>
+					<author>Author</author>
+					<lastPost>Letzte Antwort</lastPost>
+					<threads>Themen</threads>
+					<replies>Antworten</replies>
+					<views>Hits</views>
+					<newThread>neues Thema</newThread>
+					<cantNewThread>Du kannst in diesem Forum keinen Beitrag erstellen.</cantNewThread>
+					<threadIsSticky>Thema ist sticky</threadIsSticky>
+					<threadIsLocked>Thema ist gesperrt</threadIsLocked>
+					<threadIsClosed>Thema ist geschlossen</threadIsClosed>
+				</page>
+				<page id="showThread">
+					<forum>Forum</forum>
+					<date>Datum</date>	
+					<atTime>um</atTime>	
+					<editedOn>Bearbeitet am</editedOn>					
+					<entries>Eintraege</entries>
+					<message>Nachricht</message>
+					<answer>Antworten</answer>
+					<advanced>Erweitert</advanced>
+					<sendMessage>PM senden</sendMessage>
+					<cantReply>Du kannst in diesem Thema nicht antworten.</cantReply>
+					<replyLoginNote>Um zu antworten musst du dich erst einloggen.</replyLoginNote>
+					<here>hier</here>
+					<or>oder</or>
+					<registerFree>kostenlos registrieren</registerFree>
+					<hasBeenClosed>Dieses Thema wurde geschlossen.</hasBeenClosed>
+					<hasBeenLocked>Dieses Thema wurde gesperrt.</hasBeenLocked>
+					<directAnswer>Direkt Antworten</directAnswer>
+				</page>
+				<page id="addThread">
+					<forum>Forum</forum>
+					<createThread>neues Thema erstellen</createThread>
+					<createLoginNote>Um ein neues Thema zu erstellen musst du dich erst einloggen.</createLoginNote>
+					<here>hier</here>
+					<or>oder</or>
+					<registerFree>kostenlos registrieren</registerFree>
+					<preview>Vorschau</preview>
+					<title>Titel</title>
+					<message>Nachricht</message>
+					<create>Erstellen</create>
+					<answer>Antworten</answer>
+				</page>
+				<page id="addPost">
+					<forum>Forum</forum>
+					<reply>Antworten</reply>
+					<createLoginNote>Um ein neues Thema zu erstellen musst du dich erst einloggen.</createLoginNote>
+					<here>hier</here>
+					<or>oder</or>
+					<registerFree>kostenlos registrieren</registerFree>
+					<preview>Vorschau</preview>
+					<answer>Antworten</answer>
+					<title>Titel</title>
+					<message>Nachricht</message>
+					<overview>Uebersicht</overview>
+					<latestFirst>Letzte Beitrage zuerst</latestFirst>
+				</page>
+			</PageSection>
+
+			<BlockSection>
+				<block id="onlineUsers">
+					<currOnlineUsers>Derzeitige Online Benutzer</currOnlineUsers>
+					<regUser>registrierte Benutzer</regUser>
+					<regUsers>registrierter Benutzer</regUsers>
+					<guestUser>Gast Benutzer</guestUser>
+					<guestUsers>Gast Benutzer</guestUsers>
+				</block>
+				<block id="ActivityOverview">
+					<title>Titel</title>
+					<username>Benutzername</username>
+					<lastEntry>Letzter Beitrag</lastEntry>
+					<answers>Antworten</answers>
+					<views>Hits</views>
+					<forum>Forum</forum>
+					<today>Heute</today>
+					<yesterday>Gestern</yesterday>
+					<by>von</by>
+				</block>
+				<block id="latestPostsByUser">
+					<post>Post</post>
+					<thread>Thema</thread>
+					<answers>Antworten</answers>
+					<forum>Forum</forum>
+					<youReplied>du hast geantwortet</youReplied>
+					<at>um</at>
+				</block>
+			</BlockSection>
+		</Forums>
+
+		<Contact>
+			<PageSection>
+				<page id="index">
+					<headline>Kontaktiere uns</headline>
+					<teaser>Wenn du Probleme beim Besuch dieser Seite hast oder eine allgemeine Anfrage stellen willst, dann nutze das Kontaktformular</teaser>
+					<submittedHead>Danke fuer die Nachricht</submittedHead>
+					<submittedBody>Deine Nachricht wurde erfolgreich versand.</submittedBody>
+				</page>
+			</PageSection>
+			<BlockSection>
+				<block id="addContact">
+					<form_legend>Kontakt Form</form_legend>
+					<form_note>Bitte fuelle alle Felder aus und waehle einen geeigneten Betreff.</form_note>
+					<form_label_name>Name</form_label_name>
+					<form_label_email>Email</form_label_email>
+					<form_label_subject>Betreff</form_label_subject>
+					<form_label_message>Nachricht</form_label_message>
+					<form_input_subject>- bitte waehlen -</form_input_subject>
+					<form_btn_submit>Senden</form_btn_submit>
+					<form_err_name>Gib deinen Namen an</form_err_name>
+					<form_err_email>ungueltige Email</form_err_email>
+					<form_err_subject>ungueltige Auswahl</form_err_subject>
+					<form_err_message>Schreibe eine Nachricht</form_err_message>
+
+					<!-- array, feel free to add more -->					
+					<subjects>Allgemeine Anfrage</subjects>
+					<subjects>Feedback</subjects>
+					<subjects>Neues Feature</subjects>
+					<subjects>Mitmachen</subjects>
+					<subjects>Fehler melden</subjects>
+				</block>
+			</BlockSection>
+		</Contact>
+	</plugins>
+
+
+
+	<!-- Custom path to add stuff that does not fit anywhere else, can also be named differently (anything you like). -->
+	<!-- Access this via $this->language->getCustom(full_path_with_id, key). -->
+	<!-- e.g. -->
+	<!-- $this->language->getCustom('/root/custom/MailSection/mail[@id="welcome"]', 'subject'); -->
+	<custom>
+		<MailSection>
+			<mail id="welcome">
+				<subject>Registrierung bestaetigen</subject>
+				<body>Hi %s,\n\num deine Registrierung zu bestaetigen klicke bitte auf den folgenden Link.\n\n%s</body>
+			</mail>
+		</MailSection>
+	</custom>
+</root>

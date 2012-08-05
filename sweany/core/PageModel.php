@@ -1,0 +1,8 @@
+<?php/** * Abstract parent for page modesl * * * Sweany: MVC-like PHP Framework with blocks and tables (entities) * Copyright 2011-2012, Patu * * Licensed under The MIT License * Redistributions of files must retain the above copyright notice. * * @copyright	Copyright 2011-2012, Patu * @link		none yet * @package		sweany.sys * @author		Patu * @license		MIT License (http://www.opensource.org/licenses/mit-license.php) * @version		0.7 2012-07-29 13:25 * */abstract Class PageModel{	/* ***************************************************** VARIABLES ***************************************************** */	/*
+	 * Defines whether the page controller is used by normal
+	* pages or by pages supplied by plugins.
+	*
+	* Default is set to false and will be overriden by
+	* Plugins in the controller
+	*/
+	protected $plugin = false;	/*	 * Which Tables to autoload into this Model	 */	protected $tables = array();	protected $plugin_tables = array();	/* ***************************************************** Constructor ***************************************************** */	public function __construct()	{		// initialize table helpers		foreach ($this->tables as $table)		{			$new_var		= $table;			$this->$new_var = Loader::loadTable($table);		}			// initialize table helpers		foreach ($this->plugin_tables as $table)		{			$new_var		= $table;			$this->$new_var = Loader::loadPluginTable($table, str_replace('Model', '', get_class($this)));		}	}}?>

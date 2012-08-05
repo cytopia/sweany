@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- Do not delete the core part,      -->
+	<!-- But feel free to adjust the text. -->
+	<core>
+		<settings>
+			<lang_name>English</lang_name>
+			<lang_short>en</lang_short>
+			<lang_long>en-US</lang_long>
+		</settings>
+		<default>
+			<page id="notFound">
+				<title>Page not Found</title>
+				<text>Sorry, the page you are looking for was not found.</text>
+			</page>
+			<page id="redirect">
+				<title>Redirecting</title>
+				<text>Click here if your browser does not automatically redirect you.</text>
+			</page>
+			<page id="changeLanguage">
+				<title>Changing Language</title>
+				<text>The Language settings will be applied now.</text>
+			</page>
+		</default>
+	</core>
+	<!-- /do not delete the core part -->
+
+
+	<!-- Normal Page Controller Defines -->
+	<usr>
+		<PageSection>
+			<Site>
+				<page id="index">
+					<html_title>Home</html_title>
+					<menu_contact>Contact us</menu_contact>
+				</page>
+			</Site>
+			<User>
+				<page id="logout">
+					<title>Logging out...</title>
+					<note>Thank you for using this site</note>
+				</page>
+				<page id="login">
+					<title>Login / Register</title>
+					<accountLocked>This user account has been locked</accountLocked>
+					<accountDeleted>This user account has been deleted</accountDeleted>
+					<accountDisabled>This user account has not been enabled yet.</accountDisabled>
+					<registerCompleteTitle>Registration successful</registerCompleteTitle>
+					<registerCompleteBody>We have sent you an email with a validation link to complete your registration. Please check your inbox.</registerCompleteBody>
+				</page>
+				<page id="validate">
+					<accountActivatedTitle>User account has been activated</accountActivatedTitle>
+					<accountActivatedBody>Your account has been activated successfully. You can now login</accountActivatedBody>
+					<invalidKeyTitle>Invalid activation key</invalidKeyTitle>
+					<invalidKeyBody>The supplied activation key is invalid or already activated.</invalidKeyBody>
+					<here>here</here>
+				</page>
+			</User>
+		</PageSection>
+
+		<BlockSection>
+			<UserBlock>
+				<block id="loginLink">
+					<welcome>Welcome to</welcome>
+					<site_name>this site</site_name>
+					<login>Log In</login>
+					<signup>Sign Up</signup>
+					<or>or</or>
+				</block>
+				<block id="logoutLink">
+					<logout>logout</logout>
+				</block>
+			</UserBlock>
+		</BlockSection>
+
+		<LayoutSection>
+			<Layouts>
+				<layout id="FrontPage">
+					<home>Home</home>
+					<forums>Forums</forums>
+					<contact>Contact</contact>
+					<test>Test</test>
+					<copyright>© 2012 Copyright note.</copyright>
+				</layout>
+			</Layouts>
+		</LayoutSection>
+	</usr>
+	<!-- /Normal Page Controller Defines -->
+
+
+	<!-- Framework Plugins -->
+	<plugins>
+		<Forums>
+			<PageSection>
+				<page id="index">
+					<forum>Forum</forum>
+					<lastEntry>Last entry</lastEntry>
+					<threads>Threads</threads>
+					<posts>Posts</posts>
+					<by>by</by>
+				</page>
+				<page id="showForum">
+					<forum>Forum</forum>
+					<author>Author</author>
+					<lastPost>Last post</lastPost>
+					<threads>Threads</threads>
+					<replies>Replies</replies>
+					<views>Views</views>
+					<newThread>new Thread</newThread>
+					<cantNewThread>You cannot create a new thread in this forum.</cantNewThread>
+					<threadIsSticky>Thread is sticky</threadIsSticky>
+					<threadIsLocked>Thread is locked</threadIsLocked>
+					<threadIsClosed>Thread is closed</threadIsClosed>
+				</page>
+				<page id="showThread">
+					<forum>Forum</forum>
+					<date>Date</date>	
+					<atTime>at</atTime>	
+					<editedOn>Edited on</editedOn>					
+					<entries>Entries</entries>
+					<message>Message</message>
+					<answer>Answer</answer>
+					<advanced>Advanced</advanced>
+					<sendMessage>send pm</sendMessage>
+					<cantReply>You cannot reply in this thread.</cantReply>
+					<replyLoginNote>To reply in this thread you first have to login</replyLoginNote>
+					<here>here</here>
+					<or>or</or>
+					<registerFree>register for free</registerFree>
+					<hasBeenClosed>This thread has been closed.</hasBeenClosed>
+					<hasBeenLocked>This thread has been locked.</hasBeenLocked>
+					<directAnswer>Direct Answer</directAnswer>
+				</page>
+				<page id="addThread">
+					<forum>Forum</forum>
+					<createThread>create new Thread</createThread>
+					<createLoginNote>To create a new Thread you first have to log in</createLoginNote>
+					<here>here</here>
+					<or>or</or>
+					<registerFree>register for free</registerFree>
+					<preview>Preview</preview>
+					<title>Title</title>
+					<message>Message</message>
+					<create>Create</create>
+					<answer>Answer</answer>
+				</page>
+				<page id="addPost">
+					<forum>Forum</forum>
+					<reply>Reply</reply>
+					<createLoginNote>To add a new Post you first have to log in</createLoginNote>
+					<here>here</here>
+					<or>or</or>
+					<registerFree>register for free</registerFree>
+					<preview>Preview</preview>
+					<answer>Answer</answer>
+					<title>Title</title>
+					<message>Message</message>
+					<overview>Overview</overview>
+					<latestFirst>Latest entries first</latestFirst>
+				</page>
+			</PageSection>
+
+			<BlockSection>
+				<block id="onlineUsers">
+					<currOnlineUsers>Current Online Users</currOnlineUsers>
+					<regUser>registered user</regUser>
+					<regUsers>registered users</regUsers>
+					<guestUser>guest user</guestUser>
+					<guestUsers>guest users</guestUsers>
+				</block>
+				<block id="ActivityOverview">
+					<title>Title</title>
+					<username>Username</username>
+					<lastEntry>Last Entry</lastEntry>
+					<answers>Answers</answers>
+					<views>Views</views>
+					<forum>Forum</forum>
+					<today>Today</today>
+					<yesterday>Yesterday</yesterday>
+					<by>by</by>
+				</block>
+				<block id="latestPostsByUser">
+					<post>Post</post>
+					<thread>Thread</thread>
+					<answers>Answers</answers>
+					<forum>Forum</forum>
+					<youReplied>You replied</youReplied>
+					<at>at</at>
+				</block>
+			</BlockSection>
+		</Forums>
+
+		<Contact>
+			<PageSection>
+				<page id="index">
+					<headline>Contact us</headline>
+					<teaser>If  you have problems using our site or ideas how we can make it better, dont hesitate to contact us by email contact(at)site(dot)com or use the contact form provided below.</teaser>
+					<submittedHead>Thank you for submitting</submittedHead>
+					<submittedBody>Your message has been send successfully.</submittedBody>
+				</page>
+			</PageSection>
+			<BlockSection>
+				<block id="addContact">
+					<form_legend>Contact form</form_legend>
+					<form_note>Please fill in all fields and choose an appropriate subject.</form_note>
+					<form_label_name>Name</form_label_name>
+					<form_label_email>Email</form_label_email>
+					<form_label_subject>Subject</form_label_subject>
+					<form_label_message>Message</form_label_message>
+					<form_input_subject>- please choose -</form_input_subject>
+					<form_btn_submit>Send</form_btn_submit>
+					<form_err_name>Please write your name</form_err_name>
+					<form_err_email>invalid email</form_err_email>
+					<form_err_subject>invalid choice</form_err_subject>
+					<form_err_message>Please write a message</form_err_message>
+
+					<!-- array, feel free to add more -->					
+					<subjects>General Inquiry</subjects>
+					<subjects>Feedback</subjects>
+					<subjects>Feature Request</subjects>
+					<subjects>Get involved</subjects>
+					<subjects>Report Error</subjects>
+				</block>
+			</BlockSection>
+		</Contact>
+	</plugins>
+
+
+
+	<!-- Custom path to add stuff that does not fit anywhere else, can also be named differently (anything you like). -->
+	<!-- Access this via $this->language->getCustom(full_path_with_id, key). -->
+	<!-- e.g. -->
+	<!-- $this->language->getCustom('/root/custom/MailSection/mail[@id="welcome"]', 'subject'); -->
+	<custom>
+		<MailSection>
+			<mail id="welcome">
+				<subject>Confirm Registration</subject>
+				<body>Hi %s,\n\nTo complete your registration, please click on the following link to confirm your registration.\n\n%s</body>
+			</mail>
+		</MailSection>
+	</custom>
+</root>

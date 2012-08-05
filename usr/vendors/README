@@ -1,0 +1,7 @@
+Vendor created custom classes/functionality.
+Please use namespaces for your classes to not collide with core or project classes.
+
+TODO:
++ description how to use vendors
++ example vendor
+
