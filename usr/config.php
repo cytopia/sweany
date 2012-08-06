@@ -41,6 +41,14 @@
  * This speeds up disk loading times drastically, as only a single
  * file has to be read from disk.
  *
+ * By also stripping comments and code formattings the file size will
+ * be reduced from 147kb to 61.2kb
+ *
+ *
+ * TODO: The following 'Important Note' does not apply yet.
+ *       Currently the fast core mode has the same capabilities
+ *       as the normal mode
+ *
  * Important Note:
  * ----------------------------------------------------------------
  * -
@@ -52,9 +60,6 @@
  * -  Only use in production or you might miss something.
  * -
  * ----------------------------------------------------------------
- *
- * TODO: not implemented yet.
- * Will be available once sweany reaches release candidate state.
  *
  */
 $FAST_CORE_MODE			= 0;
@@ -319,7 +324,8 @@ $DEFAULT_FORM_ELEMENT_ERR_CSS	= 'border: solid 2px red;';
 
 /**
  * TODO: right now, you cannot deactivate any of the core
- * modules. This still needs to be implemented.
+ * modules (except $SQL_LOG_VISITORS which is off by default).
+ * This still needs to be implemented.
  */
 
 
@@ -370,6 +376,9 @@ $USER_PWD_SALT					= '*&^%$GHJULBJHU*(trfd^%ybJuhiyg78f5V^yb897&^';
 /**
  * User Online Count
  *
+ * TODO: need config flag for
+ *       fake online users here
+ *
  * @requires: MySQL, User
  */
 $USER_ONLINE_COUNT_ENABLE		= true;
@@ -380,4 +389,4 @@ $USER_ONLINE_COUNT_ENABLE		= true;
  *
  * @requires: MySQL
  */
-$SQL_LOG_VISITORS				= true;
+$SQL_LOG_VISITORS				= false;

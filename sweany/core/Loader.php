@@ -125,8 +125,7 @@ Class Loader
 
 	public static function autoload($sClassName)
 	{
-		if (\Core\Init\CoreSettings::$showFwErrors > 1 || \Core\Init\CoreSettings::$logFwErrors > 1)
-			$start = getmicrotime();
+		$start = microtime(true);
 
 		if (class_exists($sClassName))
 		{
@@ -177,8 +176,7 @@ Class Loader
     /***************************************************** PRIVATE FUNCTIONS *****************************************************/
     private static function __loadFast($class, $type)
     {
-		if (\Core\Init\CoreSettings::$showFwErrors > 1 || \Core\Init\CoreSettings::$logFwErrors > 1)
-	    		$start = getmicrotime();
+	 	$start = microtime(true);
 
     	// 01) Check if class has already been declared
     	//     improves speed drastically if having files declaring a single table multiple times
@@ -205,8 +203,7 @@ Class Loader
     }
     private static function __loadSlow($class, $paths = array(), $type)
     {
-		if (\Core\Init\CoreSettings::$showFwErrors || \Core\Init\CoreSettings::$logFwErrors )
-			$start = getmicrotime();
+		$start = microtime(true);
 
     	$size	= sizeof($paths);
 
