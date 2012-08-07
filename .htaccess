@@ -1,0 +1,7 @@
+php_flag magic_quotes_gpc Off
+
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteRule    ^$   www/    [L]
+    RewriteRule    (.*) www/$1  [L]
+</IfModule>
