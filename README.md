@@ -4,6 +4,9 @@ These are shipped as examples as there is no documentation yet.
 Requirements:
  * at least PHP 5.3.0
 
+Documentation:
+ * https://github.com/lockdoc/sweany/wiki
+
 Features:
  * Pages (Model, View Controller based)
  * Blocks (Model, View Controller based)
