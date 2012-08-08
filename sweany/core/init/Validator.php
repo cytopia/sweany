@@ -21,7 +21,7 @@
  * @package		sweany.core.init
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25
+ * @version		0.7 2012-08-08 11:25
  *
  *
  * This (optional) core will validate various settings of
@@ -703,7 +703,7 @@ class Validator extends CoreAbstract
 	}
 	private static function validateOnlineUsers()
 	{
-		// Password SALT
+		// Online count
 		if ( !isset($GLOBALS['USER_ONLINE_COUNT_ENABLE']) )
 		{
 			self::$error  = '<b>$USER_ONLINE_COUNT_ENABLE</b> not defined in <b>config.php</b>';
@@ -716,6 +716,29 @@ class Validator extends CoreAbstract
 			self::$error  = 'MySQL: <b>user_online</b> table does not exist';
 			return false;
 		}
+
+		if ( !isset($GLOBALS['USER_ONLINE_SINCE_MINUTES']) )
+		{
+			self::$error  = '<b>$USER_ONLINE_SINCE_MINUTES</b> not defined in <b>config.php</b>';
+			return false;
+		}
+		if ( $GLOBALS['USER_ONLINE_SINCE_MINUTES'] < 1 )
+		{
+			self::$error  = '<b>$USER_ONLINE_SINCE_MINUTES</b> must be greater than <b>1</b> in <b>config.php</b>';
+			return false;
+		}
+
+		if ( !isset($GLOBALS['USER_ONLINE_ADD_FAKE_GUESTS']) )
+		{
+			self::$error  = '<b>$USER_ONLINE_ADD_FAKE_GUESTS</b> not defined in <b>config.php</b>';
+			return false;
+		}
+		if ( $GLOBALS['USER_ONLINE_ADD_FAKE_GUESTS'] < 0 )
+		{
+			self::$error  = '<b>$USER_ONLINE_ADD_FAKE_GUESTS</b> cannot be negative in <b>config.php</b>';
+			return false;
+		}
+
 		return true;
 	}
 	private static function validateLogVisitors()

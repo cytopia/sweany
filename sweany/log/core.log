@@ -1,0 +1,20 @@
+2012-08-08 08:02:51	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 08:02:51	['.WARNING.'] [Language]	[Choose] Session does not exist - Using default
+2012-08-08 10:50:32	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 10:51:06	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 10:51:41	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 10:51:41	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-08 10:51:41	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-08 10:51:41	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-08 10:52:14	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 10:53:02	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 11:12:00	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 11:12:14	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 11:12:19	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 11:58:52	['.ERROR.'] [Render View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany.projects.the-wire.de/usr/plugins/Forums/pages/view/ does not exist
+2012-08-08 11:58:52	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-08 11:58:52	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-08 11:58:52	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-08 11:58:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+2012-08-08 11:59:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+

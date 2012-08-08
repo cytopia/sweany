@@ -21,162 +21,370 @@
  * @package		sweany.core.lib
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25
+ * @version		0.7 2012-08-08 11:32
  *
  *
- * This helper module will provide an interface to handle users.
+ * This helper helper will provide an interface to handle users.
  */
 
-// TODO: needs rewrite
 class Users extends Core\Init\CoreUsers
 {
+
+	/************************************** ONLINE USERS **************************************/
+
+	/**
+	 * Count all current active users
+	 *
+	 * @return integer
+	 */
 	public static function countOnlineUsers()
 	{
 		return parent::countOnlineUsers();
 	}
+
+	/**
+	 *
+	 * @return integer
+	 */
 	public static function countLoggedInOnlineUsers()
 	{
 		return parent::countLoggedInOnlineUsers();
 	}
+
+	/**
+	 *
+	 * @return integer
+	 */
 	public static function countAnonymousOnlineUsers()
 	{
 		return parent::countAnonymousOnlineUsers();
 	}
 
+	/**
+	 *
+	 * @return array()
+	 */
 	public static function getLoggedInOnlineUsers()
 	{
 		return parent::getLoggedInOnlineUsers();
 	}
 
 
-	// get Rows
-	public static function getAllUsers()
+
+
+	/************************************** GET CURRENT USER INFO **************************************/
+
+	/**
+	 *
+	 * @return integer
+	 */
+	public static function id()
 	{
-		return parent::getAllUsers();
+		return parent::id();
 	}
-	public static function getAllUserGroups($order = array())
+
+	/**
+	 *
+	 * @return string
+	 */
+	public static function name()
 	{
-		return parent::getAllUserGroups($order);
+		return parent::name();
 	}
-	public static function getAllFailedLogins($order = array())
+
+	/**
+	 *
+	 * @return array()
+	 */
+	public static function data()
 	{
-		return parent::getAllFailedLogins($order);
+		return parent::data();
 	}
-	public static function update($fields = array())
+
+	/**
+	 *
+	 * @return boolean
+	 */
+	public static function isLoggedIn()
 	{
-		return parent::update($fields);
+		return parent:: isLoggedIn();
 	}
-	public static function updatePassword($user_id, $password)
+
+	/**
+	 *
+	 * @return boolean
+	 */
+	public static function isAdmin()
 	{
-		return parent::updatePassword($user_id, $password);
+		return parent::isAdmin();
 	}
+
+	/**
+	 *
+	 * @return boolean
+	 */
 	public static function isMyPassword($clearTextPwd)
 	{
 		return parent::isMyPassword($clearTextPwd);
 	}
 
-	public static function data()
-	{
-		return parent::data();
-	}
-	public static function id()
-	{
-		return parent::id();
-	}
-	public static function name()
-	{
-		return parent::name();
-	}
+
+
+
+
+
+	/************************************** GET ANY USER INFO **************************************/
+
+
+	/**
+	 *
+	 * @return string
+	 */
 	public static function getNameById($id)
 	{
 		return parent::getNameById($id);
 	}
-	public static function getIdByNameAndPassword($username, $password)
-	{
-		return parent::getIdByNameAndPassword($username, $password);
-	}
+
+	/**
+	 *
+	 * @return integer
+	 */
 	public static function getIdByName($username)
 	{
 		return parent::getIdByName($username);
 	}
+
+	/**
+	 *
+	 * @return integer
+	 */
 	public static function getIdByEmail($email)
 	{
 		return parent::getIdByEmail($email);
 	}
+
+	/**
+	 *
+	 * @return integer
+	 */
 	public static function getIdByResetPasswordKey($reset_password_key)
 	{
 		return parent::getIdByResetPasswordKey($reset_password_key);
 	}
-	public static function getEnabledUser()
+
+	/**
+	 *
+	 * @return integer
+	 */
+	public static function getIdByNameAndPassword($username, $password)
 	{
-		return parent::getEnabledUser();
+		return parent::getIdByNameAndPassword($username, $password);
 	}
-	public static function isLoggedIn()
-	{
-		return parent:: isLoggedIn();
-	}
-	public static function setResetPasswordKey($user_id)
-	{
-		return parent::setResetPasswordKey($user_id);
-	}
-	public static function checkPasswordResetKey($password_reset_key)
-	{
-		return parent::checkPasswordResetKey($password_reset_key);
-	}
-	public static function removeResetPasswordKey($user_id)
-	{
-		return parent::removeResetPasswordKey($user_id);
-	}
-	public static function isAdmin()
-	{
-		return parent::isAdmin();
-	}
-	public static function logout($session_id)
-	{
-		return parent::logout($session_id);
-	}
-	public static function usernameExists($username)
-	{
-		return parent::usernameExists($username);
-	}
-	public static function emailExists($email)
-	{
-		return parent::emailExists($email);
-	}
-	public static function otherUserHasThisEmail($email)
-	{
-		return parent::otherUserHasThisEmail($email);
-	}
+
+
+
+	/************************************** CHECK ANY USER **************************************/
+
+	/**
+	 *
+	 * @param interger $user_id
+	 * @return boolean
+	 */
 	public static function exists($user_id)
 	{
 		return parent::exists($user_id);
 	}
+
+	/**
+	 *
+	 * @param interger $user_id
+	 * @return boolean
+	 */
 	public static function isLocked($user_id)
 	{
 		return parent::isLocked($user_id);
 	}
+
+	/**
+	 *
+	 * @param interger $user_id
+	 * @return boolean
+	 */
 	public static function isEnabled($user_id)
 	{
 		return parent::isEnabled($user_id);
 	}
+
+	/**
+	 *
+	 * @param interger $user_id
+	 * @return boolean
+	 */
 	public static function isDeleted($user_id)
 	{
 		return parent::isDeleted($user_id);
 	}
-	public static function checkLogin($username, $password, $log_bad_attempts = true)
+
+	/**
+	 *
+	 * @param string $username
+	 * @return boolean
+	 */
+	public static function usernameExists($username)
 	{
-		return parent::checkLogin($username, $password, $log_bad_attempts);
+		return parent::usernameExists($username);
 	}
-	public static function validate($validation_key)
+
+	/**
+	 * Check if this email address already exists
+	 * in the users database
+	 *
+	 * @param string $email
+	 */
+	public static function emailExists($email)
 	{
-		return parent::validate($validation_key);
+		return parent::emailExists($email);
 	}
+
+	/**
+	 * Check if the specified email already exists for another
+	 * user other than the current logged in user.
+	 * (Usefull if you want to edit the email of the current logged in user)
+	 *
+	 * @param	string	$email
+	 * @return	bool
+	 */
+	public static function otherUserHasThisEmail($email)
+	{
+		return parent::otherUserHasThisEmail($email);
+	}
+
+
+
+
+
+	/************************************** GET MANY USERS **************************************/
+
+	/**
+	 * @return array()
+	 */
+	public static function getEnabledUser()
+	{
+		return parent::getEnabledUser();
+	}
+
+	/**
+	 * @return array()
+	 */
+	public static function getAllUsers()
+	{
+		return parent::getAllUsers();
+	}
+
+	/**
+	 * @return array()
+	 */
+	public static function getAllUserGroups($order = array())
+	{
+		return parent::getAllUserGroups($order);
+	}
+
+	/**
+	 * @return array()
+	 */
+	public static function getAllFailedLogins($order = array())
+	{
+		return parent::getAllFailedLogins($order);
+	}
+
+
+
+	/************************************** ACTIONS  **************************************/
+
 	public static function login($username, $password, $log_bad_attempts = true)
 	{
 		return parent::login($username, $password, $log_bad_attempts);
 	}
+
+	/**
+	 * Check if the given username and password match.
+	 * Can be used by the form validator, to automatically validate
+	 * login.
+	 *
+	 * @param string	$username
+	 * @param string	$password (cleartext)
+	 * @param boolean	$log_bad_attempts (whether or not to log wrong user/pass)
+	 * @return boolean	success
+	 */
+	public static function checkLogin($username, $password, $log_bad_attempts = true)
+	{
+		return parent::checkLogin($username, $password, $log_bad_attempts);
+	}
+
+
+	public static function logout($session_id)
+	{
+		return parent::logout($session_id);
+	}
+
+
+
+
+	/************************************** ADD/UPDATE  **************************************/
+
 	public static function addUser($username, $password, $email)
 	{
 		return parent::addUser($username, $password, $email);
 	}
+
+
+	/**
+	 * Update current logged in user (by its id)
+	 *
+	 * @param array() $fields
+	 */
+	public static function update($fields = array())
+	{
+		return parent::update($fields);
+	}
+
+	/**
+	 *
+	 * @param integer $user_id
+	 * @param integer $password (cleartext)
+	 */
+	public static function updatePassword($user_id, $password)
+	{
+		return parent::updatePassword($user_id, $password);
+	}
+
+
+	/**
+	 * Validate a registered user by the validation key.
+	 * This key should have been sent to him by email
+	 * and makes the final step for registration
+	 *
+	 * @param string $validation_key
+	 */
+	public static function validate($validation_key)
+	{
+		return parent::validate($validation_key);
+	}
+
+
+	public static function setResetPasswordKey($user_id)
+	{
+		return parent::setResetPasswordKey($user_id);
+	}
+
+	public static function checkPasswordResetKey($password_reset_key)
+	{
+		return parent::checkPasswordResetKey($password_reset_key);
+	}
+
+	public static function removeResetPasswordKey($user_id)
+	{
+		return parent::removeResetPasswordKey($user_id);
+	}
+
 }

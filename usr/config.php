@@ -70,7 +70,7 @@
  * ----------------------------------------------------------------
  *
  */
-$FAST_CORE_MODE			= 1;
+$FAST_CORE_MODE			= 0;
 
 
 /*
@@ -358,10 +358,10 @@ $LANGUAGE_IMG_PATH				= '/img/site/flags';	// need pics in the form of en.png, d
  * @requires: no other module to be enabled
  */
 $SQL_ENABLE						= true;
-$SQL_HOST						= '127.0.0.1';
+$SQL_HOST						= '127.0.0.13';
 $SQL_DB							= 'sweany';
 $SQL_USER						= 'root';
-$SQL_PASS						= '';
+$SQL_PASS						= 'thisistherootmysqladmin';
 
 
 /**
@@ -390,6 +390,8 @@ $USER_PWD_SALT					= '*&^%$GHJULBJHU*(trfd^%ybJuhiyg78f5V^yb897&^';
  * @requires: MySQL, User
  */
 $USER_ONLINE_COUNT_ENABLE		= true;
+$USER_ONLINE_SINCE_MINUTES		= 10;	// count all users since last 10 minutes
+$USER_ONLINE_ADD_FAKE_GUESTS	= 10;	// add 10 fake guests to the online count
 
 
 /**

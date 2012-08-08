@@ -6,7 +6,7 @@ class Layouts extends LayoutController
 	{
 		$this->set('language', $this->language);
 
-		if ( !$this->user->isLoggedIn() )
+		if ( !Users::isLoggedIn() )
 		{
 			$params = array('User', 'login', 'User', 'login');
 			$this->attachBlock('loginBox', null, 'User', 'loginLink', $params);
