@@ -109,6 +109,22 @@ class User extends PageController
 			}
 		}
 
+		// -------------------- SET FORM ERROR LANGUAGE ---------------------- //
+		$this->formValidator['form_login']['username']['custom']['error']		= $this->language->loginError;
+		$this->formValidator['form_login']['username']['minLen']['error']		= $this->language->loginTooShortError;
+
+		$this->formValidator['form_register']['username']['exists']['error']	= $this->language->regUserNameExists;
+		$this->formValidator['form_register']['username']['maxLen']['error']	= $this->language->regUserNameMaxLen;
+		$this->formValidator['form_register']['username']['alphaNum']['error']	= $this->language->regUserNamealphaNum;
+		$this->formValidator['form_register']['username']['minLen']['error']	= $this->language->regUserNameMinLen;
+
+		$this->formValidator['form_register']['email']['isEmail']['error']		= $this->language->regEmailInvalid;
+		$this->formValidator['form_register']['email']['custom']['error']		= $this->language->regEmailExists;
+
+		$this->formValidator['form_register']['password']['minLen']['error']	= $this->language->regPasswordMinLen;
+		$this->formValidator['form_register']['password']['maxLen']['error']	= $this->language->regPasswordMaxLen;
+
+		$this->formValidator['form_register']['agb']['accept']['error']			= $this->language->regAgb;
 
 		// -------------------- LOGIN ---------------------- //
 		if ( $this->validateForm('form_login')  )
@@ -178,6 +194,7 @@ class User extends PageController
 		// ADD TEMPLATE ELEMENTS
 		HtmlTemplate::setTitle($this->language->title);
 
+		$this->set('language', $this->language);
 		$this->view('login.tpl.php');
 	}
 

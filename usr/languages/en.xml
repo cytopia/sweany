@@ -42,6 +42,27 @@
 				</page>
 				<page id="login">
 					<title>Login / Register</title>
+					<login>Login</login>
+					<username>Username</username>
+					<password>Password</password>
+					<lostPassword>lost password?</lostPassword>
+					<registerFree>Register for free</registerFree>
+					<email>Email</email>
+					<tos>Terms of Service</tos>
+					<acceptTos>I hereby accept the %s and the %s.</acceptTos>
+					<register>Register</register>
+					<dataPolicy>Data Policy</dataPolicy>
+					<loginError>Wrong Username or Password</loginError>
+					<loginTooShortError>Username too short</loginTooShortError>
+					<regUserNameExists>Username already exists</regUserNameExists>
+					<regUserNameMaxLen>max 12 characters</regUserNameMaxLen>
+					<regUserNamealphaNum>Only alphanumerical characters</regUserNamealphaNum>
+					<regUserNameMinLen>min 3 characters</regUserNameMinLen>
+					<regEmailInvalid>This is not a valid email</regEmailInvalid>
+					<regEmailExists>Email address already exists</regEmailExists>
+					<regPasswordMinLen>min 5 characters</regPasswordMinLen>
+					<regPasswordMaxLen>max 30 characters</regPasswordMaxLen>
+					<regAgb>To join this site you have to accept the data policy and terms of service</regAgb>
 					<accountLocked>This user account has been locked</accountLocked>
 					<accountDeleted>This user account has been deleted</accountDeleted>
 					<accountDisabled>This user account has not been enabled yet.</accountDisabled>
