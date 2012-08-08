@@ -21,7 +21,7 @@
  * @package		sweany.core.init
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25
+ * @version		0.7 2012-08-08 11:13
  *
  *
  * This core module will provide an interface to handle users.
@@ -35,23 +35,30 @@ class CoreUsers extends CoreAbstract
 	private static $tbl_failed_logins	= 'user_failed_logins';
 	private static $tbl_online_users	= 'user_online';
 
-	private static $onlineSinceMinutes	= 20;	// count online users from last XX Minutes till now
-	private static $fakeOnlineGuests	= 10;	// set the amount of fake online guests
+	private static $onlineSinceMinutes;	// count online users from last XX Minutes till now
+	private static $fakeOnlineGuests;	// set the amount of fake online guests
 
+	/**
+	 * @Deprecated
+	 */
 	public function __construct()
 	{
-		//
-		// TODO: do not have the loggin here!!!
-		//
+	}
+
+
+	public static function initialize()
+	{
+
+		self::$onlineSinceMinutes	= $GLOBALS['USER_ONLINE_SINCE_MINUTES'];
+		self::$fakeOnlineGuests		= $GLOBALS['USER_ONLINE_ADD_FAKE_GUESTS'];
+
 		// Add current user to online users table
 		\Core\Init\CoreMySql::insertRow(self::$tbl_online_users, array('time' => time(), 'fk_user_id' => self::id(), 'session_id' => \Core\Init\CoreSession::getId(), 'ip' => $_SERVER['REMOTE_ADDR'], 'current_page' => \Core\Init\CoreUrl::$request));
 
 		// Delete all entries since last XX minutes
 		\Core\Init\CoreMySql::delete(self::$tbl_online_users, sprintf('`time` < %d', strtotime('-'.self::$onlineSinceMinutes.' minute', time())));
-	}
-	public static function initialize()
-	{
-		// TODO:
+
+		// TODO: check for valid initialization
 		return true;
 	}
 

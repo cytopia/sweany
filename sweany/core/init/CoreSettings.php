@@ -21,7 +21,7 @@
  * @package		sweany.core.init
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25
+ * @version		0.7 2012-08-08 11:08
  *
  *
  * This core module will set the following settings:
@@ -44,14 +44,8 @@ class CoreSettings extends CoreAbstract
 
 	private static $coreLogFile		= null;
 	private static $userLogFile		= null;
-/*
-	public static $logToFile	= false;
-	public static $logToStdOut	= false;
-	public static $logFile		= null;
-	public static $debugLevel	= false;
-*/
-	private static $timezone	= null;
-//	private static $logDir		= LOG_PATH;
+
+	private static $timezone		= null;
 
 
 
@@ -73,16 +67,7 @@ class CoreSettings extends CoreAbstract
 		self::$coreLogFile		= LOG_PATH.DS.$GLOBALS['FILE_LOG_CORE'];
 		self::$userLogFile		= LOG_PATH.DS.$GLOBALS['FILE_LOG_USER'];
 
-		// TODO: temporary override of old variables
-		// No granular debugging available yet.
-		//self::$debugLevel		= (bool)(self::$showPhpErrors || self::$showSqlErrors || self::$showFwErrors);
-		//self::$logFile			= self::$coreLogFile;
-		//self::$logToFile		= (bool)(self::$logPhpErrors || self::$logSqlErrors || self::$logFwErrors);
-
-//		var_dump(self::$debugLevel);
-
-		self::$timezone		= $GLOBALS['DEFAULT_TIME_ZONE'];
-
+		self::$timezone			= $GLOBALS['DEFAULT_TIME_ZONE'];
 
 		// TODO: need to synchronize with mysql database timezone
 		self::_setTimeZone();
