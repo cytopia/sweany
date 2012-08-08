@@ -17,4 +17,104 @@
 2012-08-08 11:58:52	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
 2012-08-08 11:58:54	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
 2012-08-08 11:59:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `is_admin` FROM `users` WHERE id = 0
+2012-08-08 12:01:48	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:01:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = 'lockdoc2'
+2012-08-08 12:01:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = 'lockdoc2' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:01:52	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 12:01:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:02:00	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-08 12:02:00	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-08 12:02:00	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-08 12:02:04	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:03:36	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:06:58	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:07:20	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:07:23	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:07:35	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:07:46	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:08:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:08:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:10:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:10:34	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][dataPolicy] does not exist
+2012-08-08 12:11:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:11:11	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][dataPolicy] does not exist
+2012-08-08 12:11:21	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:11:21	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][dataPolicy] does not exist
+2012-08-08 12:11:39	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:11:42	['.WARNING.'] [Callback]	method &lt;agb&gt; does not exist in class &lt;Site&gt;
+2012-08-08 12:11:42	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;agb&gt; not found.
+2012-08-08 12:11:43	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:11:44	['.WARNING.'] [Callback]	method &lt;agb&gt; does not exist in class &lt;Site&gt;
+2012-08-08 12:11:44	['.WARNING.'] [Callback]	Wrong request: class &lt;Site&gt; and method &lt;agb&gt; not found.
+2012-08-08 12:11:47	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:11:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:12:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = ''
+2012-08-08 12:12:19	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:12:22	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-08 12:12:22	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-08 12:12:22	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-08 12:12:26	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:12:28	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = ''
+2012-08-08 12:12:28	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:13:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = ''
+2012-08-08 12:13:50	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:13:52	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = 'asdasds'
+2012-08-08 12:13:52	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = 'asdasds' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:15:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = 'asdasds'
+2012-08-08 12:15:34	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = 'asdasds' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:16:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = 'asdasds'
+2012-08-08 12:16:09	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = 'asdasds' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:16:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = 's'
+2012-08-08 12:16:11	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = 's' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:22:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = 's'
+2012-08-08 12:22:56	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = 's' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:22:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = 'sasdasd'
+2012-08-08 12:22:59	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = 'sasdasd' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:23:01	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:23:15	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:23:20	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-08 12:23:20	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-08 12:23:20	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][loginError] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][loginTooShortError] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][regUserNameExists] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][regUserNameMaxLen] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][regUserNamealphaNum] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][regUserNameMinLen] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][regEmailInvalid] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][regEmailExists] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][regPasswordMinLen] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][regPasswordMaxLen] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][regAgb] does not exist
+2012-08-08 12:23:24	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][login] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][username] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][password] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][lostPassword] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][registerFree] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][username] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][email] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][password] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][tos] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][acceptTos] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][dataPolicy] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][tos] does not exist
+2012-08-08 12:23:24	['.ERROR.'] [Language]	[/root/usr/PageSection/User/page id="login"][register] does not exist
+2012-08-08 12:26:28	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:26:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = ''
+2012-08-08 12:26:31	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:26:33	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:26:37	['.WARNING.'] [Callback]	method &lt;passwortVergessen&gt; does not exist in class &lt;Users&gt;
+2012-08-08 12:26:37	['.WARNING.'] [Callback]	Wrong request: class &lt;Users&gt; and method &lt;passwortVergessen&gt; not found.
+2012-08-08 12:26:41	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:26:42	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE username = ''
+2012-08-08 12:26:42	['.WARNING.'] [fetchField]	returning empty field: SELECT `id` FROM `users` WHERE `username` = '' AND `password` = '709e40bc2074e3aa88a6f8672a4dae42'
+2012-08-08 12:26:46	['.ERROR.'] [Render View]	view /var/www/htdocs/the-wire.de/projects.the-wire.de/sweany.projects.the-wire.de/usr/pages/view/User/ does not exist
+2012-08-08 12:26:47	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-08 12:26:47	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-08 12:26:47	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
+2012-08-08 12:26:50	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-08-08 12:26:51	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-08-08 12:26:51	['.WARNING.'] [Callback]	class &lt;favicon.ico&gt; does not exist.
+2012-08-08 12:26:51	['.WARNING.'] [Callback]	Wrong request: class &lt;favicon.ico&gt; and method &lt;index&gt; not found.
 

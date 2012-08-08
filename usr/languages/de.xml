@@ -42,6 +42,27 @@
 				</page>
 				<page id="login">
 					<title>Einloggen / Registrieren</title>
+					<login>Einloggen</login>
+					<username>Benutzername</username>
+					<password>Passwort</password>
+					<lostPassword>Passwort vergessen?</lostPassword>
+					<registerFree>Kostenlos Registrieren</registerFree>
+					<email>Email</email>
+					<tos>Nutzungsbedingungen</tos>
+					<acceptTos>Hiermit akzeptiere ich die  %s und die %s.</acceptTos>
+					<register>Registrieren</register>
+					<dataPolicy>Datenschutzerklaerung</dataPolicy>
+					<loginError>Falscher Benutzername oder Passwort</loginError>
+					<loginTooShortError>Benutzername zu kurs</loginTooShortError>
+					<regUserNameExists>Benutzername existiert bereits</regUserNameExists>
+					<regUserNameMaxLen>max 12 Zeichen</regUserNameMaxLen>
+					<regUserNamealphaNum>Nur alphanumerische Zeichen</regUserNamealphaNum>
+					<regUserNameMinLen>min 3 Zeichen</regUserNameMinLen>
+					<regEmailInvalid>Dies ist keine gueltige Email</regEmailInvalid>
+					<regEmailExists>Emailadresse existiert bereits</regEmailExists>
+					<regPasswordMinLen>min 5 Zeichen</regPasswordMinLen>
+					<regPasswordMaxLen>max 30 Zeichen</regPasswordMaxLen>
+					<regAgb>Um dieser Seite beizutreten musst du die Datenschutzbestimmungen und Nutzungsbedingungen akzeptieren</regAgb>
 					<accountLocked>Das Benutzerkonto wurde gesperrt</accountLocked>
 					<accountDeleted>Das Benutzerkonto wurde geloescht</accountDeleted>
 					<accountDisabled>Das Benutzerkonto wurde noch nicht aktiviert</accountDisabled>
