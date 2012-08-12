@@ -1,3 +1,3 @@
 *.tar.gz
-usr/config.php
-weany/log/core.log
+#usr/config.php
+#sweany/log/core.log
