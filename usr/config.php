@@ -358,10 +358,10 @@ $LANGUAGE_IMG_PATH				= '/img/site/flags';	// need pics in the form of en.png, d
  * @requires: no other module to be enabled
  */
 $SQL_ENABLE						= true;
-$SQL_HOST						= '127.0.0.1';
+$SQL_HOST						= '127.0.0.13';
 $SQL_DB							= 'sweany';
 $SQL_USER						= 'root';
-$SQL_PASS						= '';
+$SQL_PASS						= 'thisistherootmysqladmin';
 
 
 /**
