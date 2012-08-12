@@ -1,0 +1,3 @@
+*.tar.gz
+usr/config.php
+weany/log/core.log
