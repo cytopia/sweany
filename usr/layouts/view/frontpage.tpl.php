@@ -25,7 +25,7 @@
 			<div style="float:right; width:15em;padding-top:64px;">
 				<div style="border:solid 1px black; height:180px;">
 					<?php /* TODO: need User helper, we do not want to access core Classes!!! */?>
-					<?php if ( \Core\Init\CoreUsers::isLoggedIn() ): ?>
+					<?php if ( $user->isLoggedIn() ): ?>
 						<?php echo $blocks['logoutBox'];?><br/>
 					<?php else: ?>
 						<?php echo $blocks['loginBox']; ?>

@@ -30,6 +30,9 @@ namespace Core\Init;
 
 class CoreUsers extends CoreAbstract
 {
+
+	/**************************************  V A R I A B L E S  **************************************/
+
 	private static $tbl_users			= 'users';
 	private static $tbl_user_groups		= 'user_groups';
 	private static $tbl_failed_logins	= 'user_failed_logins';
@@ -38,13 +41,17 @@ class CoreUsers extends CoreAbstract
 	private static $onlineSinceMinutes;	// count online users from last XX Minutes till now
 	private static $fakeOnlineGuests;	// set the amount of fake online guests
 
+
+
+
+	/**************************************  C O N S T R U C T O R S  **************************************/
+
 	/**
 	 * @Deprecated
 	 */
 	public function __construct()
 	{
 	}
-
 
 	public static function initialize()
 	{
@@ -62,10 +69,25 @@ class CoreUsers extends CoreAbstract
 		return true;
 	}
 
+
+
+
+	/************************************** ONLINE USERS **************************************/
+
+	/**
+	 * Count all current active users
+	 *
+	 * @return integer
+	 */
 	public static function countOnlineUsers()
 	{
 		return (self::$fakeOnlineGuests + \Core\Init\CoreMySql::selectNumRows('SELECT DISTINCT `session_id` FROM '.self::$tbl_online_users));
 	}
+
+	/**
+	 *
+	 * @return integer
+	 */
 	public static function countLoggedInOnlineUsers()
 	{
 		return \Core\Init\CoreMySql::selectNumRows('SELECT
@@ -79,6 +101,11 @@ class CoreUsers extends CoreAbstract
 									GROUP BY
 										tbl_result.fk_user_id');
 	}
+
+	/**
+	 *
+	 * @return integer
+	 */
 	public static function countAnonymousOnlineUsers()
 	{
 		return (self::$fakeOnlineGuests +
@@ -104,6 +131,11 @@ class CoreUsers extends CoreAbstract
 		);
 	}
 
+
+	/**
+	 *
+	 * @return array()
+	 */
 	public static function getLoggedInOnlineUsers()
 	{
 		$query = 'SELECT
@@ -122,192 +154,331 @@ class CoreUsers extends CoreAbstract
 	}
 
 
-	// get Rows
+
+
+
+	/**************************************  G E T   I D   **************************************/
+
+	/**
+	 *
+	 * @return integer
+	 */
+	public static function id()
+	{
+		$user	= \Core\Init\CoreSession::get('user');
+		return (int) ( isset($user['id']) && is_numeric($user['id']) && $user['id'] > 0 ) ? $user['id'] : 0;
+	}
+
+	/**
+	 * @param string $username
+	 * @param string $password (cleartext)
+	 * @return integer
+	 */
+	public static function getIdByNameAndPassword($username, $password)
+	{
+		$user_id	= self::getIdByName($username);
+		$salt		= self::_getPasswordSalt($user_id);
+
+		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`username` = '%s' AND `password` = '%s'",
+				mysql_real_escape_string($username),
+				self::_encryptPassword($password, $salt))
+		);
+	}
+
+	/**
+	 * @param string $username
+	 * @return integer
+	 */
+	public static function getIdByName($username)
+	{
+		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`username`= '%s'", mysql_real_escape_string($username)));
+	}
+
+	/**
+	 * @param string $email
+	 * @return integer
+	 */
+	public static function getIdByEmail($email)
+	{
+		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`email` = '%s'", mysql_real_escape_string($email)));
+	}
+
+	/**
+	 * @param string $reset_password_key
+	 * @return integer
+	 */
+	public static function getIdByResetPasswordKey($reset_password_key)
+	{
+		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`reset_password_key` = '%s'", mysql_real_escape_string($reset_password_key)));
+	}
+
+
+
+
+	/**************************************  C U R R E N T   U S E R   **************************************/
+
+	/**
+	 * Returns the info whether or not the current user session is logged in.
+	 *
+	 * @param integer $paranoid (also check php session against session stored in database)
+	 * @return boolean
+	 */
+	public static function isLoggedIn($paranoid = true)
+	{
+		$user		= \Core\Init\CoreSession::get('user');
+
+		// validate php session
+		if ( !(isset($user['auth']) && $user['auth']) )
+		{
+			return false;
+		}
+		else
+		{
+			if ( $paranoid )
+			{
+				$user_id	= self::id();
+				$sess_id	= \Core\Init\CoreSession::getId();
+
+				// check php session against stored session in mysql
+				if ( $sess_id != \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'session_id', $user_id) )
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+			else
+			{
+				return true;
+			}
+
+		}
+	}
+
+
+	/**
+	 *
+	 * @param string @clearTextPwd
+	 * @return boolean
+	 */
+	public static function isMyPassword($clearTextPwd)
+	{
+		$user_id	= self::id();
+		$salt		= self::_getPasswordSalt($user_id);
+
+		$encrypted	= self::_encryptPassword($clearTextPwd, $salt);
+
+		return ( $encrypted == \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'password', $user_id) );
+	}
+
+
+
+
+	/************************************** GET USER INFO **************************************/
+
+	/**
+	 * Returns the username of the current logged in user,
+	 * or alternatively of the one specified by the corresponding id.
+	 *
+	 * @param  integer $id (optional)
+	 * @return string
+	 */
+	public static function name($id = null)
+	{
+		$id = (is_null($id)) ? self::id() : (int)$id;
+
+		return \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'username', $id);
+	}
+
+
+	/**
+	 * Returns the data array of the current logged in user,
+	 * or alternatively of the one specified by the corresponding id.
+	 *
+	 * @param integer $id (optional)
+	 * @return array()
+	 */
+	public static function data($id = null)
+	{
+		$id		= (is_null($id)) ? self::id() : (int)$id;
+		$query	= sprintf('SELECT * FROM `%s` WHERE `id` = %d', self::$tbl_users, $id);
+		$data	= \Core\Init\CoreMysql::select($query);
+
+		return (isset($data[0])) ? $data[0] : array();
+	}
+
+
+	/**
+	 *
+	 * @param integer $id (optional)
+	 * @return boolean
+	 */
+	public static function isAdmin($id = null)
+	{
+		$id		= (is_null($id)) ? self::id() : (int)$id;
+		return \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'is_admin', $id);
+	}
+
+
+	/**
+	 *
+	 * @param interger $id (optional)
+	 * @return boolean
+	 */
+	public static function isEnabled($id = null)
+	{
+		$id = (is_null($id)) ? self::id() : (int)$id;
+		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d AND is_enabled = 1", mysql_real_escape_string($id)));
+	}
+
+
+	/**
+	 *
+	 * @param interger $id (optional)
+	 * @return boolean
+	 */
+	public static function isLocked($id = null)
+	{
+		$id = (is_null($id)) ? self::id() : (int)$id;
+		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d AND is_locked = 1", mysql_real_escape_string($id)));
+	}
+
+
+	/**
+	 *
+	 * @param interger $id (optional)
+	 * @return boolean
+	 */
+	public static function isDeleted($id = null)
+	{
+		$id = (is_null($id)) ? self::id() : (int)$id;
+		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d AND is_deleted = 1", mysql_real_escape_string($id)));
+	}
+
+
+
+
+	/************************************** E X I S T S   I N F O **************************************/
+
+	/**
+	 *
+	 * @param integer $user_id
+	 * @param boolean
+	 */
+	public static function exists($user_id)
+	{
+		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d", mysql_real_escape_string($user_id)));
+	}
+
+	/**
+	 *
+	 * @param string $username
+	 * @return boolean
+	 */
+	public static function usernameExists($username)
+	{
+		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("username = '%s'", mysql_real_escape_string($username)));
+	}
+
+	/**
+	 *
+	 * @param string $email
+	 * @return boolean
+	 */
+	public static function emailExists($email)
+	{
+		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("email = '%s'", mysql_real_escape_string($email)));
+	}
+
+
+	/**
+	 * Check if the specified email already exists for another
+	 * user other than the current logged in user.
+	 * (Usefull if you want to edit the email of the current logged in user)
+	 *
+	 * @param	string	$email
+	 * @return	bool
+	 */
+	public static function otherUserHasThisEmail($email)
+	{
+		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`email` = '%s' AND `id` <> %d", mysql_real_escape_string($email), self::id()));
+	}
+
+
+
+
+	/************************************** GET MANY USERS **************************************/
+
+	/**
+	 * @return array()
+	 */
 	public static function getAllUsers()
 	{
 		return \Core\Init\CoreMySql::select('SELECT * FROM '.self::$tbl_users);
 	}
+
+
+	/**
+	 * @return array()
+	 */
 	public static function getAllUserGroups($order = array())
 	{
 		return \Core\Init\CoreMySql::select('SELECT * FROM '.self::$tbl_user_groups);
 	}
+
+	/**
+	 * @return array()
+	 */
 	public static function getAllFailedLogins($order = array())
 	{
 		return \Core\Init\CoreMySql::select('SELECT * FROM '.self::$tbl_failed_logins);
 	}
 
 
-	public static function update($fields = array())
-	{
-		if ( isset($fields['modified']) )
-			$fields['modified'] = date("Y-m-d H:i:s", time());
-		if ( isset($fields['password']) )
-			$fields['password'] = self::_encryptPassword($fields['password']);
 
-		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, $fields, self::id());
-	}
-	public static function updatePassword($user_id, $password)
-	{
-		$fields['password'] = self::_encryptPassword($password);
 
-		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, $fields, $user_id);
-	}
+	/************************************** ACTIONS  **************************************/
 
-	public static function isMyPassword($clearTextPwd)
+	public static function login($username, $password, $log_bad_attempts = true)
 	{
-		$encrypted	= self::_encryptPassword($clearTextPwd);
-		$data		= self::data();
+		$user_id	= self::getIdByName($username);
 
-		return ($encrypted == $data['password']);
-	}
-
-	public static function data()
-	{
-		$query	= sprintf('SELECT * FROM `%s` WHERE `id` = %d', self::$tbl_users, self::id());
-		$data	= \Core\Init\CoreMysql::select($query);
-		return $data[0];
-	}
-
-	public static function id()
-	{
-		return self::isLoggedIn();
-	}
-
-	public static function name()
-	{
-		return \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'username', self::_isLoggedIn());
-	}
-
-	public static function getNameById($id)
-	{
-		return \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'username', $id);
-	}
-	public static function getIdByNameAndPassword($username, $password)
-	{
-		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`username` = '%s' AND `password` = '%s'",
-			mysql_real_escape_string($username),
-			self::_encryptPassword($password))
+		$condition	= sprintf("username = '%s' AND password = '%s' AND is_enabled = 1 AND is_deleted = 0 AND is_locked = 0",
+				mysql_real_escape_string($username),
+				$password
 		);
-	}
 
-	public static function getIdByName($username)
-	{
-		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`username`= '%s'", mysql_real_escape_string($username)));
-	}
-	public static function getIdByEmail($email)
-	{
-		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`email` = '%s'", mysql_real_escape_string($email)));
-	}
-	public static function getIdByResetPasswordKey($reset_password_key)
-	{
-		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`reset_password_key` = '%s'", mysql_real_escape_string($reset_password_key)));
-	}
-
-	public static function getEnabledUser()
-	{
-		$user_id = self::isLoggedIn();
-		return self::_getEnabledUser($user_id);
-	}
-
-	public static function isLoggedIn()
-	{
-		return self::_isLoggedIn();
-	}
-
-	public static function setResetPasswordKey($user_id)
-	{
-		// TODO:
-		// IMPORTANT:
-		//
-		// need to check that this key is unique!!!
-		//
-
-		// Generate random key
-		$session_id = Session::getId();
-		$ip			= $_SERVER['REMOTE_ADDR'];
-			$hostname	= $hostname	= @gethostbyaddr($ip);
-		$key		= md5(rand().time().$session_id.$ip.$hostname.rand().$user_id);
-
-		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('reset_password_key' => $key), $user_id);
-	}
-	public static function checkPasswordResetKey($password_reset_key)
-	{
-		$condition	= sprintf("reset_password_key = '%s' AND LENGTH(reset_password_key)>0", mysql_real_escape_string($password_reset_key));
-		$user_id	= \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', $condition);
-
-		if ( $user_id )
+		// can login
+		if ( self::checkLogin($username, $password, $log_bad_attempts) )
 		{
-			return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id);
-		}
-		else
-		{
-			return false;
-		}
-	}
+			$user = self::data($user_id);
 
-	public static function removeResetPasswordKey($user_id)
-	{
-		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('reset_password_key' => ''), $user_id);
-	}
+			// update login session, time and ip
+			self::_updateSuccessfulLogin($user_id);
 
-	public static function isAdmin()
-	{
-		$user_id = self::_isLoggedIn();
+			// Set user session
+			unset($user['password']);
+			$user['auth'] = TRUE;
+			\Core\Init\CoreSession::set('user', $user);
 
-		return self::_isAdmin($user_id);
-	}
-
-	public static function logout($session_id)
-	{
-		if ( $session_id == \Core\Init\CoreSession::getId() )
-		{
-			\Core\Init\CoreSession::del('user');
 			return true;
 		}
 		return false;
 	}
 
 
-
-	public static function usernameExists($username)
+	public static function checkLogin($username, $clearTextPwd, $log_bad_attempts = true)
 	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("username = '%s'", mysql_real_escape_string($username)));
-	}
-	public static function emailExists($email)
-	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("email = '%s'", mysql_real_escape_string($email)));
-	}
-	public static function otherUserHasThisEmail($email)
-	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`email` = '%s' AND `id` <> %d", mysql_real_escape_string($email), self::id()));
-	}
-	public static function exists($user_id)
-	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d", mysql_real_escape_string($user_id)));
-	}
-	public static function isLocked($user_id)
-	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d AND is_locked = 1", mysql_real_escape_string($user_id)));
-	}
-	public static function isEnabled($user_id)
-	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d AND is_enabled = 1", mysql_real_escape_string($user_id)));
-	}
-	public static function isDeleted($user_id)
-	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d AND is_deleted = 1", mysql_real_escape_string($user_id)));
-	}
-
-	public static function checkLogin($username, $password, $log_bad_attempts = true)
-	{
-		$password	= self::_encryptPassword($password);
-		$user_id	= self::_getUserIdByName($username);
-		$user		= self::_getEnabledUser($user_id);
+		$user_id	= self::getIdByName($username);
+		$salt		= self::_getPasswordSalt($user_id);
+		$password	= self::_encryptPassword($clearTextPwd, $salt);
 
 		$condition	= sprintf(
-			"username = '%s' AND password = '%s' AND is_enabled = 1 AND is_deleted = 0 AND is_locked = 0",
-			mysql_real_escape_string($username),
-			$password
+				"username = '%s' AND password = '%s' AND is_enabled = 1 AND is_deleted = 0 AND is_locked = 0",
+				mysql_real_escape_string($username),
+				$password
 		);
 
 		// can login
@@ -322,12 +493,77 @@ class CoreUsers extends CoreAbstract
 		// log failed login attempts
 		if ( $log_bad_attempts )
 		{
-			self::_logFailedLogin($username, $password);
+			self::_logFailedLogin($username, $clearTextPwd);
 		}
 
 		return false;
 	}
 
+	public static function logout($session_id)
+	{
+		if ( $session_id == \Core\Init\CoreSession::getId() )
+		{
+			\Core\Init\CoreSession::del('user');
+			return true;
+		}
+		return false;
+	}
+
+
+
+
+	/************************************** ADD/UPDATE  **************************************/
+
+	public static function addUser($username, $password, $email)
+	{
+		$salt = self::_createPasswordSalt();
+		$data = array('username'			=> $username,
+						'password'			=> self::_encryptPassword($password, $salt),
+						'password_salt'		=> $salt,
+						'email'				=> $email,
+						'has_accepted_terms'=> 1,
+						'is_enabled'		=> 0,		// needs to validate with validation_key
+						'is_locked'			=> 0,
+						'is_deleted'		=> 0,
+						'validation_key'	=> md5(\Core\Init\CoreSession::getId().$username.$password.$email.time()),
+						'created'			=> date('Y-m-d H:i:s', time()),
+		);
+		return \Core\Init\CoreMySql::insertRow('users', $data);
+	}
+
+	/**
+	 * Update current logged in user (by its id)
+	 *
+	 * @param array() $fields
+	 */
+	public static function update($fields = array())
+	{
+		if ( isset($fields['modified']) )
+			$fields['modified'] = date('Y-m-d H:i:s', time());
+		if ( isset($fields['password']) )
+			$fields['password'] = self::_encryptPassword($fields['password'], self::_getPasswordSalt(self::id()));
+
+		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, $fields, self::id());
+	}
+
+	/**
+	 *
+	 * @param integer $password (cleartext)
+	 */
+	public static function updatePassword($password)
+	{
+		$fields['password'] = self::_encryptPassword($password, self::_getPasswordSalt(self::id()));
+
+		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, $fields, self::id());
+	}
+
+	/**
+	 * Validate a registered user by the validation key.
+	 * This key should have been sent to him by email
+	 * and makes the final step for registration
+	 *
+	 * @param string $validation_key
+	 */
 	public static function validate($validation_key)
 	{
 		$condition	= sprintf("validation_key = '%s'", mysql_real_escape_string($validation_key));
@@ -344,106 +580,89 @@ class CoreUsers extends CoreAbstract
 
 	}
 
-	public static function login($username, $password, $log_bad_attempts = true)
+	public static function setResetPasswordKey($user_id)
 	{
-		$user_id	= self::_getUserIdByName($username);
+		// Generate random key
+		$session_id = Session::getId();
+		$ip			= $_SERVER['REMOTE_ADDR'];
+		$hostname	= @gethostbyaddr($ip);
+		$key		= md5(mt_rand().time().$session_id.$ip.$hostname.mt_rand().$user_id);
 
-		$condition	= sprintf("username = '%s' AND password = '%s' AND is_enabled = 1 AND is_deleted = 0 AND is_locked = 0",
-			mysql_real_escape_string($username),
-			$password
-		);
+		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('reset_password_key' => $key), $user_id);
+	}
 
-		// can login
-		if ( self::checkLogin($username, $password, $log_bad_attempts) )
+	/**
+	 *
+	 * @param string $password_reset_key
+	 * @return boolean
+	 */
+	public static function checkPasswordResetKey($password_reset_key)
+	{
+		$condition	= sprintf("reset_password_key = '%s' AND LENGTH(reset_password_key)>0", mysql_real_escape_string($password_reset_key));
+		$user_id	= \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', $condition);
+
+		if ( $user_id )
 		{
-			$user = self::_getEnabledUser($user_id);
-
-			// update login session, time and ip
-			self::_updateSuccessfulLogin($user_id);
-
-			// Set user session
-			unset($user['password']);
-			$user['auth'] = TRUE;
-			\Core\Init\CoreSession::set('user', $user);
-
-			return true;
+			return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id);
 		}
-		return false;
+		else
+		{
+			return false;
+		}
 	}
 
-
-
-	public static function addUser($username, $password, $email)
+	/**
+	 *
+	 * @param integer $user_id
+	 */
+	public static function removeResetPasswordKey($user_id)
 	{
-		$data = array(
-				'username'			=> $username,
-				'password'			=> self::_encryptPassword($password),
-				'email'				=> $email,
-				'has_accepted_terms'=> 1,
-				'is_enabled'		=> 0,		// needs to validate with validation_key
-				'is_locked'			=> 0,
-				'is_deleted'		=> 0,
-				'validation_key'	=> md5(\Core\Init\CoreSession::getId().$username.$password.$email.time()),
-				'created'			=> date("Y-m-d H:i:s", time()),
-		);
-		return \Core\Init\CoreMySql::insertRow('users', $data);
+		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('reset_password_key' => ''), $user_id);
 	}
+
+
 
 
 	/******************************************************** private functions ********************************************************/
 
-
-
-	private static function _encryptPassword($password)
+	/**
+	 *
+	 * @param string $password
+	 * @return string
+	 */
+	private static function _encryptPassword($clearTextPassword, $passwordSalt)
 	{
-		return md5(md5($password).$GLOBALS['USER_PWD_SALT']);
+		return md5($clearTextPassword.$passwordSalt);
 	}
 
-
-	private static function _isLoggedIn()
+	/**
+	 * create a random Password Salt
+	 */
+	private static function _createPasswordSalt()
 	{
-		$user		= \Core\Init\CoreSession::get('user');
-		$user_id	= isset($user['id']) ? $user['id'] : 0;
-		$sess_id	= \Core\Init\CoreSession::getId();
-
-
-		// validate php session
-		if ( !$user['auth'] )
-		{
-			return FALSE;
-		}
-
-		// check php session against stored session in mysql
-		if ( $sess_id != \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'session_id', $user_id) )
-		{
-			return FALSE;
-		}
-
-		return $user_id;
+		return md5( mt_rand().microtime(true).mt_rand().$_SERVER['REMOTE_ADDR'].mt_rand() );
 	}
 
-	private static function _isAdmin($user_id)
+	/**
+	 * Get the password salt from a specified user
+	 *
+	 * @param integer $user_id
+	 * @return string
+	 */
+	private static function _getPasswordSalt($user_id)
 	{
-		return \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'is_admin', $user_id);
+		return \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'password_salt', $user_id);
 	}
 
-
-	private static function _getEnabledUser($user_id)
-	{
-		$query	= sprintf('SELECT * FROM '.self::$tbl_users.' WHERE id = %d AND is_deleted = 0 AND is_locked = 0 AND is_enabled = 1', $user_id);
-		$data 	= \Core\Init\CoreMySql::select($query);
-		return isset($data[0]) ? $data[0] : array();
-	}
-	private static function _getUserIdByName($username)
-	{
-		return \Core\Init\CoreMySQL::fetchField(self::$tbl_users, 'id', sprintf("username = '%s'", $username));
-	}
-
+	/**
+	 *
+	 * @param integer $user_id
+	 */
 	private static function _updateSuccessfulLogin($user_id)
 	{
 		$session_id = \Core\Init\CoreSession::getId();
 		$ip			= $_SERVER['REMOTE_ADDR'];
-		$hostname	= $hostname	= @gethostbyaddr($ip);
+		$hostname	= @gethostbyaddr($ip);
 		$login_time	= date("Y-m-d H:i:s", time());
 
 		$fields = array(
@@ -453,26 +672,30 @@ class CoreUsers extends CoreAbstract
 			'last_login'				=> $login_time,
 			'last_failed_login_count'	=> 0,
 		);
-
 		return \Core\Init\CoreMySQL::updateRow(self::$tbl_users, $fields, $user_id);
 	}
 
+	/**
+	 *
+	 * @param string $username
+	 * @param string $password
+	 */
 	private static function _logFailedLogin($username, $password)
 	{
 		$session_id = \Core\Init\CoreSession::getId();
 		$ip			= $_SERVER['REMOTE_ADDR'];
-		$hostname	= $hostname	= @gethostbyaddr($ip);
+		$hostname	= @gethostbyaddr($ip);
 		$login_time	= date("Y-m-d H:i:s", time());
 
 		$fields = array(
 			'username'		=> $username,
-			'password'		=> self::_encryptPassword($password),
+			'password'		=> md5($password),	// only log md5 hashes of failed logins
 			'referer'		=> isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
 			'useragent'		=> $_SERVER['HTTP_USER_AGENT'],
 			'session_id'	=> $session_id,
 			'ip'			=> $ip,
 			'hostname'		=> $hostname,
-			'created'		=> date("Y-m-d H:i:s", time()),
+			'created'		=> $login_time,
 		);
 		return \Core\Init\CoreMySql::insertRow(self::$tbl_failed_logins, $fields);
 	}

@@ -1,7 +1,7 @@
 ﻿<h1 class="forum"><?php echo $headline; ?></h1>
 
 
-<?php if (!Users::isLoggedIn()):?>
+<?php if (!$user->isLoggedIn()):?>
 	<br/>
 	<div style="font-size:16px;"><?php echo $language->createThread; ?></div>
 	<p><?php echo $language->createLoginNote; ?> <?php echo Html::l($language->here, $userLoginCtl,$userLoginMethod);?> <?php echo $language->or;?> <?php echo Html::l($language->registerFree, $userRegisterCtl,$userRegisterMethod);?></p>

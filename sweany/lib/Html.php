@@ -21,7 +21,7 @@
  * @package		sweany.core.lib
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25
+ * @version		0.8 2012-08-13 13:25
  *
  *
  * Html Helper
@@ -57,7 +57,7 @@ Class Html
 
 
 		// TODO: maybe need to escape the params for url - keep an eye on it
-		$args = implode('/',  array_map(create_function('$param', 'return ($param);'), array_values($params)));
+		$args = implode('/', array_map(create_function('$param', 'return ($param);'), array_values($params)));
 		$attr = implode(' ', array_map(create_function('$key, $val', 'return $key."=\"".$val."\"";'), array_keys($attributes), array_values($attributes)));
 		$link = '/'.$controller.'/'.$method.'/'.$args;
 
@@ -82,22 +82,14 @@ Class Html
 	/**
 	 * returns html image
 	 *
-	 * TODO: foreach is too slow, have to replace with create_function!
-	 *
 	 * @param unknown_type $src
 	 * @param unknown_type $alt
 	 * @param unknown_type $options
 	 */
-	public static function img($src, $alt = NULL, $options = null)
+	public static function img($src, $alt = null, $options = array())
 	{
-		$opts = '';
-		if ( is_array($options) )
-		{
-			foreach ($options as $key => $value)
-			{
-				$opts	.= $key.'="'.$value.'" ';
-			}
-		}
+		$opts = implode(' ', array_map( create_function('$key, $val', 'return $key."=\"".$val."\"";'), array_keys($options), array_values($options)));
+
 		return '<img border="0" src="'.$src.'" alt="'.$alt.'"' .$opts.' />';
 	}
 
@@ -110,9 +102,18 @@ Class Html
 
 		foreach ($all as $lang=>$name)
 		{
-			$switch .= '<a href="/'.$ctrl.'/'.$mthd.'/'.$lang.'">';
-			$switch .= '<img title="'.$name.'" src="'.$path.'/'.$lang.'.png" alt="'.$name.'" />';
-			$switch .= '</a> ';
+			// Current language does not require a click link
+			if ( $lang == \Core\Init\CoreLanguage::getLangShort() )
+			{
+				$switch .= '<img title="'.$name.'" src="'.$path.'/'.$lang.'.png" alt="'.$name.'" border="0" /> ';
+			}
+			// All other language need a link to change it
+			else
+			{
+				$switch .= '<a href="/'.$ctrl.'/'.$mthd.'/'.$lang.'">';
+				$switch .= '<img title="'.$name.'" src="'.$path.'/'.$lang.'.png" alt="'.$name.'" border="0" />';
+				$switch .= '</a> ';
+			}
 		}
 		return $switch;
 	}

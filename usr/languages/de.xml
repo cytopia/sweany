@@ -7,6 +7,7 @@
 			<lang_name>Deutsch</lang_name>
 			<lang_short>de</lang_short>
 			<lang_long>de-DE</lang_long>
+			<date_format>d.m.Y</date_format>
 		</settings>
 		<default>
 			<page id="notFound">

@@ -338,6 +338,16 @@ class Validator extends CoreAbstract
 			self::$error = '<b>$EMAIL_SYSTEM_RETURN_EMAIL</b> is not a valid email';
 			return false;
 		}
+		if ( !isset($GLOBALS['EMAIL_STORE_SEND_MESSAGES']) )
+		{
+			self::$error = '<b>$EMAIL_STORE_SEND_MESSAGES</b> not defined in <b>config.php</b>';
+			return false;
+		}
+		if ( ($GLOBALS['EMAIL_STORE_SEND_MESSAGES']) && !$GLOBALS['SQL_ENABLE'])
+		{
+			self::$error = '<b>$EMAIL_STORE_SEND_MESSAGES</b> is enabled, but <b>SQL_ENABLE</b> is not enabled in <b>config.php</b>';
+			return false;
+		}
 
 
 		/***************************************************************************
@@ -675,19 +685,6 @@ class Validator extends CoreAbstract
 
 	private static function validateUsers()
 	{
-		// Password SALT
-		if ( !isset($GLOBALS['USER_PWD_SALT']) )
-		{
-			self::$error  = '<b>$USER_PWD_SALT</b> not defined in <b>config.php</b>';
-			return false;
-		}
-		else if ( strlen($GLOBALS['USER_PWD_SALT']) < 10 )
-		{
-			self::$error  = '<b>$USER_PWD_SALT</b> should have at least 10 characters';
-			return false;
-		}
-
-
 		// CHECK SQL TABLES
 		if ( count(\Core\Init\CoreMySql::select("show tables  from `$GLOBALS[SQL_DB]` like 'users'; ")) < 1 )
 		{

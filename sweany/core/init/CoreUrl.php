@@ -86,8 +86,9 @@ class CoreUrl extends CoreAbstract
 	public static function getParams()
 	{
 		$params	= array();
+		$size	= count(self::$urlParams);
 
-		for ($i=2; $i<sizeof(self::$urlParams); $i++)
+		for ($i=2; $i<$size; $i++)
 		{
 			$params[]	= self::$urlParams[$i];
 		}
@@ -103,11 +104,11 @@ class CoreUrl extends CoreAbstract
 	public static function changeSingleParam($param_position, $value)
 	{
 		$arr	= self::getParams();
-		$size 	= (sizeof($arr) >= $param_position) ? sizeof($arr) : $param_position;
+		$size 	= (count($arr) >= $param_position) ? count($arr) : $param_position;
 		$params	= array();
 
 		// fill up missing params with 0 if not set before $param_position
-		for($i=0; $i<$size; $i++)
+		for ($i=0; $i<$size; $i++)
 		{
 			if ( !isset($arr[$i]) && !strlen($arr[$i]) )
 				$params[$i] = 0;

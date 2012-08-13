@@ -53,4 +53,11 @@ class Url extends \Core\Init\CoreUrl
 		return parent::getRequest();
 	}
 
+	public static function cleanUrlParams($urlParamString)
+	{
+		$clean = preg_replace("/[^a-zA-Z0-9.\/_|+ -]/", '', $urlParamString);
+		$clean = preg_replace("/[\/|+ -]+/", '-', $clean);
+		return ($clean);
+	}
+
 }
