@@ -3,6 +3,7 @@
 + Mail Helper can optionally store sent emails in database
 + Password salts are now unique to every user (no longer in global config)
 + new table for stored emails
++ new Helper: LogCat (project specific file loggin)
 + various fixes
 
 
