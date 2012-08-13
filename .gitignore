@@ -1,3 +1,4 @@
 *.tar.gz
+.gitignore
 #usr/config.php
 #sweany/log/core.log
