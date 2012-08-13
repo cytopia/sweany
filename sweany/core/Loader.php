@@ -152,6 +152,7 @@ Class Loader
 
 		// Add internal library classes
 		$paths[]	= LIB_PATH.DS.$sClassName.$ext;
+		$paths[]	= USR_VENDORS_PATH.DS.$sClassName.$ext;
 		$paths[]	= LIB_HL_PATH.DS.$sClassName.$ext;
 
 
