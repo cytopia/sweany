@@ -1,3 +1,11 @@
+2012-08-13
+-----------------
++ Mail Helper can optionally store sent emails in database
++ Password salts are now unique to every user (no longer in global config)
++ new table for stored emails
++ various fixes
+
+
 2012-08-06
 -----------------
 + Implementation of 'fast core'
