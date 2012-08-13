@@ -1,5 +1,5 @@
 <div class="topbar" style="text-align:right;">
-	<?php echo Html::getLanguageSwitcher('Site', 'lang'); ?>
+	<?php echo Html::getLanguageSwitcher(); ?>
 </div>
 
 <div id="whole">
@@ -21,7 +21,7 @@
 		</div>
 
 		<div id="footer">
-			
+
 		</div>
 
 	</div><!--#wraper -->

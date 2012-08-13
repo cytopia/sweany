@@ -35,6 +35,22 @@ class CoreCallback extends CoreAbstract
 
 	private static $object	= array();
 
+	/**
+	 *
+	 * Holds the decision whether or not the page was
+	 * visit by the user on purpose. It will be used later
+	 * to track the page visits and be able to redirect the user
+	 * to the last visited page.
+	 *
+	 * If for example the call is made to a Default Controller
+	 * 'not_found', 'info_message' or 'settings', etc. then
+	 * this is not a visitable page, as we do not want to redirect
+	 * the user back to one of those pages
+	 *
+	 * @param boolean $visitablePage
+	 */
+	public static $visitablePage = false;
+
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
 
 	/**
@@ -73,7 +89,23 @@ class CoreCallback extends CoreAbstract
 			);
 			return true;
 		}
+		else if ( $controller == $GLOBALS['DEFAULT_SETTINGS_URL'] )
+		{
+			\SysLog::i('Callback', 'Internal request: '.\Core\Init\CoreUrl::$request);
 
+			// Load the Framework Default Page Controller
+			require_once(CORE_PAGES_PATH.DS.'FrameworkDefault.php');
+
+			// push the method into params, as we do not have a method here
+			// and the 2nd param (normally method) is actually a parameter
+			array_unshift($params, $method);
+			self::$object = array(
+							'class'		=> 'FrameworkDefault',
+							'method'	=> 'change_settings',
+							'params'	=> $params,
+			);
+			return true;
+		}
 
 		//------------- 01) No controller specified, so start with the default entry point
 		else if ( !$controller )
@@ -87,6 +119,7 @@ class CoreCallback extends CoreAbstract
 				'method'	=> $GLOBALS['DEFAULT_METHOD'],
 				'params'	=> array(),
 			);
+			self::$visitablePage = true;
 			return true;
 		}
 
@@ -154,6 +187,7 @@ class CoreCallback extends CoreAbstract
 				'method'	=> $method,
 				'params'	=> $params,
 			);
+			self::$visitablePage = true;
 			return true;
 		}
 	}

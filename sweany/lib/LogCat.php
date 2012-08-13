@@ -1,4 +1,5 @@
-<?php/**
+<?php
+/**
  * Sweany MVC PHP framework
  * Copyright (C) 2011-2012 Patu.
  *
@@ -20,10 +21,49 @@
  * @package		sweany.lib
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25 * * * Project Log Helper */class LogCat{	/******************************************  V A R I A B L E S  ******************************************/	/******************************************  F U N C T I O N S  ******************************************/	/**	 *	 * Error	 *	 * @param String $message	 * 		Error message	 *	 */	public static function e($message)	{		self::_logToFile('ERROR', $message);	}	/**	 *	 * Warning	 *	 * @param String $message	 * 		Error message	 */	 public static function w($message)
+ * @version		0.7 2012-07-29 13:25
+ *
+ *
+ * Project Log Helper
+ */
+
+class LogCat
+{
+	/******************************************  V A R I A B L E S  ******************************************/
+
+
+
+
+
+	/******************************************  F U N C T I O N S  ******************************************/
+
+
+	/**
+	 *
+	 * Error
+	 *
+	 * @param String $message
+	 * 		Error message
+	 *
+	 */
+	public static function e($message)
+	{
+		self::_logToFile('ERROR', $message);
+	}
+
+	/**
+	 *
+	 * Warning
+	 *
+	 * @param String $message
+	 * 		Error message
+	 */
+	 public static function w($message)
 	 {
 	 	self::_logToFile('WARNING', $message);
-	 }	 /**
+	 }
+
+	 /**
 	  *
 	  * Info
 	  *
@@ -34,4 +74,35 @@
 	 public static function i($message)
 	 {
 	 	self::_logToFile('INFO', $message);
-	 }	/******************************************  P R I V A T E   F U N C T I O N S  ******************************************/	private static function _logToFile($type, $message)	{		// fopen, fwrite, fclose is the faster than file_put_contents (which isjust a wrapper for that)		// fopen, fputs, fclose is fastest		$fp	= fopen(LOG_PATH.DS.$GLOBALS['FILE_LOG_USER'], 'a');		$type_len	= strlen($type);		$head		= '['.date('Y-m-d H:i:s').'] ---- ['.$type.'] '.self::_getChars(50-$type_len, '-');		fputs($fp, $head."\n\r");		fputs($fp, $message."\n\r\n\r");		fclose($fp);	}	private static function _getChars($num, $char)	{		$space ='';		for ($i=0; $i<$num; $i++)			$space .= $char;		return $space;	}}?>
+	 }
+
+
+
+	/******************************************  P R I V A T E   F U N C T I O N S  ******************************************/
+
+	private static function _logToFile($type, $message)
+	{
+		// fopen, fwrite, fclose is the faster than file_put_contents (which isjust a wrapper for that)
+		// fopen, fputs, fclose is fastest
+		$fp	= fopen(LOG_PATH.DS.$GLOBALS['FILE_LOG_USER'], 'a');
+
+		$type_len	= strlen($type);
+		$head		= '['.date('Y-m-d H:i:s').'] ---- ['.$type.'] '.self::_getChars(50-$type_len, '-');
+
+		fputs($fp, $head."\n\r");
+		fputs($fp, $message."\n\r\n\r");
+		fclose($fp);
+	}
+
+	private static function _getChars($num, $char)
+	{
+		$space ='';
+		for ($i=0; $i<$num; $i++)
+			$space .= $char;
+
+		return $space;
+	}
+}
+
+
+?>

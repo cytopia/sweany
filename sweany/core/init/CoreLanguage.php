@@ -243,7 +243,7 @@ Class CoreLanguage extends CoreAbstract
 			// Use the default language
 			if ( !file_exists($file) )
 			{
-				\Log::setWarn('Language', '[Choose] File does not exist - Using default');
+				\SysLog::w('Language', '[Choose] File does not exist - Using default');
 				$short = $GLOBALS['LANGUAGE_DEFAULT_SHORT'];
 			}
 		}

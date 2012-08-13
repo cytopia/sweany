@@ -100,6 +100,35 @@ class CoreUrl extends CoreAbstract
 	}
 
 
+	/**
+	 * Converts controller, method and params to propper url link
+	 *
+	 * @param string $controller	(optional)
+	 * @param string $method		(optional)
+	 * @param array  $params		(optional)
+	 */
+	public static function ControllerMethodAndParamsToUrlLink($controller = null, $method = null, $params = array())
+	{
+		// path is: '/' (root page)
+		if ( is_null($controller) )
+		{
+			$link = '/';
+		}
+		// path is: '/ControllerName'
+		else if ( !is_null($controller) && is_null($method) )
+		{
+			$link = '/'.$controller;
+		}
+		// path is: full path
+		else
+		{
+			$args = (is_array($params)) ? implode('/', $params) : '';
+			$link = '/'.$controller.'/'.$method;
+			$link.= (strlen($args)) ? '/'.$args : '';
+		}
+		return $link;
+	}
+
 
 	public static function changeSingleParam($param_position, $value)
 	{
