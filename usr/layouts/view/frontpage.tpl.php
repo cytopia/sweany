@@ -1,7 +1,6 @@
 <div class="topbar" style="text-align:right;">
-	<?php echo Html::getLanguageSwitcher('Site', 'lang'); ?>
+	<?php echo Html::getLanguageSwitcher(); ?>
 </div>
-
 <div id="whole">
 	<div id="wraper">
 		<div id="header">

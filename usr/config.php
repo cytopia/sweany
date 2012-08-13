@@ -168,11 +168,33 @@ $FILE_LOG_USER			= 'debug.log';	// For custom project logging
 $DEFAULT_TIME_ZONE				= 'Europe/Berlin';
 
 
+
+/*
+ * $DEFAULT_LAYOUT
+ *
+ * If you do not use or do not need a custom Layout Controller,
+ * then you need to tell the framework which default layout-view you want to use
+ *
+ * It must be in usr/layouts/view/
+ * Default is: 'default.tpl.php'
+ *
+ */
+$DEFAULT_LAYOUT					= 'default.tpl.php';
+
+
+
+
+/***************************************************************************
+ *
+*  Default URL Defines
+*
+***************************************************************************/
+
 /*
  * $DEFAULT_CONTROLLER
  *
- * When calling http://yourdomain.tld of this project controller and method
- * should handle this request
+ * When calling http://yourdomain.tld of this project, which controller and method
+ * should handle this request?
  *
  * This class must exist in usr/pages/controller
  * And the class must have the corresponding public function
@@ -193,23 +215,15 @@ $DEFAULT_METHOD					= 'index';
  *
  * Then you can specify a function (which must exist in all Controllers)
  * that will handle this request.
+ *
+ * This not only makes your url calls look nicer, but also let them appear
+ * like a tree-organized webpage which is good for seo.
+ *
  * Default is: 'index'
  */
 $ANY_CONTROLLER_DEFAULT_METHOD	= 'index';
 
 
-
-/*
- * $DEFAULT_LAYOUT
- *
- * If you do not use or do not need a custom Layout Controller,
- * then you need to tell the framework which default layout-view you want to use
- *
- * It must be in usr/layouts/view/
- * Default is: 'default.tpl.php'
- *
- */
-$DEFAULT_LAYOUT					= 'default.tpl.php';
 
 
 /*
@@ -258,7 +272,6 @@ $DEFAULT_INFO_MESSAGE_URL		= 'note';
  *
  * Note: Also make sure not to name any controller like this.
  *
- * TODO: Still lacks implementation
  *
  */
 $DEFAULT_SETTINGS_URL			= 'settings';

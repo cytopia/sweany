@@ -94,10 +94,11 @@ Class Html
 	}
 
 
-	public static function getLanguageSwitcher($ctrl, $mthd)
+	public static function getLanguageSwitcher()
 	{
 		$all	= $GLOBALS['LANGUAGE_AVAILABLE'];
 		$path	= $GLOBALS['LANGUAGE_IMG_PATH'];
+		$url	= $GLOBALS['DEFAULT_SETTINGS_URL'];
 		$switch	= '';
 
 		foreach ($all as $lang=>$name)
@@ -110,7 +111,7 @@ Class Html
 			// All other language need a link to change it
 			else
 			{
-				$switch .= '<a href="/'.$ctrl.'/'.$mthd.'/'.$lang.'">';
+				$switch .= '<a href="/'.$url.'/lang/'.$lang.'">';
 				$switch .= '<img title="'.$name.'" src="'.$path.'/'.$lang.'.png" alt="'.$name.'" border="0" />';
 				$switch .= '</a> ';
 			}

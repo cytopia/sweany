@@ -30,6 +30,11 @@
 	<!-- Normal Page Controller Defines -->
 	<usr>
 		<PageSection>
+			<Test>
+				<page id="index">
+					<fieldsetName>Fieldset</fieldsetName>
+				</page>
+			</Test>
 			<Site>
 				<page id="index">
 					<html_title>Home</html_title>
