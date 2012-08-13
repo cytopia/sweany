@@ -20,4 +20,10 @@
  * @package		sweany.core
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25 * * * Abstract parent for block controller */abstract Class BlockController extends BaseController{	/* ***************************************************** VARIABLES ***************************************************** */	/**	 *  This is an overriden variable from the	 *  BaseController and its only function is	 *  to tell the loadModel function, that it should	 *  directly load a block model instead of a normal model	 */	protected $block	= true;	private $blockName	= null;	//public $render = false;	/* ***************************************************** CONSTRUCTOR ***************************************************** */	function __construct()	{		parent::__construct();		$this->blockName	= get_called_class();		$this->language	= new \Core\Init\CoreLanguage($this->plugin, 'block', get_class($this));	}	function __destruct()	{		parent::__destruct();	}}
+ * @version		0.7 2012-07-29 13:25 * * * Abstract parent for block controller */abstract Class BlockController extends BaseController{	/* ***************************************************** VARIABLES ***************************************************** */	/*
+	 * Defines the type of the controller
+	* page, layout or block.
+	* This is used to tell the language class,
+	* which section to use
+	*/
+	protected $ctrl_type = 'block';	/**	 *  This is an overriden variable from the	 *  BaseController and its only function is	 *  to tell the loadModel function, that it should	 *  directly load a block model instead of a normal model	 */	protected $block	= true;	/* ***************************************************** CONSTRUCTOR ***************************************************** */	function __construct()	{		parent::__construct();	}	function __destruct()	{		parent::__destruct();	}}

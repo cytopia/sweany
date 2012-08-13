@@ -78,6 +78,7 @@ Class CoreLanguage extends CoreAbstract
 		else
 			return $GLOBALS['HTML_DEFAULT_LANG_SHORT'];
 	}
+
 	public static function getLangLong()
 	{
 		if ( $GLOBALS['LANGUAGE_ENABLE'] == true )
@@ -87,11 +88,11 @@ Class CoreLanguage extends CoreAbstract
 	}
 
 
-
-
-	/****************************************** CORE MODULE INITIALIZER ******************************************/
-
-
+	/**
+	 * Change the language (loads a different xml file)
+	 *
+	 * @param string $short_lang (language short code)
+	 */
 	public static function changeLanguage($short_lang = 'en')
 	{
 		\SysLog::i('Language', 'Change to '.$short_lang);
@@ -105,8 +106,7 @@ Class CoreLanguage extends CoreAbstract
 
 
 
-	/********************************************     P U B L I C S  ********************************************/
-
+	/********************************************  C O N S T R U C T O R  ********************************************/
 
 	public function __construct($plugin, $type, $controller)
 	{
@@ -119,6 +119,10 @@ Class CoreLanguage extends CoreAbstract
 
 		\SysLog::i('Language', 'Creating instance for: ['.$type.'] in: '.$path);
 	}
+
+
+
+	/********************************************  P U B L I C S  ********************************************/
 
 	/**
 	 *
@@ -134,11 +138,24 @@ Class CoreLanguage extends CoreAbstract
 		$this->_section = self::$_language->xpath($path);
 	}
 
+	/**
+	 * Choose a page from the core/default section
+	 *
+	 * @param string $id (function name of default pages)
+	 */
 	public function setCore($id)
 	{
 		$this->_section = self::$_language->xpath('/root/core/default/page[@id="'.$id.'"]');
 	}
 
+	/**
+	 * Generic getter.
+	 * Returns a language define for a custom specified call
+	 *
+	 * @param string $path
+	 * @param string $key
+	 * @return string
+	 */
 	public function getCustom($path, $key)
 	{
 		$tmp = self::$_language->xpath($path);

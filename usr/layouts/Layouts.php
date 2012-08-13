@@ -5,8 +5,9 @@ class Layouts extends LayoutController
 	public function FrontPage()
 	{
 		$this->set('language', $this->language);
+		$this->set('user', $this->user);
 
-		if ( !Users::isLoggedIn() )
+		if ( !$this->user->isLoggedIn() )
 		{
 			$params = array('User', 'login', 'User', 'login');
 			$this->attachBlock('loginBox', null, 'User', 'loginLink', $params);

@@ -25,12 +25,12 @@ $thread_time= date($time_format, $timestamp);
 						<?php echo (strtotime($thread['modified'])>0)? $language->editedOn.' '.date($date_format, strtotime($thread['modified'])).' '.$language->atTime.' '.date($time_format, strtotime($thread['modified'])).' ':''; ?>
 					</div>
 					<div class="borderMe" style="float:right;">
-						<?php if ( $thread['fk_user_id'] == Users::id() ):?>
+						<?php if ( $thread['fk_user_id'] == $user->id() ):?>
 							<img src="/img/packages/forum/button_edit.png" alt="edit" onclick="quickEditThread(<?php echo $thread['id'];?>);" />
 						<?php endif; ?>
 					</div>
 					<div style="float:right;">
-						<?php if ( Users::id()>0 ):?>
+						<?php if ( $user->id()>0 ):?>
 							<?php echo Form::start('form_add_post', '/Forums/addPost/'.$forum_id.'/'.$thread_id, array('id' => 'form_post_quote_'.$forum_id.'_'.$thread_id)); ?>
 								<?php echo Form::inputHidden('thisBody', htmlentities($thread['body']), array('id' => 'thisBodyId'.$thread['id'])); ?>
 								<?php echo Form::inputHidden('body', htmlentities($thread['body']), array('id' => 'bodyId')); ?>
@@ -97,12 +97,12 @@ $thread_time= date($time_format, $timestamp);
 							<?php echo (strtotime($post['modified'])>0)? $language->editedOn.' '.date($date_format, strtotime($post['modified'])).' '.$language->atTime.' '.date($time_format, strtotime($post['modified'])).'':''; ?>
 						</div>
 						<div style="float:right;">
-							<?php if ( $post['fk_user_id'] == Users::id() ):?>
+							<?php if ( $post['fk_user_id'] == $user->id() ):?>
 								<img src="/img/packages/forum/button_edit.png" alt="edit" onclick="quickEditPost(<?php echo $post['id'];?>);" />
 							<?php endif; ?>
 						</div>
 						<div style="float:right;">
-							<?php if ( Users::id()>0 ):?>
+							<?php if ( $user->id()>0 ):?>
 								<?php echo Form::start('form_add_post', '/Forums/addPost/'.$forum_id.'/'.$thread_id, array('id' => 'form_post_quote_'.$forum_id.'_'.$thread_id)); ?>
 									<?php echo Form::inputHidden('thisBody', $post['body'], array('id' => 'thisBodyId'.$post['id'])); ?>
 									<?php echo Form::inputHidden('body', $post['body'], array('id' => 'bodyId')); ?>
@@ -154,7 +154,7 @@ $thread_time= date($time_format, $timestamp);
 
 <?php if (!$can_reply): ?>
 	<p><?php echo $language->cantReply; ?></p>
-<?php elseif (!Users::isLoggedIn()):?>
+<?php elseif (!$user->isLoggedIn()):?>
 	<br/>
 	<div style="font-size:16px;"><?php echo $language->directAnswer; ?></div>
 	<p><?php echo $language->replyLoginNote;?> <?php echo Html::l($language->here, $userLoginCtl,$userLoginMethod);?> <?php echo $language->or; ?> <?php echo Html::l($language->registerFree, $userRegisterCtl,$userRegisterMethod);?></p>

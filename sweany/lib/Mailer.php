@@ -21,7 +21,7 @@
  * @package		sweany.core.lib
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25
+ * @version		0.8 2012-08-13 13:25
  *
  *
  * Mail Helper
@@ -47,6 +47,15 @@ class Mailer
 	private static $br		= "\r\n";
 
 
+	/**
+	 * Database table to store send emails,
+	 * if specified in config.php
+	 *
+	 * @var string
+	 */
+	private static $table	= 'emails';
+
+
 
 	/***************************************   F U N C T I O N S   ***************************************/
 
@@ -57,8 +66,7 @@ class Mailer
 	 */
 	public static function sendText($to, $subject, $message)
 	{
-		$headers = self::__getHeaders('text', $to);
-		return mail($to, self::__charset_encode($subject), $message, implode(self::$br, $headers));
+		return self::_send($to, $subject, $message, 'text');
 	}
 
 	/**
@@ -68,13 +76,45 @@ class Mailer
 	 */
 	public static function sendHtml($to, $subject, $message)
 	{
-		$headers = self::__getHeaders('html', $to);
-		return mail($to, self::__charset_encode($subject), $message, implode(self::$br, $headers));
+		return self::_send($to, $subject, $message, 'html');
 	}
 
 
 
+
+
+
 	/***************************************   P R I V A T E   H E L P E R S   ***************************************/
+
+	/**
+	 * Send wrapper, that
+	 *
+	 *
+	 * @param string $to
+	 * @param string $subject
+	 * @param string $message
+	 * @param string $type
+	 * @return boolean
+	 */
+	private static function _send($to, $subject, $message, $type)
+	{
+		$headers = self::__getHeaders($type, $to);
+		$headers = implode(self::$br, $headers);
+
+		// if enabled, also insert the email into database
+		if ( $GLOBALS['EMAIL_STORE_SEND_MESSAGES'] )
+		{
+			$email['recipient'] = $to;
+			$email['headers']	= $headers;
+			$email['subject']	= $subject;
+			$email['message']	= $message;
+			$email['created']	= date('Y-m-d H:i:s', time());
+
+			\Core\Init\CoreMySql::insertRow(self::$table, $email);
+		}
+
+		return mail($to, self::__charset_encode($subject), $message, $headers);
+	}
 
 
 	/**

@@ -28,8 +28,37 @@
  *
  * TODO: currently contains only temporay stuff. Do not use as it will change!
  */
-class MyTime
+class DateTimeHelper
 {
+
+
+	/**
+	 *
+	 * returns a date string in the specified format
+	 * or optionally also the name for 'today'/'yesterday' if
+	 * the name is given and in the timespan.
+	 *
+	 * @param  datetime $dateTimeString
+	 * @param  string   $format
+	 * @param  string   $txtToday
+	 * @param  string   $txtYesterday
+	 * @return string   (format: Yesterday, Today or 01.01.2000)
+	 */
+	public static function getFormattedDate($dateTimeString, $format ='d.m.Y', $txtToday = null, $txtYesterday = null)
+	{
+		$TODAY		= date('Ymd');
+		$YESTERDAY	= date('Ymd', time()-86400);	// (60*60*24)
+		$checkDate	= date('Ymd',strtotime($dateTimeString));
+
+		if ( strlen($txtToday) && $checkDate == $TODAY )
+			return $txtToday;
+		else if ( strlen($txtYesterday) && $checkDate == $YESTERDAY )
+			return $txtYesterday;
+		else
+			return date($format, strtotime($dateTimeString));
+	}
+
+
 	public static function getNowTimestamp()
 	{
 		return time();

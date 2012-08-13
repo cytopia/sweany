@@ -21,7 +21,7 @@
  * @package		sweany.usr
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25
+ * @version		0.8 2012-08-13 13:25
  *
  * User Configuration File
  *
@@ -69,6 +69,8 @@
  * -
  * ----------------------------------------------------------------
  *
+ * Edit (2012-08-13): Currently deactivated
+ *                    FAST_CORE_MODE-Setting below does not have any effect.
  */
 $FAST_CORE_MODE			= 0;
 
@@ -275,6 +277,12 @@ $EMAIL_SYSTEM_FROM_ADDRESS		= 'noreply@yourdomain.tld';
 $EMAIL_SYSTEM_REPLY_ADDRESS		= 'info@yourdomain.tld';
 $EMAIL_SYSTEM_RETURN_EMAIL		= 'info@yourdomain.tld';
 
+/*
+ * Stores all send messages in SQL.
+ * Requires SQL_ENABLE
+ */
+$EMAIL_STORE_SEND_MESSAGES		= 1;
+
 
 
 
@@ -378,7 +386,6 @@ $SQL_PASS						= '';
  *
  */
 $USER_ENABLE					= true;
-$USER_PWD_SALT					= '*&^%$GHJULBJHU*(trfd^%ybJuhiyg78f5V^yb897&^';
 
 
 /**

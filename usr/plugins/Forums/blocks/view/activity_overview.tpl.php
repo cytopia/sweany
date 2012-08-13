@@ -1,23 +1,3 @@
-<?php
-function getFormattedDate($mysqlDateTime, $txtToday, $txtYesterday)
-{
-	$TODAY		= date('Ymd');
-	$YESTERDAY	= date('Ymd', time()-86400);	// (60*60*24)
-
-	$checkDate = date('Ymd',strtotime($mysqlDateTime));
-
-	if ( $checkDate == $TODAY )
-		return $txtToday;
-	else if ( $checkDate == $YESTERDAY )
-		return $txtYesterday;
-	else
-		return date('d.m.Y',strtotime($mysqlDateTime));
-}
-function getFormattedTime($mysqlDateTime)
-{
-	return date('H:i',strtotime($mysqlDateTime));
-}
-?>
 <table class="forum" >
 	<thead>
 		<tr>
@@ -38,10 +18,11 @@ function getFormattedTime($mysqlDateTime)
 			<td style="width:100px;">
 				<div style="font-size:10px; line-height:120%; text-align:right;">
 				<?php if ($thread['last_post_id']): ?>
-					<?php echo getFormattedDate($thread['last_post_created'], $language->today, $language->yesterday); ?> <span style="color:gray;"><?php echo getFormattedTime($thread['last_post_created']);?></span><br/>
+
+					<?php echo DateTimeHelper::getFormattedDate($thread['last_post_created'], 'd.m.Y', $language->today, $language->yesterday); ?> <span style="color:gray;"><?php echo date('H:i',strtotime($thread['last_post_created']));?></span><br/>
 					<?php echo $language->by;?> <?php echo Html::l($thread['last_post_username'], $userProfileCtl, $userProfileMethod, array($thread['last_post_user_id'])); ?>
 				<?php else: ?>
-					<?php echo getFormattedDate($thread['created'], $language->today, $language->yesterday); ?> <span style="color:gray"><?php echo getFormattedTime($thread['created']);?></span><br/>
+					<?php echo DateTimeHelper::getFormattedDate($thread['created'], 'd.m.Y', $language->today, $language->yesterday); ?> <span style="color:gray"><?php echo date('H:i',strtotime($thread['created']));?></span><br/>
 					<?php echo $language->by;?> <?php echo Html::l($thread['username'], $userProfileCtl, $userProfileMethod, array($thread['fk_user_id'])); ?>
 				<?php endif; ?>
 				</div>
