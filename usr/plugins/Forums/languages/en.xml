@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- Do not delete the core part,      -->
+	<!-- But feel free to adjust the text. -->
+	<core>
+		<settings>
+			<lang_name>English</lang_name>
+			<lang_short>en</lang_short>
+			<lang_long>en-US</lang_long>
+			<date_format>Y-m-d</date_format>
+		</settings>
+	</core>
+	<!-- /do not delete the core part -->
+
+	<!-- Framework Plugins -->
+	<plugins>
+		<Forums>
+			<PageSection>
+				<page id="index">
+					<forum>Forum</forum>
+					<lastEntry>Last entry</lastEntry>
+					<threads>Threads</threads>
+					<posts>Posts</posts>
+					<by>by</by>
+				</page>
+				<page id="showForum">
+					<forum>Forum</forum>
+					<author>Author</author>
+					<lastPost>Last post</lastPost>
+					<threads>Threads</threads>
+					<replies>Replies</replies>
+					<views>Views</views>
+					<newThread>new Thread</newThread>
+					<cantNewThread>You cannot create a new thread in this forum.</cantNewThread>
+					<threadIsSticky>Thread is sticky</threadIsSticky>
+					<threadIsLocked>Thread is locked</threadIsLocked>
+					<threadIsClosed>Thread is closed</threadIsClosed>
+				</page>
+				<page id="showThread">
+					<forum>Forum</forum>
+					<date>Date</date>	
+					<atTime>at</atTime>	
+					<editedOn>Edited on</editedOn>					
+					<entries>Entries</entries>
+					<message>Message</message>
+					<answer>Answer</answer>
+					<advanced>Advanced</advanced>
+					<sendMessage>send pm</sendMessage>
+					<cantReply>You cannot reply in this thread.</cantReply>
+					<replyLoginNote>To reply in this thread you first have to login</replyLoginNote>
+					<here>here</here>
+					<or>or</or>
+					<registerFree>register for free</registerFree>
+					<hasBeenClosed>This thread has been closed.</hasBeenClosed>
+					<hasBeenLocked>This thread has been locked.</hasBeenLocked>
+					<directAnswer>Direct Answer</directAnswer>
+				</page>
+				<page id="addThread">
+					<forum>Forum</forum>
+					<createThread>create new Thread</createThread>
+					<createLoginNote>To create a new Thread you first have to log in</createLoginNote>
+					<here>here</here>
+					<or>or</or>
+					<registerFree>register for free</registerFree>
+					<preview>Preview</preview>
+					<title>Title</title>
+					<message>Message</message>
+					<create>Create</create>
+					<answer>Answer</answer>
+				</page>
+				<page id="addPost">
+					<forum>Forum</forum>
+					<reply>Reply</reply>
+					<createLoginNote>To add a new Post you first have to log in</createLoginNote>
+					<here>here</here>
+					<or>or</or>
+					<registerFree>register for free</registerFree>
+					<preview>Preview</preview>
+					<answer>Answer</answer>
+					<title>Title</title>
+					<message>Message</message>
+					<overview>Overview</overview>
+					<latestFirst>Latest entries first</latestFirst>
+				</page>
+			</PageSection>
+
+			<BlockSection>
+				<block id="onlineUsers">
+					<currOnlineUsers>Current Online Users</currOnlineUsers>
+					<regUser>registered user</regUser>
+					<regUsers>registered users</regUsers>
+					<guestUser>guest user</guestUser>
+					<guestUsers>guest users</guestUsers>
+				</block>
+				<block id="ActivityOverview">
+					<title>Title</title>
+					<username>Username</username>
+					<lastEntry>Last Entry</lastEntry>
+					<answers>Answers</answers>
+					<views>Views</views>
+					<forum>Forum</forum>
+					<today>Today</today>
+					<yesterday>Yesterday</yesterday>
+					<by>by</by>
+				</block>
+				<block id="latestPostsByUser">
+					<post>Post</post>
+					<thread>Thread</thread>
+					<answers>Answers</answers>
+					<forum>Forum</forum>
+					<youReplied>You replied</youReplied>
+					<at>at</at>
+				</block>
+			</BlockSection>
+		</Forums>
+	</plugins>
+</root>

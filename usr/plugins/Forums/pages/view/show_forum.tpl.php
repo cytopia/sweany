@@ -49,9 +49,9 @@
 					$last_user		= '';
 					$last_user_link = '';
 				}
-				$sticky		= ($thread['is_sticky']) ? Html::img('/img/packages/forum/threads/is_sticky.png', $language->threadIsSticky, array('title' => $language->threadIsSticky)) : '';
-				$locked		= ($thread['is_locked']) ? Html::img('/img/packages/forum/threads/is_locked.png', $language->threadIsLocked, array('title' => $language->threadIsLocked)) : '';
-				$closed		= ($thread['is_closed']) ? Html::img('/img/packages/forum/threads/is_closed.png', $language->threadIsClosed, array('title' => $language->threadIsClosed)) : '';
+				$sticky		= ($thread['is_sticky']) ? Html::img('/plugins/Forums/img/threads/is_sticky.png', $language->threadIsSticky, array('title' => $language->threadIsSticky)) : '';
+				$locked		= ($thread['is_locked']) ? Html::img('/plugins/Forums/img/threads/is_locked.png', $language->threadIsLocked, array('title' => $language->threadIsLocked)) : '';
+				$closed		= ($thread['is_closed']) ? Html::img('/plugins/Forums/img/threads/is_closed.png', $language->threadIsClosed, array('title' => $language->threadIsClosed)) : '';
 				$timestamp	= strtotime($thread['created']);
 				$date		= date($date_format, $timestamp);
 				$time		= date($time_format, $timestamp);

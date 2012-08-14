@@ -13,7 +13,7 @@ $thread_time= date($time_format, $timestamp);
 			<th colspan="2"><div class="forumNavi"><?php echo $navi; ?></div></th>
 		</tr>
 		<tr>
-			<th colspan="2"><img src="/img/packages/forum/icon_date_time.png" title="<?php echo $language->date; ?>" /><span style="padding-left:5px; font-weight:normal;"> <?php echo $thread_date.' '.$language->atTime.' '.$thread_time; ?></span></th>
+			<th colspan="2"><img src="/plugins/Forums/img/icon_date_time.png" title="<?php echo $language->date; ?>" /><span style="padding-left:5px; font-weight:normal;"> <?php echo $thread_date.' '.$language->atTime.' '.$thread_time; ?></span></th>
 		</tr>
 	</thead>
 	<tfoot>
@@ -26,7 +26,7 @@ $thread_time= date($time_format, $timestamp);
 					</div>
 					<div class="borderMe" style="float:right;">
 						<?php if ( $thread['fk_user_id'] == $user->id() ):?>
-							<img src="/img/packages/forum/button_edit.png" alt="edit" onclick="quickEditThread(<?php echo $thread['id'];?>);" />
+							<img src="/plugins/Forums/img/button_edit.png" alt="edit" onclick="quickEditThread(<?php echo $thread['id'];?>);" />
 						<?php endif; ?>
 					</div>
 					<div style="float:right;">
@@ -36,7 +36,7 @@ $thread_time= date($time_format, $timestamp);
 								<?php echo Form::inputHidden('body', htmlentities($thread['body']), array('id' => 'bodyId')); ?>
 								<?php echo Form::inputHidden('forum_id', $forum_id); ?>
 								<?php echo Form::inputHidden('thread_id', $thread_id); ?>
-								<img src="/img/packages/forum/button_quote.png" alt="quote"
+								<img src="/plugins/Forums/img/button_quote.png" alt="quote"
 									onclick="var body=(document.getElementById('thisBodyId<?php echo $thread['id'];?>').value);
 											body='[quote=<?php echo $thread['username'];?>]'+(body)+'[/quote]';
 											document.getElementById('bodyId').value=body;
@@ -61,7 +61,7 @@ $thread_time= date($time_format, $timestamp);
 				<div>
 					<div style="font-size:11px;">
 						<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$thread['fk_user_id'];?>" title="send private PM to <?php echo $thread['username']; ?>">
-							<img src="/img/packages/forum/pm.png" title="Private Nachricht" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
+							<img src="/plugins/Forums/img/pm.png" title="Private Nachricht" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
 						</a>
 					</div>
 				</div>
@@ -69,7 +69,7 @@ $thread_time= date($time_format, $timestamp);
 			<td>
 				<div id="startThread">
 					<div class="forumThreadTitle"><?php echo $thread['title']; ?></div>
-					<div class="forumThreadBody"><?php echo Bbcode::parse($thread['body']); ?></div>
+					<div class="forumThreadBody"><?php echo Bbcode::parse($thread['body'], '/plugins/Forums/img/smiley'); ?></div>
 				</div>
 			</td>
 		</tr>
@@ -85,7 +85,7 @@ $thread_time= date($time_format, $timestamp);
 	<table class="forum">
 		<thead>
 			<tr>
-				<th colspan="2"><img src="/img/packages/forum/icon_date_time.png" title="<?php echo $language->date;?>" /><span style="padding-left:5px; font-weight:normal;"> <?php echo $date.' '.$language->atTime.' '.$time; ?></span></th>
+				<th colspan="2"><img src="/plugins/Forums/img/icon_date_time.png" title="<?php echo $language->date;?>" /><span style="padding-left:5px; font-weight:normal;"> <?php echo $date.' '.$language->atTime.' '.$time; ?></span></th>
 			</tr>
 		</thead>
 		<tfoot>
@@ -98,7 +98,7 @@ $thread_time= date($time_format, $timestamp);
 						</div>
 						<div style="float:right;">
 							<?php if ( $post['fk_user_id'] == $user->id() ):?>
-								<img src="/img/packages/forum/button_edit.png" alt="edit" onclick="quickEditPost(<?php echo $post['id'];?>);" />
+								<img src="/plugins/Forums/img/button_edit.png" alt="edit" onclick="quickEditPost(<?php echo $post['id'];?>);" />
 							<?php endif; ?>
 						</div>
 						<div style="float:right;">
@@ -108,7 +108,7 @@ $thread_time= date($time_format, $timestamp);
 									<?php echo Form::inputHidden('body', $post['body'], array('id' => 'bodyId')); ?>
 									<?php echo Form::inputHidden('forum_id', $forum_id); ?>
 									<?php echo Form::inputHidden('thread_id', $thread_id); ?>
-									<img src="/img/packages/forum/button_quote.png" alt="quote"
+									<img src="/plugins/Forums/img/button_quote.png" alt="quote"
 										onclick="var body=document.getElementById('thisBodyId<?php echo $post['id'];?>').value;
 												body='[quote=<?php echo $post['username'];?>]'+body+'[/quote]';
 												document.getElementById('bodyId').value=body;
@@ -133,7 +133,7 @@ $thread_time= date($time_format, $timestamp);
 					<div>
 						<div style="font-size:11px;">
 							<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$post['fk_user_id'];?>" title="private Nachricht an <?php echo $thread['username']; ?> schreiben">
-								<img src="/img/packages/forum/pm.png" title="Private Nachricht" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
+								<img src="/plugins/Forums/img/pm.png" title="Private Nachricht" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
 							</a>
 						</div>
 					</div>
@@ -143,7 +143,7 @@ $thread_time= date($time_format, $timestamp);
 						<?php if (strlen($post['title'])): ?>
 							<div class="forumPostTitle"><?php echo $post['title']; ?></div>
 						<?php endif; ?>
-						<div class="forumPostBody"><?php echo Bbcode::parse($post['body']); ?></div>
+						<div class="forumPostBody"><?php echo Bbcode::parse($post['body'], '/plugins/Forums/img/smiley'); ?></div>
 					</div>
 				</td>
 			</tr>

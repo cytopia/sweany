@@ -18,7 +18,7 @@
 				<tr>
 					<td>
 						<div class="forumPostTitle"><?php echo $postPreview['title']; ?></div>
-						<div class="forumPostBody"><?php echo Bbcode::parse($postPreview['body']); ?></div>
+						<div class="forumPostBody"><?php echo Bbcode::parse($postPreview['body'], '/plugins/Forums/img/smiley'); ?></div>
 					</td>
 				</tr>
 			</tbody>
@@ -96,7 +96,7 @@
 					</td>
 					<td>
 						<div class="forumPostBody">
-							<?php echo Bbcode::parse($entry['body']); ?>
+							<?php echo Bbcode::parse($entry['body'], '/plugins/Forums/img/smiley'); ?>
 						</div>
 					</td>
 				</tr>

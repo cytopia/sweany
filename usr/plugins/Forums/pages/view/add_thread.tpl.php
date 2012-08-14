@@ -18,7 +18,7 @@
 				<tr>
 					<td>
 						<div class="forumPostTitle"><?php echo $threadPreview['title']; ?></div>
-						<div class="forumPostBody"><?php echo Bbcode::parse($threadPreview['body']); ?></div>
+						<div class="forumPostBody"><?php echo Bbcode::parse($threadPreview['body'], '/plugins/Forums/img/smiley'); ?></div>
 					</td>
 				</tr>
 			</tbody>

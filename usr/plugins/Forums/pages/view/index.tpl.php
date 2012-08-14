@@ -62,7 +62,7 @@
 					$time					= '';
 				}
 
-				$icon	= Html::img('/img/packages/forum/'.$forum['icon']);
+				$icon	= Html::img('/plugins/Forums/img/'.$forum['icon']);
 
 				?>
 				<tr>
