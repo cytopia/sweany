@@ -21,10 +21,23 @@
  * @package		sweany.core.init
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25
+ * @version		0.8 2012-08-14 13:25
  *
  *
  * This core module will handle the Language.
+ *
+ * NOTE:
+ * For performance reasons this class consists of a static and a dynamic part.
+ *
+ * + The static part will load the normal project specific language xml file.
+ *
+ * + Each created instance will then load the path (inside that xml file)
+ *   of the current accessed section, as a full page load needs several different sections.
+ *   (layout-section, page-section and block-section)
+ *
+ * + Additionally an instance can also load a plugin xml file, but we dont know yet, so we let
+ *   the instance decide, whether or not it is needed.
+ *   Then again, the new file will have to provide different sections as well.
  */
 
 
@@ -35,17 +48,34 @@
  *       project.
  *       An alternative could be to just use the layout section for any global
  *       words. (Needs thinking and performance measuring)
+ *
+ *
+ * TODO: Plugin files are still loaded per instance, also need some static
+ *       flag to keep track of already loaded plugin xml files.
  */
 namespace Core\Init;
 
 Class CoreLanguage extends CoreAbstract
 {
-	private static $instance 	= null;
 
+	private static $_language	= null;
 	private static $langName	= null;
 	private static $langShort	= null;
 	private static $langLong	= null;
-	private static $_language	= null;
+
+
+	/*
+	 * Keep track if the instance belongs to a plugin or not.
+	 * If the specified instance is of a plugin,
+	 * then we will have to load another xml file.
+	 */
+	private $_plugin		= null;
+
+
+	private $_pLanguage	 	= null;
+	private $_pLangName		= null;
+	private $_pLangShort	= null;
+	private $_pLangLong		= null;
 
 	private $_path				= null;
 	private $_id				= null;
@@ -108,8 +138,25 @@ Class CoreLanguage extends CoreAbstract
 
 	/********************************************  C O N S T R U C T O R  ********************************************/
 
-	public function __construct($plugin, $type, $controller)
+	public function __construct($plugin = null, $type, $controller)
 	{
+		if ( $plugin )
+		{
+			/*
+			 * Tell the instance, that we have to deal with a plugin,
+			 * this complicates things. :-(
+			 */
+			$this->_plugin = $plugin;
+			$this->_loadPluginXMLFile(self::$langShort);
+
+			\SysLog::i('Language', 'Creating ['.$plugin.'-plugin] instance for: ['.$type.']');
+
+		}
+		else
+		{
+			\SysLog::i('Language', 'Creating [normal] instance for: ['.$type.']');
+		}
+
 		$section	= (strlen($plugin)) ? 'plugins/'.$plugin : 'usr';
 		$sub		= ($type == 'page') ? 'PageSection' : (($type == 'layout') ? 'LayoutSection' : 'BlockSection');
 		$sub		= (strlen($plugin)) ? $sub : $sub.'/'.$controller;
@@ -117,7 +164,44 @@ Class CoreLanguage extends CoreAbstract
 		$path		= '/root/'.$section.'/'.$sub.'/'.$type;
 		$this->_path= $path;
 
-		\SysLog::i('Language', 'Creating instance for: ['.$type.'] in: '.$path);
+		\SysLog::i('Language', 'Setting path for: ['.$type.'] to: '.$path);
+	}
+
+	/**
+	 * Plugins have their own xml files and
+	 * if the above constructor is told, that it is being accessed
+	 * by a Plugin, then we will have to load that file here.
+	 *
+	 * @param string $lang_short
+	 * 		Language specifier (e.g.: 'en' or 'de')
+	 * @return boolean
+	 * 		true on success, false on failure
+	 */
+	private function _loadPluginXMLFile($lang_short)
+	{
+		$xml_file = USR_PLUGINS_PATH.DS.$this->_plugin.DS.'languages'.DS.$lang_short.'.xml';
+
+		if ( file_exists($xml_file) )
+		{
+			\SysLog::i('Language', '[Plugin] loading '.$lang_short.'.xml for ['.$this->_plugin.'-plugin]');
+
+			$this->_pLanguage	= simplexml_load_file($xml_file);
+
+			$settings			= $this->_pLanguage->xpath('/root/core/settings');
+
+			$this->_pLangName	= $settings[0]->lang_name;
+			$this->_pLangShort	= $settings[0]->lang_short;
+			$this->_pLangLong	= $settings[0]->lang_long;
+
+			return true;
+		}
+		else
+		{
+			\SysLog::e('Language', '[Plugin Load] Language File does not exist: '.$xml_file);
+			\SysLog::show();
+			exit;
+			return false;
+		}
 	}
 
 
@@ -135,7 +219,18 @@ Class CoreLanguage extends CoreAbstract
 		$this->_id	= $function;
 		$path		= $this->_path.'[@id="'.$function.'"]';
 
-		$this->_section = self::$_language->xpath($path);
+		/*
+		 * If dealing with a plugin, we have an instance lang variable,
+		 * otherwise we will use the static one, that holds the project xml file.
+		 */
+		if ( $this->_plugin )
+		{
+			$this->_section = $this->_pLanguage->xpath($path);
+		}
+		else
+		{
+			$this->_section = self::$_language->xpath($path);
+		}
 	}
 
 	/**
@@ -145,6 +240,7 @@ Class CoreLanguage extends CoreAbstract
 	 */
 	public function setCore($id)
 	{
+		// default part is not available in plugin xml files, so no need to differentiate here
 		$this->_section = self::$_language->xpath('/root/core/default/page[@id="'.$id.'"]');
 	}
 
@@ -158,7 +254,18 @@ Class CoreLanguage extends CoreAbstract
 	 */
 	public function getCustom($path, $key)
 	{
-		$tmp = self::$_language->xpath($path);
+		/*
+		 * If dealing with a plugin, we have an instance lang variable,
+		* otherwise we will use the static one, that holds the project xml file.
+		*/
+		if ( $this->_plugin )
+		{
+			$tmp = $this->_pLanguage->xpath($path);
+		}
+		else
+		{
+			$tmp = self::$_language->xpath($path);
+		}
 
 		// As it is still an object, we will need to cast it into
 		// a string. This is necessary for serialization,
@@ -224,7 +331,7 @@ Class CoreLanguage extends CoreAbstract
 
 
 
-	/********************************************  P R I V A T E S  ********************************************/
+	/********************************************  P R I V A T E   S T A T I C S  ********************************************/
 
 	/**
 	 * Choose language based on Session

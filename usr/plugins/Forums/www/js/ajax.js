@@ -94,25 +94,6 @@ function MakePOSTRequest(url, params, callback)
 	catch (e) { }
 }
 
-function liveSearch(url, params, textBoxId, resultId)
-{
-	elBox	= document.getElementById(textBoxId);
-	el		= document.getElementById(resultId);
-	MakePOSTRequest(url, params, function(response)
-	{
-		el.style.visibility ='visible';	// show
-		el.style.display='block';
-		el.innerHTML = '';				// empty element
-		
-		var result = eval('(' + response + ')');
-		for (var i=0;i<result.length; i++)
-		{
-			var uniqueId = 'uniqueName'+i;
-			var line = '<div id="'+uniqueId+'" class="livesearchResultRows" onclick="document.getElementById(\''+textBoxId+'\').value=document.getElementById(\''+uniqueId+'\').innerHTML; document.getElementById(\''+resultId+'\').style.display=\'none\';" >'+result[i]+"</div>";
-			el.innerHTML += line;
-		}
-	});
-}
 
 /************************************** CURSOR FUNCTIONS **************************************/
 /* return the position of the cursor */

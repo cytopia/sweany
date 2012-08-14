@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- Do not delete the core part,      -->
+	<!-- But feel free to adjust the text. -->
+	<core>
+		<settings>
+			<lang_name>Deutsch</lang_name>
+			<lang_short>de</lang_short>
+			<lang_long>de-DE</lang_long>
+			<date_format>d.m.Y</date_format>
+		</settings>
+	</core>
+	<!-- /do not delete the core part -->
+
+	<!-- Framework Plugins -->
+	<plugins>
+		<Contact>
+			<PageSection>
+				<page id="index">
+					<headline>Kontaktiere uns</headline>
+					<teaser>Wenn du Probleme beim Besuch dieser Seite hast oder eine allgemeine Anfrage stellen willst, dann nutze das Kontaktformular</teaser>
+					<submittedHead>Danke fuer die Nachricht</submittedHead>
+					<submittedBody>Deine Nachricht wurde erfolgreich versand.</submittedBody>
+				</page>
+			</PageSection>
+			<BlockSection>
+				<block id="addContact">
+					<form_legend>Kontakt Form</form_legend>
+					<form_note>Bitte fuelle alle Felder aus und waehle einen geeigneten Betreff.</form_note>
+					<form_label_name>Name</form_label_name>
+					<form_label_email>Email</form_label_email>
+					<form_label_subject>Betreff</form_label_subject>
+					<form_label_message>Nachricht</form_label_message>
+					<form_input_subject>- bitte waehlen -</form_input_subject>
+					<form_btn_submit>Senden</form_btn_submit>
+					<form_err_name>Gib deinen Namen an</form_err_name>
+					<form_err_email>ungueltige Email</form_err_email>
+					<form_err_subject>ungueltige Auswahl</form_err_subject>
+					<form_err_message>Schreibe eine Nachricht</form_err_message>
+
+					<!-- array, feel free to add more -->					
+					<subjects>Allgemeine Anfrage</subjects>
+					<subjects>Feedback</subjects>
+					<subjects>Neues Feature</subjects>
+					<subjects>Mitmachen</subjects>
+					<subjects>Fehler melden</subjects>
+				</block>
+			</BlockSection>
+		</Contact>
+	</plugins>
+</root>

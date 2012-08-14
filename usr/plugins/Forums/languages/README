@@ -1,0 +1,42 @@
+Language definition files go here.
+
+The name must be <2-Letter-Country-Code>.xml
+For example: de.xml, en.xml, ...
+
+
+
+Each File is build like this
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- framework required defines -->
+	<settings>
+		<lang_name>English</lang_name>
+		<lang_short>en</lang_short>
+		<lang_long>en-US</lang_long>
+	</settings>
+	<page id="notFound">
+		<title>Page not Found</title>
+		<txt_alert>Sorry, the page you are looking for was not found.</txt_alert>
+	</page>
+	<page id="redirect">
+		<title>Redirecting</title>
+		<txt_note>Click here if your browser does not automatically redirect you.</txt_note>
+	</page>
+	<page id="changeLanguage">
+		<title>Changing Language</title>
+		<txt_note>The Language settings will be applied now</txt_note>
+	</page>
+	<!-- /framework required defines -->
+
+
+	<!-- custom defines -->
+
+	<!-- one page section should be defined per page -->
+	<page id="ID_GOES_HERE">
+		<SOME_TAG>The actual language define goes here</SOME_TAG>
+		...
+	</page>
+
+</root>

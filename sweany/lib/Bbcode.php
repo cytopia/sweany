@@ -28,7 +28,7 @@
  */
 class Bbcode
 {
-	public static function parse($text, $allowedTags = array('smilies', 'text', 'url', 'img', 'code', 'quote'))
+	public static function parse($text, $smiley_path = null, $allowedTags = array('smilies', 'text', 'url', 'img', 'code', 'quote'))
 	{
 		// convert html entities, because html tags are not allowed
 		$str		= htmlentities($text, ENT_COMPAT, 'UTF-8');
@@ -42,26 +42,26 @@ class Bbcode
 		//-------------------- SMILIES
 		if ( in_array('smilies', $allowedTags) )
 		{
-			$str = str_replace(':)', '<img src="/img/packages/forum/smiley/smile.png" />', $str);
-			$str = str_replace(':-)', '<img src="/img/packages/forum/smiley/smile.png" />', $str);
-			$str = str_replace(':D', '<img src="/img/packages/forum/smiley/grin.png" />', $str);
-			$str = str_replace(':d', '<img src="/img/packages/forum/smiley/grin.png" />', $str);
+			$str = str_replace(':)', '<img src="'.$smiley_path.'/smile.png" />', $str);
+			$str = str_replace(':-)', '<img src="'.$smiley_path.'/smile.png" />', $str);
+			$str = str_replace(':D', '<img src="'.$smiley_path.'/grin.png" />', $str);
+			$str = str_replace(':d', '<img src="'.$smiley_path.'/grin.png" />', $str);
 
-			$str = str_replace(':(', '<img src="/img/packages/forum/smiley/unhappy.png" />', $str);
-			$str = str_replace(':-(', '<img src="/img/packages/forum/smiley/unhappy.png" />', $str);
+			$str = str_replace(':(', '<img src="'.$smiley_path.'/unhappy.png" />', $str);
+			$str = str_replace(':-(', '<img src="'.$smiley_path.'/unhappy.png" />', $str);
 
-			$str = str_replace(':p', '<img src="/img/packages/forum/smiley/tongue.png" />', $str);
-			$str = str_replace(':-p', '<img src="/img/packages/forum/smiley/tongue.png" />', $str);
+			$str = str_replace(':p', '<img src="'.$smiley_path.'/tongue.png" />', $str);
+			$str = str_replace(':-p', '<img src="'.$smiley_path.'/tongue.png" />', $str);
 
-			$str = str_replace(':confuse:', '<img src="/img/packages/forum/smiley/confuse.png" />', $str);
-			$str = str_replace(':cool:', '<img src="/img/packages/forum/smiley/cool.png" />', $str);
-			$str = str_replace(':cry:', '<img src="/img/packages/forum/smiley/cry.png" />', $str);
-			$str = str_replace(':red:', '<img src="/img/packages/forum/smiley/red.png" />', $str);
-			$str = str_replace(':evilgrin:', '<img src="/img/packages/forum/smiley/evilgrin.png" />', $str);
-			$str = str_replace(':surprise:', '<img src="/img/packages/forum/smiley/surprise.png" />', $str);
-			$str = str_replace(':yell:', '<img src="/img/packages/forum/smiley/yell.png" />', $str);
-			$str = str_replace(':mad:', '<img src="/img/packages/forum/smiley/mad.png" />', $str);
-			$str = str_replace(':roll:', '<img src="/img/packages/forum/smiley/roll.png" />', $str);
+			$str = str_replace(':confuse:', '<img src="'.$smiley_path.'/confuse.png" />', $str);
+			$str = str_replace(':cool:', '<img src="'.$smiley_path.'/cool.png" />', $str);
+			$str = str_replace(':cry:', '<img src="'.$smiley_path.'/cry.png" />', $str);
+			$str = str_replace(':red:', '<img src="'.$smiley_path.'/red.png" />', $str);
+			$str = str_replace(':evilgrin:', '<img src="'.$smiley_path.'/evilgrin.png" />', $str);
+			$str = str_replace(':surprise:', '<img src="'.$smiley_path.'/surprise.png" />', $str);
+			$str = str_replace(':yell:', '<img src="'.$smiley_path.'/yell.png" />', $str);
+			$str = str_replace(':mad:', '<img src="'.$smiley_path.'/mad.png" />', $str);
+			$str = str_replace(':roll:', '<img src="'.$smiley_path.'/roll.png" />', $str);
 		}
 
 		//-------------------- TEXT FORMAT
@@ -76,8 +76,8 @@ class Bbcode
 		//-------------------- URL LINKS
 		if ( in_array('url', $allowedTags) )
 		{
-			$str = preg_replace('#\[url\](.*)\[/url\]#isU', "<a href=\"$1\">$1</a>", $str);
-			$str = preg_replace('#\[url=(.*)\](.*)\[/url\]#isU', "<a href=\"$1\">$2</a>", $str);
+			$str = preg_replace('#\[url\](.*)\[/url\]#isU', "<a href=\"$1\" target=\"_blank\">$1</a>", $str);
+			$str = preg_replace('#\[url=(.*)\](.*)\[/url\]#isU', "<a href=\"$1\" target=\"_blank\">$2</a>", $str);
 		}
 
 		//-------------------- IMAGES
