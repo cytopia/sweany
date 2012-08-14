@@ -1,3 +1,4 @@
+* Fix Language load bug for plugins
 * improve Validator mode
 * improve Debugging mode
 * improve Fast core
