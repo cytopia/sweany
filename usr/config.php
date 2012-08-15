@@ -151,6 +151,17 @@ $FILE_LOG_CORE			= 'core.log';	// logs all the above stuff (if enabled)
 $FILE_LOG_USER			= 'debug.log';	// For custom project logging
 
 
+/*
+ * Debug Css
+ *
+ * Colorize all div's on the page
+ *
+ * Values:
+ * 0: Off
+ * 1: On
+ */
+$DEBUG_CSS				= 1;
+
 
 
 /***************************************************************************

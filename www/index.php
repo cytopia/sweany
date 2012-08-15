@@ -392,6 +392,16 @@ else
 		History::track();
 	}
 
+	/*
+	 * If it is a renderable page with html code,
+	 * we will need to check if CSS debugging should be applied
+	 */
+	if ( $GLOBALS['DEBUG_CSS'] )
+	{
+		Javascript::addFile('/js/debug.js');
+		Javascript::setOnPageLoadFunction('debugDiv()');
+	}
+
 
 	// ------ RENDER VIEW
 	if ( \Core\Init\CoreSettings::$showFwErrors > 2 || \Core\Init\CoreSettings::$logFwErrors > 2 ){ $start = microtime(true);}
