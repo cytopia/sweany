@@ -21,7 +21,7 @@
  * @package		sweany.core.init
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.8 2012-08-14 13:25
+ * @version		0.9 2012-08-14 13:25
  *
  *
  * This core module will handle the Language.
@@ -48,38 +48,43 @@
  *       project.
  *       An alternative could be to just use the layout section for any global
  *       words. (Needs thinking and performance measuring)
- *
- *
- * TODO: Plugin files are still loaded per instance, also need some static
- *       flag to keep track of already loaded plugin xml files.
  */
 namespace Core\Init;
 
 Class CoreLanguage extends CoreAbstract
 {
 
-	private static $_language	= null;
-	private static $langName	= null;
-	private static $langShort	= null;
-	private static $langLong	= null;
+	/*
+	 * Information retrieved from the project main
+	 * language xml file are stored here.
+	 */
+	private static $langName	= null;		// e.g.: English
+	private static $langShort	= null;		// e.g.: en
+	private static $langLong	= null;		// e.g.: en-US
 
 
 	/*
-	 * Keep track if the instance belongs to a plugin or not.
-	 * If the specified instance is of a plugin,
-	 * then we will have to load another xml file.
+	 * This array will hold all language objects
+	 * of 'default' (project specific xml object) and
+	 * all other plugin language objects (if any)
 	 */
-	private $_plugin		= null;
+	private static $language = array();
 
 
-	private $_pLanguage	 	= null;
-	private $_pLangName		= null;
-	private $_pLangShort	= null;
-	private $_pLangLong		= null;
+	/*
+	 * In case the instance is a Plugin,
+	 * it will hold the name of it,
+	 * otherwise will be null
+	 */
+	private $_plugin	= null;
 
-	private $_path				= null;
-	private $_id				= null;
-	private $_section			= null;
+
+	/*
+	 * Instance accesser
+	 */
+	private $_path		= null;		// xml path section
+	private $_id		= null;		// xml id section
+	private $_store		= null;		// provides the actual language words
 
 
 
@@ -89,7 +94,7 @@ Class CoreLanguage extends CoreAbstract
 	public static function initialize()
 	{
 		$short		= self::chooseLanguage();
-		$success	= self::loadFile($short);
+		$success	= self::loadProjectFile($short);
 		return $success;
 	}
 
@@ -130,7 +135,7 @@ Class CoreLanguage extends CoreAbstract
 
 		// Need to reload the file (as it has changed)
 		$short = self::chooseLanguage();
-		self::loadFile($short);
+		self::loadProjectFile($short);
 	}
 
 
@@ -140,21 +145,11 @@ Class CoreLanguage extends CoreAbstract
 
 	public function __construct($plugin = null, $type, $controller)
 	{
-		if ( $plugin )
+		if ($plugin)
 		{
-			/*
-			 * Tell the instance, that we have to deal with a plugin,
-			 * this complicates things. :-(
-			 */
 			$this->_plugin = $plugin;
-			$this->_loadPluginXMLFile(self::$langShort);
 
-			\SysLog::i('Language', 'Creating ['.$plugin.'-plugin] instance for: ['.$type.']');
-
-		}
-		else
-		{
-			\SysLog::i('Language', 'Creating [normal] instance for: ['.$type.']');
+			self::loadPluginFile(self::$langShort, $plugin);
 		}
 
 		$section	= (strlen($plugin)) ? 'plugins/'.$plugin : 'usr';
@@ -164,45 +159,16 @@ Class CoreLanguage extends CoreAbstract
 		$path		= '/root/'.$section.'/'.$sub.'/'.$type;
 		$this->_path= $path;
 
-		\SysLog::i('Language', 'Setting path for: ['.$type.'] to: '.$path);
-	}
-
-	/**
-	 * Plugins have their own xml files and
-	 * if the above constructor is told, that it is being accessed
-	 * by a Plugin, then we will have to load that file here.
-	 *
-	 * @param string $lang_short
-	 * 		Language specifier (e.g.: 'en' or 'de')
-	 * @return boolean
-	 * 		true on success, false on failure
-	 */
-	private function _loadPluginXMLFile($lang_short)
-	{
-		$xml_file = USR_PLUGINS_PATH.DS.$this->_plugin.DS.'languages'.DS.$lang_short.'.xml';
-
-		if ( file_exists($xml_file) )
+		if ($plugin)
 		{
-			\SysLog::i('Language', '[Plugin] loading '.$lang_short.'.xml for ['.$this->_plugin.'-plugin]');
-
-			$this->_pLanguage	= simplexml_load_file($xml_file);
-
-			$settings			= $this->_pLanguage->xpath('/root/core/settings');
-
-			$this->_pLangName	= $settings[0]->lang_name;
-			$this->_pLangShort	= $settings[0]->lang_short;
-			$this->_pLangLong	= $settings[0]->lang_long;
-
-			return true;
+			\SysLog::i('Language', '[Plugin] Setting path for: ['.$type.'] to: '.$path);
 		}
 		else
 		{
-			\SysLog::e('Language', '[Plugin Load] Language File does not exist: '.$xml_file);
-			\SysLog::show();
-			exit;
-			return false;
+			\SysLog::i('Language', 'Setting path for: ['.$type.'] to: '.$path);
 		}
 	}
+
 
 
 
@@ -225,11 +191,11 @@ Class CoreLanguage extends CoreAbstract
 		 */
 		if ( $this->_plugin )
 		{
-			$this->_section = $this->_pLanguage->xpath($path);
+			$this->_store = self::$language[$this->_plugin]->xpath($path);
 		}
 		else
 		{
-			$this->_section = self::$_language->xpath($path);
+			$this->_store = self::$language['default']->xpath($path);
 		}
 	}
 
@@ -241,7 +207,7 @@ Class CoreLanguage extends CoreAbstract
 	public function setCore($id)
 	{
 		// default part is not available in plugin xml files, so no need to differentiate here
-		$this->_section = self::$_language->xpath('/root/core/default/page[@id="'.$id.'"]');
+		$this->_store = self::$language['default']->xpath('/root/core/default/page[@id="'.$id.'"]');
 	}
 
 	/**
@@ -260,11 +226,11 @@ Class CoreLanguage extends CoreAbstract
 		*/
 		if ( $this->_plugin )
 		{
-			$tmp = $this->_pLanguage->xpath($path);
+			$tmp = self::$language[$this->_plugin]->xpath($path);
 		}
 		else
 		{
-			$tmp = self::$_language->xpath($path);
+			$tmp = self::$language['default']->xpath($path);
 		}
 
 		// As it is still an object, we will need to cast it into
@@ -304,7 +270,7 @@ Class CoreLanguage extends CoreAbstract
 		// As it is still an object, we will need to cast it into
 		// a string. This is necessary for serialization,
 		// otherwise there will be a lot of errors and strange results
-		if ( !isset($this->_section[0]) )
+		if ( !isset($this->_store[0]) )
 		{
 			\SysLog::e('Language', '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
 
@@ -312,7 +278,7 @@ Class CoreLanguage extends CoreAbstract
 			if ( \Core\Init\CoreSettings::$showPhpErrors == 0)
 				return '';
 		}
-		if ( !count($this->_section[0]->$key ) )
+		if ( !count($this->_store[0]->$key ) )
 		{
 			\SysLog::e('Language', '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
 
@@ -321,11 +287,11 @@ Class CoreLanguage extends CoreAbstract
 				return '';
 		}
 
-		//return $this->_section[0]->$key;
-		if ( count($this->_section[0]->$key) > 1)
-			return $this->_section[0]->$key;
+		//return $this->_store[0]->$key;
+		if ( count($this->_store[0]->$key) > 1)
+			return $this->_store[0]->$key;
 		else
-			return (String)$this->_section[0]->$key;
+			return (String)$this->_store[0]->$key;
 	}
 
 
@@ -366,19 +332,82 @@ Class CoreLanguage extends CoreAbstract
 
 
 	/**
-	 * Load Language File
+	 * Plugin specific xml file load.
+	 * Each Plugin has their own (if available) language xml file
+	 * and we have to load all files (if for example there are several
+	 * blocks from different plugins on one page).
 	 *
-	 * @param String $lang_short ('en', 'de', etc)
+	 * We also have to make sure, not to load a file twice to save performance.
+	 *
+	 * @param string $lang_short
+	 * 		('en', 'de', etc)
+	 * @param string $plugin
+	 * 		name of the plugin
+	 * @return boolean
+	 * 		success
 	 */
-	private static function loadFile($lang_short)
+	private static function loadPluginFile($lang_short, $plugin)
 	{
-		$xml_lang = USR_LANGUAGES_PATH.DS.$lang_short.'.xml';
+		/*
+		 * In case we have several plugin xml files to load or already loaded,
+		 * we need to keep track of the latest assigned file,
+		 * as this one will serve the content
+		 */
+		//$this->_plugin = $plugin;
 
-		if ( file_exists($xml_lang) )
+
+		/*
+		 * In case the file has already been loaded,
+		 * we will quit here and give some info to the syslogger
+		 */
+		if ( array_key_exists($plugin, self::$language) )
 		{
-			//Log::setInfo('Language', '[Load] '.$lang_short);
-			self::$_language	= simplexml_load_file($xml_lang);
-			$settings			= self::$_language->xpath('/root/core/settings');
+			\SysLog::i('Language', '[Plugin] '.$lang_short.'.xml already loaded for ['.$plugin.'-plugin]. Skipping...');
+			return true;
+		}
+		else
+		{
+			/*
+			 * File is not in the array, so not loaded.
+			 * We need to make sure it exists and load it.
+			 */
+
+			$xml_file = USR_PLUGINS_PATH.DS.$plugin.DS.'languages'.DS.$lang_short.'.xml';
+
+			if ( file_exists($xml_file) )
+			{
+				self::$language[$plugin] = simplexml_load_file($xml_file);
+				\SysLog::i('Language', '[Plugin] First Load of '.$lang_short.'.xml for ['.$plugin.'-plugin]');
+				return true;
+			}
+			else
+			{
+				\SysLog::e('Language', '[Plugin] File does not exist for ['.$plugin.'-plugin]: '.$xml_file);
+				return false;
+			}
+		}
+	}
+
+
+	/**
+	 *
+	 * Project specific xml file load.
+	 * Loads the language xml file from usr/languages.
+	 *
+	 * @param string $lang_short
+	 * 		Language 2-letter specifier (e.g.: 'en', 'de', ...)
+	 * @return boolean
+	 * 		success
+	 */
+	private static function loadProjectFile($lang_short)
+	{
+		$xml_file = USR_LANGUAGES_PATH.DS.$lang_short.'.xml';
+
+		if ( file_exists($xml_file) )
+		{
+			//Log::setInfo('Language', '[Load] '.$xml_file);
+			self::$language['default']	= simplexml_load_file($xml_file);
+			$settings					= self::$language['default']->xpath('/root/core/settings');
 
 			self::$langName		= $settings[0]->lang_name;
 			self::$langShort	= $settings[0]->lang_short;
@@ -388,7 +417,7 @@ Class CoreLanguage extends CoreAbstract
 		}
 		else
 		{
-			self::$error = 'File does not exist: '.$xml_lang;
+			self::$error = 'File does not exist: '.$xml_file;
 			return false;
 		}
 	}
