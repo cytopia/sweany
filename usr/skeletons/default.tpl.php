@@ -29,6 +29,7 @@
 
 	<!-- CSS Stylesheet -->
 	<?php /* TODO: replace with std css files or define in config.php */ ?>
+	<link type="text/css" rel="Stylesheet" href="/css/oocss.css" />
 	<link type="text/css" rel="Stylesheet" href="/css/style.css" />
 	<link type="text/css" rel="Stylesheet" href="/css/layout.css" />
 <?php echo Css::getFiles();?>
