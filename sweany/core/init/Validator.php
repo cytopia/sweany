@@ -226,6 +226,21 @@ class Validator extends CoreAbstract
 			return false;
 		}
 
+		if ( !isset($GLOBALS['DEBUG_CSS']) )
+		{
+			self::$error  = '<b>$DEBUG_CSS</b> not defined in <b>config.php</b>';
+			return false;
+		}
+		if ( !($GLOBALS['DEBUG_CSS'] == 0 || $GLOBALS['DEBUG_CSS'] == 1) )
+		{
+			self::$error  = '<b>$DEBUG_CSS</b> in <b>config.php</b> has a wrong value, can only be <b>0</b> or <b>1</b>.';
+			return false;
+		}
+		if ( !file_exists(ROOT.DS.'www'.DS.'js'.DS.'debug.js') )
+		{
+			self::$error  = 'CSS Debug File <b>'.$GLOBALS['DEBUG_CSS'].'</b> does not exist in '.ROOT.DS.'www'.DS.'js'.DS.'debug.js';
+			return false;
+		}
 
 		/***************************************************************************
 		*
