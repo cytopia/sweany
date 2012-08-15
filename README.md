@@ -21,3 +21,4 @@ Features:
  * Validator mode
  * Syslog (Internal Debug Mode to monitor performance and engine calls)
  * Fast core (a single file holds everything to reduce disk loading times... needs to be pushed)
+ * Integrated CSS Debugger
