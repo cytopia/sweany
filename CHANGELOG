@@ -1,3 +1,10 @@
+2012-08-14
+-----------------
++ Plugins have been fully seperated from the user's project files
+  including their own language, css/js and image directories (routing is done via .htaccess)
++ Still need to fix a bug, so that that different plugin calls (to the same plugin) only load the xml file once
+
+
 2012-08-13
 -----------------
 + Mail Helper can optionally store sent emails in database
