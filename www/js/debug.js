@@ -26,20 +26,64 @@
  * CSS Debugging Helper
  */
 
+
+/*
+ * Array of colors
+ */
+var colors = new Array(
+		'#A52A2A',
+		'#8A2BE2',
+		'#5F9EA0',
+		'#D2691E',
+		'#7FFF00',
+		'#00008B',
+		'#008B8B',
+		'#B8860B',
+		'#DEB887',
+		'#DC143C',
+		'#6495ED',
+		'#A9A9A9',
+		'#006400',
+		'#FF8C00',
+		'#E9967A',
+		'#8FBC8F',
+		'#483D8B',
+		'#2F4F4F',
+		'#228B22',
+		'#ADFF2F',
+		'#FF69B4',
+		'#CD5C5C',
+		'#FAEBD7',
+		'#00FFFF',
+		'#0000FF'
+);
+
 /*
  *  php like rand function
  */
+/*
 function rand(from, to)
 {
 	return Math.floor(Math.random() * (to - from + 1) + from);
 }
-
+*/
 /*
  *  decimal to hex
  */
+/*
 function d2h(d)
 {
 	return d.toString(16);
+}
+*/
+function getColor(count)
+{
+	var size = colors.length;
+	/* reset to beginning if count exceeds size of color array */
+	count	 = (count >= size) ? count-size : count;
+	return colors[count];
+	
+//	return colors[rand(0,size-1)];
 }
 
 /*
@@ -51,7 +95,7 @@ function debugDiv()
 
 	for (var i = 0; i < divs.length; i++)
 	{
-		divs[i].style.backgroundColor = "#" + d2h(rand(0,16))+d2h(rand(0,16))+d2h(rand(0,16));
+		divs[i].style.backgroundColor = getColor(i); /*"#" + d2h(rand(0,16))+d2h(rand(0,16))+d2h(rand(0,16));*/
 	}
 }
 
