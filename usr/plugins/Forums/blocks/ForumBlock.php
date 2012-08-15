@@ -9,7 +9,7 @@ class ForumBlock extends BlockController
 	 *
 	 * Renders a bsdforen.de like overview of the forum
 	 */
-	public function ActivityOverview($numEntries = 10)
+	public function ActivityOverview($numEntries = 10, $detailed = true)
 	{
 		$tblThreads = Loader::loadPluginTable('ForumThreads', $this->plugin);
 
@@ -20,8 +20,13 @@ class ForumBlock extends BlockController
 		$this->set('userProfileMethod', $this->userProfileMethod);
 
 		$this->set('forumThreads', $forumThreads);
-		$this->view('activity_overview.tpl.php');
+
+		if ( $detailed )
+			$this->view('activity_overview.tpl.php');
+		else
+			$this->view('activity_overview_list.tpl.php');
 	}
+
 
 	public function latestPostsByUser($user_id, $numEntries = 10)
 	{
