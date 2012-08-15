@@ -1,3 +1,9 @@
+2012-08-15
+-----------------
++ Language Bug fixed
++ Internal CSS Debugger added (configurable via config.php)
+
+
 2012-08-14
 -----------------
 + Plugins have been fully seperated from the user's project files
@@ -25,6 +31,7 @@
 + Performance Optimization
 + Project specific Configuration has been extended
 + bugfixing for running on windows servers
+
 
 2012-06-17
 -----------------
