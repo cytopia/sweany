@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -39,7 +39,7 @@ $SERVER_REACTION_TIME = ( microtime(true) - $_SERVER['REQUEST_TIME'] );
 define('DS', DIRECTORY_SEPARATOR);
 
 // Root Path
-define('ROOT', (dirname(dirname(__FILE__))));
+define('ROOT', (dirname(dirname(__FILE__))));	// parent directory
 
 
 
@@ -63,6 +63,7 @@ define('CORE_INIT_PATH', CORE_PATH.DS.'init');					// Path to Initialization fil
 define('CORE_PAGES_PATH', CORE_PATH.DS.'pages');				// Path to Framework default pages (viewable)
 define('CORE_TPL_PATH', CORE_PATH.DS.'templates');				// Path to html skeleton templates
 define('CORE_VIEWS_PATH', CORE_PATH.DS.'views');				// Path to view (modes) files (json, xml...)
+define('CORE_VALIDATOR_PATH', CORE_PATH.DS.'validator');		// Path to validators
 
 //---------- Lib folders
 define('LIB_HL_PATH', LIB_PATH.DS.'highlighter');				// Path to various code highlighters
@@ -86,7 +87,8 @@ define('USR_LANGUAGES_PATH', USR_PATH.DS.'languages');
 define('USR_LAYOUTS_PATH', USR_PATH.DS.'layouts');
 define('USR_PAGES_PATH', USR_PATH.DS.'pages');
 define('USR_PLUGINS_PATH', USR_PATH.DS.'plugins');
-define('USR_SKELETONS_PATH', USR_PATH.DS.'skeletons');
+define('USR_SKELETONS_PATH', USR_PATH.DS.'skeletons'.DS.'html');
+define('USR_MAIL_SKELETON_PATH', USR_PATH.DS.'skeletons'.DS.'email');
 define('USR_TABLES_PATH', USR_PATH.DS.'tables');
 define('USR_VENDORS_PATH', USR_PATH.DS.'vendors');
 
@@ -94,6 +96,7 @@ define('USR_VENDORS_PATH', USR_PATH.DS.'vendors');
 define('PAGES_CONTROLLER_PATH', USR_PAGES_PATH.DS.'controller');
 define('PAGES_MODEL_PATH', USR_PAGES_PATH.DS.'model');
 define('PAGES_VIEW_PATH', USR_PAGES_PATH.DS.'view');
+define('PAGES_WRAPPER_PATH', USR_PAGES_PATH.DS.'wrapper');
 
 
 
@@ -120,8 +123,18 @@ require(USR_PATH.DS.'config.php');
 //{
 	// Load Basic functions
 	require(CORE_PATH.DS.'functions.php');
+	require(CORE_PATH.DS.'CustomError.php');
+	
+	// Set Error Handler
+	set_error_handler(array('CustomError', 'error_handler'));
+	set_exception_handler(array('CustomError', 'exception_handler'));
+	register_shutdown_function(array('CustomError', 'shutdown_handler'));
 
 	/*
+	 * Load Configuration Store
+	 */
+	require(CORE_PATH.DS.'Config.php');
+	 /*
 	 * Load Initializer
 	 */
 	require(CORE_INIT_PATH.DS.'CoreAbstract.php');
@@ -129,7 +142,7 @@ require(USR_PATH.DS.'config.php');
 	require(CORE_INIT_PATH.DS.'CoreCallback.php');
 	require(CORE_INIT_PATH.DS.'CoreSession.php');
 	require(CORE_INIT_PATH.DS.'CoreLanguage.php');
-	require(CORE_INIT_PATH.DS.'CoreMySql.php');
+	require(CORE_INIT_PATH.DS.'CoreDatabase.php');
 	require(CORE_INIT_PATH.DS.'CoreUrl.php');
 	require(CORE_INIT_PATH.DS.'CoreUsers.php');
 
@@ -161,11 +174,6 @@ $FILE_LOAD_TIME = ( microtime(true) - ($_SERVER['REQUEST_TIME']+$SERVER_REACTION
  * ************************************************************************************************************/
 
 
- /****************************************** Load Core ******************************************/
-
-
-
-
 // ----------   1.) Initialize the Settings
 if ( !\Core\Init\CoreSettings::initialize() )
 {
@@ -181,19 +189,26 @@ SysLog::i('Core', 'Settings loaded successfully.');
 
 
 
-// ----------   0.) Load the Validator
-if ( $GLOBALS['VALIDATION_MODE'] )
+// ----------   2.) Load the Validator (in case it is not set, load it to produce readable error)
+if ( !isset($GLOBALS['VALIDATION_MODE']) || $GLOBALS['VALIDATION_MODE'] == true )
 {
 	$timeBefore = microtime(true);
-	require(CORE_INIT_PATH.DS.'Validator.php');
 
-	// ----------   1.) Initialize the Settings
+	require(CORE_INIT_PATH.DS.'Validator.php');
+	require(CORE_VALIDATOR_PATH.DS.'Validate01Basics.php');
+	require(CORE_VALIDATOR_PATH.DS.'Validate02Config.php');
+	require(CORE_VALIDATOR_PATH.DS.'Validate03Language.php');
+	require(CORE_VALIDATOR_PATH.DS.'Validate04Database.php');
+	require(CORE_VALIDATOR_PATH.DS.'Validate05User.php');
+	require(CORE_VALIDATOR_PATH.DS.'Validate06UserOnlineCount.php');
+	require(CORE_VALIDATOR_PATH.DS.'Validate07LogVisitors.php');
+	require(CORE_VALIDATOR_PATH.DS.'Validate08Plugins.php');
+
+	// ----------   2.1) Initialize the Validator
 	if ( !\Core\Init\Validator::initialize() )
 	{
-		// we cannot use log here, when settings breaks
-		// as the Logging settings are initialized in the settings
-		// itself, so we just output the error via 'echo'
-		echo \Core\Init\Validator::getError();
+		SysLog::e('Validation', \Core\Init\Validator::getError());
+		SysLog::show();
 		exit();
 	}
 	SysLog::i('Core', 'Validation OK. Took '.sprintf('%.6F',microtime(true)-$timeBefore).' sec');
@@ -201,8 +216,17 @@ if ( $GLOBALS['VALIDATION_MODE'] )
 
 
 
+// ----------   2.) Initialize the Session
+if ( !\Core\Init\CoreSession::initialize() )
+{
+	SysLog::e('Session', \Core\Init\CoreSession::getError());
+	SysLog::show();
+	exit();
+}
+SysLog::i('Core', 'Session Initialized successfully');
 
-// ----------   2.) Initialize the Url
+
+// ----------   3.) Initialize the Url
 if ( !\Core\Init\CoreUrl::initialize() )
 {
 	SysLog::e('Url', \Core\Init\CoreUrl::getError());
@@ -212,7 +236,7 @@ if ( !\Core\Init\CoreUrl::initialize() )
 SysLog::i('Core', 'Url loaded successfully, Request: '.\Core\Init\CoreUrl::$request);
 
 
-// ----------   3.) Initialize the Framework Callback
+// ----------   4.) Initialize the Framework Callback
 if ( !\Core\Init\CoreCallback::initialize() )
 {
 	SysLog::e('Callback', \Core\Init\CoreCallback::getError());
@@ -220,16 +244,6 @@ if ( !\Core\Init\CoreCallback::initialize() )
 	exit();
 }
 SysLog::i('Core', 'Callback Initialized successfully');
-
-
-// ----------   4.) Initialize the Session
-if ( !\Core\Init\CoreSession::initialize() )
-{
-	SysLog::e('Session', \Core\Init\CoreSession::getError());
-	SysLog::show();
-	exit();
-}
-SysLog::i('Core', 'Session Initialized successfully');
 
 
 // ----------   5.) Initialize the Language
@@ -245,50 +259,41 @@ if ( $GLOBALS['LANGUAGE_ENABLE'] == true )
 }
 
 // ----------   6.) Initialize MySQL
-if ( !\Core\Init\CoreMySql::initialize() )
+if ( $GLOBALS['SQL_ENABLE'] == true )
 {
-	SysLog::e('MySQL', \Core\Init\CoreMySql::getError());
-	SysLog::show();
-	exit();
+	if ( !\Core\Init\CoreDatabase::initialize() )
+	{
+		SysLog::e('Database', \Core\Init\DatabaseMySql::getError());
+		SysLog::show();
+		exit();
+	}
+	SysLog::i('Core', 'Database ('.$GLOBALS['SQL_ENGINE'].') Initialized successfully, using db: '.$GLOBALS['SQL_DB']);
+
+
+	// ----------   7.) Initialize Users
+	if ( $GLOBALS['USER_ENABLE'] == true )
+	{
+		if ( !\Core\Init\CoreUsers::initialize() )
+		{
+			SysLog::e('Users', \Core\Init\CoreUsers::getError());
+			SysLog::show();
+			exit();
+		}
+		SysLog::i('Core', 'Users Initialized successfully, current user: (id: '.\Core\Init\CoreUsers::id().') '.\Core\Init\CoreUsers::name());
+	}
+	
+	// ----------   8.) Post Settings
+	// Log visitors to SQL
+	if ( $GLOBALS['SQL_LOG_VISITORS_ENABLE'] == true && $GLOBALS['SQL_ENABLE'] == true )
+	{
+		$logger = Loader::loadTable('Visitors');
+		$logger->add();
+	}
+	
 }
-SysLog::i('Core', 'MySQL Initialized successfully, using db: '.$GLOBALS['SQL_DB']);
-
-
-
-// ----------   7.) Initialize Users
-if ( !\Core\Init\CoreUsers::initialize() )
-{
-	SysLog::e('Users', \Core\Init\CoreUsers::getError());
-	SysLog::show();
-	exit();
-}
-SysLog::i('Core', 'Users Initialized successfully, current user: (id: '.\Core\Init\CoreUsers::id().') '.\Core\Init\CoreUsers::name());
 
 $BOOTSTRAP_TIME = ( microtime(true) - ($_SERVER['REQUEST_TIME']+$SERVER_REACTION_TIME+$FILE_LOAD_TIME) );
 SysLog::i('-- BOOTSTRAP --', 'done in '.round($BOOTSTRAP_TIME, 4).' seconds');
-
-
-
-
-/* ************************************************************************************************************
- *
- * POST BOOT
- *
- * ************************************************************************************************************/
-
- // ----------   7.) Post Settings
-//
-// If we are not in the backend and SQL Visitor
-// Logging is enabled in conf.php
-// we will start the log now
-//
-// Log visitors to SQL
-if ( $GLOBALS['SQL_LOG_VISITORS'] == true )
-{
-	$logger = Loader::loadTable('Visitors');
-	$logger->add();
-}
-
 
 
 
@@ -317,9 +322,10 @@ SysLog::i('-- CALL --', 'calling <strong><font color="green">'.$class.'->'.$meth
 $CALL_START_TIME = microtime(true);
 
 // set language
-$c->language->set($method);
-
-
+if ( $GLOBALS['LANGUAGE_ENABLE'] == true )
+{
+	$c->language->set($method);
+}
 
 /**
  * faster than call_user_func_array
@@ -364,7 +370,7 @@ if ( !$c->render )
 	\Core\Init\CoreUrl::cleanup();
 	\Core\Init\CoreCallback::cleanup();
 	\Core\Init\CoreSession::cleanup();
-	\Core\Init\CoreMySQL::cleanup();
+	if ( $GLOBALS['SQL_ENABLE'] ) {\Core\Init\CoreDatabase::cleanup();}
 
 	// Loggin
 	SysLog::i('End', 'Execution finished');
@@ -408,10 +414,14 @@ else
 	$view = Render::view($c);
 	if ( \Core\Init\CoreSettings::$showFwErrors > 2 || \Core\Init\CoreSettings::$logFwErrors > 2 ){ SysLog::i('Render View', 'Total Execution Time', null, $start);}
 
+	// ------ RENDER ADDITIONAL MULTIPLE VIEWS
+	if ( \Core\Init\CoreSettings::$showFwErrors > 2 || \Core\Init\CoreSettings::$logFwErrors > 2 ){ $start = microtime(true); }
+	$views = Render::views($c);
+	if ( \Core\Init\CoreSettings::$showFwErrors > 2 || \Core\Init\CoreSettings::$logFwErrors > 2 ){ SysLog::i('Render Views', 'Total Execution Time', null, $start);}
 
 	// ------ RENDER LAYOUT
 	if ( \Core\Init\CoreSettings::$showFwErrors > 2 || \Core\Init\CoreSettings::$logFwErrors > 2 ) {$start = microtime(true);}
-	$layout	= Render::layout($c, $view);
+	$layout	= Render::layout($c, $view, $views);
 	if ( \Core\Init\CoreSettings::$showFwErrors > 2 || \Core\Init\CoreSettings::$logFwErrors > 2 ) {SysLog::i('Render Layout', 'Total Execution Time', null, $start);}
 
 
@@ -436,7 +446,7 @@ else
 	\Core\Init\CoreUrl::cleanup();
 	\Core\Init\CoreCallback::cleanup();
 	\Core\Init\CoreSession::cleanup();
-	\Core\Init\CoreMySQL::cleanup();
+	if ( $GLOBALS['SQL_ENABLE'] ) {\Core\Init\CoreDatabase::cleanup();}
 
 
 	// ------ LOGGIN

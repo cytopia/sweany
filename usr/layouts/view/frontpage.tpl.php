@@ -25,9 +25,9 @@
 				<div style="border:solid 1px black; height:180px;">
 					<?php /* TODO: need User helper, we do not want to access core Classes!!! */?>
 					<?php if ( $user->isLoggedIn() ): ?>
-						<?php echo $blocks['logoutBox'];?><br/>
+						<?php echo $bLogoutBox;?><br/>
 					<?php else: ?>
-						<?php echo $blocks['loginBox']; ?>
+						<?php echo $bLoginBox; ?>
 					<?php endif; ?>
 				</div>
 			</div>

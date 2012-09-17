@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -60,9 +60,12 @@ class Mailer
 	/***************************************   F U N C T I O N S   ***************************************/
 
 	/**
-	 *  Send Plain Text Email
+	 * Send Plain Text Email
 	 *
-	 *  returns true on success and false on failure
+	 * @param	string	$to
+	 * @param	string	$subject
+	 * @param	string	$message
+	 * @return	boolean	success
 	 */
 	public static function sendText($to, $subject, $message)
 	{
@@ -70,9 +73,12 @@ class Mailer
 	}
 
 	/**
-	 *  Send Plain HTML Email
+	 * Send Plain HTML Email
 	 *
-	 *  returns true on success and false on failure
+	 * @param	string	$to
+	 * @param	string	$subject
+	 * @param	string	$message
+	 * @return	boolean	success
 	 */
 	public static function sendHtml($to, $subject, $message)
 	{
@@ -83,23 +89,23 @@ class Mailer
 
 
 
-
 	/***************************************   P R I V A T E   H E L P E R S   ***************************************/
 
 	/**
-	 * Send wrapper, that
+	 * Send wrapper
 	 *
-	 *
-	 * @param string $to
-	 * @param string $subject
-	 * @param string $message
-	 * @param string $type
-	 * @return boolean
+	 * @param	string	$to
+	 * @param	string	$subject
+	 * @param	string	$message
+	 * @param	string	$type
+	 * @return	boolean success
 	 */
 	private static function _send($to, $subject, $message, $type)
 	{
 		$headers = self::__getHeaders($type, $to);
 		$headers = implode(self::$br, $headers);
+
+		$message = Render::email($message, USR_MAIL_SKELETON_PATH.DS.'default.tpl.php');
 
 		// if enabled, also insert the email into database
 		if ( $GLOBALS['EMAIL_STORE_SEND_MESSAGES'] )
@@ -109,18 +115,22 @@ class Mailer
 			$email['subject']	= $subject;
 			$email['message']	= $message;
 			$email['created']	= date('Y-m-d H:i:s', time());
-
-			\Core\Init\CoreMySql::insertRow(self::$table, $email);
+			$db = \Core\Init\CoreDatabase::$db;
+			$db::insertRow(self::$table, $email);
 		}
 
-		return mail($to, self::__charset_encode($subject), $message, $headers);
+		// Make sure to only send email when desired
+		if ( !$GLOBALS['EMAIL_DO_NOT_SEND'] )
+		{
+			return mail($to, self::__charset_encode($subject), $message, $headers);
+		}
 	}
 
 
 	/**
 	 *  Build email headers
-	 * (also takes care of encoding the from name
-	 * depending on the chosen charset encoding
+	 *  (also takes care of encoding the from name
+	 *  depending on the chosen charset encoding
 	 */
 	private static function __getHeaders($content_type = 'text', $to_email)
 	{
@@ -148,5 +158,3 @@ class Mailer
 		return (self::$charset == 'utf-8') ? '=?UTF-8?B?'.base64_encode($string).'?=' : $string;
 	}
 }
-
-?>

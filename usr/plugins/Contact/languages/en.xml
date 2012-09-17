@@ -17,8 +17,6 @@
 		<Contact>
 			<PageSection>
 				<page id="index">
-					<headline>Contact us</headline>
-					<teaser>If  you have problems using our site or ideas how we can make it better, dont hesitate to contact us by email contact(at)site(dot)com or use the contact form provided below.</teaser>
 					<submittedHead>Thank you for submitting</submittedHead>
 					<submittedBody>Your message has been send successfully.</submittedBody>
 				</page>
@@ -38,7 +36,7 @@
 					<form_err_subject>invalid choice</form_err_subject>
 					<form_err_message>Please write a message</form_err_message>
 
-					<!-- array, feel free to add more -->					
+					<!-- array, feel free to add more, but also make sure to have the same values in all language files -->					
 					<subjects>General Inquiry</subjects>
 					<subjects>Feedback</subjects>
 					<subjects>Feature Request</subjects>

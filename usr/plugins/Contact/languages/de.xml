@@ -17,8 +17,6 @@
 		<Contact>
 			<PageSection>
 				<page id="index">
-					<headline>Kontaktiere uns</headline>
-					<teaser>Wenn du Probleme beim Besuch dieser Seite hast oder eine allgemeine Anfrage stellen willst, dann nutze das Kontaktformular</teaser>
 					<submittedHead>Danke fuer die Nachricht</submittedHead>
 					<submittedBody>Deine Nachricht wurde erfolgreich versand.</submittedBody>
 				</page>
@@ -38,7 +36,7 @@
 					<form_err_subject>ungueltige Auswahl</form_err_subject>
 					<form_err_message>Schreibe eine Nachricht</form_err_message>
 
-					<!-- array, feel free to add more -->					
+					<!-- array, feel free to add more, but also make sure to have the same values in all language files -->					
 					<subjects>Allgemeine Anfrage</subjects>
 					<subjects>Feedback</subjects>
 					<subjects>Neues Feature</subjects>

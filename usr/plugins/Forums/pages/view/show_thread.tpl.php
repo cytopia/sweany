@@ -13,6 +13,9 @@ $thread_time= date($time_format, $timestamp);
 			<th colspan="2"><div class="forumNavi"><?php echo $navi; ?></div></th>
 		</tr>
 		<tr>
+			<td colspan="2"></td>
+		</tr>
+		<tr>
 			<th colspan="2"><img src="/plugins/Forums/img/icon_date_time.png" title="<?php echo $language->date; ?>" /><span style="padding-left:5px; font-weight:normal;"> <?php echo $thread_date.' '.$language->atTime.' '.$thread_time; ?></span></th>
 		</tr>
 	</thead>
@@ -49,9 +52,13 @@ $thread_time= date($time_format, $timestamp);
 		</tr>
 	</tfoot>
 	<tbody>
+		<?php
+			$author_name= ($thread['fk_user_id']>0) ? $thread['username'] : 'anonymous';
+			$author_link= ($userProfileLink) ? Html::l($author_name, $userProfileCtl, $userProfileMethod, array($thread['fk_user_id'])) : $author_name;
+		?>
 		<tr>
 			<td style="width:150px;">
-				<div class="forumUsername"><?php echo ($thread['fk_user_id']>0) ? Html::l($thread['username'], $userProfileCtl, $userProfileMethod, array($thread['fk_user_id'])) : 'anonymous'; ?></div>
+				<div class="forumUsername"><?php echo $author_link; ?></div>
 				<br/>
 				<div style="font-size:11px;">
 					<div style="float:left; width:90px;"><?php echo $language->entries; ?>:</div><div style="float:left;"><?php echo $thread['num_entries'];?></div>
@@ -59,11 +66,13 @@ $thread_time= date($time_format, $timestamp);
 				</div><br/><br/>
 				<div style="clear:both;"></div>
 				<div>
-					<div style="font-size:11px;">
-						<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$thread['fk_user_id'];?>" title="send private PM to <?php echo $thread['username']; ?>">
-							<img src="/plugins/Forums/img/pm.png" title="Private Nachricht" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
-						</a>
-					</div>
+					<?php if ( $userMessageLink ):?>
+						<div style="font-size:11px;">
+							<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$thread['fk_user_id'];?>" title="<?php echo $language->sendMessage;?>">
+								<img src="/plugins/Forums/img/pm.png" title="<?php echo $language->sendMessage;?>" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
+							</a>
+						</div>
+					<?php endif;?>
 				</div>
 			</td>
 			<td>
@@ -86,7 +95,9 @@ $thread_time= date($time_format, $timestamp);
 		<thead>
 			<tr>
 				<th colspan="2"><img src="/plugins/Forums/img/icon_date_time.png" title="<?php echo $language->date;?>" /><span style="padding-left:5px; font-weight:normal;"> <?php echo $date.' '.$language->atTime.' '.$time; ?></span></th>
-			</tr>
+			</tr>		<tr>
+			<td colspan="6"></td>
+		</tr>
 		</thead>
 		<tfoot>
 			<tr>
@@ -121,9 +132,13 @@ $thread_time= date($time_format, $timestamp);
 			</tr>
 		</tfoot>
 		<tbody>
+			<?php
+				$author_name= ($post['fk_user_id']>0) ? $post['username'] : 'anonymous';
+				$author_link= ($userProfileLink) ? Html::l($author_name, $userProfileCtl, $userProfileMethod, array($post['fk_user_id'])) : $author_name;
+			?>
 			<tr>
 				<td style="width:150px;">
-					<div class="forumUsername"><?php echo ($post['fk_user_id']>0) ? Html::l($post['username'], $userProfileCtl, $userProfileMethod, array($post['fk_user_id'])) : 'anonymous'; ?></div>
+					<div class="forumUsername"><?php echo $author_link; ?></div>
 					<br/><br/>
 					<div style="font-size:11px;">
 						<div style="float:left; width:90px;"><?php echo $language->entries; ?>:</div><div style="float:left;"><?php echo $post['num_entries'];?></div>
@@ -131,11 +146,13 @@ $thread_time= date($time_format, $timestamp);
 					</div><br/><br/>
 					<div style="clear:both;"></div>
 					<div>
-						<div style="font-size:11px;">
-							<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$post['fk_user_id'];?>" title="private Nachricht an <?php echo $thread['username']; ?> schreiben">
-								<img src="/plugins/Forums/img/pm.png" title="Private Nachricht" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
-							</a>
-						</div>
+						<?php if ( $userMessageLink ):?>
+							<div style="font-size:11px;">
+								<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$post['fk_user_id'];?>" title="private Nachricht an <?php echo $thread['username']; ?> schreiben">
+									<img src="/plugins/Forums/img/pm.png" title="Private Nachricht" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
+								</a>
+							</div>
+						<?php endif;?>
 					</div>
 				</td>
 				<td>
@@ -215,7 +232,7 @@ $thread_time= date($time_format, $timestamp);
 		</tr>
 		<tr>
 			<td>
-				<?php echo $blocks['onlineUsers'];?>
+				<?php echo $bOnlineUsers;?>
 			</td>
 		</tr>
 	</tfoot>

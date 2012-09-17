@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -100,13 +100,12 @@ class CoreCallback extends CoreAbstract
 			// and the 2nd param (normally method) is actually a parameter
 			array_unshift($params, $method);
 			self::$object = array(
-							'class'		=> 'FrameworkDefault',
-							'method'	=> 'change_settings',
-							'params'	=> $params,
+				'class'		=> 'FrameworkDefault',
+				'method'	=> 'change_settings',
+				'params'	=> $params,
 			);
 			return true;
 		}
-
 		//------------- 01) No controller specified, so start with the default entry point
 		else if ( !$controller )
 		{
@@ -114,12 +113,43 @@ class CoreCallback extends CoreAbstract
 
 			require(PAGES_CONTROLLER_PATH.DS.$GLOBALS['DEFAULT_CONTROLLER'].'.php');
 
-			self::$object = array(
-				'class'		=> $GLOBALS['DEFAULT_CONTROLLER'],
-				'method'	=> $GLOBALS['DEFAULT_METHOD'],
-				'params'	=> array(),
-			);
+			// Check if the Default Controller is authorized to be viewed
+			// by the current user.
+			// If not display an error not found message, to hide the admin area
+			if ( !$GLOBALS['DEFAULT_CONTROLLER']::isAuthorized() )
+			{
+				// Load the Framework Default Page Controller
+				require_once(CORE_PAGES_PATH.DS.'FrameworkDefault.php');
+
+				self::$object = array(
+					'class'		=> 'FrameworkDefault',
+					'method'	=> 'url_not_found',
+					'params'	=> array(\Core\Init\CoreUrl::$request),
+				);
+			}
+			else
+			{
+				self::$object = array(
+					'class'		=> $GLOBALS['DEFAULT_CONTROLLER'],
+					'method'	=> $GLOBALS['DEFAULT_METHOD'],
+					'params'	=> array(),
+				);
+			}
 			self::$visitablePage = true;
+			return true;
+		}
+		else if ( !$controller::isAuthorized() )
+		{
+			\SysLog::w('Callback', '[Not Authorized] - Faking Not Found in: class &lt;'.$controller.'&gt; and method &lt;'.$method.'&gt;');
+
+			// Load the Framework Default Page Controller
+			require_once(CORE_PAGES_PATH.DS.'FrameworkDefault.php');
+
+			self::$object = array(
+				'class'		=> 'FrameworkDefault',
+				'method'	=> 'url_not_found',
+				'params'	=> array(\Core\Init\CoreUrl::$request),
+			);
 			return true;
 		}
 
@@ -159,7 +189,6 @@ class CoreCallback extends CoreAbstract
 			);
 			return true;
 		}
-
 		//------------- 04)  Security pre-caution:
 		// All functions defined in 'Controller.php' itself are inherited to
 		// the xxxController Class, but are not allowed to be called
@@ -182,6 +211,8 @@ class CoreCallback extends CoreAbstract
 		// Everyhing went fine
 		else
 		{
+			\SysLog::i('Callback', 'Normal Request');
+
 			self::$object = array(
 				'class'		=> $controller,
 				'method'	=> $method,

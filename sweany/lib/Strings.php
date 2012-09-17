@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -18,7 +18,7 @@
  *
  * @copyright	Copyright 2011-2012, Patu
  * @link		none yet
- * @package		sweany.core.lib
+ * @package		sweany.lib
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @version		0.7 2012-07-29 13:25
@@ -81,6 +81,22 @@ class Strings
 		}
 		return implode("\n", $tmp);
 	}
-}
 
-?>
+
+	/*
+	 * Convert Umlauts
+	 * TODO: need preg_replace as it is much faster
+	 */
+	public static function convertUmlauts($string)
+	{
+		$clean = str_replace('ä', 'ae', $string);
+		$clean = str_replace('ö', 'oe', $clean);
+		$clean = str_replace('ü', 'ue', $clean);
+		$clean = str_replace('Ä', 'Ae', $clean);
+		$clean = str_replace('Ö', 'Oe', $clean);
+		$clean = str_replace('Ü', 'ue', $clean);
+		$clean = str_replace('ß', 'ss', $clean);
+
+		return $clean;
+	}
+}

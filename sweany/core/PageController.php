@@ -1,4 +1,5 @@
-<?php/**
+<?php
+/**
  * Sweany MVC PHP framework
  * Copyright (C) 2011-2012 Patu.
  *
@@ -7,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -20,18 +21,289 @@
  * @package		sweany.core
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25 * * * Abstract parent for page controller */abstract Class PageController extends BaseController{	/* ***************************************************** VARIABLES ***************************************************** */	/*	 * Defines the type of the controller	 * page, layout or block.	 * This is used to tell the language class,	 * which section to use	 */	protected $ctrl_type = 'page';	/*	 * The following will define the Variables, View Layout and Blocks	 * to use	 *	 * Already defined in BaseController:	 *	private $vars	= array();	// all variables parsed to the view	 *	private $view	= null;		// the view itself to use	 */	private $layout	= null;		// the layout file to render the view into	private $blocks	= array();	// pre-rendered blocks (if any)	/*	 * DO USE a model by default in page controllers	 *	 * Can still be overritten individually by project specific controller pages	 * by setting $have_model = false in the variable section	 */	protected $have_model = true;	/* ***************************************************** CONSTRUCTOR ***************************************************** */	public function __construct()	{		/*		 * Call the Parent Constructor		 */		parent::__construct();	}	public function __desctruct()	{		parent::__destruct();	}	/* ***************************************************** CONTROLLER SETTER ***************************************************** */	/**	 *	 * Assign the class and function of the layout	 * controller to use	 *	 * @param string $class (name of class)	 * @param string $method (name of function)	 */	protected function layout($class, $method)	{		$this->layout = array($class, $method);	}	/**	 *	 * Attach blocks to the layout and return the return value	 * of the block function itself.	 *	 * @param string $varName	 * @param string $blockPluginName	 * @param string $blockControllerName	 * @param string $blockMethodName	 * @param array  $blockMethodParams	 * @return mixed	 */	protected function attachBlock($varName, $blockPluginName, $blockControllerName, $blockMethodName, $blockMethodParams = array())	{		if ( \Core\Init\CoreSettings::$showFwErrors > 2 || \Core\Init\CoreSettings::$logFwErrors > 2 )			$start = getmicrotime();		$output = Render::block($blockPluginName, $blockControllerName, $blockMethodName, $blockMethodParams);		if ( \Core\Init\CoreSettings::$showFwErrors > 2 || \Core\Init\CoreSettings::$logFwErrors > 2 )			SysLog::i('Attach Block', '(Done) | [to Page] from: '.$blockPluginName.'\\'.$blockControllerName.'::'.($blockControllerName).'->'.$blockMethodName, null, $start);		// 08) store block into array		$this->blocks[$varName]	= $output['content'];		return $output['return'];	}	/* ***************************************************** INDEX GETTER ***************************************************** */	public function getBlocks()	{		return $this->blocks;	}	public function getLayout()	{		return $this->layout;	}	public function isPlugin()	{		return $this->plugin;	}	/* ***************************************************** REDIRECTS ***************************************************** */	/**	 * Instant/transparent redirects via php-header().	 * Note: in Debug Mode you will not be redirected instantly, but rather find a link to click	 */	/**	 *	 * Redirect to a different page by Ctl/Method	 * Make sure to encode the parameter values nicely	 *	 * @param string $controller (optional)	 * 		controller Name or null for default controller	 * @param string $method (optional)	 * 		method Name or null for default method	 * @param array $params (optional)	 * 		params array	 */	protected function redirect($controller = null, $method = null, $params = array())	{		$link = \Core\Init\CoreUrl::ControllerMethodAndParamsToUrlLink($controller, $method, $params);		// if debug is on, do not redirect, but show the link instead		if ( \Core\Init\CoreSettings::$showFwErrors )		{			echo '<font color="red">Redirect Call: </font><a href="'.$link.'">'.$link.'</a>';			\SysLog::show();			exit();		}		else		{			header('Location: '.$link);			exit();		}	}	/**	 *	 * Redirect to front page	 */	protected function redirectHome()	{		// no parameter leads to null-values and therefore to '/' redirect		$this->redirect();	}	/* *************************************************  D E L A Y E D   R E D I R E C T S ************************************************* */	/**	 * The Delayed redirects will present the user with an info page containing a headline and	 * a body text, giving him/her some information. The info page can be customized under:	 *	 * usr/pages/view/FrameworkDefault/info_message.tpl.php	 *	 * There also exists an html/javascript redirect after X (specified) seconds and optionally	 * a clickable link to redirect instantly.	 */	/**	 *	 * Redirect to the previous page you came from (on this site).	 *	 * All internal pages (such as not_found, info, robots) and pages without a view (e.g.: ajax requests)	 * do not count and will not be stored in the prevPage.	 */	protected function redirectBack()	{		$prevPage	= History::getPrevPage();		$controller = $prevPage['controller'];		$method		= $prevPage['method'];		$params		= $prevPage['params'];		$this->redirect($controller, $method, $params);	}	/**
+ * @version		0.7 2012-07-29 13:25
+ *
+ *
+ * Abstract parent for page controller
+ */
+abstract Class PageController extends BaseController
+{
+
+	/* ***************************************************** VARIABLES ***************************************************** */
+
+	/*
+	 * Defines the type of the controller
+	 * page, layout or block.
+	 * This is used to tell the language class,
+	 * which section to use
+	 */
+	protected $ctrl_type = 'page';
+
+
+	/*
+	 * The following will define the Variables, View Layout and Blocks
+	 * to use
 	 *
-	 * Redirect to the specified page.	 * Delay the redirect by the amount of seconds specified and display an info message.	 *	 * @param string $controller (optional)	 * 		controller Name or null for default controller	 * @param string $method (optional)	 * 		method Name or null for default method	 * @param array $params (optional)	 * 		params array
+	 * Already defined in BaseController:
+	 *	private $vars	= array();	// all variables parsed to the view
+	 *	private $view	= null;		// the view itself to use
+	 */
+	private $layout	= null;		// the layout file to render the view into
+
+
+
+	/**
+	 * Additionally to $view, a PageController also
+	 * has $views. This is an associative array of multiple
+	 * views that can be rendered into a layout.
+	 *
+	 * @var mixed[]	$views
+	 * 	$views['key'] = 'view name'
+	 */
+	private $views	= null;
+
+	/*
+	 * DO USE a model by default in page controllers
+	 *
+	 * Can still be overritten individually by project specific controller pages
+	 * by setting $have_model = false in the variable section
+	 */
+	protected $have_model = true;
+
+
+
+
+	/*
+	 * If the users module is enabled,
+	 * and this flag is set to true,
+	 * the page controller will be promoted to an admin controller.
+	 *
+	 * Only users with status of 'admin' are allowed to access it,
+	 * without having to include special checks in every function.
+	 *
+	 * Non-admin users will see a 404 not found if they try to access an
+	 * admin controller
+	 */
+	protected static $admin_area = false;
+
+
+
+	/* ***************************************************** CONSTRUCTOR ***************************************************** */
+
+	public function __construct()
+	{
+		/*
+		 * Call the Parent Constructor
+		 */
+		parent::__construct();
+	}
+
+
+	public function __desctruct()
+	{
+		parent::__destruct();
+	}
+
+
+
+	/* ***************************************************** CONTROLLER SETTER ***************************************************** */
+
+	/**
+	 *
+	 * Assign the class and function of the layout
+	 * controller to use
+	 *
+	 * @param string	$class		(name of class)
+	 * @param string	$method		(name of function)
+	 * @param mixed[]	$params		Function parameter to append to layout function
+	 */
+	protected function layout($class, $method, $params = array())
+	{
+		$this->layout = array($class, $method, $params);
+	}
+
+	/**
+	 *
+	 * Use this function to set multiple views
+	 *
+	 * @param string $key		Key to refer to the view
+	 * @param string $view		Name of the view
+	 */
+	protected function views($key, $view)
+	{
+		$this->views[$key] = $view;
+	}
+
+
+
+	/* ***************************************************** CONTROLLER GETTER ***************************************************** */
+
+
+
+	public function getLayout()
+	{
+		return $this->layout;
+	}
+
+	/**
+	 * Get multiple Page Controller Views
+	 *
+	 * @return	mixed[]	$view	array of view names
+	 */
+	public function getViews()
+	{
+		return $this->views;
+	}
+
+	public function isPlugin()
+	{
+		return $this->plugin;
+	}
+
+
+	public static function isAuthorized()
+	{
+		// Only check for authorization if the user module is active.
+		// If it is not active, always authorize positively
+		if ( $GLOBALS['USER_ENABLE'] == true )
+		{
+			// NOTE: Late static binding call, to get the childs value
+			//       rather than my own.
+			if ( static::$admin_area && !\Core\Init\CoreUsers::isAdmin() )
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+
+
+	/* ***************************************************** REDIRECTS ***************************************************** */
+
+	/**
+	 * Instant/transparent redirects via php-header().
+	 * Note: in Debug Mode you will not be redirected instantly, but rather find a link to click
+	 */
+
+
+	/**
+	 *
+	 * Redirect to a different page by Ctl/Method
+	 * Make sure to encode the parameter values nicely
+	 *
+	 * @param string $controller (optional)
+	 * 		controller Name or null for default controller
+	 * @param string $method (optional)
+	 * 		method Name or null for default method
+	 * @param array $params (optional)
+	 * 		params array
+	 */
+	protected function redirect($controller = null, $method = null, $params = array())
+	{
+		$link = \Core\Init\CoreUrl::ControllerMethodAndParamsToUrlLink($controller, $method, $params);
+
+		// if debug is on, do not redirect, but show the link instead
+		if ( \Core\Init\CoreSettings::$showFwErrors )
+		{
+			echo '<font color="red">Redirect Call: </font><a href="'.$link.'">'.$link.'</a>';
+			\SysLog::show();
+			exit();
+		}
+		else
+		{
+			header('Location: '.$link);
+			exit();
+		}
+	}
+
+	/**
+	 *
+	 * Redirect to front page
+	 */
+	protected function redirectHome()
+	{
+		// no parameter leads to null-values and therefore to '/' redirect
+		$this->redirect();
+	}
+
+
+
+
+	/* *************************************************  D E L A Y E D   R E D I R E C T S ************************************************* */
+
+	/**
+	 * The Delayed redirects will present the user with an info page containing a headline and
+	 * a body text, giving him/her some information. The info page can be customized under:
+	 *
+	 * usr/pages/view/FrameworkDefault/info_message.tpl.php
+	 *
+	 * There also exists an html/javascript redirect after X (specified) seconds and optionally
+	 * a clickable link to redirect instantly.
+	 */
+
+
+	/**
+	 *
+	 * Redirect to the previous page you came from (on this site).
+	 *
+	 * All internal pages (such as not_found, info, robots) and pages without a view (e.g.: ajax requests)
+	 * do not count and will not be stored in the prevPage.
+	 */
+	protected function redirectBack()
+	{
+		$prevPage	= History::getPrevPage();
+		$controller = $prevPage['controller'];
+		$method		= $prevPage['method'];
+		$params		= $prevPage['params'];
+		$this->redirect($controller, $method, $params);
+	}
+
+
+	/**
+	 *
+	 * Redirect to the specified page.
+	 * Delay the redirect by the amount of seconds specified and display an info message.
+	 *
+	 * @param string $controller (optional)
+	 * 		controller Name or null for default controller
+	 * @param string $method (optional)
+	 * 		method Name or null for default method
+	 * @param array $params (optional)
+	 * 		params array
 	 * @param string $title
 	 * 		the title to display on the info page
 	 * @param string $body
 	 * 		the body text to display on the info page
 	 * @param integer $delay
 	 * 		the delay before redirect in seconds
-	 */	protected function redirectDelayed($controller = null, $method = null, $params = array(), $title, $body, $delay = 5)	{		$link = \Core\Init\CoreUrl::ControllerMethodAndParamsToUrlLink($controller, $method, $params);		$info['url']	= $link;		$info['delay']	= $delay;		$info['title']	= $title;		$info['body']	= $body;		\Core\Init\CoreSession::set('info_message_data', $info);		$this->redirect($GLOBALS['DEFAULT_INFO_MESSAGE_URL']);	}	/**
+	 */
+	protected function redirectDelayed($controller = null, $method = null, $params = array(), $title, $body, $delay = 5)
+	{
+		$link = \Core\Init\CoreUrl::ControllerMethodAndParamsToUrlLink($controller, $method, $params);
+
+		$info['url']	= $link;
+		$info['delay']	= $delay;
+		$info['title']	= $title;
+		$info['body']	= $body;
+
+		\Core\Init\CoreSession::set('info_message_data', $info);
+
+		$this->redirect($GLOBALS['DEFAULT_INFO_MESSAGE_URL']);
+	}
+
+
+	/**
 	 *
-	 * Redirect to the front page.	 * Delay the redirect by the amount of seconds specified and display an info message.
+	 * Redirect to the front page.
+	 * Delay the redirect by the amount of seconds specified and display an info message.
 	 *
 	 * @param string $title
 	 * 		the title to display on the info page
@@ -39,4 +311,34 @@
 	 * 		the body text to display on the info page
 	 * @param integer $delay
 	 * 		the delay before redirect in seconds
-	 */	protected function redirectDelayedHome($title, $body, $delay = 5)	{		$this->redirectDelayed(null, null, null, $title, $body, $delay);	}	/**	 *	 * Redirect to the previous page you came from (on this site).	 * Delay the redirect by the amount of seconds specified and display an info message.	 *	 * All internal pages (such as not_found, info, robots) and pages without a view (e.g.: ajax requests)	 * do not count and will not be stored in the prevPage.	 *	 * @param string $title	 * 		the title to display on the info page	 * @param string $body	 * 		the body text to display on the info page	 * @param integer $delay	 * 		the delay before redirect in seconds	 */	protected function redirectDelayedBack($title, $body, $delay = 5)	{		$prevPage	= History::getPrevPage();		$controller = $prevPage['controller'];		$method		= $prevPage['method'];		$params		= $prevPage['params'];		$this->redirectDelayed($controller, $method, $params, $title, $body, $delay);	}}
+	 */
+	protected function redirectDelayedHome($title, $body, $delay = 5)
+	{
+		$this->redirectDelayed(null, null, null, $title, $body, $delay);
+	}
+
+
+	/**
+	 *
+	 * Redirect to the previous page you came from (on this site).
+	 * Delay the redirect by the amount of seconds specified and display an info message.
+	 *
+	 * All internal pages (such as not_found, info, robots) and pages without a view (e.g.: ajax requests)
+	 * do not count and will not be stored in the prevPage.
+	 *
+	 * @param string $title
+	 * 		the title to display on the info page
+	 * @param string $body
+	 * 		the body text to display on the info page
+	 * @param integer $delay
+	 * 		the delay before redirect in seconds
+	 */
+	protected function redirectDelayedBack($title, $body, $delay = 5)
+	{
+		$prevPage	= History::getPrevPage();
+		$controller = $prevPage['controller'];
+		$method		= $prevPage['method'];
+		$params		= $prevPage['params'];
+		$this->redirectDelayed($controller, $method, $params, $title, $body, $delay);
+	}
+}

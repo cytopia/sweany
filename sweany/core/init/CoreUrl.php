@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -71,10 +71,25 @@ class CoreUrl extends CoreAbstract
 
 	/* ******************************************** ACTIONS ********************************************/
 
+
 	public static function getController()
 	{
-		return isset(self::$urlParams[0]) ? self::$urlParams[0] : null;
+		global $CUSTOM_ROUTING;
+
+		// No request exist, return null for frontpage
+		if ( !isset(self::$urlParams[0]) )
+			return null;
+
+		// Custom seo controller name :-)
+		if ( isset($CUSTOM_ROUTING[self::$urlParams[0]]['controller']) && strlen($CUSTOM_ROUTING[self::$urlParams[0]]['controller']) )
+		{
+			\SysLog::i('Seo-URL', '[SEO] <span style="color:yellow;">'.self::$urlParams[0].'</span> =&gt; <strong style="color:white;">class</strong> <strong style="color:green;">'.$CUSTOM_ROUTING[self::$urlParams[0]]['controller'].'</strong>');
+			return $CUSTOM_ROUTING[self::$urlParams[0]]['controller'];
+		}
+
+		return self::$urlParams[0];
 	}
+
 
 	public static function getMethod()
 	{

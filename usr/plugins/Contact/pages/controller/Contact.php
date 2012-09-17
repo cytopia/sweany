@@ -21,7 +21,8 @@ class Contact extends PageController
 	* **********************************************************************************************************************/
 	public function index()
 	{
-		$submitted = $this->attachBlock('contactForm', 'Contact', 'Contact', 'addContact');
+		$bContactForm	= Blocks::get('Contact', 'Contact', 'addContact');
+		$submitted		= $bContactForm['ret'];
 
 		 //form was submitted successfully
 		 //show info and the redirect user to the start page
@@ -33,6 +34,14 @@ class Contact extends PageController
 			return;
 		}
 		$this->set('language', $this->language);
-		$this->view('contact.tpl.php');
+		$this->set('bContactForm', $bContactForm['html']);
+		$this->view('index');
+
+		// LAYOUT OPTIONS
+		if  ( Config::exists('layout', 'contact') )
+		{
+			$layout = Config::get('layout', 'contact');
+			$this->layout($layout[0], $layout[1], isset($layout[3]) ? $layout[3] : array());
+		}
 	}
 }

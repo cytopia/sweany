@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -39,9 +39,8 @@ abstract Class Table
 
 	public function __construct()
 	{
-		$this->db	= new \Core\Init\CoreMySQL;
-
-		$this->fields = $this->__replaceTablePlaceholders();
+		$this->db		= new \Core\Init\CoreDatabase::$db;
+		$this->fields	= $this->__replaceTablePlaceholders();
 	}
 
 	public function getTable()
@@ -125,6 +124,14 @@ abstract Class Table
 	public function fieldExists($field, $value)
 	{
 		return $this->db->existField($this->table, $field, $value);
+	}
+
+
+	/********************************* ENUMS *********************************/
+
+	public function getEnumValues($field)
+	{
+		return $this->db->getEnumValues($this->table, $field);
 	}
 
 

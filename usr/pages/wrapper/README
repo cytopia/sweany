@@ -1,0 +1,34 @@
+Wrappers are views that can hold a plugin view to customize its surrounding.
+
+Example:
+----------
+Assume you have a plugin called 'Forums'. Its controller is 'Forum' and
+there is a method that defines a view called 'index.tpl.php'.
+
+Then you can create a new folder in this directory, called 'Forums' (named after the plugin name)
+and in it place a file called 'index.tpl.php'
+
+In this file then you will automatically have access to the following variables:
++ $view
++ $user
++ $language
+
+The view holds the rendered content of the controller function that uses this view.
+$user is the user object
+$language is the language object
+
+You can then place custom layout around the working plugin page such as:
+
+
+<div class="left">
+	<?php echo $view; ?>
+</div>
+<div class="right">
+	... custom content...
+</div>
+
+
+Note:
+----------
+Wrappers are optionally, you do not have to create them.
+Only use if you want to customize some stuff

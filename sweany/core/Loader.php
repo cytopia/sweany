@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -21,7 +21,7 @@
  * @package		sweany.core
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.7 2012-07-29 13:25
+ * @version		0.8 2012-07-29 13:25
  *
  *
  * This class holds 4 functions.
@@ -35,25 +35,48 @@ Class Loader
 {
 
 	private static $classes = array();
+	private static $configs	= array();
 
 
 
 	/***************************************************** LOADER *****************************************************/
 
-	/*
-	public static function loadHelper($class)
+	private static function loadPluginConfig($plugin)
 	{
-		if ( ($return = self::__loadFast($class, 'Helper')) )
-			return $return;
-
-		$path	= HELPER.DS.$class.'.php';
-		return self::__loadSlow($class, array($path), 'Helper');
+		if ( isset(self::$configs[$plugin]) )
+		{
+			SysLog::i('Plugin Config', '['.$plugin.'] config.php already loaded');
+		}
+		else
+		{
+			if ( is_file(USR_PLUGINS_PATH.DS.$plugin.DS.'config.php') )
+			{
+				require(USR_PLUGINS_PATH.DS.$plugin.DS.'config.php');
+				SysLog::i('Plugin Config', '['.$plugin.'] loading config.php');
+				self::$configs[$plugin] = true;
+			}
+			else
+			{
+				SysLog::w('Plugin Config', '['.$plugin.'] config.php does not exist.');
+				
+				// Store it anyway for performance reasons.
+				// Plugin might not have a config, so we store it as true which will avoid to check for
+				// the file every time this function is called.
+				// (which could be a lot if several blocks of that plugin will be rendered to a single page)
+				self::$configs[$plugin] = true;
+			}
+		}
 	}
-	*/
 
 	public static function loadBlock($class, $plugin)
 	{
-		$type = ($plugin) ? 'Plugin' : '';
+		$type = '';
+		
+		if ( $plugin )
+		{
+			$type = 'Plugin';
+			self::loadPluginConfig($plugin);
+		}
 
 		if ( ($return = self::__loadFast($class.'Block', $type.'Block')) )
 			return $return;
@@ -83,7 +106,6 @@ Class Loader
 	{
 		$table	= $class.'Table';
 
-
 		// Try the fast way
 		if ( ($return = self::__loadFast($table, 'PluginTable')) )
 			return $return;
@@ -99,6 +121,11 @@ Class Loader
 		$model	= $class.'Model';
 		$type	= ($plugin) ? 'Plugin' : '';
 
+		if ($plugin)
+		{
+			self::loadPluginConfig($plugin);
+		}
+		
 		// Try the fast way
 		if ( ($return = self::__loadFast($model, $type.'Model')) )
 			return $return;
@@ -112,20 +139,6 @@ Class Loader
 		return self::__loadSlow($model, $paths, $type.'Model');
 	}
 
-
-/*
-	public static function loadModule($class)
-	{
-		$class = $class.'Module';
-
-		if ( ($return = self::__loadFast($class, 'Module')) )
-			return $return;
-
-		$path	= MODULE.DS.$class.'.php';
-
-		return self::__loadSlow($class, array($path), 'Model');
-	}
-*/
 
 
 
@@ -163,6 +176,12 @@ Class Loader
 		{
 			if ( is_file($paths[$i]) )
 			{
+				if ( strpos($paths[$i], USR_PLUGINS_PATH) !== false )
+				{
+					// In case the page refers to a plugin, we first have to load the plugin config
+					self::loadPluginConfig($sClassName);
+				}
+			
 				include($paths[$i]);
 
 				if (class_exists($sClassName, false))
@@ -183,63 +202,65 @@ Class Loader
 
 
 
-    /***************************************************** PRIVATE FUNCTIONS *****************************************************/
-    private static function __loadFast($class, $type)
-    {
+	/***************************************************** PRIVATE FUNCTIONS *****************************************************/
+	private static function __loadFast($class, $type)
+	{
 	 	$start = microtime(true);
 
-    	// 01) Check if class has already been declared
-    	//     improves speed drastically if having files declaring a single table multiple times
-    	if ( array_key_exists($class, self::$classes) )
-    	{
-    		SysLog::i('load'.$type, '(Fast: If: 1/2):<font color="#FF6903"> '.$class . '</font> already declared, passing reference', null, $start);
-    		return self::$classes[$class];
-    	}
+		// 01) Check if class has already been declared
+		//     improves speed drastically if having files declaring a single table multiple times
+		if ( array_key_exists($class, self::$classes) )
+		{
+			SysLog::i('load'.$type, '(Fast: If: 1/2):<font color="#FF6903"> '.$class . '</font> already declared, passing reference', null, $start);
+			return self::$classes[$class];
+		}
 
-    	// 02) Check if the class has already been loaded into memory
-    	//     (but we do not have it cataloged, due to autoloader did not tell us)
-    	//		Also set warning, so we might clean this problem later
-    	else if ( class_exists($class, false) )
-    	{
-    		SysLog::w('load'.$type, '(Fast: If: 2/2):<font color="purple"> '.$class . '</font> already in Memory, but have to redeclare ', null, $start);
+		// 02) Check if the class has already been loaded into memory
+		//     (but we do not have it cataloged, due to autoloader did not tell us)
+		//		Also set warning, so we might clean this problem later
+		else if ( class_exists($class, false) )
+		{
+			SysLog::w('load'.$type, '(Fast: If: 2/2):<font color="purple"> '.$class . '</font> already in Memory, but have to redeclare ', null, $start);
 
-    		$c = new $class;
+			$c = new $class;
 
-    		// store reference to prevent re-declaration
-    		self::$classes[$class] = &$c;
-    		return $c;
-    	}
-    	return null;
-    }
-    private static function __loadSlow($class, $paths = array(), $type)
-    {
-		$start = microtime(true);
+			// store reference to prevent re-declaration
+			self::$classes[$class] = &$c;
+			return $c;
+		}
+		return null;
+	}
 
-    	$size	= sizeof($paths);
 
-      	for ($i=0; $i<$size; $i++)
-    	{
-    		// If not declared yet, create instance
-    		if ( is_file($paths[$i]) )
-    		{
-    			// TODO: get rid of _once
-    			include_once($paths[$i]);
 
-    			// TODO: class_exists check really needed???
-    			if ( class_exists($class, false) )
-    			{
-    				SysLog::i('load'.$type, '(Slow: Round '.($i+1).'/'.($size+1).'):<font color="purple"> '.$class . '</font> in ' . $paths[$i], null, $start);
+	private static function __loadSlow($class, $paths = array(), $type)
+	{
+		$start	= microtime(true);
+		$size	= sizeof($paths);
 
-    				$c = new $class;
+		for ($i=0; $i<$size; $i++)
+		{
+			// If not declared yet, create instance
+			if ( is_file($paths[$i]) )
+			{
+				// TODO: get rid of _once
+				include_once($paths[$i]);
 
-    				// store reference to prevent re-declaration
-    				self::$classes[$class] = &$c;
-    				return $c;
-    			}
-    			else
-    			{
-    				SysLog::e('load'.$type, 'No such Class <font color="red">'.$class.'</font> in '.$paths[$i], debug_backtrace(), $start);
-    				return null;
+				// TODO: class_exists check really needed???
+				if ( class_exists($class, false) )
+				{
+					SysLog::i('load'.$type, '(Slow: Round '.($i+1).'/'.($size+1).'):<font color="purple"> '.$class . '</font> in ' . $paths[$i], null, $start);
+
+					$c = new $class;
+
+					// store reference to prevent re-declaration
+					self::$classes[$class] = &$c;
+					return $c;
+				}
+				else
+				{
+					SysLog::e('load'.$type, 'No such Class <font color="red">'.$class.'</font> in '.$paths[$i], debug_backtrace(), $start);
+					return null;
 				}
 			}
 		}
@@ -247,9 +268,7 @@ Class Loader
 		// Throw error, as nothing has been found
 		SysLog::e('load'.$type, 'No such file <font color="red"><ul>'.implode('<li>',$paths).'</ul></font>', debug_backtrace(), $start);
 		return null;
-    }
+	}
 }
 
 spl_autoload_register(array('Loader', 'autoload'));
-
-?>

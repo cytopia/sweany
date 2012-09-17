@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -59,7 +59,7 @@ Class Html
 		// TODO: maybe need to escape the params for url - keep an eye on it
 		$args = implode('/', array_map(create_function('$param', 'return ($param);'), array_values($params)));
 		$attr = implode(' ', array_map(create_function('$key, $val', 'return $key."=\"".$val."\"";'), array_keys($attributes), array_values($attributes)));
-		$link = '/'.$controller.'/'.$method.'/'.$args;
+		$link = '/'.$controller.'/'.$method.'/'.$args.$anchor;
 
 		return '<a href="'.$link.'"'.$attr.'>'.$name.'</a>';
 	}
@@ -94,7 +94,7 @@ Class Html
 	}
 
 
-	public static function getLanguageSwitcher()
+	public static function getLanguageSwitcher($pre = null, $post = null, $show_flags = true, $show_names =  false)
 	{
 		$all	= $GLOBALS['LANGUAGE_AVAILABLE'];
 		$path	= $GLOBALS['LANGUAGE_IMG_PATH'];
@@ -106,18 +106,22 @@ Class Html
 			// Current language does not require a click link
 			if ( $lang == \Core\Init\CoreLanguage::getLangShort() )
 			{
-				$switch .= '<img title="'.$name.'" src="'.$path.'/'.$lang.'.png" alt="'.$name.'" border="0" /> ';
+				$switch .= $pre;
+				$switch .= '<img title="'.$name.'" src="'.$path.'/'.$lang.'.png" alt="'.$name.'" border="0" />';
+				$switch .= ($show_names) ? '<span>'.$name.'</span>' : '';
+				$switch .= $post;
 			}
 			// All other language need a link to change it
 			else
 			{
+				$switch .= $pre;
 				$switch .= '<a href="/'.$url.'/lang/'.$lang.'">';
 				$switch .= '<img title="'.$name.'" src="'.$path.'/'.$lang.'.png" alt="'.$name.'" border="0" />';
-				$switch .= '</a> ';
+				$switch .= ($show_names) ? $name : '';
+				$switch .= '</a>';
+				$switch .= $post;
 			}
 		}
 		return $switch;
 	}
 }
-
-?>

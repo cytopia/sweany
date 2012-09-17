@@ -1,11 +1,31 @@
-* seperate Plugin Validator and config
-* improve Validator mode
-* improve Debugging mode
-* improve Fast core
-* Vendors need propper testing
-* implement CLI core
-* write Documentation
+===========================================
+= TODO
+===========================================
+
+High Priority
+-------------------------
+* Caching
+* SEO URLs
+* object orientated db handling (ruby-on-rails like)
 * Security testings
-* PostgreSQL compatibility
+* Function name freeze
+
+
+Medium Priority
+-------------------------
+* reactivate Fast core
+* Vendors need propper testing
+* PostgreSQL compatibility (1 of 2 is done)
+* SQLite compatibility (1 of 2 is done)
+* user groups
+* write Documentation
+
+
+Low Priority
+-------------------------
+* implement CLI core
+* Admin sections for plugins need to be programmed
+   + Forum (create categories, forums|delete/move threads/posts)
+   + Contact (view contact messages)
 * favicon.ico, Logo, Artwork and nice CSS Layout
 * Need testers and other people willing to contribute code and/or artwork
