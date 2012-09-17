@@ -7,6 +7,9 @@
 			<th style="width:50px;"><?php echo $language->threads; ?></th>
 			<th style="width:50px;"><?php echo $language->posts; ?></th>
 		</tr>
+		<tr>
+			<td colspan="5"></td>
+		</tr>
 	</thead>
 	<tfoot>
 		<tr>
@@ -14,7 +17,7 @@
 		</tr>
 		<tr>
 			<td colspan="5">
-				<?php echo $blocks['onlineUsers'];?>
+				<?php echo $bOnlineUsers;?>
 			</td>
 		</tr>
 	</tfoot>
@@ -30,20 +33,30 @@
 					$last_entry_created 	= $forum['last_thread_created'];
 					$last_entry_title		= Strings::shorten($forum['last_thread_title'],40, true);
 					$last_entry_user		= ($forum['last_thread_user_id'] > 0) ? $forum['last_thread_username'] : 'anonymous';
-					$last_entry_user_link	= ($forum['last_thread_user_id'] > 0) ? Html::l($last_entry_user, $userProfileCtl, $userProfileMethod, array($forum['last_thread_user_id'])) : $last_entry_user;
+
+					if ( ($userProfileLink) )
+						$last_entry_user_link	= ($forum['last_thread_user_id'] > 0) ? Html::l($last_entry_user, $userProfileCtl, $userProfileMethod, array($forum['last_thread_user_id'])) : $last_entry_user;
+					else
+						$last_entry_user_link	= $last_entry_user;
 
 					$last_entry_thread_id	= $forum['last_thread_id'];
+					$last_entry_seo_url		= $forum['last_thread_seo_url'];
 
 					if ( $forum['post_count'] > 0 )
 					{
-						if ( $forum['last_thread_created'] < $forum['last_post_created'] )
+						if ( $forum['last_thread_created'] <= $forum['last_post_created'] )
 						{
 							$last_entry_created 	= $forum['last_post_created'];
 							$last_entry_title		= Strings::shorten($forum['last_post_title'],40, true);
 							$last_entry_user		= ($forum['last_post_user_id'] > 0) ? $forum['last_post_username'] : 'anonymous';
-							$last_entry_user_link	= ($forum['last_post_user_id'] > 0) ? Html::l($last_entry_user, $userProfileCtl, $userProfileMethod, array($forum['last_post_user_id'])) : $last_entry_user;
+
+							if ( ($userProfileLink) )
+								$last_entry_user_link	= ($forum['last_post_user_id'] > 0) ? Html::l($last_entry_user, $userProfileCtl, $userProfileMethod, array($forum['last_post_user_id'])) : $last_entry_user;
+							else
+								$last_entry_user_link	= $last_entry_user;
 
 							$last_entry_thread_id	= $forum['last_post_thread_id'];
+							$last_entry_seo_url		= $forum['last_post_seo_url'];
 						}
 					}
 
@@ -58,6 +71,7 @@
 					$last_entry_user		= '';
 					$last_entry_user_link	= '';
 					$last_entry_thread_id	= '';
+					$last_entry_seo_url		= '';
 					$date					= '';
 					$time					= '';
 				}
@@ -74,7 +88,7 @@
 						<p><?php echo $forum['description'];?></p>
 					</td>
 					<td>
-						<div class="forumEntryLink"><?php echo Html::l($last_entry_title, 'Forums', 'showThread', array($forum['id'], $last_entry_thread_id, $forum['last_thread_seo_url'])); ?></div>
+						<div class="forumEntryLink"><?php echo Html::l($last_entry_title, 'Forums', 'showThread', array($forum['id'], $last_entry_thread_id, $last_entry_seo_url)); ?></div>
 						<div class="forumUsername"><?php echo ($last_entry_user_link) ? $language->by : ''; ?> <?php echo $last_entry_user_link; ?></div>
 						<div class="forumEntryTime"><?php echo $date.' '.$time; ?></div>
 					</td>

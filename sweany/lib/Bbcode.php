@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -123,10 +123,10 @@ class Bbcode
 		return $str;
 	}
 
-	public static function remove($text)
+	public static function remove($str)
 	{
 		// convert html entities, because html tags are not allowed
-		$str		= htmlentities($text, ENT_COMPAT, 'UTF-8');
+		$str		= htmlentities($str, ENT_COMPAT, 'UTF-8');
 
 		// completely remove complex smileys
 		$str = str_replace(':confuse:', '', $str);
@@ -232,4 +232,3 @@ class Bbcode
 		return $string;
 	}
 }
-?>

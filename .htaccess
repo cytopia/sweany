@@ -2,21 +2,21 @@ php_flag magic_quotes_gpc Off
 
 <IfModule mod_rewrite.c>
     RewriteEngine on
+	
+	# ---- redirect plugin's www folder if requested
+	# http://domain.tld/plugins/<PluginFolder>/(css|js|img)/<file>.(css|js|gif|jpg|jpeg|png)
+	# css
+	RewriteRule ^plugins/([-A-z0-9]+)/css/([-A-z0-9]+)\.css usr/plugins/$1/www/css/$2\.css [L]
+	# javascript
+	RewriteRule ^plugins/([-A-z0-9]+)/js/([-A-z0-9]+)\.js usr/plugins/$1/www/js/$2\.js [L]
+	# pictures
+	RewriteRule ^plugins/([-A-z0-9]+)/img/(.*)\.(gif|jpg|jpeg|png) usr/plugins/$1/www/img/$2\.$3 [L]
 
-    # ---- redirect plugin's www folder if requested
-    # http://domain.tld/plugins/<PluginFolder>/(css|js|img)/<file>.(css|js|gif|jpg|jpeg|png)
-    # css
-    RewriteRule ^plugins/([-A-z0-9]+)/css/([-A-z0-9]+)\.css usr/plugins/$1/www/css/$2\.css [L]
-    # javascript
-    RewriteRule ^plugins/([-A-z0-9]+)/js/([-A-z0-9]+)\.js usr/plugins/$1/www/js/$2\.js [L]
-    # pictures
-    RewriteRule ^plugins/([-A-z0-9]+)/img/(.*)\.(gif|jpg|jpeg|png) usr/plugins/$1/www/img/$2\.$3 [L]
-
-    # ---- if it is not a file or directory, move on to normal redirect
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    
-    # redirect anything else to www/
-    RewriteRule    (.*) www/$1 [L]
-    RewriteRule    ^$   www/   [L]
+	# ---- if it is not a file or directory, move on to normal redirect
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	
+	# redirect anything else to www/
+	RewriteRule    (.*) www/$1 [L]
+	RewriteRule    ^$   www/   [L]
 </IfModule>

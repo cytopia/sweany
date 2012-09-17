@@ -1,3 +1,25 @@
+2012-09-17
+-----------------
++ Core/Block rewrite
++ Validators sperated and improved
++ Plugins have their own config & validators
++ Plugins now have view wrapper to customize their look and feel without touching the plugins itself
++ ECSS integration
++ Login/Register moved into plugin
++ Config Class (still needs to be implemented in some config files)
++ Fastcore mode is currently disabled
++ Database wrapper, that allows use of other engines (later - planned: postgresql and sqlite)
++ Started on better database handling via objects (Table2.php, but not yet activated)
++ Admin Area as controller define
++ various bugfixes
++ Core modules can now be disabled in config.php (sql, user, language, etc)
++ Emails now have a skeleton file
++ Sending of emails can be deactivated
++ Custom php error handlers
++ Started work on real seo-urls
++ Passwords are now stored using sha-512 + salt instead of weak md5
+
+
 2012-08-15
 -----------------
 + Language Bug fixed
@@ -35,5 +57,5 @@
 
 2012-06-17
 -----------------
-Layouts have their own model|view|controller architecture now.
-This let them enable to also use blocks.
++ Layouts have their own model|view|controller architecture now.
++ This let them enable to also use blocks.

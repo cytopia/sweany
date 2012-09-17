@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -42,6 +42,13 @@ class CoreUsers extends CoreAbstract
 	private static $fakeOnlineGuests;	// set the amount of fake online guests
 
 
+	/*
+	 * How many rounds to loop through the hashing
+	 * in order to produce key stretching-times to make
+	 * it harder for bruteforce attacks
+	 */
+	private static $hashRounds			= 20;
+
 
 
 	/**************************************  C O N S T R U C T O R S  **************************************/
@@ -55,15 +62,19 @@ class CoreUsers extends CoreAbstract
 
 	public static function initialize()
 	{
+		if ( $GLOBALS['USER_ONLINE_COUNT_ENABLE'] )
+		{
+			self::$onlineSinceMinutes	= $GLOBALS['USER_ONLINE_SINCE_MINUTES'];
+			self::$fakeOnlineGuests		= $GLOBALS['USER_ONLINE_ADD_FAKE_GUESTS'];
 
-		self::$onlineSinceMinutes	= $GLOBALS['USER_ONLINE_SINCE_MINUTES'];
-		self::$fakeOnlineGuests		= $GLOBALS['USER_ONLINE_ADD_FAKE_GUESTS'];
+			$db = \Core\Init\CoreDatabase::$db;
 
-		// Add current user to online users table
-		\Core\Init\CoreMySql::insertRow(self::$tbl_online_users, array('time' => time(), 'fk_user_id' => self::id(), 'session_id' => \Core\Init\CoreSession::getId(), 'ip' => $_SERVER['REMOTE_ADDR'], 'current_page' => \Core\Init\CoreUrl::$request));
+			// Add current user to online users table
+			$db::insertRow(self::$tbl_online_users, array('time' => time(), 'fk_user_id' => self::id(), 'session_id' => \Core\Init\CoreSession::getId(), 'ip' => $_SERVER['REMOTE_ADDR'], 'current_page' => \Core\Init\CoreUrl::$request));
 
-		// Delete all entries since last XX minutes
-		\Core\Init\CoreMySql::delete(self::$tbl_online_users, sprintf('`time` < %d', strtotime('-'.self::$onlineSinceMinutes.' minute', time())));
+			// Delete all entries since last XX minutes
+			$db::delete(self::$tbl_online_users, sprintf('`time` < %d', strtotime('-'.self::$onlineSinceMinutes.' minute', time())));
+		}
 
 		// TODO: check for valid initialization
 		return true;
@@ -81,7 +92,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function countOnlineUsers()
 	{
-		return (self::$fakeOnlineGuests + \Core\Init\CoreMySql::selectNumRows('SELECT DISTINCT `session_id` FROM '.self::$tbl_online_users));
+		$db = \Core\Init\CoreDatabase::$db;
+		return (self::$fakeOnlineGuests + $db::selectNumRows('SELECT DISTINCT `session_id` FROM '.self::$tbl_online_users));
 	}
 
 	/**
@@ -90,7 +102,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function countLoggedInOnlineUsers()
 	{
-		return \Core\Init\CoreMySql::selectNumRows('SELECT
+		$db = \Core\Init\CoreDatabase::$db;
+		return $db::selectNumRows('SELECT
 										fk_user_id
 									FROM(
 										SELECT		DISTINCT fk_user_id, session_id
@@ -103,13 +116,16 @@ class CoreUsers extends CoreAbstract
 	}
 
 	/**
-	 *
-	 * @return integer
+	 * @param	boolean 	$include_faked_online_guests	Whether or not to also add the faked online guests
+	 * @return	integer		total
 	 */
-	public static function countAnonymousOnlineUsers()
+	public static function countAnonymousOnlineUsers($include_faked_online_guests = true)
 	{
-		return (self::$fakeOnlineGuests +
-				\Core\Init\CoreMySql::selectNumRows('SELECT
+		$db		= \Core\Init\CoreDatabase::$db;
+		$plus	= ($include_faked_online_guests) ? self::$fakeOnlineGuests : 0;
+
+		return ($plus +
+				$db::selectNumRows('SELECT
 										DISTINCT session_id
 									FROM
 										user_online
@@ -138,7 +154,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function getLoggedInOnlineUsers()
 	{
-		$query = 'SELECT
+		$db		= \Core\Init\CoreDatabase::$db;
+		$query	= 'SELECT
 						fk_user_id AS id,
 						users.username
 					FROM(
@@ -150,7 +167,7 @@ class CoreUsers extends CoreAbstract
 					JOIN users ON (users.id = tbl_result.fk_user_id)
 					GROUP BY tbl_result.fk_user_id';
 
-		return \Core\Init\CoreMySql::select($query);
+		return $db::select($query);
 	}
 
 
@@ -178,9 +195,10 @@ class CoreUsers extends CoreAbstract
 	{
 		$user_id	= self::getIdByName($username);
 		$salt		= self::_getPasswordSalt($user_id);
+		$db			= \Core\Init\CoreDatabase::$db;
 
-		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`username` = '%s' AND `password` = '%s'",
-				mysql_real_escape_string($username),
+		return $db::fetchField(self::$tbl_users, 'id', sprintf("`username` = '%s' AND `password` = '%s'",
+				$db::escape($username),
 				self::_encryptPassword($password, $salt))
 		);
 	}
@@ -191,7 +209,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function getIdByName($username)
 	{
-		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`username`= '%s'", mysql_real_escape_string($username)));
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::fetchField(self::$tbl_users, 'id', sprintf("`username`= '%s'", $db::escape($username)));
 	}
 
 	/**
@@ -200,7 +219,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function getIdByEmail($email)
 	{
-		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`email` = '%s'", mysql_real_escape_string($email)));
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::fetchField(self::$tbl_users, 'id', sprintf("`email` = '%s'", $db::escape($email)));
 	}
 
 	/**
@@ -209,7 +229,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function getIdByResetPasswordKey($reset_password_key)
 	{
-		return \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', sprintf("`reset_password_key` = '%s'", mysql_real_escape_string($reset_password_key)));
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::fetchField(self::$tbl_users, 'id', sprintf("`reset_password_key` = '%s'", $db::escape($reset_password_key)));
 	}
 
 
@@ -220,10 +241,11 @@ class CoreUsers extends CoreAbstract
 	/**
 	 * Returns the info whether or not the current user session is logged in.
 	 *
-	 * @param integer $paranoid (also check php session against session stored in database)
+	 * @param integer $paranoid Also check php session against session stored in database
+	 * 							Downside is that a single user can only be logged in once.
 	 * @return boolean
 	 */
-	public static function isLoggedIn($paranoid = true)
+	public static function isLoggedIn($paranoid = false)
 	{
 		$user		= \Core\Init\CoreSession::get('user');
 
@@ -238,9 +260,10 @@ class CoreUsers extends CoreAbstract
 			{
 				$user_id	= self::id();
 				$sess_id	= \Core\Init\CoreSession::getId();
+				$db			= \Core\Init\CoreDatabase::$db;
 
 				// check php session against stored session in mysql
-				if ( $sess_id != \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'session_id', $user_id) )
+				if ( $sess_id != $db::fetchFieldById(self::$tbl_users, 'session_id', $user_id) )
 				{
 					return false;
 				}
@@ -267,10 +290,10 @@ class CoreUsers extends CoreAbstract
 	{
 		$user_id	= self::id();
 		$salt		= self::_getPasswordSalt($user_id);
-
+		$db			= \Core\Init\CoreDatabase::$db;
 		$encrypted	= self::_encryptPassword($clearTextPwd, $salt);
 
-		return ( $encrypted == \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'password', $user_id) );
+		return ( $encrypted == $db::fetchFieldById(self::$tbl_users, 'password', $user_id) );
 	}
 
 
@@ -280,7 +303,7 @@ class CoreUsers extends CoreAbstract
 
 	/**
 	 * Returns the username of the current logged in user,
-	 * or alternatively of the one specified by the corresponding id.
+	 * or alternatively the one specified by the corresponding id.
 	 *
 	 * @param  integer $id (optional)
 	 * @return string
@@ -288,14 +311,31 @@ class CoreUsers extends CoreAbstract
 	public static function name($id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
+		$db	= \Core\Init\CoreDatabase::$db;
 
-		return \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'username', $id);
+		return $db::fetchFieldById(self::$tbl_users, 'username', $id);
+	}
+
+
+	/**
+	 * Returns the email address of the current logged in user,
+	 * or alternatively the one specified by the corresponding id.
+	 *
+	 * @param  integer $id (optional)
+	 * @return string
+	 */
+	public static function email($id = null)
+	{
+		$id = (is_null($id)) ? self::id() : (int)$id;
+		$db	= \Core\Init\CoreDatabase::$db;
+
+		return $db::fetchFieldById(self::$tbl_users, 'email', $id);
 	}
 
 
 	/**
 	 * Returns the data array of the current logged in user,
-	 * or alternatively of the one specified by the corresponding id.
+	 * or alternatively the one specified by the corresponding id.
 	 *
 	 * @param integer $id (optional)
 	 * @return array()
@@ -303,8 +343,9 @@ class CoreUsers extends CoreAbstract
 	public static function data($id = null)
 	{
 		$id		= (is_null($id)) ? self::id() : (int)$id;
+		$db		= \Core\Init\CoreDatabase::$db;
 		$query	= sprintf('SELECT * FROM `%s` WHERE `id` = %d', self::$tbl_users, $id);
-		$data	= \Core\Init\CoreMysql::select($query);
+		$data	= $db::select($query);
 
 		return (isset($data[0])) ? $data[0] : array();
 	}
@@ -318,7 +359,8 @@ class CoreUsers extends CoreAbstract
 	public static function isAdmin($id = null)
 	{
 		$id		= (is_null($id)) ? self::id() : (int)$id;
-		return \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'is_admin', $id);
+		$db		= \Core\Init\CoreDatabase::$db;
+		return $db::fetchFieldById(self::$tbl_users, 'is_admin', $id);
 	}
 
 
@@ -330,7 +372,8 @@ class CoreUsers extends CoreAbstract
 	public static function isEnabled($id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d AND is_enabled = 1", mysql_real_escape_string($id)));
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::count(self::$tbl_users, sprintf("`id` = %d AND is_enabled = 1", $db::escape($id)));
 	}
 
 
@@ -342,7 +385,8 @@ class CoreUsers extends CoreAbstract
 	public static function isLocked($id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d AND is_locked = 1", mysql_real_escape_string($id)));
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::count(self::$tbl_users, sprintf("`id` = %d AND is_locked = 1", $db::escape($id)));
 	}
 
 
@@ -354,7 +398,8 @@ class CoreUsers extends CoreAbstract
 	public static function isDeleted($id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d AND is_deleted = 1", mysql_real_escape_string($id)));
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::count(self::$tbl_users, sprintf("`id` = %d AND is_deleted = 1", $db::escape($id)));
 	}
 
 
@@ -369,7 +414,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function exists($user_id)
 	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`id` = %d", mysql_real_escape_string($user_id)));
+		$db = \Core\Init\CoreDatabase::$db;
+		return $db::count(self::$tbl_users, sprintf("`id` = %d", $db::escape($user_id)));
 	}
 
 	/**
@@ -379,7 +425,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function usernameExists($username)
 	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("username = '%s'", mysql_real_escape_string($username)));
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::count(self::$tbl_users, sprintf("username = '%s'", $db::escape($username)));
 	}
 
 	/**
@@ -389,7 +436,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function emailExists($email)
 	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("email = '%s'", mysql_real_escape_string($email)));
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::count(self::$tbl_users, sprintf("email = '%s'", $db::escape($email)));
 	}
 
 
@@ -403,7 +451,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function otherUserHasThisEmail($email)
 	{
-		return \Core\Init\CoreMySql::count(self::$tbl_users, sprintf("`email` = '%s' AND `id` <> %d", mysql_real_escape_string($email), self::id()));
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::count(self::$tbl_users, sprintf("`email` = '%s' AND `id` <> %d", $db::escape($email), self::id()));
 	}
 
 
@@ -416,16 +465,29 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function getAllUsers()
 	{
-		return \Core\Init\CoreMySql::select('SELECT * FROM '.self::$tbl_users);
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::select('SELECT * FROM '.self::$tbl_users);
 	}
 
+	/**
+	 *
+	 * Enter description here ...
+	 * @param	integer	$total	Number to return
+	 * @return	mixed[]
+	 */
+	public static function getLatestUsers($total)
+	{
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::select(sprintf('SELECT * FROM '.self::$tbl_users.' WHERE `is_enabled` = 1 AND `is_locked` = 0 AND `is_deleted` = 0 ORDER BY `created` DESC LIMIT %d', $total));
+	}
 
 	/**
 	 * @return array()
 	 */
 	public static function getAllUserGroups($order = array())
 	{
-		return \Core\Init\CoreMySql::select('SELECT * FROM '.self::$tbl_user_groups);
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::select('SELECT * FROM '.self::$tbl_user_groups);
 	}
 
 	/**
@@ -433,7 +495,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function getAllFailedLogins($order = array())
 	{
-		return \Core\Init\CoreMySql::select('SELECT * FROM '.self::$tbl_failed_logins);
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::select('SELECT * FROM '.self::$tbl_failed_logins);
 	}
 
 
@@ -445,11 +508,6 @@ class CoreUsers extends CoreAbstract
 	{
 		$user_id	= self::getIdByName($username);
 
-		$condition	= sprintf("username = '%s' AND password = '%s' AND is_enabled = 1 AND is_deleted = 0 AND is_locked = 0",
-				mysql_real_escape_string($username),
-				$password
-		);
-
 		// can login
 		if ( self::checkLogin($username, $password, $log_bad_attempts) )
 		{
@@ -460,6 +518,10 @@ class CoreUsers extends CoreAbstract
 
 			// Set user session
 			unset($user['password']);
+			unset($user['password_salt']);
+			unset($user['has_accepted_terms']);
+			unset($user['validation_key']);
+			unset($user['reset_password_key']);
 			$user['auth'] = TRUE;
 			\Core\Init\CoreSession::set('user', $user);
 
@@ -474,21 +536,22 @@ class CoreUsers extends CoreAbstract
 		$user_id	= self::getIdByName($username);
 		$salt		= self::_getPasswordSalt($user_id);
 		$password	= self::_encryptPassword($clearTextPwd, $salt);
+		$db			= \Core\Init\CoreDatabase::$db;
 
 		$condition	= sprintf(
 				"username = '%s' AND password = '%s' AND is_enabled = 1 AND is_deleted = 0 AND is_locked = 0",
-				mysql_real_escape_string($username),
+				$db::escape($username),
 				$password
 		);
 
 		// can login
-		if ( \Core\Init\CoreMySql::count(self::$tbl_users, $condition) )
+		if ( $db::count(self::$tbl_users, $condition) )
 		{
 			return true;
 		}
 
 		// count failed login attempt per user
-		\Core\Init\CoreMySql::incrementField(self::$tbl_users, 'last_failed_login_count', sprintf("id = %d", (int)$user_id));
+		$db::incrementField(self::$tbl_users, 'last_failed_login_count', sprintf("id = %d", (int)$user_id));
 
 		// log failed login attempts
 		if ( $log_bad_attempts )
@@ -516,8 +579,9 @@ class CoreUsers extends CoreAbstract
 
 	public static function addUser($username, $password, $email)
 	{
-		$salt = self::_createPasswordSalt();
-		$data = array('username'			=> $username,
+		$salt	= self::_createPasswordSalt();
+		$db		= \Core\Init\CoreDatabase::$db;
+		$data	= array('username'			=> $username,
 						'password'			=> self::_encryptPassword($password, $salt),
 						'password_salt'		=> $salt,
 						'email'				=> $email,
@@ -528,7 +592,7 @@ class CoreUsers extends CoreAbstract
 						'validation_key'	=> md5(\Core\Init\CoreSession::getId().$username.$password.$email.time()),
 						'created'			=> date('Y-m-d H:i:s', time()),
 		);
-		return \Core\Init\CoreMySql::insertRow('users', $data);
+		return $db::insertRow('users', $data);
 	}
 
 	/**
@@ -536,25 +600,31 @@ class CoreUsers extends CoreAbstract
 	 *
 	 * @param array() $fields
 	 */
-	public static function update($fields = array())
+	public static function update($fields = array(), $id = null)
 	{
+		$id = (is_null($id)) ? self::id() : (int)$id;
+		$db	= \Core\Init\CoreDatabase::$db;
+
 		if ( isset($fields['modified']) )
 			$fields['modified'] = date('Y-m-d H:i:s', time());
 		if ( isset($fields['password']) )
-			$fields['password'] = self::_encryptPassword($fields['password'], self::_getPasswordSalt(self::id()));
+			$fields['password'] = self::_encryptPassword($fields['password'], self::_getPasswordSalt($id));
 
-		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, $fields, self::id());
+		return $db::updateRow(self::$tbl_users, $fields, $id);
 	}
 
 	/**
 	 *
 	 * @param integer $password (cleartext)
 	 */
-	public static function updatePassword($password)
+	public static function updatePassword($password, $id = null)
 	{
-		$fields['password'] = self::_encryptPassword($password, self::_getPasswordSalt(self::id()));
+		$id = (is_null($id)) ? self::id() : (int)$id;
 
-		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, $fields, self::id());
+		$fields['password'] = self::_encryptPassword($password, self::_getPasswordSalt($id));
+		$db	= \Core\Init\CoreDatabase::$db;
+
+		return $db::updateRow(self::$tbl_users, $fields, $id);
 	}
 
 	/**
@@ -566,29 +636,37 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function validate($validation_key)
 	{
-		$condition	= sprintf("validation_key = '%s'", mysql_real_escape_string($validation_key));
-		$user_id	= \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', $condition);
+		$db			= \Core\Init\CoreDatabase::$db;
+		$condition	= sprintf("validation_key = '%s'", $db::escape($validation_key));
+		$user_id	= $db::fetchField(self::$tbl_users, 'id', $condition);
 
 		if ( $user_id )
 		{
-			return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id);
+			return $db::updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id);
 		}
 		else
 		{
 			return false;
 		}
-
 	}
 
+	/**
+	 *
+	 * Enter description here ...
+	 * @param	integer $user_id
+	 * @return	string	password reset key
+	 */
 	public static function setResetPasswordKey($user_id)
 	{
 		// Generate random key
-		$session_id = Session::getId();
+		$session_id = \Session::getId();
 		$ip			= $_SERVER['REMOTE_ADDR'];
 		$hostname	= @gethostbyaddr($ip);
 		$key		= md5(mt_rand().time().$session_id.$ip.$hostname.mt_rand().$user_id);
+		$db			= \Core\Init\CoreDatabase::$db;
 
-		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('reset_password_key' => $key), $user_id);
+		$db::updateRow(self::$tbl_users, array('reset_password_key' => $key), $user_id);
+		return $key;
 	}
 
 	/**
@@ -598,12 +676,13 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function checkPasswordResetKey($password_reset_key)
 	{
-		$condition	= sprintf("reset_password_key = '%s' AND LENGTH(reset_password_key)>0", mysql_real_escape_string($password_reset_key));
-		$user_id	= \Core\Init\CoreMySql::fetchField(self::$tbl_users, 'id', $condition);
+		$db			= \Core\Init\CoreDatabase::$db;
+		$condition	= sprintf("reset_password_key = '%s' AND LENGTH(reset_password_key)>0", $db::escape($password_reset_key));
+		$user_id	= $db::fetchField(self::$tbl_users, 'id', $condition);
 
 		if ( $user_id )
 		{
-			return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id);
+			return $db::updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id);
 		}
 		else
 		{
@@ -617,7 +696,21 @@ class CoreUsers extends CoreAbstract
 	 */
 	public static function removeResetPasswordKey($user_id)
 	{
-		return \Core\Init\CoreMySql::updateRow(self::$tbl_users, array('reset_password_key' => ''), $user_id);
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::updateRow(self::$tbl_users, array('reset_password_key' => ''), $user_id);
+	}
+
+	/******************************************************** count functions ********************************************************/
+
+	public static function countFakeUsers()
+	{
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::count(self::$tbl_users, '`is_fake` = 1');
+	}
+	public static function countRealUsers()
+	{
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::count(self::$tbl_users, '`is_fake` = 0');
 	}
 
 
@@ -632,7 +725,16 @@ class CoreUsers extends CoreAbstract
 	 */
 	private static function _encryptPassword($clearTextPassword, $passwordSalt)
 	{
-		return md5($clearTextPassword.$passwordSalt);
+		// start with some default value
+		$hash = md5($passwordSalt.$clearTextPassword);
+
+		// loop through to produce key stretching-times
+		// in case of web bruteforce and hash via sha512 (strongest so far)
+		for ($i=0; $i<self::$hashRounds; $i++)
+		{
+			$hash = hash("sha512",$clearTextPassword.$passwordSalt.$hash);
+		}
+		return ($hash);
 	}
 
 	/**
@@ -640,7 +742,7 @@ class CoreUsers extends CoreAbstract
 	 */
 	private static function _createPasswordSalt()
 	{
-		return md5( mt_rand().microtime(true).mt_rand().$_SERVER['REMOTE_ADDR'].mt_rand() );
+		return hash('sha512', md5( mt_rand().microtime(true).mt_rand().$_SERVER['REMOTE_ADDR'].mt_rand() ));
 	}
 
 	/**
@@ -651,7 +753,8 @@ class CoreUsers extends CoreAbstract
 	 */
 	private static function _getPasswordSalt($user_id)
 	{
-		return \Core\Init\CoreMySql::fetchFieldById(self::$tbl_users, 'password_salt', $user_id);
+		$db	= \Core\Init\CoreDatabase::$db;
+		return $db::fetchFieldById(self::$tbl_users, 'password_salt', $user_id);
 	}
 
 	/**
@@ -660,10 +763,11 @@ class CoreUsers extends CoreAbstract
 	 */
 	private static function _updateSuccessfulLogin($user_id)
 	{
+		$db			= \Core\Init\CoreDatabase::$db;
 		$session_id = \Core\Init\CoreSession::getId();
 		$ip			= $_SERVER['REMOTE_ADDR'];
 		$hostname	= @gethostbyaddr($ip);
-		$login_time	= date("Y-m-d H:i:s", time());
+		$login_time	= date('Y-m-d H:i:s', time());
 
 		$fields = array(
 			'session_id'				=> $session_id,
@@ -672,7 +776,7 @@ class CoreUsers extends CoreAbstract
 			'last_login'				=> $login_time,
 			'last_failed_login_count'	=> 0,
 		);
-		return \Core\Init\CoreMySQL::updateRow(self::$tbl_users, $fields, $user_id);
+		return $db::updateRow(self::$tbl_users, $fields, $user_id);
 	}
 
 	/**
@@ -682,6 +786,7 @@ class CoreUsers extends CoreAbstract
 	 */
 	private static function _logFailedLogin($username, $password)
 	{
+		$db			= \Core\Init\CoreDatabase::$db;
 		$session_id = \Core\Init\CoreSession::getId();
 		$ip			= $_SERVER['REMOTE_ADDR'];
 		$hostname	= @gethostbyaddr($ip);
@@ -697,6 +802,6 @@ class CoreUsers extends CoreAbstract
 			'hostname'		=> $hostname,
 			'created'		=> $login_time,
 		);
-		return \Core\Init\CoreMySql::insertRow(self::$tbl_failed_logins, $fields);
+		return $db::insertRow(self::$tbl_failed_logins, $fields);
 	}
 }

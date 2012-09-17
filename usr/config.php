@@ -21,7 +21,7 @@
  * @package		sweany.usr
  * @author		Patu <pantu39@gmail.com>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @version		0.8 2012-08-13 13:25
+ * @version		0.9 2012-09-16 13:25
  *
  * User Configuration File
  *
@@ -140,15 +140,23 @@ $LOG_SQL_ERRORS			= 2;
  * Define the names of the logfile in ./sweany/log/
  * These files must be writable by the webserver user or group.
  *
- * Enable $VALIDATION_MODE to check propper settings for these files.
- *
- *
- * TODO: The user logger still needs to be implemented
- * as a helper to write to $FILE_LOG_USER
- * Coming name: LogCat.php
+ * Enable $VALIDATION_MODE to check propper settings (existance|writeability) for these files.
  */
 $FILE_LOG_CORE			= 'core.log';	// logs all the above stuff (if enabled)
 $FILE_LOG_USER			= 'debug.log';	// For custom project logging
+
+
+
+/*
+ * If an error is caught, it will
+ * break the execution of the current page and flush
+ * all SysLog messages to the screen.
+ *
+ * This is recommended if you are in development stage
+ * as you could might miss some errors at the bottom of SysLog easily.
+ *
+ */
+$BREAK_ON_ERROR			= 0;
 
 
 /*
@@ -160,7 +168,7 @@ $FILE_LOG_USER			= 'debug.log';	// For custom project logging
  * 0: Off
  * 1: On
  */
-$DEBUG_CSS				= 1;
+$DEBUG_CSS				= 0;
 
 
 
@@ -202,6 +210,22 @@ $DEFAULT_LAYOUT					= 'default.tpl.php';
 ***************************************************************************/
 
 /*
+ * TODO: not yet implemented completely
+ *
+$CUSTOM_ROUTING = array(
+	'Site'	=> array(
+		'controller' => 'Home',
+ 		'methods'	 => array(
+ 			'test'		=> 'teswt2',
+ 		),
+ 	),
+ );
+*/
+
+
+
+
+/*
  * $DEFAULT_CONTROLLER
  *
  * When calling http://yourdomain.tld of this project, which controller and method
@@ -211,7 +235,7 @@ $DEFAULT_LAYOUT					= 'default.tpl.php';
  * And the class must have the corresponding public function
  *
  */
-$DEFAULT_CONTROLLER				= 'Site';
+$DEFAULT_CONTROLLER				= 'Home';
 $DEFAULT_METHOD					= 'index';
 
 
@@ -302,10 +326,17 @@ $EMAIL_SYSTEM_REPLY_ADDRESS		= 'info@yourdomain.tld';
 $EMAIL_SYSTEM_RETURN_EMAIL		= 'info@yourdomain.tld';
 
 /*
- * Stores all send messages in SQL.
+ * You can turn off sending during development stage.
+ * In order to simulate sending you can use the following flag
+ * 'EMAIL_STORE_SEND_MESSAGES = 1'
+ */
+$EMAIL_DO_NOT_SEND				= 0;	// values: 0|1
+
+/*
+ * Additionally stores all emails in database.
  * Requires SQL_ENABLE
  */
-$EMAIL_STORE_SEND_MESSAGES		= 1;
+$EMAIL_STORE_SEND_MESSAGES		= 1;	// values: 0|1
 
 
 
@@ -327,6 +358,25 @@ $HTML_DEFAULT_LANG_LONG			= 'en-US';
 $HTML_DEFAULT_PAGE_TITLE		= 'sweany php';
 $HTML_DEFAULT_PAGE_KEYWORDS		= 'sweany mvc php framework, sweany php, sweany, php framework';
 $HTML_DEFAULT_PAGE_DESCRIPTION	= 'sweany php is a performance-orientated and programmer-friendly MVCTB (Model, View, Controller, Table, Blocks) framework. It features some functionality from cakephp and drupals block system';
+
+
+
+
+/***************************************************************************
+ *
+*  LOCALES
+*
+***************************************************************************/
+
+
+/**
+ * Default locale for PHP to have date/time functions
+ * work accordingly.
+ *
+ * If you are using the Language Module, then this value will be overriden.
+ * Make sure to specify the correct Locale in your xml files.
+ */
+$DEFAULT_LOCALE = 'en_US.UTF-8';
 
 
 
@@ -356,23 +406,50 @@ $DEFAULT_FORM_ELEMENT_ERR_CSS	= 'border: solid 2px red;';
 
 
 
+
+/***************************************************************************
+*
+*  USE included technologies
+*
+***************************************************************************/
+
+/**
+ * Enable/Disable ECSS (Extended CSS)
+ * Allows to have inheritance and variables inside CSS files.
+ * @link: https://github.com/lockdoc/ecss
+ *
+ * Note: This only works, when including CSS files via
+ * Css::addFile(); Helper
+ */
+$ECSS_ENABLE		= true;
+
+/**
+ * Do you want compressed output
+ * @link: https://github.com/lockdoc/ecss/blob/master/README
+ * Values: 0 | 1
+ */
+$ECSS_COMPRESSED	= 0;
+
+/**
+ * Do you want commented output
+ * @link: https://github.com/lockdoc/ecss/blob/master/README
+ * Values: 0 | 1
+ */
+$ECSS_COMMENTED		= 1;
+
+
+
+
+
 /***************************************************************************
  *
  *  Enable/Disable and Setup Core Module
  *
  ***************************************************************************/
 
-/**
- * TODO: right now, you cannot deactivate any of the core
- * modules (except $SQL_LOG_VISITORS which is off by default).
- * This still needs to be implemented.
- */
-
-
 
 /**
  * Language
- *
  *
  * @requires: no other module to be enabled
  */
@@ -381,7 +458,7 @@ $LANGUAGE_DEFAULT_SHORT			= 'en';					// Default language (will also override HT
 $LANGUAGE_DEFAULT_LONG			= 'en-US';
 
 $LANGUAGE_AVAILABLE				= array('en' => 'English', 'de' => 'Deutsch');
-$LANGUAGE_IMG_PATH				= '/img/site/flags';	// need pics in the form of en.png, de.png, ...
+$LANGUAGE_IMG_PATH				= '/img/site/flags';	// need pics available with the following names of 'en.png', 'de.png', ...
 
 
 /**
@@ -390,6 +467,7 @@ $LANGUAGE_IMG_PATH				= '/img/site/flags';	// need pics in the form of en.png, d
  * @requires: no other module to be enabled
  */
 $SQL_ENABLE						= true;
+$SQL_ENGINE						= 'mysql';				// Currently only 'mysql' is supported
 $SQL_HOST						= '127.0.0.1';
 $SQL_DB							= 'sweany';
 $SQL_USER						= 'root';
@@ -401,22 +479,12 @@ $SQL_PASS						= '';
  *
  * @requires: MySQL
  *
- * Note:
- * sweany ships with a few default users in the database.
- * If you change the salt, you will als have to change the
- * password hashes in the databse.
- *
- * Minimum required Length: 10 characters!
- *
  */
 $USER_ENABLE					= true;
 
 
 /**
  * User Online Count
- *
- * TODO: need config flag for
- *       fake online users here
  *
  * @requires: MySQL, User
  */
@@ -430,4 +498,6 @@ $USER_ONLINE_ADD_FAKE_GUESTS	= 10;	// add 10 fake guests to the online count
  *
  * @requires: MySQL
  */
-$SQL_LOG_VISITORS				= false;
+$SQL_LOG_VISITORS_ENABLE		= true;
+
+// End of File

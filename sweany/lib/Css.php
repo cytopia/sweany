@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -37,6 +37,15 @@ Class Css
 	{
 		$size = sizeof(self::$css_files);
 
+		if ( $GLOBALS['ECSS_ENABLE'] )
+		{
+			$options = '';
+			$options.= ( $GLOBALS['ECSS_COMPRESSED'] )	? '&compressed' : '';
+			$options.= ( $GLOBALS['ECSS_COMMENTED'] )	? '&comment' : '';
+
+			$file	 = '/www/css/ecss.php?file=http://'.$_SERVER['HTTP_HOST'].$file.$options;
+		}
+
 		self::$css_files[$size] = '<link rel="stylesheet" type="text/css" href="'.$file.'" />';
 	}
 
@@ -50,4 +59,3 @@ Class Css
 		return $code;
 	}
 }
-?>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- Do not delete the core part,      -->
+	<!-- But feel free to adjust the text. -->
+	<core>
+		<settings>
+			<lang_name>Deutsch</lang_name>
+			<lang_short>de</lang_short>
+			<lang_long>de-DE</lang_long>
+			<date_format>d.m.Y</date_format>
+		</settings>
+	</core>
+	<!-- /do not delete the core part -->
+
+
+
+	<!-- Framework Plugins -->
+	<plugins>
+		<User>
+			<PageSection>
+				<page id="login">
+					<pageTitle>Einloggen oder kostenlos registrieren</pageTitle>
+					<registerCompleteHead>Registrierung abgeschlossen</registerCompleteHead>
+					<registerCompleteBody>Danke für die Registrierung. Du wirst in Kürze eine Email mit einem Bestätigungs Link erhalten. Bitte überprüfe deine Mailbox.</registerCompleteBody>
+				</page>
+				<page id="logout">
+					<loggedOutHead>Erfolgreich ausgeloggt</loggedOutHead>
+					<loggedOutBody>Auf wiedersehen (DIESE_PROJEKT_NAME).</loggedOutBody>
+				</page>
+				<page id="lostPassword">
+					<pageTitle>Passwort vergessen</pageTitle>
+					<passwordReset>Passwort wird zurück gesetzt.</passwordReset>
+					<passwordResetText>Wir haben dir eine Email geschickt in der du dein Passwort zurück setzen kannst. Bitte überprüfe deine Mailbox.</passwordResetText>
+				</page>
+				<page id="resetPassword">
+					<pageTitle>Passwort zurück setzen</pageTitle>
+					<createNewPassword>Neues Passwort erstellen</createNewPassword>
+					<enterYourNewPassowrd>Gib dein Passwort unten ein.</enterYourNewPassowrd>
+					<invalidKey>Ungültiger Key</invalidKey>
+					<invalidKeyText>Der eingegebene Key ist ungültig oder wurde bereits benutzt.</invalidKeyText>
+					<passwordChanged>Passwort erfolgreich geändert</passwordChanged>
+					<passwordChangedText>Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt einloggen.</passwordChangedText>
+				</page>
+			</PageSection>
+
+			<BlockSection>
+				<block id="loginLink">
+					<welcome>Wilkommen zu</welcome>
+					<site_name>(Diesem Projekt)</site_name>
+					<login>Login</login>
+					<or>oder</or>
+					<signup>Registrieren</signup>
+				</block>
+				<block id="logoutLink">
+					<logout>Logout</logout>
+				</block>
+				<block id="loginForm">
+					<username>Benutzername</username>
+					<password>Passwort</password>
+					<login>Login</login>
+					<lostPassword>Passwort vergessen?</lostPassword>
+					<loginErrorNameTooShort>Benutzername ist zu kurz</loginErrorNameTooShort>
+					<loginErrorWrongPassword>Falscher Benutzername oder Passwort</loginErrorWrongPassword>
+					<loginErrorUserIsLocked>Der Benutzer wurde gesperrt</loginErrorUserIsLocked>
+					<loginErrorUserIsDeleted>Der Benutzer wurde gelöscht</loginErrorUserIsDeleted>
+					<loginErrorUserIsNotEnabled>Der Benutzer wurde noch nicht aktiviert</loginErrorUserIsNotEnabled>
+				</block>
+				<block id="registerForm">
+					<username>Benutzername</username>
+					<email>Email</email>
+					<password>Passwort</password>
+					<terms>Bedingungen</terms>
+					<dataPolicy>Datenschutzerklärung</dataPolicy>
+					<IHerebyAccept>Hiermiet akzeptiere ich die %s und die %s.</IHerebyAccept>
+					<register>Registrieren</register>
+					<registerForFree>Kostenlos registrieren</registerForFree>
+					<regErrorNameExists>Benutzername existiert bereits</regErrorNameExists>
+					<regErrorNameTooLong>Benutzername ist zu lang</regErrorNameTooLong>
+					<regErrorNameOnlyAlphaNum>Nur alphanumerische Zeichen erlaubt</regErrorNameOnlyAlphaNum>
+					<regErrorNameTooShort>Benutzername ist zu kurz</regErrorNameTooShort>
+					<regErrorEmailInvalid>Ungültige Email Adresse</regErrorEmailInvalid>
+					<regErrorEmailExists>Die Email Adresse existiert bereits</regErrorEmailExists>
+					<regErrorPasswordTooShort>Passwort ist zu kurz</regErrorPasswordTooShort>
+					<regErrorPasswordTooLong>Password ist zu lang</regErrorPasswordTooLong>
+					<regErrorAcceptTerms>Du must die Bedingungen akzeptieren, um dich zu registrieren.</regErrorAcceptTerms>
+					<registerEmailSubject>Anmeldung Bestätigen</registerEmailSubject>
+					<registerEmailBody><![CDATA[<strong>Hallo %s</strong>,<br/><br/>Bitte klick auf den folgenden Link, um deine Anmeldung zu bestätigen:<br/><br/>%s<br/><br/>Dein Team.]]></registerEmailBody>
+				</block>
+				<block id="lostPasswordForm">
+					<errorEmailTooShort>Die Email Adresse ist zu kurz</errorEmailTooShort>
+					<errorInvalidEmail>Ungültige Email Adresse</errorInvalidEmail>
+					<errorEmailNotExist>Diese Email Adresse existiert nicht.</errorEmailNotExist>
+					<resetPassword>Passwort zurück setzen</resetPassword>
+					<yourEmail>Deine Email</yourEmail>
+					<resetPasswordEmailSubject>Passwort zurück setzen</resetPasswordEmailSubject>
+					<resetPasswordEmailBody><![CDATA[<strong>Hallo %s</strong>,<br/><br/>Bitte klicke auf den folgenden Link, um dein Passwort zurück zu setzen:<br/><br/>%s<br/><br/>Dein Team.]]></resetPasswordEmailBody>
+				</block>
+				<block id="resetPasswordForm">
+					<errorPasswordTooShort>Passwort ist zu kurz</errorPasswordTooShort>
+					<errorPasswordTooLong>Password  ist zu lang</errorPasswordTooLong>
+					<errorPasswordsDoNotMatch>Passwörter sind ungleich</errorPasswordsDoNotMatch>
+					<newPassword>Neues Passwort</newPassword>
+					<newPasswordRepeat>Passwort Wiederholung</newPasswordRepeat>
+					<create>Erstellen</create>
+				</block>
+			</BlockSection>
+		</User>
+	</plugins>
+</root>

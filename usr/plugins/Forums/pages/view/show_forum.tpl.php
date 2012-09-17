@@ -13,6 +13,8 @@
 			<th colspan="6"><div class="forumNavi"><?php echo $navi; ?></div></th>
 		</tr>
 		<tr>
+			<td colspan="6"></td>
+		</tr>		<tr>
 			<th></th>
 			<th><?php echo $language->author; ?></th>
 			<th><?php echo $language->threads; ?></th>
@@ -27,7 +29,7 @@
 		</tr>
 		<tr>
 			<td colspan="6">
-				<?php echo $blocks['onlineUsers'];?>
+				<?php echo $bOnlineUsers;?>
 			</td>
 		</tr>
 	</tfoot>
@@ -40,7 +42,11 @@
 					$last_date		= date($date_format, $timestamp);
 					$last_time		= date($time_format, $timestamp);
 					$last_user		= ($thread['last_post_user_id'] > 0) ? $thread['last_post_username'] : 'anonymous';
-					$last_user_link	= ($thread['last_post_user_id'] > 0) ? Html::l($last_user, $userProfileCtl, $userProfileMethod, array($thread['last_post_user_id'])) : $last_user;
+
+					if ( ($userProfileLink) )
+						$last_user_link	= ($thread['last_post_user_id'] > 0) ? Html::l($last_user, $userProfileCtl, $userProfileMethod, array($thread['last_post_user_id'])) : $last_user;
+					else
+						$last_user_link	= $last_user;
 				}
 				else
 				{
@@ -55,11 +61,14 @@
 				$timestamp	= strtotime($thread['created']);
 				$date		= date($date_format, $timestamp);
 				$time		= date($time_format, $timestamp);
+
+				$author_name= ($thread['fk_user_id']>0) ? $thread['username'] : 'anonymous';
+				$author_link= ($userProfileLink) ? Html::l($author_name, $userProfileCtl, $userProfileMethod, array($thread['fk_user_id'])) : $author_name;
 			?>
 			<tr>
 				<td style="width:20px;"><div style="float:left;"><?php echo $sticky.$locked.$closed; ?></div></td>
 				<td style="width:120px;">
-					<div class="forumUsername"><?php echo ($thread['fk_user_id']>0) ? Html::l($thread['username'], $userProfileCtl, $userProfileMethod, array($thread['fk_user_id'])) : 'anonymous'; ?></div>
+					<div class="forumUsername"><?php echo $author_link; ?></div>
 					<div class="forumEntryTime"><?php echo $date.' '.$time; ?></div>
 				</td>
 				<td>

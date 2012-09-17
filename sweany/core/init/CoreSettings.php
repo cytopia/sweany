@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -46,8 +46,11 @@ class CoreSettings extends CoreAbstract
 	private static $userLogFile		= null;
 
 	private static $timezone		= null;
+	private static $locale			= null;
 
 
+	// used for output buffering
+	public static $ob_callback		= null;
 
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
 	public static function initialize()
@@ -67,10 +70,20 @@ class CoreSettings extends CoreAbstract
 		self::$coreLogFile		= LOG_PATH.DS.$GLOBALS['FILE_LOG_CORE'];
 		self::$userLogFile		= LOG_PATH.DS.$GLOBALS['FILE_LOG_USER'];
 
+		// Language/Date specific settings
 		self::$timezone			= $GLOBALS['DEFAULT_TIME_ZONE'];
+		self::$locale			= $GLOBALS['DEFAULT_LOCALE'];
 
 		// TODO: need to synchronize with mysql database timezone
 		self::_setTimeZone();
+
+		if ( !self::_setLocale() )
+		{
+			self::$error = 'Cannot set locale, wrong format';
+			return false;
+		}
+
+		self::$ob_callback = (self::$showPhpErrors) ? 'ob_error_handler' : 'ob_gzhandler';
 
 		return true;
 	}
@@ -100,9 +113,6 @@ class CoreSettings extends CoreAbstract
 				case 2: error_reporting(E_ERROR | E_WARNING | E_PARSE); break;
 				case 1: error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE); break;
 			}
-
-			// Set Error Handler
-			set_error_handler('custom_php_error_handler');
 		}
 		else
 		{
@@ -115,5 +125,13 @@ class CoreSettings extends CoreAbstract
 	private static function _setTimeZone()
 	{
 		date_default_timezone_set(self::$timezone);
+	}
+
+	private static function _setLocale()
+	{
+		$ret1 = setlocale(LC_ALL, 'en_US.UTF-8');
+		$ret2 = setlocale(LC_TIME, self::$locale);
+
+		return ($ret1 && $ret2);
 	}
 }

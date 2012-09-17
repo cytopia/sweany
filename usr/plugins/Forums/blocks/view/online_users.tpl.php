@@ -1,7 +1,9 @@
 <?php
 $activeUsers = array();
 foreach ($LoggedInOnlineUsers as $onlineUser)
-	$activeUsers[] = Html::l($onlineUser['username'], $userProfileCtl, $userProfileMethod, array($onlineUser['id']));
+{
+	$activeUsers[] = ($userProfileLink) ? Html::l($onlineUser['username'], $userProfileCtl, $userProfileMethod, array($onlineUser['id'])) : $onlineUser['username'];
+}
 ?>
 <span style="font-weight:bold;"><?php echo $language->currOnlineUsers; ?>:</span>
 <?php echo $countOnlineUsers; ?> (

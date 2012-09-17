@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -61,6 +61,7 @@ Class CoreLanguage extends CoreAbstract
 	private static $langName	= null;		// e.g.: English
 	private static $langShort	= null;		// e.g.: en
 	private static $langLong	= null;		// e.g.: en-US
+	private static $locale		= null;		// e.g.: en_US.UTF-8
 
 
 	/*
@@ -69,6 +70,15 @@ Class CoreLanguage extends CoreAbstract
 	 * all other plugin language objects (if any)
 	 */
 	private static $language = array();
+
+
+	/*
+	 * static Language Store.
+	 *
+	 * This will hold the words from the global section
+	 * to have it available from any page/block/layout function
+	 */
+	private static $_sstore	= null;
 
 
 	/*
@@ -89,16 +99,28 @@ Class CoreLanguage extends CoreAbstract
 
 
 
+
 	/****************************************** CORE MODULE INITIALIZER ******************************************/
 
 	public static function initialize()
 	{
 		$short		= self::chooseLanguage();
 		$success	= self::loadProjectFile($short);
-		return $success;
+
+		// TODO: use config!!!!
+		$success2	= self::_resetLocale();
+
+		return ($success && $success2);
 	}
 
 
+	public static function _resetLocale()
+	{
+		$ret1 = setlocale(LC_ALL, 'en_US.UTF-8');
+		$ret2 = setlocale(LC_TIME, self::$locale);
+
+		return ($ret1 && $ret2);
+	}
 
 	/****************************************** STATIC  FUNCTIONS ******************************************/
 	/**
@@ -278,7 +300,7 @@ Class CoreLanguage extends CoreAbstract
 			if ( \Core\Init\CoreSettings::$showPhpErrors == 0)
 				return '';
 		}
-		if ( !count($this->_store[0]->$key ) )
+		if ( !count($this->_store[0]->$key) && !count(self::$_sstore[0]->$key) )
 		{
 			\SysLog::e('Language', '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
 
@@ -287,11 +309,21 @@ Class CoreLanguage extends CoreAbstract
 				return '';
 		}
 
-		//return $this->_store[0]->$key;
-		if ( count($this->_store[0]->$key) > 1)
-			return $this->_store[0]->$key;
-		else
-			return (String)$this->_store[0]->$key;
+		// Check if the value is available in specific store
+		if ( count($this->_store[0]->$key) )
+		{
+			if ( count($this->_store[0]->$key) > 1)
+				return $this->_store[0]->$key;
+			else
+				return (String)$this->_store[0]->$key;
+		}
+		else // otherwise use value from global store
+		{
+			if ( count(self::$_sstore[0]->$key) > 1)
+				return self::$_sstore[0]->$key;
+			else
+				return (String)self::$_sstore[0]->$key;
+		}
 	}
 
 
@@ -312,7 +344,7 @@ Class CoreLanguage extends CoreAbstract
 			$short	= $lang['short'];
 			$file	= USR_LANGUAGES_PATH.DS.$short.'.xml';
 
-			// In case it does not exist
+			// In case it does not exist$settings
 			// Use the default language
 			if ( !file_exists($file) )
 			{
@@ -412,6 +444,9 @@ Class CoreLanguage extends CoreAbstract
 			self::$langName		= $settings[0]->lang_name;
 			self::$langShort	= $settings[0]->lang_short;
 			self::$langLong		= $settings[0]->lang_long;
+			self::$locale		= $settings[0]->locale;
+
+			self::$_sstore		= self::$language['default']->xpath('/root/global');
 
 			return true;
 		}

@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Sweaby is distributed in the hope that it will be useful,
+ * Sweany is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
@@ -121,6 +121,26 @@ Class Form
 	{
 		return (isset($_POST[self::$formName][$id])) ? $_POST[self::$formName][$id] : null;
 	}
+
+
+	/**
+	 * Get values of several fields
+	 *
+	 * @param array $fields
+	 * @return array values
+	 */
+	public static function getValues($fields)
+	{
+		$size	= count($fields);
+		$values	= array();
+
+		for ($i=0; $i<$size; $i++)
+		{
+			$values[$i] = (isset($_POST[self::$formName][$fields[$i]])) ? $_POST[self::$formName][$fields[$i]] : null;
+		}
+		return $values;
+	}
+
 	public static function fieldIsSet($id)
 	{
 		return (isset($_POST[self::$formName][$id]));
@@ -281,6 +301,20 @@ Class Form
 		$options	= self::_getOptions($options);
 
 		return	'<input '.$options.' '.$style.' '.$options.' type="text" name="'.$formName.'['.$name.']" value="'.$def_val.'" />';
+	}
+
+	public static function inputFieldHinted($name, $hint = null, $default_value = null, $options = array())
+	{
+		$formName	= self::$formName;
+		$style		= self::getError($name) ? self::$css_error_form : '';
+		$def_val	= self::_getDefaultValue($name, $default_value);
+		$options	= self::_getOptions($options);
+
+		$def_val	= ($hint && !strlen($def_val)) ? $hint : $def_val;
+		$hint_script= ($hint) ? 'onblur="if (this.value == \'\') { this.value = \''.$hint.'\'; }" onfocus="if (this.value == \''.$hint.'\') { this.value = \'\'; }"' : '';
+
+
+		return	'<input '.$options.' '.$style.' '.$options.' type="text" name="'.$formName.'['.$name.']" placeholder="'.$hint.'" value="'.$def_val.'" '.$hint_script.'/>';
 	}
 
 	public static function passwordField($name, $options = array())
@@ -468,4 +502,3 @@ Class Form
 
 }
 Form::init();
-?>
