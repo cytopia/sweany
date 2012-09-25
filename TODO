@@ -5,16 +5,16 @@
 High Priority
 -------------------------
 * Caching
-* SEO URLs
-* object orientated db handling (ruby-on-rails like)
+* URL rewriting
 * Security testings
 * Function name freeze
 
 
 Medium Priority
 -------------------------
-* reactivate Fast core
-* Vendors need propper testing
+* daemonize-mode
+* re-activate Fast core
+* Vendors need propper testing (check out mailer)
 * PostgreSQL compatibility (1 of 2 is done)
 * SQLite compatibility (1 of 2 is done)
 * user groups
@@ -27,5 +27,5 @@ Low Priority
 * Admin sections for plugins need to be programmed
    + Forum (create categories, forums|delete/move threads/posts)
    + Contact (view contact messages)
-* favicon.ico, Logo, Artwork and nice CSS Layout
+* favicon.ico, Logo, Artwork and nicer base CSS Layout
 * Need testers and other people willing to contribute code and/or artwork

@@ -104,7 +104,7 @@ Class Html
 		foreach ($all as $lang=>$name)
 		{
 			// Current language does not require a click link
-			if ( $lang == \Core\Init\CoreLanguage::getLangShort() )
+			if ( $lang == \Sweany\Language::getLangShort() )
 			{
 				$switch .= $pre;
 				$switch .= '<img title="'.$name.'" src="'.$path.'/'.$lang.'.png" alt="'.$name.'" border="0" />';

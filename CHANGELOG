@@ -1,3 +1,21 @@
+2012-09-24
+-----------------
++ Integrated Database ORM
++ Improved Database wrapper
+		+ You can now easily add new engines that have to implement
+		  specific functions and then just work out of the box on the ORM model
++ Improved Validators (also validate ORM tables)
++ Core file/folder restructured
++ started work on SQL_LANGUAGE (via t() function)
++ Strings.php has been extended
++ new options in config.php
++ new potential core views (jpg, pdf, png)
++ added README's to all core folders
++ Added new parts to Syslog output
++ re-namespaced all corefiles to 'Sweany'
++ removed deprecated microtime wrapper
+
+
 2012-09-17
 -----------------
 + Core/Block rewrite

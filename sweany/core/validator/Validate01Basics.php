@@ -27,9 +27,10 @@
  * This (optional) core will validate various settings of
  * the framework itself.
  */
-class Validate01Basics extends \Core\Init\CoreAbstract
+namespace Sweany;
+class Validate01Basics extends aBootTemplate
 {
-	public static function initialize()
+	public static function initialize($options = null)
 	{
 		if ( version_compare(phpversion(), '5.3.0', '<') )
 		{

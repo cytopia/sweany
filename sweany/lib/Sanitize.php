@@ -24,7 +24,7 @@
  * @version		0.8 2012-08-17 13:25
  *
  *
- * Strings
+ * Sanitize
  */
 class Sanitize
 {
@@ -44,7 +44,8 @@ class Sanitize
 
 	public static function escape($string)
 	{
-
+		// TODO!!
+		return '"'.$string.'"';
 	}
 
 	public static function html($string, $strip_tags = false)

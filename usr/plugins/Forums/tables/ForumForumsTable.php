@@ -1,7 +1,7 @@
 <?php
 class ForumForumsTable extends Table
 {
-	protected $table	= 'forum_forums';
+	public $table	= 'forum_forums';
 
 	protected $tableHolders	= array(
 		'[[thread]]'	=> 'forum_threads',
@@ -9,7 +9,7 @@ class ForumForumsTable extends Table
 		'[[user]]'		=> 'users',
 	);
 
-	protected $fields	= array(
+	public $fields	= array(
 		// FIELDS
 		'id'					=> 'id',
 		'fk_forum_category_id'	=> 'fk_forum_category_id',
@@ -25,22 +25,22 @@ class ForumForumsTable extends Table
 		'modified'				=> 'modified',
 
 		// SUBSELECTS
-		'thread_count'			=> '(SELECT COUNT(*)	FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id)',
-		'post_count'			=> '(SELECT COUNT(*)	FROM [[post]]	WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id))',
+//		'thread_count'			=> '(SELECT COUNT(*)	FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id)',
+//		'post_count'			=> '(SELECT COUNT(*)	FROM [[post]]	WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id))',
 
-		'last_thread_id'		=> '(SELECT id			FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-		'last_thread_created'	=> '(SELECT created		FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-		'last_thread_title'		=> '(SELECT title		FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-		'last_thread_seo_url'	=> '(SELECT seo_url		FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-		'last_thread_user_id'	=> '(SELECT fk_user_id	FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-		'last_thread_username'	=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = last_thread_user_id )',
+//		'last_thread_id'		=> '(SELECT id			FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
+//		'last_thread_created'	=> '(SELECT created		FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
+//		'last_thread_title'		=> '(SELECT title		FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
+//		'last_thread_seo_url'	=> '(SELECT seo_url		FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
+//		'last_thread_user_id'	=> '(SELECT fk_user_id	FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
+//		'last_thread_username'	=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = last_thread_user_id )',
 
-		'last_post_thread_id'	=> '(SELECT fk_forum_thread_id FROM [[post]] WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ) ORDER BY [[post]].created DESC LIMIT 1)',
-		'last_post_created'		=> '(SELECT created		FROM [[post]]	WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ) ORDER BY [[post]].created DESC LIMIT 1)',
-		'last_post_title'		=> '(SELECT title		FROM [[thread]]	WHERE id = last_post_thread_id)',
-		'last_post_seo_url'		=> '(SELECT seo_url		FROM [[thread]] WHERE id = last_post_thread_id)',
-		'last_post_user_id'		=> '(SELECT fk_user_id	FROM [[post]]	WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ) ORDER BY [[post]].created DESC LIMIT 1)',
-		'last_post_username'	=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = last_post_user_id )',
+//		'last_post_thread_id'	=> '(SELECT fk_forum_thread_id FROM [[post]] WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ) ORDER BY [[post]].created DESC LIMIT 1)',
+//		'last_post_created'		=> '(SELECT created		FROM [[post]]	WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ) ORDER BY [[post]].created DESC LIMIT 1)',
+//		'last_post_title'		=> '(SELECT title		FROM [[thread]]	WHERE id = last_post_thread_id)',
+//		'last_post_seo_url'		=> '(SELECT seo_url		FROM [[thread]] WHERE id = last_post_thread_id)',
+//		'last_post_user_id'		=> '(SELECT fk_user_id	FROM [[post]]	WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ) ORDER BY [[post]].created DESC LIMIT 1)',
+//		'last_post_username'	=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = last_post_user_id )',
 	);
 
 

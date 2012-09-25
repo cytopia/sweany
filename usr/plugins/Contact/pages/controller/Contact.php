@@ -21,8 +21,7 @@ class Contact extends PageController
 	* **********************************************************************************************************************/
 	public function index()
 	{
-		$bContactForm	= Blocks::get('Contact', 'Contact', 'addContact');
-		$submitted		= $bContactForm['ret'];
+		$submitted		= $this->attachBlock('bContactForm', 'Contact', 'Contact', 'addContact');
 
 		 //form was submitted successfully
 		 //show info and the redirect user to the start page
@@ -34,7 +33,6 @@ class Contact extends PageController
 			return;
 		}
 		$this->set('language', $this->language);
-		$this->set('bContactForm', $bContactForm['html']);
 		$this->view('index');
 
 		// LAYOUT OPTIONS

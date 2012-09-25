@@ -22,11 +22,11 @@
 		</tr>
 	</tfoot>
 	<tbody>
-		<?php foreach ($categories as $category): ?>
+		<?php foreach ($data as $row): ?>
 			<tr>
-				<th colspan="5"><div class="forumCategoryName"><?php echo $category['name']; ?></div></th>
+				<th colspan="5"><div class="forumCategoryName"><?php echo $data['Category']['name']; ?></div></th>
 			</tr>
-			<?php foreach ($category['forums'] as $forum):?>
+			<?php foreach ($category['Forum'] as $forum):?>
 				<?php
 				if ( $forum['thread_count'] > 0 )
 				{

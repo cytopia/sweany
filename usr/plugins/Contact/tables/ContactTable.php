@@ -1,10 +1,13 @@
 <?php
 class ContactTable extends Table
 {
-	protected $table	= 'contact';
+	public $table	= 'contact';
+	public $alias	= 'Contact';
 
-	protected $fields	= array(
+	public $fields	= array(
 		'id'			=> 'id',
+		'fk_user_id'	=> 'fk_user_id',
+		'username'		=> 'username',
 		'name'			=> 'name',
 		'email'			=> 'email',
 		'subject'		=> 'subject',
@@ -16,35 +19,46 @@ class ContactTable extends Table
 		'useragent'		=> 'useragent',
 		'ip'			=> 'ip',
 		'host'			=> 'host',
-		'fk_user_id'	=> 'fk_user_id',
 		'session_id'	=> 'session_id',
 		'created'		=> 'created',
 	);
 
-	public function add($user_id, $name, $email, $subject, $message)
+	public $hasCreated	= array('created' => 'datetime');
+
+	/**
+	 *	@Override
+	 *	@param	mixed[]			$data
+	 *	@return	integer|null	last_insert_id
+	 */
+	public function save($data, $return_insert_id = false)
 	{
-		$fields	= array(
-			'fk_user_id'=> $user_id,
-			'name'		=> $name,
-			'email'		=> $email,
-			'subject'	=> $subject,
-			'message'	=> $message,
-			'referer'	=> isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
-			'useragent'	=> $_SERVER['HTTP_USER_AGENT'],
-			'ip'		=> $_SERVER['REMOTE_ADDR'],
-			'host'		=> gethostbyaddr($_SERVER['REMOTE_ADDR']),
-			'session_id'=> Session::getId(),
-		);
-		return $this->_add($fields);
+		$data['referer']	= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+		$data['useragent']	= $_SERVER['HTTP_USER_AGENT'];
+		$data['ip']			= $_SERVER['REMOTE_ADDR'];
+		$data['host']		= gethostbyaddr($_SERVER['REMOTE_ADDR']);
+		$data['session_id']	= Session::getId();
+		
+		parent::save($data, $return_insert_id);
 	}
+	
+	/**
+	 *	@Override
+	 *	@param	mixed[]			$data
+	 *	@return	integer|null	last_insert_id
+	 */
+	public function delete($id)
+	{
+		return $this->update($id, array('is_deleted' => 1));
+	}
+
 	
 	public function countNew()
 	{
-		return $this->_count('`is_read` = 0');
+		return $this->find('count', array('condition' => 'is_read = 0'));
 	}
 	
 	public function markRead($id)
 	{
-		$this->_updateField($id, 'is_read', 1);
+		return $this->update($id, array('is_read' => 1));
 	}
 }

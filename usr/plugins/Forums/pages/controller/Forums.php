@@ -230,8 +230,9 @@ class Forums extends PageController
 	* **********************************************************************************************************************/
 	public function index()
 	{
-		$categories		= $this->model->getForum();
-		$bOnlineUsers	= Blocks::get('Forums', 'Forum', 'onlineUsers');
+		$data = $this->model->ForumCategories->find('all');
+		
+		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 
 		// ADD TEMPLATE ELEMENTS
 		HtmlTemplate::setTitle($this->language->forum);
@@ -241,8 +242,7 @@ class Forums extends PageController
 
 		// VIEW VARIABLES
 		$this->set('language', $this->language);
-		$this->set('bOnlineUsers', $bOnlineUsers['html']);
-		$this->set('categories', $categories);
+		$this->set('data', $data);
 		$this->set('date_format', $this->dateFormat);
 		$this->set('time_format', $this->timeFormat);
 

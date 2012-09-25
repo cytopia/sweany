@@ -27,12 +27,13 @@
  * This (optional) core will validate various settings of
  * the framework itself.
  */
-class Validate02Config extends \Core\Init\CoreAbstract
+namespace Sweany;
+class Validate02Config extends aBootTemplate
 {
 
 
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
-	public static function initialize()
+	public static function initialize($options = null)
 	{
 		if ( !self::_checkVariableExistance() )
 		{

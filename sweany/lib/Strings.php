@@ -28,6 +28,53 @@
  */
 class Strings
 {
+
+	/**
+	 *
+	 *	Convert underscored string to camel-cased string
+	 *
+	 *	@param	string	$string		Underscored string to convert
+	 *	@param	boolean	$first		Make first character upper case?
+	 *	@return	string	$string		camel-cased string
+	 *
+	 *	Example:
+	 *
+	 *	sweany_php_fw	->	SweanyPhpFw	(first = true)
+	 *	sweany_php_fw	->	sweanyPhpFw	(first = false)
+	 */
+	public static function camelCase($string, $first = true)
+	{
+		$string = str_replace('_', ' ', $string);
+		$string = ucwords($string);
+		$string = str_replace(' ', '', $string);
+		return ($first) ? $string : lcfirst($string);
+	}
+	
+	/**
+	 *
+	 *	Convert camel-cased string to underscored string
+	 *
+	 *	@param	string	$string		camel-cased string to convert
+	 *	@return	string	$string		underscored string
+	 *
+	 *	Example:
+	 *
+	 *	SweanyPhpFw	->	sweany_php_fw
+	 *	sweanyPhpFw	->	sweany_php_fw
+	 */
+	public static function underScore($string)
+	{
+		$string = preg_replace('/(?<=\\w)(?=[A-Z])/',"_$1", $string);
+		$string = strtolower($string);
+		return $string;
+	}
+
+
+
+
+
+
+
 	public static function removeEmptyLines($string)
 	{
 		return preg_replace('/^\n+|^[\t\s]*\n+/m','',$string);

@@ -1,4 +1,12 @@
+# do not upload generated sweany*.tar.gz
 *.tar.gz
-.gitignore
-#usr/config.php
-#sweany/log/core.log
+
+# do not upload local config or logs
+usr/config.php
+sweany/log/core.log
+sweany/log/debug.log
+
+# win/mac auto-generated files
+Thumbs.db
+.DS_Store
+.DS_Store?

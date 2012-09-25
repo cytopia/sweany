@@ -10,14 +10,12 @@ class Layouts extends LayoutController
 		if ( !$this->user->isLoggedIn() )
 		{
 			$params		= array('User', 'login', 'User', 'login');
-			$bLoginBox	= Blocks::get('User', 'User', 'loginLink', $params);
-			$this->set('bLoginBox', $bLoginBox['html']);
+			$this->attachBlock('bLoginBox', 'User', 'User', 'loginLink', $params);
 		}
 		else
 		{
 			$params		= array('User', 'logout');
-			$bLogoutBox	=  Blocks::get('User', 'User', 'logoutLink', $params);
-			$this->set('bLogoutBox', $bLogoutBox['html']);
+			$this->attachBlock('bLogoutBox', 'User', 'User', 'logoutLink', $params);
 		}
 		$this->view('frontpage');
 	}
