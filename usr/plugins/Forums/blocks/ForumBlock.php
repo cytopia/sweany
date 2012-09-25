@@ -25,14 +25,14 @@ class ForumBlock extends BlockController
 	{
 		$tblThreads = Loader::loadPluginTable('ForumThreads', $this->plugin);
 
-		$forumThreads = $tblThreads->getLatestActiveThreads(null, $numEntries);
+		$data = $tblThreads->getLatestActiveThreads(null, $numEntries);
 
 		$this->set('language', $this->language);
 		$this->set('userProfileLink', $this->userProfileLink);
 		$this->set('userProfileCtl', $this->userProfileCtl);
 		$this->set('userProfileMethod', $this->userProfileMethod);
 
-		$this->set('forumThreads', $forumThreads);
+		$this->set('data', $data);
 
 		if ( $detailed )
 			$this->view('activity_overview');

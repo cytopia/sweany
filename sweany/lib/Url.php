@@ -32,7 +32,7 @@
  *        and rewritten!
  *
  */
-class Url extends \Core\Init\CoreUrl
+class Url extends \Sweany\Url
 {
 	public static function getController()
 	{

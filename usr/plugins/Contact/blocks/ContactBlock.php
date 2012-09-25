@@ -57,7 +57,7 @@ class ContactBlock extends BlockController
 		for($i=0; $i<$size; $i++)
 		{
 			$subArr[$i+1]['id']		= ($i+1);
-			$subArr[$i+1]['value']	= $this->language->subjects[$i];
+			$subArr[$i+1]['value']	= (string)$this->language->subjects->$i;
 		}
 
 		//------ Adjust Subject Form Rule (according to the number of subjects)
@@ -79,9 +79,18 @@ class ContactBlock extends BlockController
 			$email		= Strings::removeTags($email);
 			$message	= Strings::removeTags($message);
 
-			$user_id	= method_exists($this->user, 'id') ? $this->user->id() : 0;
+			$data['name']		= $name;
+			$data['email']		= $email;
+			$data['subject']	= $subject;
+			$data['message']	= $message;
 
-			$tblContact->add($user_id, $name, $email, $subject, $message);
+			if ( method_exists($this->user, 'id') )
+			{
+				$data['fk_user_id']	= $this->user->id();
+				$data['username']	= $this->user->name();
+			}
+
+			$tblContact->save($data);
 			$this->render = false;
 			return 1;
 		}

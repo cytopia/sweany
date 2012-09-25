@@ -83,7 +83,7 @@ class FrameworkDefault extends PageController
 		$this->set('delay', $delay);
 		$this->view('info_message');
 
-		if (\Core\Init\CoreSettings::$showFwErrors)
+		if (\Sweany\Settings::$showFwErrors)
 		{
 			echo '<font color="red">Delayed Redirect Call: </font><a href="'.$url.'">'.$url.'</a> in '.$delay.' seconds [automatic redirect disabled during debug mode]';
 		}
@@ -107,7 +107,7 @@ class FrameworkDefault extends PageController
 
 				if ( !$GLOBALS['LANGUAGE_ENABLE'] )
 				{
-					\SysLog::e($GLOBALS['DEFAULT_SETTINGS_URL'], 'Language Module is not activated, cannot change Language to: '.$value);
+					\Sweany\SysLog::e($GLOBALS['DEFAULT_SETTINGS_URL'], 'Language Module is not activated, cannot change Language to: '.$value);
 					$this->redirectBack();
 					exit;
 				}
@@ -119,14 +119,14 @@ class FrameworkDefault extends PageController
 					exit;
 				}
 
-				\SysLog::i($GLOBALS['DEFAULT_SETTINGS_URL'], 'Changing Language to: '.$value);
+				\Sweany\SysLog::i($GLOBALS['DEFAULT_SETTINGS_URL'], 'Changing Language to: '.$value);
 
 				/*
 				 * Set language to the core part of the xml file
 				 * This is only needed for the language switcher
 				 * as the define is in core/
 				 */
-				\Core\Init\CoreLanguage::changeLanguage($value);
+				\Sweany\Language::changeLanguage($value);
 
 
 				/*

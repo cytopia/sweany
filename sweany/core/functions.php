@@ -26,6 +26,75 @@
  * basic functions
  */
 
+ 
+ 
+ 
+/**
+ *
+ *	t() Function
+ *
+ *	@param	string	$text			Text to translate
+ *	@param	mixed[]	$placeholder	Placeholders not to translate
+ *	@return	string	$text			Translated text
+ *
+ *	$text can contain placeholders that do not need
+ *		  to be translated.
+ *		  e.g.: 'hallo !variable'	!variable will be replaced by placeholders unescaped
+ *		  e.g.: 'hallo @variable'	@variable will be replaced by placeholders and escaped html safe
+ *		  e.g.: 'hallo %variable'	%variable will be replaced by placeholders and escaped html safe with placeholder <em> tag
+ *
+ *	$placeholder is an associative array
+ *				 in the following format
+ *		array('!variable' => 'replaceText')	# !	do not escape
+ *		array('@variable' => 'replaceText')	# @	html safe escape
+ *		array('%variable' => 'replaceText')	# %	html safe escape plus placeholder <em> tag
+ *
+ *	Note:
+ *	Defining the function itself in an if/else statement
+ *	is by way faster, then doing the if/else inside the function,
+ *	as in this case the if/else only has to be evaluated once,
+ *	instead of at every call.
+ *
+ *
+ *	Usage:
+ *	t('hallo @name, how are you today? %credit', array('@name' => 'Peter', '%credit' => 'The Team'));
+ *
+ *
+ */
+if ( $GLOBALS['LANGUAGE_SQL_ENABLE'] )
+{
+	function t($text, $placeholder = array())
+	{
+		// TODO: Do translations
+		$sanitize = function(&$value, $key) {
+			if ($key[0]=='@') {
+				$value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+			}
+			else if ($key[0]=='%') {
+				$value = '<em class="placeholder">'.htmlspecialchars($value, ENT_QUOTES, 'UTF-8').'</em>';
+			}
+		};
+		array_walk($placeholder, $sanitize);
+		return str_replace(array_keys($placeholder), array_values($placeholder), $text);
+	}
+}
+else
+{
+	function t($text, $placeholder = array())
+	{
+		$sanitize = function(&$value, $key) {
+			if ($key[0]=='@') {
+				$value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+			}
+			else if ($key[0]=='%') {
+				$value = '<em class="placeholder">'.htmlspecialchars($value, ENT_QUOTES, 'UTF-8').'</em>';
+			}
+		};
+		array_walk($placeholder, $sanitize);
+		return str_replace(array_keys($placeholder), array_values($placeholder), $text);
+	}
+}
+
 
 /**
  * print_r improvement for html
@@ -35,38 +104,4 @@ function debug($arr)
 	echo '<pre>';
 	print_r($arr);
 	echo '</pre>';
-}
-
-
-/**
- * @Deprecated
- * TODO remove wrapper function, after checking that no other file is using it
- * returns microtime in miliseconds
- */
-function getmicrotime()
-{
-	return microtime(true);
-}
-
-/**
- * Custom ob error handler
- *
- * When in debugging mode, ob_start will use
- * this function as a callback to be able
- * to display errors during output buffering.
- *
- * (In production mode it will use a compression func)
- */
-function ob_error_handler($str)
-{
-	$error = error_get_last();
-
-	// If error orrocured
-	if ($error)
-	{
-		return ini_get('error_prepend_string').
-					"\n".'Fatal error: '.$error['message'].' in '.$error['file'].' on line '.$error['line']."\n".
-					ini_get('error_append_string');
-	}
-	return $str;
 }

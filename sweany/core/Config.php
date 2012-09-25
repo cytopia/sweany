@@ -28,6 +28,7 @@
  * and all plugin config.php files
  *
  */
+
 class Config
 {
 	/**

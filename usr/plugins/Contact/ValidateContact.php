@@ -1,7 +1,7 @@
 <?php
-class ValidateContact extends \Core\Init\CoreAbstract
+class ValidateContact extends \Sweany\aBootTemplate
 {
-	public static function initialize()
+	public static function initialize($options = null)
 	{
 		if ( !$GLOBALS['LANGUAGE_ENABLE'] )
 		{

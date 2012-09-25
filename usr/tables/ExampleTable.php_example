@@ -1,0 +1,35 @@
+<?php
+class ExampleTable extends Table
+{
+	public $table	= 'examples';
+	public $alias	= 'Example';
+	
+	public $fields = array(
+		'id'			=> 'id',
+		'name'			=> 'name',
+		'fk_user_id'	=> 'fk_user_id',
+		'fk_other_id'	=> 'fk_other_id',
+		'created'		=> 'created',
+	);
+
+	protected $hasCreated	= array(
+		'created'		=> 'timestamp',
+	);
+
+	public $belongsTo = array(
+		'User'	=> array(
+			'table'			=> 'users',
+			'fields'		=> array('id', 'username'),
+			'foreignKey'	=> 'fk_user_id',
+			'subQueries'	=> array('test' => 'SELECT username FROM users WHERE User.id=Example.fk_user_id LIMIT 1'),
+			'recursive'		=> true,
+		),
+		'Other'	=> array(
+			'table'			=> 'other',
+			'fields'		=> array('id', 'username'),
+			'foreignKey'	=> 'fk_other_id',
+			'subQueries'	=> array('test2' => 'SELECT name FROM other WHERE Other.id=Example.fk_other_id LIMIT 1'),
+			'recursive'		=> true,
+		),
+	);
+}

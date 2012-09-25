@@ -1,7 +1,7 @@
 <?php
-class ValidateForums extends \Core\Init\CoreAbstract
+class ValidateForums extends \Sweany\aBootTemplate
 {
-	public static function initialize()
+	public static function initialize($options = null)
 	{
 		if ( !$GLOBALS['LANGUAGE_ENABLE'] )
 		{

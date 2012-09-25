@@ -6,7 +6,6 @@
  * other than the default
  *
  * values:
- * null:	use default layout in usr/config.php
- * array():	array('LayoutController, 'LayoutMethod', [optional]paramsArray);
+ * array('LayoutControllerName', 'LayoutMethodName', [optional]paramsArray);
  */
 //Config::set('layout', array('Layouts', 'FrontPage'), 'contact');

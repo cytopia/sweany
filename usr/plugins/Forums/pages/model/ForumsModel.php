@@ -41,7 +41,7 @@ class ForumsModel extends PageModel
 	 * returns everything needed for the
 	 * Forum index view
 	 */
-	public function getForum()
+/*	public function getForum()
 	{
 		$categories = $this->ForumCategories->getAll(null, array('sort' => 'ASC'));
 
@@ -52,6 +52,7 @@ class ForumsModel extends PageModel
 		}
 		return $categories;
 	}
+*/
 	public function getThreadWithUserInfo($thread_id)
 	{
 		$thread		= $this->ForumThreads->getRow($thread_id);

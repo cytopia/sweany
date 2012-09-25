@@ -27,10 +27,11 @@
  * This (optional) core will validate various settings of
  * the framework itself.
  */
-class Validate04Database extends \Core\Init\CoreAbstract
+namespace Sweany;
+class Validate04Database extends aBootTemplate
 {
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
-	public static function initialize()
+	public static function initialize($options = null)
 	{
 		if ( $GLOBALS['SQL_ENABLE'] == true )
 		{
@@ -46,7 +47,7 @@ class Validate04Database extends \Core\Init\CoreAbstract
 				return false;
 			}
 
-			if ( !self::_checkSQL() )
+			if ( !self::_checkSQLConnection() )
 			{
 				echo '<h1>Validation Error: SQL</h2>';
 				return false;
@@ -97,14 +98,14 @@ class Validate04Database extends \Core\Init\CoreAbstract
 		return true;
 	}
 
-	private static function _checkSQL()
+	private static function _checkSQLConnection()
 	{
 		// This is needed to be initialized here as well,
 		// so we have access to tables in the controller and can verify them too
 		// This won't be called if validation mode is off, so no worry for two calls
-		if ( !\Core\Init\CoreDatabase::initialize() )
+		if ( !\Sweany\Database::initialize() )
 		{
-			self::$error  = \Core\Init\CoreDatabase::getError();
+			self::$error  = \Sweany\Database::getError();
 			self::$error  .= '<br/>Cannot initialize Database connection';
 			return false;
 		}

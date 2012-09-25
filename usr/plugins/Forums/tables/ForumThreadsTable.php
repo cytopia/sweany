@@ -1,15 +1,14 @@
 <?php
 class ForumThreadsTable extends Table
 {
-	protected $table 	= 'forum_threads';
+	public $table 	= 'forum_threads';
+	public $alias	= 'Thread';
 
-	protected $tableHolders	= array(
-		'[[forum]]'		=> 'forum_forums',
-		'[[post]]'		=> 'forum_posts',
-		'[[user]]'		=> 'users',
-	);
-
-	protected $fields	= array(
+	protected $hasModified	= array('created' => 'datetime');
+	protected $hasCreated	= array('created' => 'datetime');
+	
+	
+	public $fields	= array(
 		// FIELDS
 		'id'					=> 'id',
 		'fk_forum_forums_id'	=> 'fk_forum_forums_id',
@@ -25,17 +24,59 @@ class ForumThreadsTable extends Table
 		'last_post_created'		=> 'last_post_created',
 		'created'				=> 'created',
 		'modified'				=> 'modified',
-
-		// SUBSELECTS
-		'last_post_title'		=> '(SELECT title		FROM [[post]]	WHERE fk_forum_thread_id=[[this]].id ORDER BY created DESC LIMIT 1)',
-		'last_post_body'		=> '(SELECT body		FROM [[post]]	WHERE fk_forum_thread_id=[[this]].id ORDER BY created DESC LIMIT 1)',
-		'last_post_user_id'		=> '(SELECT fk_user_id	FROM [[post]]	WHERE fk_forum_thread_id=[[this]].id ORDER BY created DESC LIMIT 1)',
-		'last_post_username'	=> '(SELECT username	FROM [[user]]	WHERE id=last_post_user_id)',
-		'count_posts'			=> '(SELECT COUNT(*)	FROM [[post]]	WHERE fk_forum_thread_id=[[this]].id )',
-		'forum_name'			=> '(SELECT name		FROM [[forum]]	WHERE id = fk_forum_forums_id)',
-		'username'				=> '(SELECT username	FROM [[user]]	WHERE id=[[this]].fk_user_id)',
 	);
 
+	public $subQueries		= array(
+		'count_posts'			=> 'SELECT COUNT(id) FROM forum_posts WHERE Thread.id=fk_forum_thread_id',
+	);
+	
+	// many to one
+	public $belongsTo = array(
+		'User' => array(
+			'table'			=> 'users',
+			'primaryKey'	=> 'id',	// foreign key in the current model
+			'foreignKey'	=> 'fk_user_id',	// foreign key in the current model
+			'conditions'	=> array(),
+			'fields'		=> array('id', 'username'),
+			'subQueries'	=> array(),
+			'order'			=> array(),
+			'limit'			=> array(),
+			'dependent'		=> false,
+			'hasCreated'	=> array('created' => 'datetime'),	# If set, adds date-time value on insert (sql field: 'created')
+			'hasModified'	=> array('modified' => 'datetime'),	# If set, adds date-time value on update (sql field: 'modified')
+        ),
+		'Forum' => array(
+			'table'			=> 'forum_forums',
+			'plugin'		=> 'Forums',
+			'primaryKey'	=> 'id',			// foreign key in the current model
+			'foreignKey'	=> 'fk_forum_forums_id',	// foreign key in the current model
+			'conditions'	=> array(),
+			'fields'		=> array('id', 'name', 'seo_url'),
+			'subQueries'	=> array(),
+			'order'			=> array(),
+			'limit'			=> array(),
+			'dependent'		=> false,
+			'hasCreated'	=> array('created' => 'datetime'),	# If set, adds date-time value on insert (sql field: 'created')
+			'hasModified'	=> array('modified' => 'datetime'),	# If set, adds date-time value on update (sql field: 'modified')
+        ),
+    );
+	public $hasOne = array(
+		'LastPost'	=> array(
+			'table'			=> 'forum_posts',					# Name of the sql table
+			'plugin'		=> 'Forums',
+			'primaryKey'	=> 'id',							# Primary key in other table (<table_name>) (defaults to: 'id')
+			'foreignKey'	=> 'fk_forum_thread_id',			# Foreign key in other table (<table_name>) (defaults to: 'fk_<$this->table>_id')
+			'conditions'	=> array(),							# Array of conditions
+			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created'),							# Array of fields to fetch
+			'subQueries'	=> array('username' => 'SELECT username FROM users WHERE users.id=LastPost.fk_user_id'),	# Array of subqueries to append
+			'order'			=> array('created'=>'DESC'),		# Array of order clauses on the given table
+			'dependent'		=> false,
+			'recursive'		=> 1,								# Level of recursions (0-2)
+			'hasCreated'	=> array('created' => 'datetime'),	# If set, adds date-time value on insert (sql field: 'created')
+			'hasModified'	=> array('modified' => 'datetime'),	# If set, adds date-time value on update (sql field: 'modified')
+		),
+	);
+	
 	/************************************************** GET FUNCTIONS **************************************************/
 
 
@@ -48,7 +89,11 @@ class ForumThreadsTable extends Table
 	 */
 	public function getLatestActiveThreads($fields = null, $limit = 10)
 	{
-		return $this->_get($fields, null, null, array('GREATEST(created, last_post_created)' => 'DESC'), $limit);
+		return $this->find('all', array(
+			'fields'	=> $fields,
+			'order'		=> array('GREATEST(Thread.created, Thread.last_post_created)' => 'DESC'),
+			'limit'		=> $limit,
+		));
 	}
 
 

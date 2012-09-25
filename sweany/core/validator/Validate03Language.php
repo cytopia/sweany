@@ -27,10 +27,11 @@
  * This (optional) core will validate various settings of
  * the framework itself.
  */
-class Validate03Language extends \Core\Init\CoreAbstract
+namespace Sweany;
+class Validate03Language extends aBootTemplate
 {
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
-	public static function initialize()
+	public static function initialize($options = null)
 	{
 		// Only validate if enabled
 		if ( $GLOBALS['LANGUAGE_ENABLE'] == true )

@@ -1,7 +1,7 @@
 <?php
 class ForumPostsTable extends Table
 {
-	protected $table	= 'forum_posts';
+	public $table	= 'forum_posts';
 
 	protected $tableHolders	= array(
 		'[[forum]]'		=> 'forum_forums',
@@ -9,7 +9,7 @@ class ForumPostsTable extends Table
 		'[[post]]'		=> 'forum_posts',
 		'[[user]]'		=> 'users',
 	);
-	protected $fields	= array(
+	public $fields	= array(
 		// FIELDS
 		'id'					=> 'id',
 		'fk_forum_thread_id'	=> 'fk_forum_thread_id',
@@ -20,17 +20,17 @@ class ForumPostsTable extends Table
 		'modified'				=> 'modified',
 
 		// POST SUBSELECTS
-		'username'				=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = [[this]].fk_user_id)',
+//		'username'				=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = [[this]].fk_user_id)',
 
 		// THREAD SUBSELECTS
-		'thread_title'			=> '(SELECT title		FROM [[thread]]	WHERE [[thread]].id = fk_forum_thread_id)',
-		'thread_seo_url'		=> '(SELECT seo_url		FROM [[thread]] WHERE [[thread]].id = fk_forum_thread_id)',
-		'thread_user_id'		=> '(SELECT id			FROM [[user]]	WHERE [[user]].id = (SELECT [[thread]].fk_user_id FROM [[thread]] WHERE [[thread]].id = [[this]].fk_forum_thread_id))',
-		'thread_user_name'		=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = (SELECT [[thread]].fk_user_id FROM [[thread]] WHERE [[thread]].id = [[this]].fk_forum_thread_id))',
+//		'thread_title'			=> '(SELECT title		FROM [[thread]]	WHERE [[thread]].id = fk_forum_thread_id)',
+//		'thread_seo_url'		=> '(SELECT seo_url		FROM [[thread]] WHERE [[thread]].id = fk_forum_thread_id)',
+//		'thread_user_id'		=> '(SELECT id			FROM [[user]]	WHERE [[user]].id = (SELECT [[thread]].fk_user_id FROM [[thread]] WHERE [[thread]].id = [[this]].fk_forum_thread_id))',
+//		'thread_user_name'		=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = (SELECT [[thread]].fk_user_id FROM [[thread]] WHERE [[thread]].id = [[this]].fk_forum_thread_id))',
 
 		// FORUM SUBSELECTS
-		'forum_id'				=> '(SELECT id    		FROM [[forum]]	WHERE id = (SELECT fk_forum_forums_id FROM [[thread]] WHERE id = fk_forum_thread_id))',
-		'forum_name'			=> '(SELECT name  		FROM [[forum]]	WHERE id = (SELECT fk_forum_forums_id FROM [[thread]] WHERE id = fk_forum_thread_id))',
+//		'forum_id'				=> '(SELECT id    		FROM [[forum]]	WHERE id = (SELECT fk_forum_forums_id FROM [[thread]] WHERE id = fk_forum_thread_id))',
+//		'forum_name'			=> '(SELECT name  		FROM [[forum]]	WHERE id = (SELECT fk_forum_forums_id FROM [[thread]] WHERE id = fk_forum_thread_id))',
 	);
 
 
