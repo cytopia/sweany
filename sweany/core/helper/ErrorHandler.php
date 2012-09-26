@@ -14,20 +14,26 @@ class ErrorHandler
 	public static function ob_error_handler($str)
 	{
 		$error	= error_get_last();
-		
+
 		$trace	= debug_backtrace();
 		$trace	= isset($trace[count($trace)-1]) ? $trace[count($trace)-1] : null;
-		$trace	= (!is_null($trace)) ? $trace['class'].'->'.$trace['function'] : null;
 
-		\Sweany\SysLog::i('Output Buffering', 'Using ob_error_handler() from '.$trace);
-		
+		$class	= isset($tace['class'])		? $trace['class'].'->'	: '';
+		$func	= isset($trace['function'])	? '<strong>'.$trace['function'].'</strong>'	: '<strong>NO_FUNCTION</strong>';
+		$file	= isset($trace['file'])		? pathinfo($trace['file'],PATHINFO_BASENAME) : 'NO_FILE';
+		$line	= isset($trace['line'])		? $trace['line']		: 'NO_LINE';
+
+		$from	= $class.$func.' in '.$file.':'.$line;
+
+		\Sweany\SysLog::i('Output Buffering', 'Using ob_error_handler() from '.$from);
+
 		// If error orrocured
 		if ($error)
 		{
 			$error = ini_get('error_prepend_string').
 						"\n".'Fatal error: '.$error['message'].' in '.$error['file'].' on line '.$error['line']."\n".
 						ini_get('error_append_string');
-						
+
 			\Sweany\SysLog::e('Output Buffering', $error);
 			return $error;
 		}
@@ -126,7 +132,7 @@ class ErrorHandler
 		// otherwise it will not be displayed
 		self::flushError();
 	}
-    
+
 	// UNCATCHABLE ERRORS
 	public static function php_shutdown_handler()
 	{
@@ -151,8 +157,8 @@ class ErrorHandler
 		}
 	}
 
-	
-	
+
+
 	private static function flushError()
 	{
 		if (ob_get_length())

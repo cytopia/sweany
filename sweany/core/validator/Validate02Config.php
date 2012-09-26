@@ -62,9 +62,9 @@ class Validate02Config extends aBootTemplate
 		 ***************************************************************************/
 
 		// ---------- Fast Core Mode
-		if ( !isset($GLOBALS['FAST_CORE_MODE']) )
+		if ( !isset($GLOBALS['RUNTIME_MODE']) )
 		{
-			self::$error  = '<b>$FAST_CORE_MODE</b> not defined in <b>config.php</b>';
+			self::$error  = '<b>$RUNTIME_MODE</b> not defined in <b>config.php</b>';
 			return false;
 		}
 
@@ -306,7 +306,7 @@ class Validate02Config extends aBootTemplate
 		 *
 		 *  Included Technology Defines
 		 *
-		 ***************************************************************************/		
+		 ***************************************************************************/
 		if ( !isset($GLOBALS['ECSS_ENABLE']) )
 		{
 			self::$error = '<b>$ECSS_ENABLE</b> not defined in <b>config.php</b>';
@@ -369,9 +369,12 @@ class Validate02Config extends aBootTemplate
 		 ***************************************************************************/
 
 		// ---------- Fast Core Mode
-		if ( !($GLOBALS['FAST_CORE_MODE'] == 0 || $GLOBALS['FAST_CORE_MODE'] == 1) )
+		if ( !($GLOBALS['RUNTIME_MODE'] == SWEANY_DEVELOPMENT ||
+			   $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION ||
+			   $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION_FAST_CORE ||
+			   $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION_DAEMON ) )
 		{
-			self::$error  = '<b>$FAST_CORE_MODE</b> has a wrong value in <b>config.php</b>. Can only be <b>0</b> or <b>1</b>.';
+			self::$error  = '<b>$RUNTIME_MODE</b> has a wrong value in <b>config.php</b>. Can only be <b>SWEANY_DEVELOPMENT</b>, <b>SWEANY_PRODUCTION</b>, <b>SWEANY_PRODUCTION_FAST_CORE</b> or <b>SWEANY_PRODUCTION_DAEMON</b>.';
 			return false;
 		}
 
@@ -591,7 +594,7 @@ class Validate02Config extends aBootTemplate
 			self::$error = '<b>$ECSS_COMMENTED</b> can only be 0 or 1 in <b>config.php</b>';
 			return false;
 		}
-	
+
 		return true;
 	}
 

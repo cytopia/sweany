@@ -58,7 +58,7 @@ Class Loader
 			else
 			{
 				\Sweany\SysLog::w('Plugin Config', '['.$plugin.'] config.php does not exist.');
-				
+
 				// Store it anyway for performance reasons.
 				// Plugin might not have a config, so we store it as true which will avoid to check for
 				// the file every time this function is called.
@@ -71,7 +71,7 @@ Class Loader
 	public static function loadBlock($class, $plugin)
 	{
 		$type = '';
-		
+
 		if ( $plugin )
 		{
 			$type = 'Plugin';
@@ -125,7 +125,7 @@ Class Loader
 		{
 			self::loadPluginConfig($plugin);
 		}
-		
+
 		// Try the fast way
 		if ( ($return = self::__loadFast($model, $type.'Model')) )
 			return $return;
@@ -181,7 +181,7 @@ Class Loader
 					// In case the page refers to a plugin, we first have to load the plugin config
 					self::loadPluginConfig($sClassName);
 				}
-			
+
 				include($paths[$i]);
 
 				if (class_exists($sClassName, false))
@@ -260,6 +260,8 @@ Class Loader
 				else
 				{
 					\Sweany\SysLog::e('load'.$type, 'No such Class <font color="red">'.$class.'</font> in '.$paths[$i], debug_backtrace(), $start);
+					\Sweany\SysLog::show();
+					exit;
 					return null;
 				}
 			}
@@ -267,6 +269,8 @@ Class Loader
 
 		// Throw error, as nothing has been found
 		\Sweany\SysLog::e('load'.$type, 'No such file <font color="red"><ul>'.implode('<li>',$paths).'</ul></font>', debug_backtrace(), $start);
+		\Sweany\SysLog::show();
+		exit;
 		return null;
 	}
 }

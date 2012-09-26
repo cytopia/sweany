@@ -87,14 +87,14 @@ define('PAGES_MODEL_PATH', USR_PAGES_PATH.DS.'model');
 define('PAGES_VIEW_PATH', USR_PAGES_PATH.DS.'view');
 define('PAGES_WRAPPER_PATH', USR_PAGES_PATH.DS.'wrapper');
 
- 
- 
+
+
 /* ************************************************************************************************************
  *
  * Include Files
  *
  * ************************************************************************************************************/
- 
+
 /*
  * Load Functions and Error Handler
  */
@@ -200,7 +200,6 @@ if ( !isset($GLOBALS['VALIDATION_MODE']) || $GLOBALS['VALIDATION_MODE'] == true 
 }
 
 
-
 // ----------   2.) Initialize the Session
 if ( !\Sweany\Session::initialize() )
 {
@@ -266,7 +265,7 @@ if ( $GLOBALS['SQL_ENABLE'] == true )
 		}
 		\Sweany\SysLog::i('Core', 'Users Initialized successfully, current user: (id: '.\Sweany\Users::id().') '.\Sweany\Users::name());
 	}
-	
+
 	// ----------   8.) Post Settings
 	// Log visitors to SQL
 	if ( $GLOBALS['SQL_LOG_VISITORS_ENABLE'] == true )
@@ -274,7 +273,7 @@ if ( $GLOBALS['SQL_ENABLE'] == true )
 		$logger = Loader::loadTable('Visitors');
 		$logger->add();
 	}
-	
+
 }
 
 $BOOTSTRAP_TIME = ( microtime(true) - ($_SERVER['REQUEST_TIME']+$SERVER_REACTION_TIME+$FILE_LOAD_TIME) );
@@ -334,8 +333,6 @@ switch ( $paramSize )
 
 $CALL_END_TIME = microtime(true) - $CALL_START_TIME;
 \Sweany\SysLog::i('-- CALL --', 'done in  '.sprintf('%.6F',$CALL_END_TIME).' sec.');
-
-
 
 
 

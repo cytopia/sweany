@@ -176,9 +176,7 @@ class Render
 		$viewName		= $controller->getView().'.tpl.php';
 		$viewPath		= ($plugin) ? USR_PLUGINS_PATH.DS.$class.DS.'pages'.DS.'view'.DS.$viewName : PAGES_VIEW_PATH.DS.$class.DS.$viewName;
 
-
 		SysLog::i('Render View', 'Using: '.$viewPath);
-
 
 		// ------- Check if view, layout and skeleton do exist
 		if (!is_file($viewPath))
