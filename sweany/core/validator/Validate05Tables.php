@@ -45,7 +45,7 @@ class Validate05Tables extends aBootTemplate
 		return true;
 	}
 
-	
+
 	private static function _checkTableFiles()
 	{
 		$db = \Sweany\Database::getInstance();
@@ -55,11 +55,11 @@ class Validate05Tables extends aBootTemplate
 		{
 			while ( false !== ($file = readdir($handle)) )
 			{
-				if ( $file != '.' && $file != '..' )
+				if ( pathinfo(USR_TABLES_PATH.DS.$file, PATHINFO_EXTENSION) == 'php' )
 				{
 					$file		= str_replace('Table.php', '', $file);
 					$tblClass	= \Loader::loadTable($file);
-					
+
 					// ---------------- VALIDATE ALIAS
 					if ( !strlen($tblClass->alias) )
 					{
@@ -70,7 +70,7 @@ class Validate05Tables extends aBootTemplate
 					// ---------------- VALIDATE FIELDS
 					$sqlColumns	= $db->getColumnNames($tblClass->table);
 					$tblColumns	= $tblClass->fields;
-					
+
 					// SQL -> Table
 					foreach ($sqlColumns as $col)
 					{
@@ -89,23 +89,23 @@ class Validate05Tables extends aBootTemplate
 							return false;
 						}
 					}
-					
+
 					// ---------------- VALIDATE PK
 					$sqlPK	= $db->getPrimaryKey($tblClass->table);
 					$tblPK	= $tblClass->primary_key;
-					
+
 					if ( $sqlPK != $tblPK )
 					{
 						self::$error	= 'SQL Primary Key ('.$sqlPK.') does not match tables Primary Key ('.$tblPK.')';
 						return false;
 					}
-					
+
 					// ---------------- VALIDATE RELATIONS
 					$hasOne		= $tblClass->hasOne;
 					$hasMany	= $tblClass->hasMany;
 					$belongsTo	= $tblClass->belongsTo;
 					$habtm		= $tblClass->hasAndBelongsToMany;
-					
+
 					// Generic relation checks
 					if ( !self::__checkRelation($hasOne, $file, $tblClass, 'hasOne', $db) )				{return false;}
 					if ( !self::__checkRelation($hasMany, $file, $tblClass, 'hasMany', $db) )			{return false;}
@@ -119,7 +119,7 @@ class Validate05Tables extends aBootTemplate
 			self::$error	= USR_TABLES_PATH.' is not a directory!';
 			return false;
 		}
-	
+
 		// Validate usr/plugins/<name>/tables
 		if ( $handle = opendir(USR_PLUGINS_PATH) )
 		{
@@ -131,15 +131,15 @@ class Validate05Tables extends aBootTemplate
 					{
 						while ( false !== ($file = readdir($t_handle)) )
 						{
-							if ( $file != '.' && $file != '..' )
+							if ( pathinfo(USR_PLUGINS_PATH.DS.$plugin.DS.'tables'.DS.$file, PATHINFO_EXTENSION) == 'php')
 							{
 								$file		= str_replace('Table.php', '', $file);
 								$tblClass	= \Loader::loadPluginTable($file, $plugin);
-								
+
 								// ---------------- VALIDATE FIELDS
 								$sqlColumns	= $db->getColumnNames($tblClass->table);
 								$tblColumns	= $tblClass->fields;
-								
+
 								// SQL -> Table
 								foreach ($sqlColumns as $col)
 								{
@@ -159,24 +159,24 @@ class Validate05Tables extends aBootTemplate
 									}
 								}
 
-								
+
 								// ---------------- VALIDATE PK
 								$sqlPK	= $db->getPrimaryKey($tblClass->table);
 								$tblPK	= $tblClass->primary_key;
-								
+
 								if ( $sqlPK != $tblPK )
 								{
 									self::$error	= 'SQL Primary Key ('.$sqlPK.') does not match tables Primary Key ('.$tblPK.')';
 									return false;
 								}
 
-								
+
 								// ---------------- VALIDATE RELATIONS
 								$hasOne		= $tblClass->hasOne;
 								$hasMany	= $tblClass->hasMany;
 								$belongsTo	= $tblClass->belongsTo;
 								$habtm		= $tblClass->hasAndBelongsToMany;
-								
+
 								// Generic relation checks
 								if ( !self::__checkRelation($hasOne, $file, $tblClass, 'hasOne', $db) )				{return false;}
 								if ( !self::__checkRelation($hasMany, $file, $tblClass, 'hasMany', $db) )			{return false;}
@@ -198,11 +198,11 @@ class Validate05Tables extends aBootTemplate
 			self::$error	= USR_PLUGINS_PATH.' is not a directory!';
 			return false;
 		}
-		
+
 		return true;
 	}
 
-	
+
 	private static function __checkRelation($relation, $tbl_name, $tblClass, $type, $db)
 	{
 		foreach ($relation as $alias => $options)
@@ -213,14 +213,14 @@ class Validate05Tables extends aBootTemplate
 				self::$error = '<b>\'table\'</b> property missing in '.$tbl_name.'->'.$type.'[\''.$alias.'\']';
 				return false;
 			}
-			
+
 			// Table exists in database?
 			if ( !$db->tableExists($options['table']) )
 			{
 				self::$error = '<b>\''.$options['table'].'\'</b> does not exist in database. Defined in '.$tbl_name.'->'.$type.'[\''.$alias.'\'][\'table\']=\''.$options['table'].'\'';
 				return false;
 			}
-			
+
 			// Check Primary Key
 			$tblPK	= (isset($options['primaryKey'])) ? $options['primaryKey'] : 'id';
 			$sqlPK	= $db->getPrimaryKey($options['table']);
@@ -236,8 +236,8 @@ class Validate05Tables extends aBootTemplate
 				}
 				return false;
 			}
-			
-			
+
+
 			// Check Fields
 			if ( !isset($options['fields']) )
 			{
@@ -254,32 +254,32 @@ class Validate05Tables extends aBootTemplate
 				self::$error = '<b>'.$tbl_name.'Table</b> does not specify any  \'fields\' in: '.$tbl_name.'->'.$type.'[\''.$alias.'\'][\'fields\']';
 				return false;
 			}
-			
+
 			// Check fields against sql fields
 			$sqlFields = $db->getColumnNames($options['table']);
-			
+
 			foreach ($options['fields'] as $field)
 			{
 				if ( !in_array($field, $sqlFields) )
 				{
 					self::$error = 'Field <b>'.$field.'</b> specified in: '.$tbl_name.'->'.$type.'[\''.$alias.'\'][\'fields\'] Does not exist in database table: '.$options['table'];
 					return false;
-				
+
 				}
 			}
-			
+
 			// If recursive relation, we have to check if the other class exists
 			if ( isset($options['recursive']) && $options['recursive'] == true )
 			{
 				// Get Class Name (default is to camelCase the sql table
 				$className	= (isset($options['class'])) ? $options['class'] : \Strings::camelCase($options['table'], true);
-				
+
 				// Is Plugin?
 				$plugin		= (isset($options['plugin'])&&strlen($options['plugin'])) ? $options['plugin'] : null;
-				
+
 				// File exists?
 				$path		= ($plugin) ? USR_PLUGINS_PATH.DS.$plugin.DS.'tables'.DS.$className.'Table.php' : USR_TABLES_PATH.DS.$className.'Table.php';
-				
+
 				if ( !is_file($path) )
 				{
 					if ( !isset($options['class']) )
@@ -294,7 +294,7 @@ class Validate05Tables extends aBootTemplate
 				}
 				// TODO:!!! validate correct alias namings of the file itself
 			}
-			
+
 			// specific relation check
 			if ( $type == 'hasOne' )
 			{
@@ -332,7 +332,7 @@ class Validate05Tables extends aBootTemplate
 	{
 		$tblFK		= (isset($options['foreignKey'])) ? $options['foreignKey'] : 'fk_'.$tblClass->table.'_id';
 		$sqlColumns	= $db->getColumnNames($options['table']);
-		
+
 		if ( !in_array($tblFK, $sqlColumns) )
 		{
 			if ( !isset($options['foreignKey']) )
@@ -352,7 +352,7 @@ class Validate05Tables extends aBootTemplate
 	{
 		$tblFK		= (isset($options['foreignKey'])) ? $options['foreignKey'] : 'fk_'.$tblClass->table.'_id';
 		$sqlColumns	= $db->getColumnNames($options['table']);
-		
+
 		if ( !in_array($tblFK, $sqlColumns) )
 		{
 			if ( !isset($options['foreignKey']) )
@@ -372,7 +372,7 @@ class Validate05Tables extends aBootTemplate
 	{
 		$tblFK 		= (isset($options['foreignKey'])) ? $options['foreignKey'] : 'fk_'.$options['table'].'_id';
 		$sqlColumns	= $db->getColumnNames($tblClass->table);
-		
+
 		if ( !in_array($tblFK, $sqlColumns) )
 		{
 			if ( !isset($options['foreignKey']) )
@@ -393,7 +393,7 @@ class Validate05Tables extends aBootTemplate
 		// TODO: add validation for hasAndBelongsToMany relation on foreignKeys
 		return true;
 	}
-	
-	
-	
+
+
+
 }
