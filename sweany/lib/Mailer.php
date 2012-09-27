@@ -105,7 +105,7 @@ class Mailer
 		$headers = self::__getHeaders($type, $to);
 		$headers = implode(self::$br, $headers);
 
-		$message = Render::email($message, USR_MAIL_SKELETON_PATH.DS.'default.tpl.php');
+		$message = \Sweany\Render::email($message, USR_MAIL_SKELETON_PATH.DS.'default.tpl.php');
 
 		// if enabled, also insert the email into database
 		if ( $GLOBALS['EMAIL_STORE_SEND_MESSAGES'] )
@@ -115,8 +115,8 @@ class Mailer
 			$email['subject']	= $subject;
 			$email['message']	= $message;
 			$email['created']	= date('Y-m-d H:i:s', time());
-			$db = \Core\Init\CoreDatabase::$db;
-			$db::insertRow(self::$table, $email);
+			$db = \Sweany\Database::getInstance();
+			$db->insert(self::$table, $email);
 		}
 
 		// Make sure to only send email when desired

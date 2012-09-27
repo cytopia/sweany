@@ -202,7 +202,7 @@ class Rules
 	 */
 	public static function userNameAvailable($username)
 	{
-		return !\Core\Init\CoreUsers::usernameExists($username);
+		return !\Sweany\Users::usernameExists($username);
 	}
 
 
@@ -220,7 +220,7 @@ class Rules
 	 */
 	public static function userEmailAvailable($email)
 	{
-		return !\Core\Init\CoreUsers::emailExists($email);
+		return !\Sweany\Users::emailExists($email);
 	}
 
 	/**
@@ -229,18 +229,18 @@ class Rules
 	 */
 	public static function userEmailNotExist($email)
 	{
-		return \Core\Init\CoreUsers::emailExists($email);
+		return \Sweany\Users::emailExists($email);
 	}
 
 
 	public static function userOtherUserNotHasThisEmail($email)
 	{
-		return !\Core\Init\CoreUsers::otherUserHasThisEmail($email);
+		return !\Sweany\Users::otherUserHasThisEmail($email);
 	}
 
 	public static function userIsMyPassword($password)
 	{
-		return \Core\Init\CoreUsers::isMyPassword($password);
+		return \Sweany\Users::isMyPassword($password);
 	}
 
 	/**
@@ -253,24 +253,24 @@ class Rules
 	 */
 	public static function userCheckLogin($username, $password)
 	{
-		return \Core\Init\CoreUsers::checkLogin($username, $password);
+		return \Sweany\Users::checkLogin($username, $password);
 	}
 
 	public static function userIsNotLocked($username, $password)
 	{
-		$user_id = \Core\Init\CoreUsers::getIdByNameAndPassword($username, $password);
-		return ($user_id) ? !\Core\Init\CoreUsers::isLocked($user_id) : true;
+		$user_id = \Sweany\Users::getIdByNameAndPassword($username, $password);
+		return ($user_id) ? !\Sweany\Users::isLocked($user_id) : true;
 	}
 
 	public static function userIsNotDeleted($username, $password)
 	{
-		$user_id = \Core\Init\CoreUsers::getIdByNameAndPassword($username, $password);
-		return ($user_id) ? !\Core\Init\CoreUsers::isDeleted($user_id) : true;
+		$user_id = \Sweany\Users::getIdByNameAndPassword($username, $password);
+		return ($user_id) ? !\Sweany\Users::isDeleted($user_id) : true;
 	}
 
 	public static function userIsEnabled($username, $password)
 	{
-		$user_id = \Core\Init\CoreUsers::getIdByNameAndPassword($username, $password);
-		return ($user_id) ? \Core\Init\CoreUsers::isEnabled($user_id) : true;
+		$user_id = \Sweany\Users::getIdByNameAndPassword($username, $password);
+		return ($user_id) ? \Sweany\Users::isEnabled($user_id) : true;
 	}
 }
