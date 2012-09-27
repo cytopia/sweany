@@ -82,14 +82,9 @@ class ForumPostsTable extends Table
 
 		$db = \Core\Init\CoreDatabase::$db;
 		// Update the thread's last_post time and id (so we can order by it to get the last entries)
-		$db::updateRow($this->tableHolders['[[thread]]'], array('last_post_created' => $this->getField($post_id, 'created')), $thread_id);
-		$db::updateRow($this->tableHolders['[[thread]]'], array('last_post_id' => $post_id), $thread_id);
+		$this->db->updateRow('forum_threads', array('last_post_created' => $this->getField($post_id, 'created')), $thread_id);
+		$this->db->updateRow('forum_threads', array('last_post_id' => $post_id), $thread_id);
 
 		return $post_id;
-	}
-
-	public function update($post_id, $body)
-	{
-		return $this->_updateRow($post_id, array('body' => $body));
 	}
 }

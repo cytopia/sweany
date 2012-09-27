@@ -1,15 +1,35 @@
+2012-09-27
+-----------------
++ Further speed optimizations on ORM
+	+ Now a single query can work on all (even recursive) relations
+	+ Building result array has also improved drastically on speed (replaced loops by if/else)
++ ORM: auto-modified/auto-created on update/insert:
+	+ sql field names do not have to be 'created'/'modified' anymore, but can be 
+	  named independently in each table seperately
+	+ not limited to datetime anymore, but also supports unix timestamp, timestamp and datetime
+	  specified in each table seperately
++ Core files/folders restructed
++ More verbose error output during development mode (missing views)
++ Runtime Mode settings in config.php
++ Framewok default views (note/info/error) have moved into core
+  and can now optionally be overwritten in usr/pages/view/FrameworkDefault
++ new lib: Arrays.php
++ 2 index.php files in www/
+	+ one normal and one that will be used for fast_core (under 4kb)
+
+
 2012-09-24
 -----------------
 + Integrated Database ORM
 + Improved Database wrapper
-		+ You can now easily add new engines that have to implement
-		  specific functions and then just work out of the box on the ORM model
+	+ You can now easily add new engines that have to implement
+	  specific functions and then just work out of the box on the ORM model
 + Improved Validators (also validate ORM tables)
-+ Core file/folder restructured
++ Core files/folders restructured
 + started work on SQL_LANGUAGE (via t() function)
 + Strings.php has been extended
 + new options in config.php
-+ new potential core views (jpg, pdf, png)
++ new potential core renderables (jpg, pdf, png)
 + added README's to all core folders
 + Added new parts to Syslog output
 + re-namespaced all corefiles to 'Sweany'

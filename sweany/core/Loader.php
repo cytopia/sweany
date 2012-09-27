@@ -102,6 +102,21 @@ Class Loader
 		return self::__loadSlow($table, $paths, 'Table');
 	}
 
+	public static function loadCoreTable($class)
+	{
+		$table	= $class.'Table';
+
+		// Try the fast way
+		if ( ($return = self::__loadFast($table, 'Table')) )
+			return $return;
+
+		// no success? Try the slow way
+		$paths[] = CORE_TABLE.DS.$table.'.php';
+
+		return self::__loadSlow($table, $paths, 'Table');
+	}
+
+
 	public static function loadPluginTable($class, $plugin)
 	{
 		$table	= $class.'Table';

@@ -36,7 +36,17 @@ class Validate05Tables extends aBootTemplate
 	{
 		if ( $GLOBALS['SQL_ENABLE'] == true )
 		{
-			if ( !self::_checkTableFiles() )
+			if ( !self::checkCoreTables() )
+			{
+				echo '<h1>Validation Error: SQL</h2>';
+				return false;
+			}
+			if ( !self::checkUsrTables() )
+			{
+				echo '<h1>Validation Error: SQL</h2>';
+				return false;
+			}
+			if ( !self::checkUsrPluginTables() )
 			{
 				echo '<h1>Validation Error: SQL</h2>';
 				return false;
@@ -46,7 +56,84 @@ class Validate05Tables extends aBootTemplate
 	}
 
 
-	private static function _checkTableFiles()
+	private static function checkCoreTables()
+	{
+		$db = \Sweany\Database::getInstance();
+
+		// Validate usr/tables
+		if ( $handle = opendir(CORE_TABLE) )
+		{
+			while ( false !== ($file = readdir($handle)) )
+			{
+				if ( pathinfo(CORE_TABLE.DS.$file, PATHINFO_EXTENSION) == 'php' )
+				{
+					$file		= str_replace('Table.php', '', $file);
+					$tblClass	= \Loader::loadCoreTable($file);
+
+					// ---------------- VALIDATE ALIAS
+					if ( !strlen($tblClass->alias) )
+					{
+						self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
+						return false;
+					}
+
+					// ---------------- VALIDATE FIELDS
+					$sqlColumns	= $db->getColumnNames($tblClass->table);
+					$tblColumns	= $tblClass->fields;
+
+					// SQL -> Table
+					foreach ($sqlColumns as $col)
+					{
+						if ( !in_array($col, $tblColumns) )
+						{
+							self::$error	= 'SQL Columns <b>'.$col.'</b> is missing in table: <b>'.$file.'->fields.';
+							return false;
+						}
+					}
+					// Table -> SQL
+					foreach ($tblColumns as $col)
+					{
+						if ( !in_array($col, $sqlColumns) )
+						{
+							self::$error	= 'Table Field '.$file.'->fields(<b>\''.$col.'\'</b>) is missing in sql table: <b>'.$tblClass->table;
+							return false;
+						}
+					}
+
+					// ---------------- VALIDATE PK
+					$sqlPK	= $db->getPrimaryKey($tblClass->table);
+					$tblPK	= $tblClass->primary_key;
+
+					if ( $sqlPK != $tblPK )
+					{
+						self::$error	= 'SQL Primary Key ('.$sqlPK.') does not match tables Primary Key ('.$tblPK.')';
+						return false;
+					}
+
+					// ---------------- VALIDATE RELATIONS
+					$hasOne		= $tblClass->hasOne;
+					$hasMany	= $tblClass->hasMany;
+					$belongsTo	= $tblClass->belongsTo;
+					$habtm		= $tblClass->hasAndBelongsToMany;
+
+					// Generic relation checks
+					if ( !self::__checkRelation($hasOne, $file, $tblClass, 'hasOne', $db) )				{return false;}
+					if ( !self::__checkRelation($hasMany, $file, $tblClass, 'hasMany', $db) )			{return false;}
+					if ( !self::__checkRelation($belongsTo, $file, $tblClass, 'belongsTo', $db) )		{return false;}
+					if ( !self::__checkRelation($habtm, $file, $tblClass, 'hasAndBelongsToMany', $db) )	{return false;}
+				}
+			}
+		}
+		else
+		{
+			self::$error	= CORE_TABLE.' is not a directory!';
+			return false;
+		}
+		return true;
+	}
+
+
+	private static function checkUsrTables()
 	{
 		$db = \Sweany\Database::getInstance();
 
@@ -119,6 +206,16 @@ class Validate05Tables extends aBootTemplate
 			self::$error	= USR_TABLES_PATH.' is not a directory!';
 			return false;
 		}
+
+		return true;
+	}
+
+
+	private static function checkUsrPluginTables()
+	{
+		$db = \Sweany\Database::getInstance();
+
+		// Validate usr/tables
 
 		// Validate usr/plugins/<name>/tables
 		if ( $handle = opendir(USR_PLUGINS_PATH) )
@@ -198,11 +295,13 @@ class Validate05Tables extends aBootTemplate
 			self::$error	= USR_PLUGINS_PATH.' is not a directory!';
 			return false;
 		}
-
 		return true;
 	}
 
 
+
+	/* ******************************************* PRIVATE HELPERS ******************************************* */
+	
 	private static function __checkRelation($relation, $tbl_name, $tblClass, $type, $db)
 	{
 		foreach ($relation as $alias => $options)

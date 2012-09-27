@@ -28,7 +28,8 @@
  */
 class FrameworkDefault extends PageController
 {
-	protected $have_model = false;
+	public $isCore 		= true;
+	protected $hasModel	= false;
 
 	public function url_not_found($request = null)
 	{
