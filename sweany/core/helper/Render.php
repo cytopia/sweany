@@ -116,34 +116,28 @@ class Render
 		$view		= $block->getView().'.tpl.php';
 		$view_path	= strlen($pluginName) ? USR_PLUGINS_PATH.DS.$pluginName.DS.'blocks'.DS.'view'.DS.$view : USR_BLOCKS_PATH.DS.$controllerName.DS.'view'.DS.$view;
 
-		// If the block is a form page and the form has been
-		// submitted, then the block does not necessarily need
-		// to load a view, but just return its state,
-		// so we only set a warning here and don't exit the script
 		if (!is_file($view_path))
 		{
 			SysLog::e('Render Block', 'Block View: '.$view_path. ' does not exist');
-			SysLog::show();
-			exit();
+			$view_path = CORE_VIEW.DS.'missing.tpl.php';	// use error view
+		}
+
+		// 06) RENDER
+		if ( !in_array(\Sweany\Settings::$ob_callback, ob_list_handlers())  )
+		{
+			ob_start(\Sweany\Settings::$ob_callback);
 		}
 		else
 		{
-			// 06) RENDER
-			if ( !in_array(\Sweany\Settings::$ob_callback, ob_list_handlers())  )
-			{
-				ob_start(\Sweany\Settings::$ob_callback);
-			}
-			else
-			{
-				ob_start();
-			}
-			@include($view_path);
-
-			$content = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
-
-			// 07) Clean (erase) the output buffer and turn off output buffering
-			ob_end_clean();
+			ob_start();
 		}
+
+		@include($view_path);
+
+		$content = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
+
+		// 07) Clean (erase) the output buffer and turn off output buffering
+		ob_end_clean();
 
 		// 09 Restore Header
 		//
@@ -174,16 +168,36 @@ class Render
 		$blocks			= $controller->getBlocks();
 		$plugin			= $controller->isPlugin();
 		$viewName		= $controller->getView().'.tpl.php';
-		$viewPath		= ($plugin) ? USR_PLUGINS_PATH.DS.$class.DS.'pages'.DS.'view'.DS.$viewName : PAGES_VIEW_PATH.DS.$class.DS.$viewName;
 
-		SysLog::i('Render View', 'Using: '.$viewPath);
 
-		// ------- Check if view, layout and skeleton do exist
+		// Core views for core controller reside in a different place
+		if ( $controller->isCore )
+		{
+			// If we are not in a plugin and have a view file
+			// with the same name of the core view, we overwrite it
+			if ( !$plugin && is_file(PAGES_VIEW_PATH.DS.$class.DS.$viewName) )
+			{
+				$viewPath = PAGES_VIEW_PATH.DS.$class.DS.$viewName;
+				SysLog::i('Render Core View [overwrite]', 'Overwriting Core view, Using: '.$viewPath);
+			}
+			else
+			{
+				$viewPath	= CORE_VIEW.DS.$class.DS.$viewName;
+				SysLog::i('Render Core View', 'Using: '.$viewPath);
+			}
+		}
+		else
+		{
+			$viewPath	= ($plugin) ? USR_PLUGINS_PATH.DS.$class.DS.'pages'.DS.'view'.DS.$viewName : PAGES_VIEW_PATH.DS.$class.DS.$viewName;
+			SysLog::i('Render View', 'Using: '.$viewPath);
+		}
+
+
+		// ------- Check if view exists
 		if (!is_file($viewPath))
 		{
 			SysLog::e('Render View', 'view '.$viewPath. ' does not exist');
-			SysLog::show();
-			exit;
+			$viewPath = CORE_VIEW.DS.'missing.tpl.php';	// use error view
 		}
 
 		// ------- Set Variables (defined by controller)
@@ -222,13 +236,13 @@ class Render
 	}
 
 	/**
-	*
-	* Renders multiple PageController Views and returns
-	* the rendered elements
-	*
-	* @param	&class			$controller
-	* @return	string[]|null	$content		An array of rendered view OR null if none available
-	*/
+	 *
+	 * Renders multiple PageController Views and returns
+	 * the rendered elements
+	 *
+	 * @param	&class			$controller
+	 * @return	string[]|null	$content		An array of rendered view OR null if none available
+	 */
 	public static function views(&$controller)
 	{
 		// If there are no multiple views available, return null
@@ -251,14 +265,12 @@ class Render
 			SysLog::i('Render Views', 'Using: '.$viewPaths[$key]);
 
 
-			// ------- Check if view, layout and skeleton do exist
+			// ------- Check if views exist
 			if (!is_file($viewPaths[$key]))
 			{
 				SysLog::e('Render Views', 'view '.$viewPaths[$key]. ' does not exist');
-				SysLog::show();
-				exit;
+				$viewPaths[$key] = CORE_VIEW.DS.'missing.tpl.php';	// use error view
 			}
-
 		}
 
 
@@ -419,12 +431,11 @@ class Render
 		SysLog::i('Render Layout', 'Using Layout View: '.$layoutView);
 
 
-		// ------- Check if view, layout and skeleton do exist
+		// ------- Check if layout exists
 		if (!is_file($layoutView))
 		{
 			SysLog::e('Render Layout', 'Layout View: '.$layoutView. ' does not exist');
-			SysLog::show();
-			exit;
+			$layoutView = CORE_VIEW.DS.'missing.tpl.php';	// use error view
 		}
 
 

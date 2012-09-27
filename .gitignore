@@ -1,6 +1,9 @@
 # do not upload generated sweany*.tar.gz
 *.tar.gz
 
+# do not upload backup dirs
+_bak/
+
 # do not upload local config or logs
 usr/config.php
 sweany/log/core.log

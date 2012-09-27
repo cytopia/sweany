@@ -1,6 +1,6 @@
 <?php
 namespace Sweany;
-class mysql extends aBootTemplate implements iDataBase
+class mysql extends aBootTemplate implements iDBO
 {
 
 	/* ******************************************** VARIABLES ********************************************/
@@ -180,10 +180,15 @@ class mysql extends aBootTemplate implements iDataBase
 	
 	
 	/* ******************************************** UPDATE ******************************************** */
-	public function update($table, $fields, $condition)
+	public function update($table, $fields, $condition, $return_row = false)
 	{
 		return 0;
 	}
+	public function updateRow($table, $id, $fields)
+	{
+		return 0;
+	}
+	
 	public static function incrementField($table, $field, $condition, $return_ids = false)
 	{
 		return 0;

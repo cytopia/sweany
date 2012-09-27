@@ -34,6 +34,7 @@ class ForumThreadsTable extends Table
 	public $belongsTo = array(
 		'User' => array(
 			'table'			=> 'users',
+			'core'			=> true,
 			'primaryKey'	=> 'id',	// foreign key in the current model
 			'foreignKey'	=> 'fk_user_id',	// foreign key in the current model
 			'conditions'	=> array(),
@@ -157,10 +158,6 @@ class ForumThreadsTable extends Table
 			'seo_url'				=> $seo_url,
 		);
 		return $this->_add($fields);
-	}
-	public function update($thread_id, $body)
-	{
-		return $this->_updateRow($thread_id, array('body' => $body));
 	}
 
 	public function incrementViewCount($thread_id)

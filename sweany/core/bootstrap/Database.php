@@ -51,7 +51,7 @@ class Database extends aBootTemplate
 		
 		// TODO: if validator mode is on
 		// check if file exists
-		require_once(CORE_DATABASE.DS.'iDataBase.php');
+		require_once(CORE_DATABASE.DS.'iDBO.php');
 		require_once(CORE_DATABASE.DS.$engine.'.php');
 		
 		// Check if the database engine implements required interface class

@@ -32,6 +32,17 @@ abstract Class PageController extends BaseController
 	/* ***************************************************** VARIABLES ***************************************************** */
 
 	/*
+	 *	Is this a sweany built-in core Controller?
+	 *
+	 *	We need this in order to determine, which view
+	 *	to use for built-in controllers
+	 *
+	 *	@param	boolean	$isBuiltIn
+	 */
+	public $isCore = false;
+	
+	
+	/*
 	 * Defines the type of the controller
 	 * page, layout or block.
 	 * This is used to tell the language class,
@@ -255,7 +266,7 @@ abstract Class PageController extends BaseController
 	 */
 	protected function redirectBack()
 	{
-		$prevPage	= History::getPrevPage();
+		$prevPage	= \Sweany\History::getPrevPage();
 		$controller = $prevPage['controller'];
 		$method		= $prevPage['method'];
 		$params		= $prevPage['params'];
@@ -331,7 +342,7 @@ abstract Class PageController extends BaseController
 	 */
 	protected function redirectDelayedBack($title, $body, $delay = 5)
 	{
-		$prevPage	= History::getPrevPage();
+		$prevPage	= \Sweany\History::getPrevPage();
 		$controller = $prevPage['controller'];
 		$method		= $prevPage['method'];
 		$params		= $prevPage['params'];

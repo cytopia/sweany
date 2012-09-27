@@ -167,6 +167,7 @@ class Table
 	 *		'<alias>' => array(							# Table alias of <table_name> (must match the alias name in the corresponding php class)
 	 *			'table'			=> '<table_name>',		# Name of the sql table
 	 *			'class'			=> '<class_name>',		# Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
+	 *			'core'			=> false				# True if this table file is in sweany/core/built-in/tables
 	 *			'plugin'		=> '<plugin_name>'|null,# Name of the plugin or (null or not set if it is not a plugin)
 	 *			'primaryKey'	=> 'id',				# Primary key in other table (<table_name>) (defaults to: 'id')
 	 *			'foreignKey'	=> '<foreign_key>',		# Foreign key in other table (<table_name>) (defaults to: 'fk_<$this->table>_id')
@@ -193,6 +194,7 @@ class Table
 	 *		'<alias>'	=> array(						# Table alias of <table_name> (must match the alias name in the corresponding php class)
 	 *			'table'			=> '<table_name>',		# Name of the sql table
 	 *			'class'			=> '<class_name>',		# Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
+	 *			'core'			=> false				# True if this table file is in sweany/core/built-in/tables
 	 *			'plugin'		=> '<plugin_name>'|null,# Name of the plugin or (null or not set if it is not a plugin)
 	 *			'primaryKey'	=> 'id',				# primary key in other table (<table_name>) (defaults to: 'id')
 	 *			'foreignKey'	=> '<foreign_key>',		# Foreign key in other table (<table_name>) (defaults to: 'fk_'<$this->table>_id')
@@ -221,6 +223,7 @@ class Table
 	 *		'<alias>'	=> array(						# Alias (must match the alias name in the corresponding php class)
 	 *			'table'			=> '<table_name>',		# Name of the sql table
 	 *			'class'			=> '<class_name>',		# Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
+	 *			'core'			=> false				# True if this table file is in sweany/core/built-in/tables
 	 *			'plugin'		=> '<plugin_name>'|null,# Name of the plugin or (null or not set if it is not a plugin)
 	 *			'primaryKey'	=> 'id',				# primary key in other table (<table_name>)		(defaults to: 'id')
 	 *			'foreignKey'	=> '<foreign_key>',		# Foreign key in current table (<$this->table>)	(defaults to: 'fk_<table_name>_id')
@@ -258,7 +261,7 @@ class Table
 
 	/* ************************************************************************************************************************** *
 	 *
-	 *	C L A S S   F U N C T I O N S
+	 *	E N T I T Y   C L A S S   F U N C T I O N S
 	 *
 	 * ************************************************************************************************************************** */
 
@@ -305,6 +308,7 @@ class Table
 		return ( isset($data[0]) ) ? $data[0] : array();
 	}
 
+
 	/**
 	 *
 	 *	Load Many entities by an array of ids
@@ -328,6 +332,7 @@ class Table
 		$data		= $this->retrieveResults($query);
 		return $data;
 	}
+
 
 	/**
 	 *
@@ -414,17 +419,79 @@ class Table
 	}
 
 
-
-	public function save($fields, $return_insert_id = false)
+	/**
+	 *	Save entity (by id)
+	 *
+	 *	@param	mixed[]	$fields			Array of field-value pairs
+	 *		Array = (
+	 *			'<field1>	=> '<value1>',
+	 *			'<field2>	=> '<value2>',
+	 *		);
+	 *
+	 *	@param	integer	$return			(0-2) Whether or not to return anything
+	 *		0:	return boolean	Success
+	 *		1:	return integer	Last insert id
+	 *		2:	return mixed[]	Updated row
+	 *
+	 *	@return	boolean|integer|mixed[]	Depending on $return param
+	 */
+	public function save($fields, $return = 0)
 	{
-		return $this->db->insert($this->table, $this->__appendCreatedFieldIfExist($fields), $return_insert_id);
+		$fields = $this->_appendCreatedFieldIfExist($fields);
+		$ret	= $this->db->insert($this->table, $fields, (($return) ? true : false));
+
+		switch ($return)
+		{
+			// return non-recursive row
+			case 2:
+				return $this->loadOne($ret, null, 0);
+
+			// [DEFAULT] return success of operation or last insert id
+			default:
+				return $ret;
+		}
 	}
 
-	public function update($id, $data)
-	{}
+	/**
+	 *	Update entity (by id)
+	 *
+	 *	@param	integer	$id			Id of the row/entity
+	 *	@param	mixed[]	$fields		Array of field-value pairs
+	 *		Array = (
+	 *			'<field1>	=> '<value1>',
+	 *			'<field2>	=> '<value2>',
+	 *		);
+	 *
+	 *	@param	integer	$return		(0-2) Whether or not to return anything
+	 *		0:	return boolean	Success
+	 *		1:	return integer	Last insert id
+	 *		2:	return mixed[]	Updated row
+	 *
+	 *	@return	boolean|integer|mixed[]
+	 */
+	public function update($id, $fields, $return = 0)
+	{
+		$success	= $this->db->updateRow($this->table, $id, $fields);
+		
+		switch ($return)
+		{
+			case 1:		return $id;
+			case 2:		return $this->loadOne($id, null, 0);
+			default:	return $success;
+		}
+	}
 
+
+	/**
+	 *	Delete entity (by id)
+	 *
+	 *	@param	integer	$id			Id of the row/entity
+	 *	@return	boolean				Success of operation
+	 */
 	public function delete($id)
-	{}
+	{
+		return $this->db->deleteRow($this->table, $id);
+	}
 
 
 
@@ -475,21 +542,19 @@ class Table
 	}
 
 
-
-
 	/**
-	*
-	*	Retrieve processed database result array
-	*
-	*	@param	string	$query		SQL Query
-	*	@return	mixed[]	Result array
-	*
-	*	Note:
-	*	This function created a lambda callback and parses
-	*	it to the database select function in order to build
-	*	the result array according to the set entity relations
-	*	(hasOne, hasMany, belongsTo...)
-	*/
+	 *
+	 *	Retrieve processed database result array
+	 *
+	 *	@param	string	$query		SQL Query
+	 *	@return	mixed[]	Result array
+	 *
+	 *	Note:
+	 *	This function created a lambda callback and parses
+	 *	it to the database select function in order to build
+	 *	the result array according to the set entity relations
+	 *	(hasOne, hasMany, belongsTo...)
+	 */
 	private function retrieveResults($query)
 	{
 		$count	= -1;
@@ -608,6 +673,8 @@ class Table
 		}
 		return $condition;
 	}
+
+
 	private function _buildMainQueryOrder($order)
 	{
 		// ORDER:
@@ -675,6 +742,8 @@ class Table
 			}
 		}
 	}
+
+
 	private function _buildHasManyQuery(&$fields, &$joins, &$order, $recursive, $prefix = '')
 	{
 		$joinType = 'LEFT JOIN';
@@ -781,12 +850,6 @@ class Table
 	}
 
 
-
-
-
-
-
-
 	/**
 	 *
 	 *	Build order array with table aliases
@@ -820,7 +883,6 @@ class Table
 		}
 		return $newOrder;
 	}
-
 
 
 	/**
@@ -891,6 +953,48 @@ class Table
 	}
 
 
+	private function _appendModifiedFieldIfExist($fields)
+	{
+		if ( $this->hasModified )
+		{
+			$field_name		= key($this->hasModified);
+			$sqlDataType	= $this->hasModified[$field_name];
+
+			switch ($sqlDataType)
+			{
+				case 'datetime':	return array_merge($fields, array($field_name	=> $this->db->getNowDateTime()));
+				case 'timestamp':	return array_merge($fields, array($field_name	=> $this->db->getNowTimeStamp()));
+				case 'integer':		return array_merge($fields, array($field_name	=> $this->db->getNowUnixTimeStamp()));
+				default:			return $fields;
+			}
+		}
+		else
+		{
+			return $fields;
+		}
+	}
+	private function _appendCreatedFieldIfExist($fields)
+	{
+		if ( $this->hasCreated )
+		{
+			$field_name		= key($this->hasCreated);
+			$sqlDataType	= $this->hasCreated[$field_name];
+
+			switch ($sqlDataType)
+			{
+				case 'datetime':	return array_merge($fields, array($field_name	=> $this->db->getNowDateTime()));
+				case 'timestamp':	return array_merge($fields, array($field_name	=> $this->db->getNowTimeStamp()));
+				case 'integer':		return array_merge($fields, array($field_name	=> $this->db->getNowUnixTimeStamp()));
+				default:			return $fields;
+			}
+		}
+		else
+		{
+			return $fields;
+		}
+	}	
+	
+	
 
 	/* ************************************************************************************************************************** *
 	 *
@@ -911,46 +1015,4 @@ class Table
 		return (is_array($order) && count($order)) ? ' ORDER BY '.implode(', ', array_map( create_function('$key, $val', 'return "$key ".$val;'), array_keys($order), array_values($order))) : '';
 	}
 
-
-
-	private function __appendModifiedFieldIfExist($fields)
-	{
-		if ( $this->hasModified )
-		{
-			$field_name		= key($this->hasModified);
-			$sqlDataType	= $this->hasModified[$field_name];
-
-			switch ($sqlDataType)
-			{
-				case 'datetime':	return array_merge($fields, array($field_name	=> $this->db->getNowDateTime()));
-				case 'timestamp':	return array_merge($fields, array($field_name	=> $this->db->getNowTimeStamp()));
-				case 'integer':		return array_merge($fields, array($field_name	=> $this->db->getNowUnixTimeStamp()));
-				default:			return $fields;
-			}
-		}
-		else
-		{
-			return $fields;
-		}
-	}
-	private function __appendCreatedFieldIfExist($fields)
-	{
-		if ( $this->hasCreated )
-		{
-			$field_name		= key($this->hasCreated);
-			$sqlDataType	= $this->hasCreated[$field_name];
-
-			switch ($sqlDataType)
-			{
-				case 'datetime':	return array_merge($fields, array($field_name	=> $this->db->getNowDateTime()));
-				case 'timestamp':	return array_merge($fields, array($field_name	=> $this->db->getNowTimeStamp()));
-				case 'integer':		return array_merge($fields, array($field_name	=> $this->db->getNowUnixTimeStamp()));
-				default:			return $fields;
-			}
-		}
-		else
-		{
-			return $fields;
-		}
-	}
 }

@@ -80,7 +80,7 @@ class Router extends aBootTemplate
 			\Sweany\SysLog::i('Callback', 'Internal request: '.\Sweany\Url::$request);
 
 			// Load the Framework Default Page Controller
-			require_once(CORE_PAGES.DS.'FrameworkDefault.php');
+			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
 
 			self::$object = array(
 				'class'		=> 'FrameworkDefault',
@@ -94,7 +94,7 @@ class Router extends aBootTemplate
 			\Sweany\SysLog::i('Callback', 'Internal request: '.\Sweany\Url::$request);
 
 			// Load the Framework Default Page Controller
-			require_once(CORE_PAGES.DS.'FrameworkDefault.php');
+			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
 
 			// push the method into params, as we do not have a method here
 			// and the 2nd param (normally method) is actually a parameter
@@ -119,7 +119,7 @@ class Router extends aBootTemplate
 			if ( !$GLOBALS['DEFAULT_CONTROLLER']::isAuthorized() )
 			{
 				// Load the Framework Default Page Controller
-				require_once(CORE_PAGES.DS.'FrameworkDefault.php');
+				require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
 
 				self::$object = array(
 					'class'		=> 'FrameworkDefault',
@@ -143,7 +143,7 @@ class Router extends aBootTemplate
 			\Sweany\SysLog::w('Callback', '[Not Authorized] - Faking Not Found in: class &lt;'.$controller.'&gt; and method &lt;'.$method.'&gt;');
 
 			// Load the Framework Default Page Controller
-			require_once(CORE_PAGES.DS.'FrameworkDefault.php');
+			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
 
 			self::$object = array(
 				'class'		=> 'FrameworkDefault',
@@ -163,7 +163,7 @@ class Router extends aBootTemplate
 
 
 			// Load the Framework Default Page Controller
-			require_once(CORE_PAGES.DS.'FrameworkDefault.php');
+			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
 
 			self::$object = array(
 				'class'		=> 'FrameworkDefault',
@@ -197,7 +197,7 @@ class Router extends aBootTemplate
 			\Sweany\SysLog::w('Callback', 'Method &lt;'.$method.'&gt; is not allowed to be called');
 
 			// Load the Framework Default Page Controller
-			require_once(CORE_PAGES.DS.'FrameworkDefault.php');
+			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
 
 			self::$object = array(
 				'class'		=> 'FrameworkDefault',

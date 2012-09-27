@@ -1,0 +1,1 @@
+<?php/*This file must be here for the fallback 404 error page*/?><h2><?php echo $language->title; ?></h2><br/><p><?php echo $language->text; ?></p>

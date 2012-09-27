@@ -49,10 +49,15 @@ define('CORE_BOOTSTRAP', CORE_PATH.DS.'bootstrap');				// Path to bootstrap fold
 define('CORE_CACHE', CORE_PATH.DS.'cache');						// Path to cache folder
 define('CORE_DATABASE', CORE_PATH.DS.'database');				// Path to database folder
 define('CORE_HELPER', CORE_PATH.DS.'helper');					// Path to core helper classes (Render, Syslog)
-define('CORE_PAGES', CORE_PATH.DS.'pages');						// Path to framework default pages folder
-define('CORE_STRUCTURE', CORE_PATH.DS.'structure');				// Path to framework structure folder
+define('CORE_BUILT_IN', CORE_PATH.DS.'built-in');				// Path to built in Controllers, Views and Tables (and their templates)
 define('CORE_VALIDATOR', CORE_PATH.DS.'validator');				// Path to framework validators folder
-define('CORE_VIEWS', CORE_PATH.DS.'views');						// Path to framework default views
+define('CORE_RENDERABLE', CORE_PATH.DS.'renderable');			// Path to framework renderables (json, xml, png, jpeg, ....)
+
+
+define('CORE_CONTROLLER', CORE_BUILT_IN.DS.'controller');
+define('CORE_MODEL', CORE_BUILT_IN.DS.'model');
+define('CORE_VIEW', CORE_BUILT_IN.DS.'view');
+define('CORE_TABLE', CORE_BUILT_IN.DS.'tables');
 
 //---------- Lib folders
 define('LIB_HL_PATH', LIB_PATH.DS.'highlighter');				// Path to various code highlighters
@@ -138,12 +143,12 @@ require(CORE_PATH.DS.'Loader.php');
 /*
  * Load Framework Structure Template Files
  */
-require(CORE_STRUCTURE.DS.'BaseController.php');
-require(CORE_STRUCTURE.DS.'LayoutController.php');
-require(CORE_STRUCTURE.DS.'BlockController.php');
-require(CORE_STRUCTURE.DS.'PageController.php');
-require(CORE_STRUCTURE.DS.'PageModel.php');
-require(CORE_STRUCTURE.DS.'Table.php');
+require(CORE_BUILT_IN.DS.'BaseController.php');
+require(CORE_BUILT_IN.DS.'LayoutController.php');
+require(CORE_BUILT_IN.DS.'BlockController.php');
+require(CORE_BUILT_IN.DS.'PageController.php');
+require(CORE_BUILT_IN.DS.'PageModel.php');
+require(CORE_BUILT_IN.DS.'Table.php');
 
 
 
@@ -270,10 +275,9 @@ if ( $GLOBALS['SQL_ENABLE'] == true )
 	// Log visitors to SQL
 	if ( $GLOBALS['SQL_LOG_VISITORS_ENABLE'] == true )
 	{
-		$logger = Loader::loadTable('Visitors');
-		$logger->add();
+		$logger = Loader::loadCoreTable('Visitors');
+		$logger->save();
 	}
-
 }
 
 $BOOTSTRAP_TIME = ( microtime(true) - ($_SERVER['REQUEST_TIME']+$SERVER_REACTION_TIME+$FILE_LOAD_TIME) );

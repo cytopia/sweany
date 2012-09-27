@@ -25,6 +25,9 @@
  *
  *
  * This core module will provide an interface to handle users.
+ *
+ * TODO: most of the stuff should go into the session which updates on ins/upd/del
+ *		 so we can safe some db operations
  */
 namespace Sweany;
 

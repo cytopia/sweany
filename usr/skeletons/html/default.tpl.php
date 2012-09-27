@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"<?php echo HtmlTemplate::getXmlNameSpace();?> xml:lang="<?php echo \Sweany\Language::getLangShort();?>" dir="ltr" lang="<?php echo \Sweany\Language::getLangLong();?>" <?php echo HtmlTemplate::getHtmlAttribute();?>>
 <head<?php echo HtmlTemplate::getHeadPrefix();?>>
 	<title><?php echo strlen(HtmlTemplate::getTitle())?HtmlTemplate::getTitle():$GLOBALS['HTML_DEFAULT_PAGE_TITLE'];?></title>
@@ -28,8 +28,8 @@
 	<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico" />
 
 	<!-- CSS Stylesheet -->
-<?php Css::addFile('/css/style.css');?>
-<?php Css::addFile('/css/layout.css');?>
+<?php Css::addFile('/css/style.css'); /*use wrapper here, so it can decide whether or not to apply ECSS on them */?>
+<?php Css::addFile('/css/layout.css');/*use wrapper here, so it can decide whether or not to apply ECSS on them */?>
 <?php echo Css::getFiles();?>
 	<!-- / CSS Stylesheet -->
 

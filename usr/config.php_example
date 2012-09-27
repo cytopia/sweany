@@ -565,7 +565,7 @@ $SQL_PASS						= '';
  *
  */
 $USER_ENABLE					= true;
-
+$USER_STORE_FAILED_LOGINS		= 1;	// TODO: implement
 
 /**
  * User Online Count
