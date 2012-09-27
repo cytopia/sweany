@@ -23,22 +23,23 @@ class ContactTable extends Table
 		'created'		=> 'created',
 	);
 
-	public $hasCreated	= array('created' => 'datetime');
+	public $hasCreated	= array('created' => 'integer');
 
 	/**
 	 *	@Override
 	 *	@param	mixed[]			$data
-	 *	@return	integer|null	last_insert_id
+	 *	@return	integer|null	$return
 	 */
-	public function save($data, $return_insert_id = false)
+	public function save($data, $return = 0)
 	{
+		$data['referer']	= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 		$data['referer']	= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 		$data['useragent']	= $_SERVER['HTTP_USER_AGENT'];
 		$data['ip']			= $_SERVER['REMOTE_ADDR'];
 		$data['host']		= gethostbyaddr($_SERVER['REMOTE_ADDR']);
 		$data['session_id']	= Session::getId();
 		
-		parent::save($data, $return_insert_id);
+		parent::save($data, $return);
 	}
 	
 	/**

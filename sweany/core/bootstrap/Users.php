@@ -38,7 +38,7 @@ class Users extends aBootTemplate
 
 	private static $tbl_users			= 'users';
 	private static $tbl_user_groups		= 'user_groups';
-	private static $tbl_failed_logins	= 'user_failed_logins';
+	private static $tbl_failed_logins	= 'failed_logins';
 	private static $tbl_online_users	= 'user_online';
 
 	private static $onlineSinceMinutes;	// count online users from last XX Minutes till now
@@ -349,7 +349,7 @@ class Users extends aBootTemplate
 		$db		= \Sweany\Database::getInstance();
 		$query	= sprintf('SELECT * FROM `%s` WHERE `id` = %d', self::$tbl_users, $id);
 		$data	= $db->select($query);
-
+		debug($data);
 		return (isset($data[0])) ? $data[0] : array();
 	}
 

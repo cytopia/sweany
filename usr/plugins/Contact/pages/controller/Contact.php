@@ -9,7 +9,7 @@ class Contact extends PageController
 	/**
 	 * We do not need a model here
 	 */
-	protected $have_model = false;
+	protected $hasModel = false;
 
 
 

@@ -532,12 +532,14 @@ class Render
 		 */
 		if ( is_file(PAGES_WRAPPER_PATH.DS.$pluginName.DS.$viewName) )
 		{
-			$ob_callback	= (\Sweany\Settings::$showPhpErrors) ? 'ob_error_handler' : 'ob_gzhandler';
-
 			SysLog::i('Render View', 'Add Wrapper for '.$pluginName.'-plugin: '.$viewName);
 
 			// -------- RENDER
-			if ( !ob_start($ob_callback) )
+			if ( !in_array(\Sweany\Settings::$ob_callback, ob_list_handlers())  )
+			{
+				ob_start(\Sweany\Settings::$ob_callback);
+			}
+			else
 			{
 				ob_start();
 			}

@@ -5,8 +5,7 @@ class User extends PageController
 	protected $plugin = 'User';
 
 	// Dont need a model
-	protected $have_model = false;
-
+	protected $hasModel = false;
 
 
 	/**
@@ -16,10 +15,10 @@ class User extends PageController
 	{
 		// get the LoginForm
 		// Its return value holds the successful login
-		$bLoginForm = Blocks::get('User', 'User', 'loginForm');
+		$loggedIn = $this->attachBlock('bLoginForm', 'User', 'User', 'loginForm');
 
 		// User is already logged in or has logged in successfully
-		if ( $bLoginForm['ret'] )
+		if ( $loggedIn )
 		{
 			// Where did the user come from
 			$referrer = Session::get('referrer');
@@ -41,9 +40,9 @@ class User extends PageController
 		}
 		// get the registerForm
 		// Its return value holds the user_if on successful registration or 0
-		$bRegisterForm = Blocks::get('User', 'User', 'registerForm', array(__CLASS__, 'validate'));
+		$user_id = $this->attachBlock('bRegisterForm', 'User', 'User', 'registerForm', array(__CLASS__, 'validate'));
 
-		if ( ($user_id = $bRegisterForm['ret']) > 0 )
+		if ( $user_id > 0 )
 		{
 			// If registration is complete, redirect him
 			$this->redirectDelayed(__CLASS__, __FUNCTION__, null, $this->language->registerCompleteHead, $this->language->registerCompleteBody, 20);
@@ -53,8 +52,6 @@ class User extends PageController
 		// ADD TEMPLATE ELEMENTS
 		HtmlTemplate::setTitle($this->language->pageTitle);
 
-		$this->set('bLoginForm', $bLoginForm['html']);
-		$this->set('bRegisterForm', $bRegisterForm['html']);
 		$this->view('login');
 
 		// LAYOUT OPTIONS

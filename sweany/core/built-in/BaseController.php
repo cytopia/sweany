@@ -407,7 +407,7 @@ abstract Class BaseController
 				}
 			}
 
-			if ( $this->have_model )
+			if ( $this->hasModel )
 			{
 				// check if model has a rule for this form
 				// <formName>Validate($form_name)
