@@ -90,10 +90,10 @@ class User extends PageController
 	 */
 	public function lostPassword()
 	{
-		$bLostPasswordForm = Blocks::get('User', 'User', 'lostPasswordForm', array(__CLASS__, 'resetPassword'));
+		$submitted = $this->attachBlock('bLostPasswordForm', 'User', 'User', 'lostPasswordForm', array(__CLASS__, 'resetPassword'));
 
 		// User has successfully submitted the form
-		if ( $bLostPasswordForm['ret'] > 0 )
+		if ( $submitted > 0 )
 		{
 			$this->redirectDelayed(__CLASS__, 'login', null, $this->language->passwordReset, $this->language->passwordResetText, 20);
 			return;
@@ -102,7 +102,6 @@ class User extends PageController
 		// ADD TEMPLATE ELEMENTS
 		HtmlTemplate::setTitle($this->language->pageTitle);
 
-		$this->set('bLostPasswordForm', $bLostPasswordForm['html']);
 		$this->view('lost_password');
 
 		// LAYOUT OPTIONS

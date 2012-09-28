@@ -116,7 +116,7 @@ class Mailer
 			$email['message']	= $message;
 			$email['created']	= date('Y-m-d H:i:s', time());
 			$db = \Sweany\Database::getInstance();
-			$db->insert(self::$table, $email);
+			$db->insert(self::$table, $email, false);
 		}
 
 		// Make sure to only send email when desired
