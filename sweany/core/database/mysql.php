@@ -163,7 +163,7 @@ class mysql extends aBootTemplate implements iDBO
 	 *	Fetch a specific field by WHERE condition
 	 *
 	 *	@param	string		$table		Table to work on
-	 *	@param	string		$field_name	Name of the field
+	 *	@param	string		$field		Name of the field
 	 *	@param	mixed[]		$condition	Escapable condition
 	 *		Array (
 	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
@@ -175,11 +175,11 @@ class mysql extends aBootTemplate implements iDBO
 	 *
 	 *	@return	mixed		Value of the field (or null if empty)
 	 */
-	public function fetchField($table, $field_name, $condition)
+	public function fetchField($table, $field, $condition)
 	{
 		$where	= $condition ? 'WHERE '.$this->_prepare($condition) : '';
-		$query	= sprintf('SELECT `%s` FROM `%s` %s;', $field_name, $table, $where);
-		$data	= self::select($query);
+		$query	= sprintf('SELECT `%s` FROM `%s` %s;', $field, $table, $where);
+		$data	= $this->select($query);
 
 		if ( !isset($data[0][$field]) )
 		{
@@ -202,10 +202,10 @@ class mysql extends aBootTemplate implements iDBO
 	 *	@param	integer		$id			Id of the row
 	 *	@return	mixed		Value of the field (or null if empty)
 	 */
-	public function fetchRowField($table, $field_name, $id)
+	public function fetchRowField($table, $field, $id)
 	{
-		$condition = sprintf('WHERE `id` = %d', $this->escape($id, true));
-		return $this->fetchField($table, $field_name, $condition);
+		$condition = sprintf('`id` = %d', (int)$id);
+		return $this->fetchField($table, $field, $condition);
 	}
 
 
@@ -271,7 +271,7 @@ class mysql extends aBootTemplate implements iDBO
 	 */
 	public function rowExists($table, $id)
 	{
-		$count	= (is_numeric($id)) ? self::count($table, sprintf('`id` = %d', (int)$id)) : 0;
+		$count	= (is_numeric($id)) ? $this->count($table, sprintf('`id` = %d', (int)$id)) : 0;
 		
 		if ($count > 1)
 		{
@@ -314,7 +314,7 @@ class mysql extends aBootTemplate implements iDBO
 		SysLog::sqlInfo('insertRow', null, $query, null, $time);
 
 		// return last insert id ?
-		return ($return_insert_id) ? $this->_getLastInsertId() : true;
+		return ($ret_ins_id) ? $this->_getLastInsertId() : true;
 	}
 
 
@@ -344,7 +344,7 @@ class mysql extends aBootTemplate implements iDBO
 		$where		= $condition ? 'WHERE '.$this->_prepare($condition) : '';
 
 		// Prepare fields
-		$fields	= implode(',', array_map( create_function('$key, $val', 'return "`".$key."`=\'".mysql_real_escape_string($val)."\'";'), array_keys($field_array), array_values($field_array)));
+		$fields	= implode(',', array_map( create_function('$key, $val', 'return "`".$key."`=\'".mysql_real_escape_string($val)."\'";'), array_keys($fields), array_values($fields)));
 
 		$query	= sprintf('UPDATE `%s` SET %s %s;', $table, $fields, $where);
 
@@ -410,12 +410,14 @@ class mysql extends aBootTemplate implements iDBO
 		};
 		
 		// Apply anonymous functions
+		$incFields	= is_array($incFields) ? $incFields : array();
+		$updFields	= is_array($updFields) ? $updFields : array();
 		$incFields	= implode(',', array_map($fIncFields, array_values($incFields)));
-		$updFields	= implode(',', array_map($fUpdFieldsm array_keys($updFields), array_values($updFields)));
-		$fields		= $incFields ? $incFields.', '.$updFields : $updFields;
-		
+		$updFields	= implode(',', array_map($fUpdFields, array_keys($updFields), array_values($updFields)));
+		$fields		= $updFields ? $incFields.', '.$updFields : $incFields;
+
 		// Build query
-		$query		= sprintf('UPDATE `%s` SET %s %s;', $table, $fields, $condition);
+		$query		= sprintf('UPDATE `%s` SET %s %s;', $table, $fields, $where);
 
 		// Fire!
 		$start		= microtime(true);
@@ -429,7 +431,7 @@ class mysql extends aBootTemplate implements iDBO
 		}
 
 		SysLog::sqlAppendTime($time);
-		SysLog::sqlInfo('incrementFields', implode(',', $incFields), $query, null, $time);
+		SysLog::sqlInfo('incrementFields', $incFields, $query, null, $time);
 	
 		return true;
 	}
@@ -551,6 +553,9 @@ class mysql extends aBootTemplate implements iDBO
 
 
 
+
+
+
 	/**********************************************************************************************************************************
 	 *
 	 * 	P R I V A T E   F U N C T I O N S
@@ -576,35 +581,38 @@ class mysql extends aBootTemplate implements iDBO
 	 *	@param	mixed[]	$statement
 	 *
 	 *		example:
-	 *		Array
-	 *		(
+	 *		Array (
 	 *			[0]	=>	'`id` = :id AND `username` LIKE %:name%',
-	 *			[1]	=>	Array
-	 *				(
-	 *					':id' 	=> $id,
-	 *					':name'	=> $name
-	 *				),
+	 *			[1]	=>	Array (
+	 *				':id' 	=> $id,
+	 *				':name'	=> $name
+	 *			),
 	 *		);
 	 *
 	 *	@return	string	escape safe string
 	 */
 	private function _prepare($statement = null)
 	{
-		$stmt	= (isset($statement[0]) && is_string($statement[0]) && strlen($statement[0]))	? $statement[0] : '';
+		// Non escapable string
+		if ( is_string($statement) )
+		{
+			return $statement;
+		}
+
+		$stmt	= (isset($statement[0]) && is_string($statement[0]) && strlen($statement[0]))	? $statement[0] : null;
 		$vars	= (isset($statement[1])	&& is_array($statement[1])	&& count($statement[1]))	? $statement[1] : null;
 		
 		if ( !$stmt || !$vars )
 		{
 			return $stmt;
 		}
-
-		$fPrepare = function(&$value, $key) /*use ($this)*/ {
+		
+		$fPrepare = function(&$value, $key) {
 			if ($key[0]==':') {
-				$value = $this->db->escape($value, true);
+				$value = $this->escape($value, true);
 			}
 		};
 		array_walk($vars, $fPrepare);
 		return str_replace(array_keys($vars), array_values($vars), $stmt);
 	}
-
 }

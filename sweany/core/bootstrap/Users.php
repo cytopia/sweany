@@ -54,8 +54,10 @@ class Users extends aBootTemplate
 	 */
 	private static $hashRounds			= 20;
 
-	private static $db		= null;
-	private static $tblUser = null;
+	/**
+	 *	@param object	$db	Database Object
+	 */
+	private static $db					= null;
 
 	/**************************************  C O N S T R U C T O R S  **************************************/
 
@@ -67,28 +69,21 @@ class Users extends aBootTemplate
 	}
 
 	
-	// FIXME: TODO: load tables statically into initialize function,
-	// so that we do not have to get a new table on each function!!!!!!!!!!!!!!!!
-	
 	public static function initialize($options = null)
 	{
 		self::$db		= \Sweany\Database::getInstance();
-		self::$tblUser	= \Loader::loadCoreTable('Users');
 
 		if ( $GLOBALS['USER_ONLINE_COUNT_ENABLE'] )
 		{
 			self::$onlineSinceMinutes	= $GLOBALS['USER_ONLINE_SINCE_MINUTES'];
 			self::$fakeOnlineGuests		= $GLOBALS['USER_ONLINE_ADD_FAKE_GUESTS'];
 
-			$db = \Sweany\Database::getInstance();
-
 			// Add current user to online users table
-			self::$db->insert(self::$tbl_online_users, array('time' => time(), 'fk_user_id' => self::id(), 'session_id' => \Sweany\Session::getId(), 'ip' => $_SERVER['REMOTE_ADDR'], 'current_page' => \Sweany\Url::$request));
+			self::$db->insert(self::$tbl_online_users, array('time' => time(), 'fk_user_id' => self::id(), 'session_id' => \Sweany\Session::getId(), 'ip' => $_SERVER['REMOTE_ADDR'], 'current_page' => \Sweany\Url::$request), false);
 
 			// Delete all entries since last XX minutes
 			self::$db->delete(self::$tbl_online_users, sprintf('`time` < %d', strtotime('-'.self::$onlineSinceMinutes.' minute', time())));
 		}
-
 		// TODO: check for valid initialization
 		return true;
 	}
@@ -105,8 +100,7 @@ class Users extends aBootTemplate
 	 */
 	public static function countOnlineUsers()
 	{
-		$db = \Sweany\Database::getInstance();
-		return (self::$fakeOnlineGuests + $db->countDistinct(self::$tbl_online_users, 'session_id', null));
+		return (self::$fakeOnlineGuests + self::$db->countDistinct(self::$tbl_online_users, 'session_id', null));
 	}
 
 	/**
@@ -115,17 +109,18 @@ class Users extends aBootTemplate
 	 */
 	public static function countLoggedInOnlineUsers()
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->selectNumRows('SELECT
-										fk_user_id
-									FROM(
-										SELECT		DISTINCT fk_user_id, session_id
-										FROM		user_online
-										WHERE		fk_user_id>0
-										GROUP BY	session_id
-									) AS tbl_result
-									GROUP BY
-										tbl_result.fk_user_id');
+		$query = 'SELECT
+					COUNT(*) AS counter
+				FROM(
+					SELECT		DISTINCT fk_user_id, session_id
+					FROM		user_online
+					WHERE		fk_user_id>0
+					GROUP BY	session_id
+				) AS tbl_result
+				GROUP BY
+					tbl_result.fk_user_id;';
+		$result	= self::$db->select($query);
+		return isset($result[0]['counter']) ? $result[0]['counter'] : 0;
 	}
 
 	/**
@@ -134,30 +129,30 @@ class Users extends aBootTemplate
 	 */
 	public static function countAnonymousOnlineUsers($include_faked_online_guests = true)
 	{
-		$db = \Sweany\Database::getInstance();
-		$plus	= ($include_faked_online_guests) ? self::$fakeOnlineGuests : 0;
+		$fake	= ($include_faked_online_guests) ? self::$fakeOnlineGuests : 0;
+		$query	= 'SELECT
+						COUNT (DISTINCT session_id) AS counter
+					FROM
+						user_online
+					WHERE
+						fk_user_id=0 AND
+						session_id NOT IN
+						(SELECT session_id
+							FROM(
+								SELECT		DISTINCT fk_user_id, session_id
+								FROM		user_online
+								WHERE		fk_user_id>0
+								GROUP BY	session_id
+							) AS tbl_result
+						GROUP BY
+							tbl_result.fk_user_id
+						)
+					GROUP BY
+						session_id;';
 
-		return ($plus +
-				$db->selectNumRows('SELECT
-										DISTINCT session_id
-									FROM
-										user_online
-									WHERE
-										fk_user_id=0 AND
-										session_id NOT IN
-										(SELECT session_id
-											FROM(
-												SELECT		DISTINCT fk_user_id, session_id
-												FROM		user_online
-												WHERE		fk_user_id>0
-												GROUP BY	session_id
-											) AS tbl_result
-										GROUP BY
-											tbl_result.fk_user_id
-										)
-									GROUP BY
-										session_id')
-		);
+		$result	= self::$db->select($query);
+		$count	= isset($result[0]['counter']) ? $result[0]['counter'] : 0;
+		return ($fake + $count);
 	}
 
 
@@ -167,7 +162,6 @@ class Users extends aBootTemplate
 	 */
 	public static function getLoggedInOnlineUsers()
 	{
-		$db = \Sweany\Database::getInstance();
 		$query	= 'SELECT
 						fk_user_id AS id,
 						users.username
@@ -180,7 +174,7 @@ class Users extends aBootTemplate
 					JOIN users ON (users.id = tbl_result.fk_user_id)
 					GROUP BY tbl_result.fk_user_id';
 
-		return $db->select($query);
+		return self::$db->select($query);
 	}
 
 
@@ -208,12 +202,15 @@ class Users extends aBootTemplate
 	{
 		$user_id	= self::getIdByName($username);
 		$salt		= self::_getPasswordSalt($user_id);
-		$db = \Sweany\Database::getInstance();
-
-		return $db->fetchField(self::$tbl_users, 'id', sprintf("`username` = '%s' AND `password` = '%s'",
-				$db->escape($username),
-				self::_encryptPassword($password, $salt))
+		$condition	= array(
+				'`username` = :username AND `password` = :password',
+				array(
+					':username' => $username,
+					':password' => self::_encryptPassword($password, $salt)
+				)
 		);
+	
+		return self::$db->fetchField(self::$tbl_users, 'id', $condition);
 	}
 
 	/**
@@ -222,8 +219,8 @@ class Users extends aBootTemplate
 	 */
 	public static function getIdByName($username)
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->fetchField(self::$tbl_users, 'id', sprintf("`username`= '%s'", $db->escape($username)));
+		$condition	= array('`username` = :username', array(':username' => $username));
+		return self::$db->fetchField(self::$tbl_users, 'id', $condition);
 	}
 
 	/**
@@ -232,8 +229,8 @@ class Users extends aBootTemplate
 	 */
 	public static function getIdByEmail($email)
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->fetchField(self::$tbl_users, 'id', sprintf("`email` = '%s'", $db->escape($email)));
+		$condition	= array('`email` = :email', array(':email' => $email));
+		return self::$db->fetchField(self::$tbl_users, 'id', $condition);
 	}
 
 	/**
@@ -242,8 +239,8 @@ class Users extends aBootTemplate
 	 */
 	public static function getIdByResetPasswordKey($reset_password_key)
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->fetchField(self::$tbl_users, 'id', sprintf("`reset_password_key` = '%s'", $db->escape($reset_password_key)));
+		$condition	= array('`reset_password_key` = :key', array(':key' => $reset_password_key));
+		return self::$db->fetchField(self::$tbl_users, 'id', $condition);
 	}
 
 
@@ -273,10 +270,9 @@ class Users extends aBootTemplate
 			{
 				$user_id	= self::id();
 				$sess_id	= \Sweany\Session::getId();
-				$db			= \Sweany\Database::getInstance();
 
 				// check php session against stored session in mysql
-				if ( $sess_id != $db->fetchRowField(self::$tbl_users, 'session_id', $user_id) )
+				if ( $sess_id != self::$db->fetchRowField(self::$tbl_users, 'session_id', $user_id) )
 				{
 					return false;
 				}
@@ -289,7 +285,6 @@ class Users extends aBootTemplate
 			{
 				return true;
 			}
-
 		}
 	}
 
@@ -303,10 +298,9 @@ class Users extends aBootTemplate
 	{
 		$user_id	= self::id();
 		$salt		= self::_getPasswordSalt($user_id);
-		$db			= \Sweany\Database::getInstance();
 		$encrypted	= self::_encryptPassword($clearTextPwd, $salt);
 
-		return ( $encrypted == $db->fetchRowField(self::$tbl_users, 'password', $user_id) );
+		return ( $encrypted == self::$db->fetchRowField(self::$tbl_users, 'password', $user_id) );
 	}
 
 
@@ -324,10 +318,7 @@ class Users extends aBootTemplate
 	public static function name($id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
-		// TODO: read data from session!
-		$db = \Sweany\Database::getInstance();
-
-		return $db->fetchRowField(self::$tbl_users, 'username', $id);
+		return self::$db->fetchRowField(self::$tbl_users, 'username', $id);
 	}
 
 
@@ -341,9 +332,7 @@ class Users extends aBootTemplate
 	public static function email($id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
-		$db = \Sweany\Database::getInstance();
-
-		return $db->fetchRowField(self::$tbl_users, 'email', $id);
+		return self::$db->fetchRowField(self::$tbl_users, 'email', $id);
 	}
 
 
@@ -357,9 +346,8 @@ class Users extends aBootTemplate
 	public static function data($id = null)
 	{
 		$id		= (is_null($id)) ? self::id() : (int)$id;
-		$db		= \Sweany\Database::getInstance();
 		$query	= sprintf('SELECT * FROM `%s` WHERE `id` = %d', self::$tbl_users, $id);
-		$data	= $db->select($query);
+		$data	= self::$db->select($query);
 		return (isset($data[0])) ? $data[0] : array();
 	}
 
@@ -372,8 +360,7 @@ class Users extends aBootTemplate
 	public static function isAdmin($id = null)
 	{
 		$id		= (is_null($id)) ? self::id() : (int)$id;
-		$db 	= \Sweany\Database::getInstance();
-		return $db->fetchRowField(self::$tbl_users, 'is_admin', $id);
+		return self::$db->fetchRowField(self::$tbl_users, 'is_admin', $id);
 	}
 
 
@@ -385,8 +372,7 @@ class Users extends aBootTemplate
 	public static function isEnabled($id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
-		$db = \Sweany\Database::getInstance();
-		return $db->count(self::$tbl_users, sprintf("`id` = %d AND is_enabled = 1", $db->escape($id)));
+		return self::$db->count(self::$tbl_users, sprintf("`id` = %d AND is_enabled = 1", self::$db->escape($id)));
 	}
 
 
@@ -398,8 +384,7 @@ class Users extends aBootTemplate
 	public static function isLocked($id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
-		$db = \Sweany\Database::getInstance();
-		return $db->count(self::$tbl_users, sprintf("`id` = %d AND is_locked = 1", $db->escape($id)));
+		return self::$db->count(self::$tbl_users, sprintf("`id` = %d AND is_locked = 1", self::$db->escape($id)));
 	}
 
 
@@ -411,8 +396,7 @@ class Users extends aBootTemplate
 	public static function isDeleted($id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
-		$db = \Sweany\Database::getInstance();
-		return $db->count(self::$tbl_users, sprintf("`id` = %d AND is_deleted = 1", $db->escape($id)));
+		return self::$db->count(self::$tbl_users, sprintf("`id` = %d AND is_deleted = 1", self::$db->escape($id)));
 	}
 
 
@@ -427,7 +411,7 @@ class Users extends aBootTemplate
 	 */
 	public static function exists($user_id)
 	{
-		return self::$tblUser->exist($user_id);
+		return self::$db->rowExists(self::$tbl_users, $user_id);
 	}
 
 	/**
@@ -437,7 +421,7 @@ class Users extends aBootTemplate
 	 */
 	public static function usernameExists($username)
 	{
-		return self::$tblUser->existBy(array('`username` = :username', array(':username' => $username)));
+		return self::$db->count(self::$tbl_users, array('`username` = :username', array(':username' => $username)));
 	}
 
 	/**
@@ -447,7 +431,7 @@ class Users extends aBootTemplate
 	 */
 	public static function emailExists($email)
 	{
-		return self::$tblUser->existBy(array('`email` = :email', array(':email' => $email)));
+		return self::$db->count(self::$tbl_users, array('`email` = :email', array(':email' => $email)));
 	}
 
 
@@ -462,7 +446,7 @@ class Users extends aBootTemplate
 	public static function otherUserHasThisEmail($email)
 	{
 		$condition = array('`email` = :email AND `id` <> :id', array(':email' => $email, ':id' => self::id()));
-		return self::$tblUser->existBy($condition);
+		return self::$db->count(self::$tbl_users, $condition);
 	}
 
 
@@ -475,8 +459,7 @@ class Users extends aBootTemplate
 	 */
 	public static function getAllUsers()
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->select('SELECT * FROM '.self::$tbl_users);
+		return self::$db->select('SELECT * FROM '.self::$tbl_users);
 	}
 
 	/**
@@ -487,8 +470,7 @@ class Users extends aBootTemplate
 	 */
 	public static function getLatestUsers($total)
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->select(sprintf('SELECT * FROM '.self::$tbl_users.' WHERE `is_enabled` = 1 AND `is_locked` = 0 AND `is_deleted` = 0 ORDER BY `created` DESC LIMIT %d', $total));
+		return self::$db->select(sprintf('SELECT * FROM `'.self::$tbl_users.'` WHERE `is_enabled` = 1 AND `is_locked` = 0 AND `is_deleted` = 0 ORDER BY `created` DESC LIMIT %d', (int)$total));
 	}
 
 	/**
@@ -496,8 +478,7 @@ class Users extends aBootTemplate
 	 */
 	public static function getAllUserGroups($order = array())
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->select('SELECT * FROM '.self::$tbl_user_groups);
+		return self::$db->select('SELECT * FROM '.self::$tbl_user_groups);
 	}
 
 	/**
@@ -505,8 +486,7 @@ class Users extends aBootTemplate
 	 */
 	public static function getAllFailedLogins($order = array())
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->select('SELECT * FROM '.self::$tbl_failed_logins);
+		return self::$db->select('SELECT * FROM '.self::$tbl_failed_logins);
 	}
 
 
@@ -547,19 +527,17 @@ class Users extends aBootTemplate
 		$salt		= self::_getPasswordSalt($user_id);
 		$password	= self::_encryptPassword($clearTextPwd, $salt);
 
-		$where		= sprintf("`username` = '%s' AND `password` = '%s' AND `is_enabled` = 1 AND `is_deleted` = 0 AND `is_locked` = 0",
-			self::$db->escape($username),
-			self::$db->escape($password)
-		);
+		$condition	= array("`username` = :username AND `password` = :password AND `is_enabled` = 1 AND `is_deleted` = 0 AND `is_locked` = 0",
+			array(':username' => $username, ':password' => $password));
 
 		// can login
-		if ( self::$db->count(self::$tbl_users, $where) )
+		if ( self::$db->count(self::$tbl_users, $condition) )
 		{
 			return true;
 		}
 
 		// count failed login attempt per user
-		self::$db->incrementFields(self::$tbl_users, array('last_failed_login_count'), sprintf("id = %d", (int)$user_id));
+		self::$db->incrementFields(self::$tbl_users, array('last_failed_login_count'), null, sprintf('`id` = %d', (int)$user_id));
 
 		// log failed login attempts
 		if ( $log_bad_attempts )
@@ -588,7 +566,6 @@ class Users extends aBootTemplate
 	public static function addUser($username, $password, $email)
 	{
 		$salt	= self::_createPasswordSalt();
-		$db 	= \Sweany\Database::getInstance();
 		$data	= array('username'			=> $username,
 						'password'			=> self::_encryptPassword($password, $salt),
 						'password_salt'		=> $salt,
@@ -598,9 +575,9 @@ class Users extends aBootTemplate
 						'is_locked'			=> 0,
 						'is_deleted'		=> 0,
 						'validation_key'	=> md5(\Sweany\Session::getId().$username.$password.$email.time()),
-						'created'			=> date('Y-m-d H:i:s', time()),
+						'created'			=> self::$db->getNowUnixTimeStamp(),
 		);
-		return $db->insert('users', $data, true);
+		return self::$db->insert('users', $data, true);
 	}
 
 	/**
@@ -611,14 +588,13 @@ class Users extends aBootTemplate
 	public static function update($fields = array(), $id = null)
 	{
 		$id = (is_null($id)) ? self::id() : (int)$id;
-		$db = \Sweany\Database::getInstance();
 
 		if ( isset($fields['modified']) )
-			$fields['modified'] = date('Y-m-d H:i:s', time());
+			$fields['modified'] = self::$db->getNowUnixTimeStamp();
 		if ( isset($fields['password']) )
 			$fields['password'] = self::_encryptPassword($fields['password'], self::_getPasswordSalt($id));
 
-		return $db->updateRow(self::$tbl_users, $fields, $id);
+		return self::$db->updateRow(self::$tbl_users, $fields, $id);
 	}
 
 	/**
@@ -630,9 +606,8 @@ class Users extends aBootTemplate
 		$id = (is_null($id)) ? self::id() : (int)$id;
 
 		$fields['password'] = self::_encryptPassword($password, self::_getPasswordSalt($id));
-		$db = \Sweany\Database::getInstance();
 
-		return $db->updateRow(self::$tbl_users, $fields, $id);
+		return self::$db->updateRow(self::$tbl_users, $fields, $id);
 	}
 
 	/**
@@ -644,18 +619,10 @@ class Users extends aBootTemplate
 	 */
 	public static function validate($validation_key)
 	{
-		$db 		= \Sweany\Database::getInstance();
-		$condition	= sprintf("validation_key = '%s'", $db::escape($validation_key));
-		$user_id	= $db->fetchField(self::$tbl_users, 'id', $condition);
+		$condition	= array('validation_key = :key', array(':key' => $validation_key));
+		$user_id	= self::$db->fetchField(self::$tbl_users, 'id', $condition);
 
-		if ( $user_id )
-		{
-			return $db->updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id);
-		}
-		else
-		{
-			return false;
-		}
+		return ($user_id) ? self::$db->updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id) : false;
 	}
 
 	/**
@@ -671,9 +638,8 @@ class Users extends aBootTemplate
 		$ip			= $_SERVER['REMOTE_ADDR'];
 		$hostname	= @gethostbyaddr($ip);
 		$key		= md5(mt_rand().time().$session_id.$ip.$hostname.mt_rand().$user_id);
-		$db 		= \Sweany\Database::getInstance();
 
-		$db->updateRow(self::$tbl_users, array('reset_password_key' => $key), $user_id);
+		self::$db->updateRow(self::$tbl_users, array('reset_password_key' => $key), $user_id);
 		return $key;
 	}
 
@@ -684,18 +650,10 @@ class Users extends aBootTemplate
 	 */
 	public static function checkPasswordResetKey($password_reset_key)
 	{
-		$db 		= \Sweany\Database::getInstance();
-		$condition	= sprintf("reset_password_key = '%s' AND LENGTH(reset_password_key)>0", $db->escape($password_reset_key));
+		$condition	= array('`reset_password_key` = :key AND LENGTH(reset_password_key)>0', array(':key' => $password_reset_key));
 		$user_id	= $db->fetchField(self::$tbl_users, 'id', $condition);
 
-		if ( $user_id )
-		{
-			return $db->updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id);
-		}
-		else
-		{
-			return false;
-		}
+		return ($user_id) ? self::$db->updateRow(self::$tbl_users, array('is_enabled' => 1, 'validation_key' => ''), $user_id) : false;
 	}
 
 	/**
@@ -704,21 +662,18 @@ class Users extends aBootTemplate
 	 */
 	public static function removeResetPasswordKey($user_id)
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->updateRow(self::$tbl_users, array('reset_password_key' => ''), $user_id);
+		return self::$db->updateRow(self::$tbl_users, array('reset_password_key' => ''), $user_id);
 	}
 
 	/******************************************************** count functions ********************************************************/
 
 	public static function countFakeUsers()
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->count(self::$tbl_users, '`is_fake` = 1');
+		return self::$db->count(self::$tbl_users, '`is_fake` = 1');
 	}
 	public static function countRealUsers()
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->count(self::$tbl_users, '`is_fake` = 0');
+		return self::$db->count(self::$tbl_users, '`is_fake` = 0');
 	}
 
 
@@ -761,8 +716,7 @@ class Users extends aBootTemplate
 	 */
 	private static function _getPasswordSalt($user_id)
 	{
-		$db = \Sweany\Database::getInstance();
-		return $db->fetchRowField(self::$tbl_users, 'password_salt', $user_id);
+		return self::$db->fetchRowField(self::$tbl_users, 'password_salt', $user_id);
 	}
 
 	/**
@@ -771,11 +725,10 @@ class Users extends aBootTemplate
 	 */
 	private static function _updateSuccessfulLogin($user_id)
 	{
-		$db 		= \Sweany\Database::getInstance();
 		$session_id = \Sweany\Session::getId();
 		$ip			= $_SERVER['REMOTE_ADDR'];
 		$hostname	= @gethostbyaddr($ip);
-		$login_time	= date('Y-m-d H:i:s', time());
+		$login_time	= self::$db->getNowUnixTimeStamp();
 
 		$fields = array(
 			'session_id'				=> $session_id,
@@ -784,7 +737,7 @@ class Users extends aBootTemplate
 			'last_login'				=> $login_time,
 			'last_failed_login_count'	=> 0,
 		);
-		return $db->updateRow(self::$tbl_users, $fields, $user_id);
+		return self::$db->updateRow(self::$tbl_users, $fields, $user_id);
 	}
 
 	/**
@@ -794,11 +747,10 @@ class Users extends aBootTemplate
 	 */
 	private static function _logFailedLogin($username, $password)
 	{
-		$db 		= \Sweany\Database::getInstance();
 		$session_id = \Sweany\Session::getId();
 		$ip			= $_SERVER['REMOTE_ADDR'];
 		$hostname	= @gethostbyaddr($ip);
-		$login_time	= date("Y-m-d H:i:s", time());
+		$login_time	= self::$db->getNowUnixTimeStamp();
 
 		$fields = array(
 			'username'		=> $username,
@@ -810,6 +762,6 @@ class Users extends aBootTemplate
 			'hostname'		=> $hostname,
 			'created'		=> $login_time,
 		);
-		return $db->insert(self::$tbl_failed_logins, $fields);
+		return self::$db->insert(self::$tbl_failed_logins, $fields);
 	}
 }
