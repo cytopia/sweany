@@ -1,6 +1,10 @@
 # do not upload generated sweany*.tar.gz
 *.tar.gz
 
+# do not upload scripts
+push_github.sh
+push_local.sh
+
 # do not upload backup dirs
 _bak/
 

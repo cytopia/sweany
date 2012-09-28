@@ -43,19 +43,32 @@ class ContactTable extends Table
 	}
 	
 	/**
-	 *	@Override
-	 *	@param	mixed[]			$data
-	 *	@return	integer|null	last_insert_id
+	 *	@override
+	 *	@param	integer		$id			Id of entity
+	 *	@param	void		$related	No effect here (no relations defined) 
+	 *	@return	boolean		success
 	 */
-	public function delete($id)
+	public function delete($id, $related = null)
 	{
-		return $this->update($id, array('is_deleted' => 1));
+		$fields = array(
+			'is_deleted'	=> 1,
+		);
+		return parent::update($id, $fields, 0);
 	}
+	public function deleteAll($condition, $related = false, $return = 0)
+	{
+		$fields = array(
+			'is_deleted'	=> 1,
+		);
+		return parent::updateAll($condition, $fields, $return);
+	}
+
 
 	
 	public function countNew()
 	{
-		return $this->find('count', array('condition' => 'is_read = 0'));
+		$condition = array('is_read = :read', array(':read' => 0));
+		return $this->find('count', array('condition' => $condition));
 	}
 	
 	public function markRead($id)

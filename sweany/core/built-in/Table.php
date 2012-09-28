@@ -129,7 +129,7 @@ class Table
 
 
 
-	/*
+	/**
 	 *	Default order when selecting (can be overwritten)
 	 *
 	 *	@param mixed[]	Order
@@ -156,6 +156,7 @@ class Table
 	 *		$condition = '<Alias>.is_deleted = 0';
 	 */
 	public $condition		= null;
+
 
 	/* ***************************************  R E L A T I O N   D E F I N E S  *************************************** */
 
@@ -243,7 +244,7 @@ class Table
 
 
 
-	// TODO:
+	// TODO implement:
 	public $hasAndBelongsToMany	= array();
 
 
@@ -261,7 +262,7 @@ class Table
 
 	/* ************************************************************************************************************************** *
 	 *
-	 *	E N T I T Y   C L A S S   F U N C T I O N S
+	 *	C O N S T R U C T O R   /   D E S T R U C T O R
 	 *
 	 * ************************************************************************************************************************** */
 
@@ -286,6 +287,14 @@ class Table
 		$this->db = \Sweany\Database::getInstance();
 	}
 
+
+
+
+	/* ************************************************************************************************************************** *
+	 *
+	 *	E N T I T Y   G E T   F U N C T I O N S
+	 *
+	 * ************************************************************************************************************************** */
 
 
 	/**
@@ -319,8 +328,8 @@ class Table
 	 *	@param	integer			$recursive	Level of recursions (0-3)
 	 *		0: flat - no relations, only this table
 	 *		1: with relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
-	 *		2: with relations and follow recursion specified by relation
-	 *		3: with relations and force recursion on all relations
+	 *		2: with relations and follow recursion (if set to true in respective relations defintion of the current table)
+	 *		3: with relations and force recursion on all relations (even if not set or set to false)
 	 *
 	 *	@return	mixed[]			$data		Returns all found entities
 	 */
@@ -333,6 +342,54 @@ class Table
 		return $data;
 	}
 
+
+	
+	/**
+	 *
+	 *	Check if the entity exists
+	 *
+	 *	@param	integer		$id		Id of the entity (row)
+	 *	@return	boolean		exists?
+	 */
+	public function exist($id)
+	{
+		return $this->db->rowExists($this->table, $id);
+	}
+	
+	
+	public function existBy($condition)
+	{
+		return $this->find('count', array('condition' => $condition));
+	}
+
+	/**
+	 *
+	 *	Get value of a field from the entity (row)
+	 *
+	 *	@param	name		$name	Name of the field (in row)
+	 *	@param	integer		$id		Id of the entity (row)
+	 *	@return	mixed		$value	Value of the field
+	 *
+	 */
+	public function Field($name, $id)
+	{
+		return $this->db->fetchRowField($this->table, $name, $id);
+	}
+
+
+	/**
+	 *
+	 *	Get value of a field by condition
+	 *
+	 *	@param	name		$name		Name of the field (in row)
+	 *	@param	string		$condition	SQL Condition (make sure to escape the values)
+	 *	@return	mixed		$value		Value of the field
+	 *
+	 */
+	public function FieldBy($name, $condition)
+	{
+		return $this->db->fetchField($this->table, $name, $this->prepare($condition));
+	}
 
 	/**
 	 *
@@ -387,38 +444,58 @@ class Table
 	 */
 	public function find($type = 'all', $options = array())
 	{
+		// Extract Condition
+		$condition	= isset($options['condition'])			? $options['condition'] : $this->condition;
+		$condition	= $this->prepare($condition);
+		
+		// Return count immediately, if chosen
+		if ( $type == 'count' )
+		{
+			return $this->db->count($condition);
+		}
+		
+	
 		// Get Options;
 		$fields 	= isset($options['fields'])				? $options['fields']	: $this->fields;
-		$condition	= isset($options['condition'])			? $options['condition'] : $this->condition;
 		$order		= isset($options['order'])				? $options['order']		: $this->order;
-		$limit		= isset($options['limit'])				? $options['limit']		: null;	// mutually exclusive $limit > $range
-		$range		= !$limit && isset($options['range'])	? $options['range']		: null;	// mutually exclusive $limit > $range
-		$recursive	= isset($options['recursive'])			? $options['recursive']	: 1;
-
-		switch ($type)
+		$recursive	= isset($options['recursive'])			? $options['recursive']	: 1;	// defaults to 1
+		
+		// Get mutually exclusive limit/order (limit takes priority over range)
+		if ( isset($options['limit']) )
 		{
-			case 'all':
-				break;
-			case 'first':
-				break;
-			case 'last':
-				break;
-			case 'count':
-				break;
-			default: /* 'all' */
-				break;
+			$limit = $options['limit'];
+		}
+		else
+		{
+			$limit	= (isset($options['range']) && is_array($options['range'])) ? implode(',', $options['range']) : null;
 		}
 
 		// Build Query
-		$query		= $this->buildQuery($fields, $condition, $order, $limit);
-
-		// Retrieve Results
+		$query		= $this->buildQuery($fields, $condition, $order, $limit, $recursive);
 		$data		= $this->retrieveResults($query);
 
-		return $data;
+		// NOTE:
+		// TODO: This is only a temporary solution and will be replaced
+		// by propper SQL queries later (just to get the fw back to work
+		// FIXME:!!!!
+		switch ($type)
+		{
+			case 'all':			return $data;
+			case 'first':		return isset($data[0]) ? $data[0] : array();
+			case 'last':		return isset($data[count($data)-1]) ? $data[count($data)-1] : array();
+			default: /*'all'*/	return $data;
+		}
 	}
+	
 
 
+	/* ************************************************************************************************************************** *
+	 *
+	 *	E N T I T Y   S A V E   F U N C T I O N S
+	 *
+	 * ************************************************************************************************************************** */
+
+	
 	/**
 	 *	Save entity (by id)
 	 *
@@ -435,7 +512,7 @@ class Table
 	 *
 	 *	@return	boolean|integer|mixed[]	Depending on $return param
 	 */
-	public function save($fields, $return = 0)
+	public function save($fields, $return = 1)
 	{
 		$fields = $this->_appendCreatedFieldIfExist($fields);
 		$ret	= $this->db->insert($this->table, $fields, (($return) ? true : false));
@@ -451,6 +528,16 @@ class Table
 				return $ret;
 		}
 	}
+
+	
+	
+	
+	/* ************************************************************************************************************************** *
+	 *
+	 *	E N T I T Y   U P D A T E   F U N C T I O N S
+	 *
+	 * ************************************************************************************************************************** */
+	
 
 	/**
 	 *	Update entity (by id)
@@ -471,6 +558,7 @@ class Table
 	 */
 	public function update($id, $fields, $return = 0)
 	{
+		// TODO, only extract all fields that actually exist as specified in the table
 		$success	= $this->db->updateRow($this->table, $id, $fields);
 		
 		switch ($return)
@@ -480,6 +568,31 @@ class Table
 			default:	return $success;
 		}
 	}
+	public function updateAll($condition, $fields, $return = 0)
+	{
+		return $this->db->update($this->table, $fields, $this->prepare($condition), $return);
+	}
+	
+	
+	public function increment($id, $fields, $return = 0)
+	{
+		$condition = $this->prepare(array('id = :id', array(':id' => $id)));
+
+		return $this->db->incrementFields($this->table, $fields, $condition, $return);
+	}
+	
+	// TODO: return (array)values on $return = 2
+	public function incrementAll($condition, $fields, $return = 0)
+	{
+		return $this->db->incrementFields($this->table, $fields, $this->prepare($condition), $return);
+	}
+
+
+	/* ************************************************************************************************************************** *
+	 *
+	 *	E N T I T Y   D E L E T E   F U N C T I O N S
+	 *
+	 * ************************************************************************************************************************** */
 
 
 	/**
@@ -488,10 +601,19 @@ class Table
 	 *	@param	integer	$id			Id of the row/entity
 	 *	@return	boolean				Success of operation
 	 */
-	public function delete($id)
+	public function delete($id, $related = false)
 	{
+		// TODO: delete related data in this->[relations]
 		return $this->db->deleteRow($this->table, $id);
 	}
+
+	public function deleteAll($condition, $related = false, $return = 0)
+	{
+		// TODO: delete related data in this->[relations]
+		return $this->db->delete($this->table, $this->prepare($condition));
+	}
+
+
 
 
 
@@ -502,6 +624,46 @@ class Table
 	*
 	* ************************************************************************************************************************** */
 
+	
+	/**
+	 *	Prepares and escapes a statement
+	 *
+	 *	@param	mixed[]	$statement
+	 *
+	 *		example:
+	 *		Array
+	 *		(
+	 *			[0]	=>	'`id` = :id AND `username` LIKE %:name%',
+	 *			[1]	=>	Array
+	 *				(
+	 *					':id' 	=> $id,
+	 *					':name'	=> $name
+	 *				),
+	 *		);
+	 *
+	 *	@return	string	escape safe string
+	 */
+	private function prepare($statement = null)
+	{
+		$stmt	= (isset($statement[0]) && is_string($statement[0]) && strlen($statement[0]))	? $statement[0] : '';
+		$vars	= (isset($statement[1])	&& is_array($statement[1])	&& count($statement[1]))	? $statement[1] : null;
+		
+		if ( !$stmt || !$vars )
+		{
+			return $stmt;
+		}
+
+		$fPrepare = function(&$value, $key) /*use ($this)*/ {
+			if ($key[0]==':') {
+				$value = $this->db->escape($value, true);
+			}
+		};
+		array_walk($vars, $fPrepare);
+		return str_replace(array_keys($vars), array_values($vars), $stmt);
+	}
+	
+	
+	
 	private function buildQuery($fields = null, $condition = null, $order = null, $limit = null, $recursive = 1)
 	{
 		$pk[]	= $this->alias.'.'.$this->primary_key.' AS '.PRIM_KEY;
@@ -731,8 +893,17 @@ class Table
 			if ( isset($properties['recursive']) && $properties['recursive'] )
 			{
 				$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
-				$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-				$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+				$core	= isset($properties['core'])  ? $properties['core']  : false;
+				
+				if ($core)
+				{
+					$oTable = Loader::loadCoreTable($class);
+				}
+				else
+				{
+					$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
+					$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+				}
 
 				// recurse all relations once, by setting recursion to false
 				// recurse all relations once, by setting recursion to false
@@ -784,8 +955,17 @@ class Table
 			)
 			{
 				$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
-				$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-				$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+				$core	= isset($properties['core'])  ? $properties['core']  : false;
+				
+				if ($core)
+				{
+					$oTable = Loader::loadCoreTable($class);
+				}
+				else
+				{
+					$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
+					$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+				}
 
 				// recurse all relations once, by setting recursion to false
 				// We are already in a X -> many relation, so we have to append the ManyIndicator to all local aliases
@@ -837,8 +1017,17 @@ class Table
 			)
 			{
 				$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
-				$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-				$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+				$core	= isset($properties['core'])  ? $properties['core']  : false;
+				
+				if ($core)
+				{
+					$oTable = Loader::loadCoreTable($class);
+				}
+				else
+				{
+					$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
+					$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+				}
 
 				// recurse all relations once, by setting recursion to false
 				// recurse all relations once, by setting recursion to false
