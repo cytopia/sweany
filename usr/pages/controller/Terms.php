@@ -2,7 +2,7 @@
 
 class Terms extends PageController
 {
-	protected $have_model = false;
+	protected $hasModel = false;
 	
 	public function index()
 	{

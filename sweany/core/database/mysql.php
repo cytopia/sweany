@@ -294,7 +294,7 @@ class mysql extends aBootTemplate implements iDBO
 	 *	@param	boolean			$ret_ins_id			Return last insert id?
 	 *	@return	boolean|integer	success|insert id
 	 */
-	public function insert($table, $fields, $ret_ins_id = true)
+	public function insert($table, $fields, $ret_ins_id)
 	{
 		$names	= implode(',', array_map( create_function('$key', 'return "`".$key."`";'), array_keys($fields)));
 		$values = implode(',', array_map( create_function('$val', 'return "\'".mysql_real_escape_string($val)."\'";'), array_values($fields)));
@@ -373,7 +373,7 @@ class mysql extends aBootTemplate implements iDBO
 	 *	@param	mixed[]		$fields		Array of name-value pairs of fields to update
 	 *	@return	boolean		success
 	 */
-	public function updateRow($table, $id, $fields)
+	public function updateRow($table, $fields, $id)
 	{
 		return $this->update($table, $fields, sprintf('`id` = %d', (int)$id));
 	}
