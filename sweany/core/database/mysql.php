@@ -3,7 +3,11 @@ namespace Sweany;
 class mysql extends aBootTemplate implements iDBO
 {
 
-	/* ******************************************** VARIABLES ********************************************/
+	/* ************************************************************************************************************************** *
+	 *
+	 *	STATIC VARIABLES
+	 *
+	 * ************************************************************************************************************************** */
 
 	private	static $link		= null;
 	private static $query		= null;
@@ -14,7 +18,12 @@ class mysql extends aBootTemplate implements iDBO
 
 
 
-	/*********************************************** OVERRIDE INITIALIZE ***********************************************/
+	/* ************************************************************************************************************************** *
+	 *
+	 *	STATIC FUNCTIONS
+	 *
+	 * ************************************************************************************************************************** */
+
 
 	public static function initialize($options = null)
 	{
@@ -48,28 +57,10 @@ class mysql extends aBootTemplate implements iDBO
 			self::$error = 'Encodings and Connections could not be set to utf8';
 			return false;
 		}
-
-
-		/**
-		 *	If MySQL Server and Apache Server are on a different host,
-		 *  they could likely have a different time set, if the admin
-		 *  is a fucking stupid dickhead (as those from 0fees.net)
-		 *  So we have to manually adjust the MySQL time every time
-		 *  we do a page load
-		 *
-		 *  TODO: Only activate if this is the case
-		 */
-		/*
-		if (!self::_setServerTimeZone())
-		{
-			self::$error = 'Timezone, Coult not set timezone offset '.date("P", time());
-			return FALSE;
-		}*/
-
 		return true;
 	}
 
-	/*********************************************** OVERRIDE CLEANUP ***********************************************/
+	/* ********************************************** OVERRIDE CLEANUP ***********************************************/
 
 	public static function cleanup()
 	{
@@ -77,7 +68,14 @@ class mysql extends aBootTemplate implements iDBO
 			mysql_close(self::$link);
 	}
 
-	/*********************************************** CLASS FUNCTIONS ***********************************************/
+
+
+
+	/* ************************************************************************************************************************** *
+	 *
+	 *	BASIC FUNCTIONS
+	 *
+	 * ************************************************************************************************************************** */
 
 	public function __construct()
 	{
@@ -94,8 +92,22 @@ class mysql extends aBootTemplate implements iDBO
 	}
 
 
+	
+	
+	/* ************************************************************************************************************************** *
+	 *
+	 *	SQL FUNCTIONS
+	 *
+	 * ************************************************************************************************************************** */
 
+	 
+	/* **************************************************** GENERIC SELECT **************************************************** */
+	 
+	 
 	/**
+	 *	Raw select function (optional with callback)
+	 *
+	 *	Use with caution and escape the query before you go
 	 *
 	 *	@param	string		$query
 	 *	@param	function	$callback = function ($row, &$data){}
@@ -145,39 +157,118 @@ class mysql extends aBootTemplate implements iDBO
 
 
 
-	/* ******************************************** FETCH ******************************************** */
+	/* **************************************************** FETCH **************************************************** */
 
+	/**
+	 *	Fetch a specific field by WHERE condition
+	 *
+	 *	@param	string		$table		Table to work on
+	 *	@param	string		$field_name	Name of the field
+	 *	@param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 *
+	 *	@return	mixed		Value of the field (or null if empty)
+	 */
 	public function fetchField($table, $field_name, $condition)
 	{
-	
-	}
-	
+		$where	= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$query	= sprintf('SELECT `%s` FROM `%s` %s;', $field_name, $table, $where);
+		$data	= self::select($query);
 
+		if ( !isset($data[0][$field]) )
+		{
+			SysLog::sqlWarn('fetchField', 'returning empty field', self::$query, $data);
+			return null;
+		}
+		if ( count($data) > 1 )
+		{
+			SysLog::sqlWarn('fetchField', 'result hash more than one row', self::$query, $data);
+		}
+		return $data[0][$field];	
+	}
+
+
+	/**
+	 *	Fetch a specific field of a row (by id)
+	 *
+	 *	@param	string		$table		Table to work on
+	 *	@param	string		$field_name	Name of the field
+	 *	@param	integer		$id			Id of the row
+	 *	@return	mixed		Value of the field (or null if empty)
+	 */
 	public function fetchRowField($table, $field_name, $id)
 	{
-		return 0;
+		$condition = sprintf('WHERE `id` = %d', $this->escape($id, true));
+		return $this->fetchField($table, $field_name, $condition);
 	}
 
+
+	/* **************************************************** COUNT **************************************************** */
+
+	/**
+	 *	Count Row(s) by WHERE condition
+	 *
+	 *	@param	string		$table		Table to work on
+	 *	@param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 *
+	 *	@return	integer		Number of rows
+	 */
 	public function count($table, $condition)
 	{
-		$where	= $condition ? 'WHERE '.$condition : '';
-		$query	= sprintf('SELECT COUNT(*) AS counter FROM `%s` %s', $table, $where);
+		$where	= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$query	= sprintf('SELECT COUNT(*) AS counter FROM `%s` %s;', $table, $where);
 		$data	= $this->select($query);
 
 		return (isset($data[0]['counter'])) ? $data[0]['counter'] : 0;
 	}
-	
+
+
+	/**
+	 *	Count Row(s) by Distinct field and WHERE condition
+	 *
+	 *	@param	string		$table		Table to work on
+	 *	@param	string		$field		Field to apply DISTINCT() on
+	 *	@param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 *
+	 *	@return	integer		Number of rows
+	 */
 	public function countDistinct($table, $field, $condition)
 	{
-		$where	= $condition ? 'WHERE '.$condition : '';
-		$query	= sprintf('SELECT COUNT(DISTINCT `%s`) AS counter FROM `%s` %s', $field, $table, $where);
+		$where	= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$query	= sprintf('SELECT COUNT(DISTINCT `%s`) AS counter FROM `%s` %s;', $field, $table, $where);
 		$data	= $this->select($query);
 
 		return (isset($data[0]['counter'])) ? $data[0]['counter'] : 0;
-	
 	}
-	
-	
+
+
+	/**
+	 *	Check if Row (by id) exists
+	 *
+	 *	@param	string		$table		Table to work on
+	 *	@param	integer		$id			Id of the row
+	 *	@return	boolean		yes|no
+	 */
 	public function rowExists($table, $id)
 	{
 		$count	= (is_numeric($id)) ? self::count($table, sprintf('`id` = %d', (int)$id)) : 0;
@@ -191,31 +282,121 @@ class mysql extends aBootTemplate implements iDBO
 	}
 
 
-	
-	/* ******************************************** UPDATE ******************************************** */
+
+	/* **************************************************** ADD **************************************************** */
 
 
 	/**
+	 *	Insert
 	 *
-	 *	Update by condition
-	 *
-	 *	@param	string		$query				SQL Query
-	 *	@param	mixed[]		$fields				Field value pair of fields and values
-	 *	@param	string		$condition			SQL Condition
-	 *	@param	boolean		$affected_row_ids	Return Ids of affected rows?
-	 *
-	 *	@return	integer[]|boolean				Array of Ids of affected rows or success of operation
+	 *	@param	string			$table				Table to work on
+	 *	@param	mixed[]			$fields				Array of name-value pairs of fields to update
+	 *	@param	boolean			$ret_ins_id			Return last insert id?
+	 *	@return	boolean|integer	success|insert id
 	 */
-	public function update($table, $fields, $condition, $affected_row_ids = false)
+	public function insert($table, $fields, $ret_ins_id = true)
 	{
+		$names	= implode(',', array_map( create_function('$key', 'return "`".$key."`";'), array_keys($fields)));
+		$values = implode(',', array_map( create_function('$val', 'return "\'".mysql_real_escape_string($val)."\'";'), array_values($fields)));
+
+		$query	= sprintf('INSERT INTO `%s` (%s) VALUES(%s);', $table, $names, $values);
+
+		$start	= microtime(true);
+		$result	= mysql_query($query, self::$link);
+		$time	= microtime(true) - $start;
+
+		if (!$result)
+		{
+			SysLog::sqlError('insertRow', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
+			return false;
+		}
+		SysLog::sqlAppendTime($time);
+		SysLog::sqlInfo('insertRow', null, $query, null, $time);
+
+		// return last insert id ?
+		return ($return_insert_id) ? $this->_getLastInsertId() : true;
 	}
+
+
+
+
+	/* **************************************************** UPDATE **************************************************** */
+
+	/**
+	 *	Update Row(s) by WHERE condition
+	 *
+	 *	@param	string		$table		Table to work on
+	 *	@param	mixed[]		$fields		Array of name-value pairs of fields to update
+	 *	@param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 *
+	 *	@return	boolean		success
+	 */
+	public function update($table, $fields, $condition)
+	{
+		// Prepare where clause
+		$where		= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+
+		// Prepare fields
+		$fields	= implode(',', array_map( create_function('$key, $val', 'return "`".$key."`=\'".mysql_real_escape_string($val)."\'";'), array_keys($field_array), array_values($field_array)));
+
+		$query	= sprintf('UPDATE `%s` SET %s %s;', $table, $fields, $where);
+
+		$start	= microtime(true);
+		$result	= mysql_query($query, self::$link);
+		$time	= microtime(true) - $start;
+
+		if (!$result)
+		{
+			SysLog::sqlError('update', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
+			return false;
+		}
+
+		SysLog::sqlAppendTime($time);
+		SysLog::sqlInfo('update', null, $query, null, $time);
+
+		return true;
+	}
+
+
+	/**
+	 *	Update Row by Id
+	 *
+	 *	@param	string		$table		Table to work on
+	 *	@param	intege		$id			Id of the row
+	 *	@param	mixed[]		$fields		Array of name-value pairs of fields to update
+	 *	@return	boolean		success
+	 */
 	public function updateRow($table, $id, $fields)
 	{
-		return 0;
+		return $this->update($table, $fields, sprintf('`id` = %d', (int)$id));
 	}
-	
 
-	public function incrementFields($table, $incFields, $updFields, $condition, $affected_row_ids = false)
+
+	/**
+	 *	Increment fields(s) and update other fields (such as modified)
+	 *
+	 *	@param	string		$table
+	 *	@param	string[]	$incFields	Array of field names to increment
+	 *	@param	mixed[]		$updFields	Array of name-value pair of fields to update
+	 *	@param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 *
+	 *	@return	boolean	success
+	 */
+	public function incrementFields($table, $incFields, $updFields, $condition)
 	{
 		// Prepare where clause
 		$where		= $condition ? 'WHERE '.$this->_prepare($condition) : '';
@@ -234,12 +415,12 @@ class mysql extends aBootTemplate implements iDBO
 		$fields		= $incFields ? $incFields.', '.$updFields : $updFields;
 		
 		// Build query
-		$query		= sprintf("UPDATE `%s` SET %s %s", $table, $fields, $condition);
+		$query		= sprintf('UPDATE `%s` SET %s %s;', $table, $fields, $condition);
 
-
-		$start	= microtime(true);
-		$result	= mysql_query($query, self::$link);
-		$time	= microtime(true) - $start;
+		// Fire!
+		$start		= microtime(true);
+		$result		= mysql_query($query, self::$link);
+		$time		= microtime(true) - $start;
 
 		if (!$result)
 		{
@@ -250,19 +431,33 @@ class mysql extends aBootTemplate implements iDBO
 		SysLog::sqlAppendTime($time);
 		SysLog::sqlInfo('incrementFields', implode(',', $incFields), $query, null, $time);
 	
-		// TODO: getColumnFields()
-		return ($get_update_id) ? $this->getColumnFields($table, 'id', $where) : true;
+		return true;
 	}
-	
-	
-	
-	/* ******************************************** INSERT ******************************************** */
-	public function insert($table, $fields, $return_insert_id = true)
-	{
-		$names	= implode(',', array_map( create_function('$key', 'return "`".$key."`";'), array_keys($fields)));
-		$values = implode(',', array_map( create_function('$val', 'return "\'".mysql_real_escape_string($val)."\'";'), array_values($fields)));
 
-		$query	= sprintf('INSERT INTO `%s` (%s) VALUES(%s)', $table, $names, $values);
+	
+	
+	
+	/* **************************************************** DELETE **************************************************** */
+
+	/**
+	 *	Delete by WHERE condition
+	 *
+	 *	@param	string	$table
+	 *	@param	mixed[]	$condition	escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 *
+	 *	@return	boolean	success
+	 */
+	public function delete($table, $condition)
+	{
+		$where	= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$query	= sprintf('DELETE FROM `%s` %s;', $table, $where);
 
 		$start	= microtime(true);
 		$result	= mysql_query($query, self::$link);
@@ -270,29 +465,36 @@ class mysql extends aBootTemplate implements iDBO
 
 		if (!$result)
 		{
-			\Sweany\SysLog::sqlError('insertRow', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
-			return (-1);
+			SysLog::sqlError('delete', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
+			return false;
 		}
-		\Sweany\SysLog::sqlAppendTime($time);
-		\Sweany\SysLog::sqlInfo('insertRow', null, $query, null, $time);
 
-		// return last insert id ?
-		return ($return_insert_id) ? self::_getLastInsertId() : null;
+		SysLog::sqlAppendTime($time);
+		SysLog::sqlInfo('delete', null, $query, null, $time);
+
+		return true;
 	}
 
-	
-	
-	/* ******************************************** DELETE ******************************************** */
-	public function delete($table, $condition, $affected_row_ids = false)
-	{
-	}
+
+	/**
+	 *	Delete row by ID
+	 *
+	 *	@param	string	$table
+	 *	@param	integer	$id
+	 *	@return	boolean	success
+	 */
 	public function deleteRow($table, $id)
 	{
+		return $this->delete($table, sprintf('`id` = %d', (int)$id));
 	}
 
 	
 	
-	/* ******************************************** HELPER ******************************************** */
+	/* ************************************************************************************************************************** *
+	 *
+	 *	HELPER FUNCTIONS
+	 *
+	 * ************************************************************************************************************************** */
 	public function getNowDateTime()
 	{
 		return date('Y-m-d H:i:s');
@@ -355,13 +557,14 @@ class mysql extends aBootTemplate implements iDBO
 	 *
 	 **********************************************************************************************************************************/
 
-	/************************************************ PRIVATE SPECIAL MYSQL FUNCTIONS ****************************************************/
-	private static function _getLastInsertId()
+
+
+	private function _getLastInsertId()
 	{
 		$result	= mysql_query('SELECT LAST_INSERT_ID() AS id');
 		$row	= mysql_fetch_array($result, MYSQL_ASSOC);
 		$id		= $row['id'];
-		\Sweany\SysLog::sqlInfo('lastInsertId', $id, null, null);
+		SysLog::sqlInfo('lastInsertId', $id, null, null);
 		return $id;
 	}
 
