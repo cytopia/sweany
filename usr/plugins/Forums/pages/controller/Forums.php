@@ -230,7 +230,8 @@ class Forums extends PageController
 	* **********************************************************************************************************************/
 	public function index()
 	{
-		$data = $this->model->ForumCategories->find('all');
+		$data = $this->model->ForumCategories->find('all', array('recursive' => 2));
+		debug($data);
 		
 		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 

@@ -2,6 +2,7 @@
 class ForumPostsTable extends Table
 {
 	public $table	= 'forum_posts';
+	public $alias	= 'Post';
 
 	protected $tableHolders	= array(
 		'[[forum]]'		=> 'forum_forums',

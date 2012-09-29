@@ -2,15 +2,10 @@
 class ForumForumsTable extends Table
 {
 	public $table	= 'forum_forums';
+	public $alias	= 'Forum';
 
-	protected $tableHolders	= array(
-		'[[thread]]'	=> 'forum_threads',
-		'[[post]]'		=> 'forum_posts',
-		'[[user]]'		=> 'users',
-	);
 
 	public $fields	= array(
-		// FIELDS
 		'id'					=> 'id',
 		'fk_forum_category_id'	=> 'fk_forum_category_id',
 		'sort'					=> 'sort',
@@ -44,6 +39,39 @@ class ForumForumsTable extends Table
 	);
 
 
+
+	public $hasMany = array(
+		'LastThread'	=> array(
+			'table'			=> 'forum_threads',
+			'plugin'		=> 'Forums',
+			'primaryKey'	=> 'id',						# primary key in Category table
+			'foreignKey'	=> 'fk_forum_forums_id',		# Foreign key in Forum's table
+			'conditions'	=> array(),
+			'fields'		=> array('id', 'title', 'fk_user_id', 'seo_url'),
+		//	'order'			=> array('sort' => 'ASC'),
+			'limit'			=> array(),
+			'dependent'		=> false,
+			'hasCreated'	=> 'datetime',
+			'hasModified'	=> 'datetime',
+		),
+		'Thread'	=> array(
+			'table'			=> 'forum_threads',
+			'plugin'		=> 'Forums',
+			'primaryKey'	=> 'id',						# primary key in Category table
+			'foreignKey'	=> 'fk_forum_forums_id',		# Foreign key in Forum's table
+			'conditions'	=> array(),
+			'fields'		=> array('id', 'title', 'fk_user_id', 'seo_url'),
+		//	'order'			=> array('sort' => 'ASC'),
+			'limit'			=> array(),
+			'dependent'		=> false,
+			'hasCreated'	=> 'datetime',
+			'hasModified'	=> 'datetime',
+		),
+	);
+	
+	
+	
+	
 	/************************************************** GET FUNCTIONS **************************************************/
 
 	public function getAllByCat($category_id, $order = array('sort' => 'ASC'), $limit = NULL)

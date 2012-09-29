@@ -24,9 +24,9 @@
 	<tbody>
 		<?php foreach ($data as $row): ?>
 			<tr>
-				<th colspan="5"><div class="forumCategoryName"><?php echo $data['Category']['name']; ?></div></th>
+				<th colspan="5"><div class="forumCategoryName"><?php echo $row['Category']['name']; ?></div></th>
 			</tr>
-			<?php foreach ($category['Forum'] as $forum):?>
+			<?php foreach ($row['Forum'] as $forum):?>
 				<?php
 				if ( $forum['thread_count'] > 0 )
 				{
