@@ -131,7 +131,7 @@ class Users extends aBootTemplate
 	{
 		$fake	= ($include_faked_online_guests) ? self::$fakeOnlineGuests : 0;
 		$query	= 'SELECT
-						COUNT (DISTINCT session_id) AS counter
+						COUNT(DISTINCT session_id) AS counter
 					FROM
 						user_online
 					WHERE

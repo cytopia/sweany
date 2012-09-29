@@ -177,7 +177,9 @@ class Table
 	 *			'subQueries'	=> array(),				# Array of subqueries to append
 	 *			'order'			=> array(), 			# Array of order clauses on the given table
 	 *			'dependent'		=> false,
-	 *			'recursive'		=> false,				# true: also load the depending table with its relations | false: only load this relation
+	 *			'recursive'		=> false|true,			# true: also load the depending table with its relations | false: only load this relation
+	 *			'recursive'		=> array('hasMany' => array('Alias1', 'Alias', 'belongsTo' => array('One'))
+	 *				# only follow specific relations recursively (in this case the Alias1 & Alias2 from 'hasMany' and 'One' from 'belongsTo')
 	 *			'hasCreated'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on insert (sql def field: 'created') or specify field name
 	 *			'hasModified'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on update (sql def field: 'modified') or specify field name
 	 *		),
@@ -205,7 +207,9 @@ class Table
 	 *			'order'			=> array(),				# Array of order clauses on the given table
 	 *			'limit'			=> array(),				# Array of Limit clause
 	 *			'dependent'		=> false,
-	 *			'recursive'		=> false,				# true: also load the depending table with its relations | false: only load this relation
+	 *			'recursive'		=> false|true,			# true: also load the depending table with its relations | false: only load this relation
+	 *			'recursive'		=> array('hasMany' => array('Alias1', 'Alias', 'belongsTo' => array('One'))
+	 *				# only follow specific relations recursively (in this case the Alias1 & Alias2 from 'hasMany' and 'One' from 'belongsTo')
 	 *			'hasCreated'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on insert (sql def field: 'created') or specify field name
 	 *			'hasModified'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on update (sql def field: 'modified') or specify field name
      *   	),
@@ -234,7 +238,9 @@ class Table
 	 *			'order'			=> array(),				# Array of order clauses on the given table
 	 *			'limit'			=> array(),				# Array of Limit clause
 	 *			'dependent'		=> false,
-	 *			'recursive'		=> false,				# true: also load the depending table with its relations | false: only load this relation
+	 *			'recursive'		=> false|true,			# true: also load the depending table with its relations | false: only load this relation
+	 *			'recursive'		=> array('hasMany' => array('Alias1', 'Alias', 'belongsTo' => array('One'))
+	 *				# only follow specific relations recursively (in this case the Alias1 & Alias2 from 'hasMany' and 'One' from 'belongsTo')
 	 *			'hasCreated'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on insert (sql def field: 'created') or specify field name
 	 *			'hasModified'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on update (sql def field: 'modified') or specify field name
      *   	),
@@ -684,13 +690,13 @@ class Table
 		if ( $recursive > 0)
 		{
 			// Add hasOne (one-to-one)
-			$this->_buildHasOneQuery($fields, $joins, $recursive);
+			$this->_buildHasOneQuery(null, $fields, $joins, $recursive);
 
 			// Add hasMany (one-to-many)
-			$this->_buildHasManyQuery($fields, $joins, $order, $recursive);
+			$this->_buildHasManyQuery(null, $fields, $joins, $order, $recursive);
 
 			// Add belongsTo (many-to-one)
-			$this->_buildBelongsToQuery($fields, $joins, $order, $recursive);
+			$this->_buildBelongsToQuery(null, $fields, $joins, $order, $recursive);
 		}
 
 		// Build Query
@@ -859,181 +865,241 @@ class Table
 
 		return $order;
 	}
-	private function _buildHasOneQuery(&$fields, &$joins, $recursive, $prefix = '')
+	private function _buildHasOneQuery($limitAliase = false, &$fields, &$joins, $recursive, $prefix = '')
 	{
 		$joinType = 'JOIN';	// LEFT JOIN?	TODO: double check if this works!!! (also in recursive relations), otherwise LEFT JOIN
 
 		foreach ( $this->hasOne as $alias => $properties )
 		{
-			// Associations
-			$mainPK		= $this->alias.'.'.$this->primary_key;
-			$orderPK	= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
-			$thisPK		= $alias.'.'. (isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id');
-			$thisFK		= $alias.'.'.$properties['foreignKey'];
-
-			// Table Data
-			$thisTable	= $properties['table'];
-
-			// Field Data
-			$thisFields = Arrays::array_unshift_assoc($properties['fields'], PRIM_KEY, $orderPK);
-			$thisFields	= $this->_buildAliasedFields($alias, $prefix.$alias, $thisFields);
-
-			$thisSubQ	= isset($properties['subQueries'])	? $this->_buildAliasedSubQueries($alias, $prefix.$alias, $properties['subQueries']) : null;
-
-			// ADD Fields
-			$fields		= array_merge($fields, $thisFields);
-
-			// ADD Sub Queries
-			$fields		= $thisSubQ ? array_merge($fields, $thisSubQ) : $fields;
-
-			// ADD JOINS
-			$joins[]	= $joinType.' '.$thisTable.' AS '.$alias.' ON ('.$mainPK.'='.$thisFK.')';
-
-			// Check for recursive Joining
-			if ( isset($properties['recursive']) && $properties['recursive'] )
+			// This is used for the recursive relations, so that we can limit what to follow
+			if ( !$limitAliase || in_array($alias, $limitAliase) )
 			{
-				$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
-				$core	= isset($properties['core'])  ? $properties['core']  : false;
-				
-				if ($core)
-				{
-					$oTable = Loader::loadCoreTable($class);
-				}
-				else
-				{
-					$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-					$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
-				}
+				// Associations
+				$mainPK		= $this->alias.'.'.$this->primary_key;
+				$orderPK	= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
+				$thisPK		= $alias.'.'. (isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id');
+				$thisFK		= $alias.'.'.$properties['foreignKey'];
 
-				// recurse all relations once, by setting recursion to false
-				// recurse all relations once, by setting recursion to false
-				$oTable->_buildHasOneQuery($fields, $joins, 0, $alias.TREE_SEP);
-				$oTable->_buildHasManyQuery($fields, $joins, $order, 0, $alias.TREE_SEP);
-				$oTable->_buildBelongsToQuery($fields, $joins, $order, 0, $alias.TREE_SEP);
+				// Table Data
+				$thisTable	= $properties['table'];
+
+				// Field Data
+				$thisFields = Arrays::array_unshift_assoc($properties['fields'], PRIM_KEY, $orderPK);
+				$thisFields	= $this->_buildAliasedFields($alias, $prefix.$alias, $thisFields);
+
+				$thisSubQ	= isset($properties['subQueries'])	? $this->_buildAliasedSubQueries($alias, $prefix.$alias, $properties['subQueries']) : null;
+
+				// ADD Fields
+				$fields		= array_merge($fields, $thisFields);
+
+				// ADD Sub Queries
+				$fields		= $thisSubQ ? array_merge($fields, $thisSubQ) : $fields;
+
+				// ADD JOINS
+				$joins[]	= $joinType.' '.$thisTable.' AS '.$alias.' ON ('.$mainPK.'='.$thisFK.')';
+
+				
+				// Check for recursive Joining
+				if ( ($recursive > 1 &&	isset($properties['recursive']) && $properties['recursive']) ||
+					 ($recursive > 2) // force
+				)
+				{
+					$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
+					$core	= isset($properties['core'])  ? $properties['core']  : false;
+					
+					if ($core)
+					{
+						$oTable = Loader::loadCoreTable($class);
+					}
+					else
+					{
+						$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
+						$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+					}
+					
+					// do not limit recursion
+					if ( $properties['recursive'] === true || $recursive > 2 )
+					{
+						// recurse all relations once, and set recursion to false, so that we don't loop any deeper
+						$oTable->_buildHasOneQuery(null, $fields, $joins, 0, $alias.TREE_SEP);
+						$oTable->_buildHasManyQuery(null, $fields, $joins, $order, 0, $alias.TREE_SEP);
+						$oTable->_buildBelongsToQuery(null, $fields, $joins, $order, 0, $alias.TREE_SEP);
+					}
+					else
+					{
+						if ( isset($properties['recursive']['hasOne']) ) {
+							$oTable->_buildHasOneQuery($properties['recursive']['hasOne'], $fields, $joins, 0, $alias.TREE_SEP);
+						}
+						if ( isset($properties['recursive']['hasMany']) ) {
+							$oTable->_buildHasManyQuery($properties['recursive']['hasMany'], $fields, $joins, $order, 0, $alias.TREE_SEP);
+						}
+						if ( isset($properties['recursive']['belongsTo']) ) {
+							$oTable->_buildBelongsToQuery($properties['recursive']['belongsTo'], $fields, $joins, $order, 0, $alias.TREE_SEP);
+						}
+					}
+				}
 			}
 		}
 	}
 
 
-	private function _buildHasManyQuery(&$fields, &$joins, &$order, $recursive, $prefix = '')
+	private function _buildHasManyQuery($limitAliase = false, &$fields, &$joins, &$order, $recursive, $prefix = '')
 	{
 		$joinType = 'LEFT JOIN';
 
 		foreach ( $this->hasMany as $alias => $properties )
 		{
-			// Associations
-			$mainPK		= $this->alias.'.'.$this->primary_key;
-			$orderPK	= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
-			$thisPK		= $alias.'.'.$orderPK;
-			$thisFK		= $alias.'.'.$properties['foreignKey'];
-
-			// Table Data
-			$thisTable	= $properties['table'];
-
-			// Field Data
-			$thisFields = Arrays::array_unshift_assoc($properties['fields'], PRIM_KEY, $orderPK);
-			$thisFields	= $this->_buildAliasedFields($alias, $prefix.$alias, $thisFields, 'many');
-
-			$thisSubQ	= isset($properties['subQueries'])	? $this->_buildAliasedSubQueries($alias, $prefix.$alias, $properties['subQueries'], 'many') : null;
-			$thisOrder	= isset($properties['order'])		? $this->_buildAliasedOrder($properties['order'], $alias, $orderPK)  : $this->_buildAliasedOrder(null, $alias, $orderPK);
-
-			// ADD Fields
-			$fields		= array_merge($fields, $thisFields);
-
-			// ADD Sub Queries
-			$fields		= $thisSubQ ? array_merge($fields, $thisSubQ) : $fields;
-
-			// ADD JOINS
-			$joins[]	= $joinType.' '.$thisTable.' AS '.$alias.' ON ('.$mainPK.'='.$thisFK.')';
-
-			// ADD ORDER
-			$order		= $thisOrder ? array_merge($order, $thisOrder) : $order;
-
-			// Check for recursive Joining
-			if ( ($recursive > 1 &&	isset($properties['recursive']) && $properties['recursive']) ||
-				 ($recursive > 2) // force
-			)
+			// This is used for the recursive relations, so that we can limit what to follow
+			if ( !$limitAliase || in_array($alias, $limitAliase) )
 			{
-				$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
-				$core	= isset($properties['core'])  ? $properties['core']  : false;
-				
-				if ($core)
-				{
-					$oTable = Loader::loadCoreTable($class);
-				}
-				else
-				{
-					$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-					$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
-				}
+				// Associations
+				$mainPK		= $this->alias.'.'.$this->primary_key;
+				$orderPK	= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
+				$thisPK		= $alias.'.'.$orderPK;
+				$thisFK		= $alias.'.'.$properties['foreignKey'];
 
-				// recurse all relations once, by setting recursion to false
-				// We are already in a X -> many relation, so we have to append the ManyIndicator to all local aliases
-				$oTable->_buildHasOneQuery($fields, $joins, 0, $alias.MANY_IND.TREE_SEP);
-				$oTable->_buildHasManyQuery($fields, $joins, $order, 0, $alias.MANY_IND.TREE_SEP);
-				$oTable->_buildBelongsToQuery($fields, $joins, $order, 0, $alias.MANY_IND.TREE_SEP);
+				// Table Data
+				$thisTable	= $properties['table'];
+
+				// Field Data
+				$thisFields = Arrays::array_unshift_assoc($properties['fields'], PRIM_KEY, $orderPK);
+				$thisFields	= $this->_buildAliasedFields($alias, $prefix.$alias, $thisFields, 'many');
+
+				$thisSubQ	= isset($properties['subQueries'])	? $this->_buildAliasedSubQueries($alias, $prefix.$alias, $properties['subQueries'], 'many') : null;
+				$thisOrder	= isset($properties['order'])		? $this->_buildAliasedOrder($properties['order'], $alias, $orderPK)  : $this->_buildAliasedOrder(null, $alias, $orderPK);
+
+				// ADD Fields
+				$fields		= array_merge($fields, $thisFields);
+
+				// ADD Sub Queries
+				$fields		= $thisSubQ ? array_merge($fields, $thisSubQ) : $fields;
+
+				// ADD JOINS
+				$joins[]	= $joinType.' '.$thisTable.' AS '.$alias.' ON ('.$mainPK.'='.$thisFK.')';
+
+				// ADD ORDER
+				$order		= $thisOrder ? array_merge($order, $thisOrder) : $order;
+
+				// Check for recursive Joining
+				if ( ($recursive > 1 &&	isset($properties['recursive']) && $properties['recursive']) ||
+					 ($recursive > 2) // force
+				)
+				{
+					$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
+					$core	= isset($properties['core'])  ? $properties['core']  : false;
+					
+					if ($core)
+					{
+						$oTable = Loader::loadCoreTable($class);
+					}
+					else
+					{
+						$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
+						$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+					}
+
+					if ( $properties['recursive'] === true || $recursive > 2 )
+					{
+						// recurse all relations once, and set recursion to false, so that we don't loop any deeper
+						// We are already in a X -> many relation, so we have to append the ManyIndicator to all local aliases
+						$oTable->_buildHasOneQuery(null, $fields, $joins, 0, $alias.MANY_IND.TREE_SEP);
+						$oTable->_buildHasManyQuery(null, $fields, $joins, $order, 0, $alias.MANY_IND.TREE_SEP);
+						$oTable->_buildBelongsToQuery(null, $fields, $joins, $order, 0, $alias.MANY_IND.TREE_SEP);
+					}
+					else
+					{
+						if ( isset($properties['recursive']['hasOne']) ) {
+							$oTable->_buildHasOneQuery($properties['recursive']['hasOne'], $fields, $joins, 0, $alias.MANY_IND.TREE_SEP);
+						}
+						if ( isset($properties['recursive']['hasMany']) ) {
+							$oTable->_buildHasManyQuery($properties['recursive']['hasMany'], $fields, $joins, $order, 0, $alias.MANY_IND.TREE_SEP);
+						}
+						if ( isset($properties['recursive']['belongsTo']) ) {
+							$oTable->_buildBelongsToQuery($properties['recursive']['belongsTo'], $fields, $joins, $order, 0, $alias.MANY_IND.TREE_SEP);
+						}
+					}
+				}
 			}
 		}
 	}
 
 	// prefix is used for inner calls to append prefix to alias: Users.Thread.id
-	private function _buildBelongsToQuery(&$fields, &$joins, &$order, $recursive, $prefix = '')
+	private function _buildBelongsToQuery($limitAliase = false, &$fields, &$joins, &$order, $recursive, $prefix = '')
 	{
 		$joinType = 'JOIN';
 
 		foreach ( $this->belongsTo as $alias => $properties )
 		{
-			// Associations
-			$mainPK		= $this->alias.'.'.$this->primary_key;
-			$mainFK		= $this->alias.'.'.$properties['foreignKey'];
-			$orderPK	= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
-			$thisPK		= $alias.'.'.$orderPK;
-
-			// Table Data
-			$thisTable	= $properties['table'];
-
-			// Field Data
-			$thisFields = Arrays::array_unshift_assoc($properties['fields'], PRIM_KEY, $orderPK);
-			$thisFields	= $this->_buildAliasedFields($alias, $prefix.$alias, $thisFields);
-
-			$thisSubQ	= isset($properties['subQueries'])	? $this->_buildAliasedSubQueries($alias, $prefix.$alias, $properties['subQueries']) : null;
-			$thisOrder	= isset($properties['order'])		? $this->_buildAliasedOrder($properties['order'], $alias, $orderPK)  : $this->_buildAliasedOrder(null, $alias, $orderPK);
-
-			// ADD Fields
-			$fields		= array_merge($fields, $thisFields);
-
-			// ADD Sub Queries
-			$fields		= $thisSubQ ? array_merge($fields, $thisSubQ) : $fields;
-
-			// ADD JOINS
-			$joins[]	= $joinType.' '.$thisTable.' AS '.$alias.' ON ('.$mainFK.'='.$thisPK.')';
-
-			// ADD ORDER
-			$order		= $thisOrder ? array_merge($order, $thisOrder) : $order;
-
-			// Check for recursive Joining
-			if ( ($recursive > 1 &&	isset($properties['recursive']) && $properties['recursive']) ||
-				 ($recursive > 2) // force
-			)
+			// This is used for the recursive relations, so that we can limit what to follow
+			if ( !$limitAliase || in_array($alias, $limitAliase) )
 			{
-				$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
-				$core	= isset($properties['core'])  ? $properties['core']  : false;
-				
-				if ($core)
-				{
-					$oTable = Loader::loadCoreTable($class);
-				}
-				else
-				{
-					$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-					$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
-				}
+				// Associations
+				$mainPK		= $this->alias.'.'.$this->primary_key;
+				$mainFK		= $this->alias.'.'.$properties['foreignKey'];
+				$orderPK	= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
+				$thisPK		= $alias.'.'.$orderPK;
 
-				// recurse all relations once, by setting recursion to false
-				// recurse all relations once, by setting recursion to false
-				$oTable->_buildHasOneQuery($fields, $joins, 0, $alias.TREE_SEP);
-				$oTable->_buildHasManyQuery($fields, $joins, $order, 0, $alias.TREE_SEP);
-				$oTable->_buildBelongsToQuery($fields, $joins, $order, 0, $alias.TREE_SEP);
+				// Table Data
+				$thisTable	= $properties['table'];
+
+				// Field Data
+				$thisFields = Arrays::array_unshift_assoc($properties['fields'], PRIM_KEY, $orderPK);
+				$thisFields	= $this->_buildAliasedFields($alias, $prefix.$alias, $thisFields);
+
+				$thisSubQ	= isset($properties['subQueries'])	? $this->_buildAliasedSubQueries($alias, $prefix.$alias, $properties['subQueries']) : null;
+				$thisOrder	= isset($properties['order'])		? $this->_buildAliasedOrder($properties['order'], $alias, $orderPK)  : $this->_buildAliasedOrder(null, $alias, $orderPK);
+
+				// ADD Fields
+				$fields		= array_merge($fields, $thisFields);
+
+				// ADD Sub Queries
+				$fields		= $thisSubQ ? array_merge($fields, $thisSubQ) : $fields;
+
+				// ADD JOINS
+				$joins[]	= $joinType.' '.$thisTable.' AS '.$alias.' ON ('.$mainFK.'='.$thisPK.')';
+
+				// ADD ORDER
+				$order		= $thisOrder ? array_merge($order, $thisOrder) : $order;
+
+				// Check for recursive Joining
+				if ( ($recursive > 1 &&	isset($properties['recursive']) && $properties['recursive']) ||
+					 ($recursive > 2) // force
+				)
+				{
+					$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
+					$core	= isset($properties['core'])  ? $properties['core']  : false;
+					
+					if ($core)
+					{
+						$oTable = Loader::loadCoreTable($class);
+					}
+					else
+					{
+						$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
+						$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+					}
+
+					// do not limit recursion
+					if ( $properties['recursive'] === true || $recursive > 2 )
+					{
+						// recurse all relations once, and set recursion to false, so that we don't loop any deeper
+						$oTable->_buildHasOneQuery(null, $fields, $joins, 0, $alias.TREE_SEP);
+						$oTable->_buildHasManyQuery(null, $fields, $joins, $order, 0, $alias.TREE_SEP);
+						$oTable->_buildBelongsToQuery(null, $fields, $joins, $order, 0, $alias.TREE_SEP);
+					}
+					else
+					{
+						if ( isset($properties['recursive']['hasOne']) ) {
+							$oTable->_buildHasOneQuery($properties['recursive']['hasOne'], $fields, $joins, 0, $alias.TREE_SEP);
+						}
+						if ( isset($properties['recursive']['hasMany']) ) {
+							$oTable->_buildHasManyQuery($properties['recursive']['hasMany'], $fields, $joins, $order, 0, $alias.TREE_SEP);
+						}
+						if ( isset($properties['recursive']['belongsTo']) ) {
+							$oTable->_buildBelongsToQuery($properties['recursive']['belongsTo'], $fields, $joins, $order, 0, $alias.TREE_SEP);
+						}
+					}
+				}
 			}
 		}
 	}

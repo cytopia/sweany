@@ -71,7 +71,7 @@ class Validate05Tables extends aBootTemplate
 					$tblClass	= \Loader::loadCoreTable($file);
 
 					// ---------------- VALIDATE ALIAS
-					if ( !strlen($tblClass->alias) )
+					if ( !$tblClass->alias || !strlen($tblClass->alias) )
 					{
 						self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
 						return false;
@@ -148,7 +148,7 @@ class Validate05Tables extends aBootTemplate
 					$tblClass	= \Loader::loadTable($file);
 
 					// ---------------- VALIDATE ALIAS
-					if ( !strlen($tblClass->alias) )
+					if ( !$tblClass->alias || !strlen($tblClass->alias) )
 					{
 						self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
 						return false;
@@ -233,6 +233,12 @@ class Validate05Tables extends aBootTemplate
 								$file		= str_replace('Table.php', '', $file);
 								$tblClass	= \Loader::loadPluginTable($file, $plugin);
 
+								// ---------------- VALIDATE ALIAS
+								if ( !$tblClass->alias || !strlen($tblClass->alias) )
+								{
+									self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
+									return false;
+								}
 								// ---------------- VALIDATE FIELDS
 								$sqlColumns	= $db->getColumnNames($tblClass->table);
 								$tblColumns	= $tblClass->fields;
@@ -368,17 +374,25 @@ class Validate05Tables extends aBootTemplate
 			}
 
 			// If recursive relation, we have to check if the other class exists
-			if ( isset($options['recursive']) && $options['recursive'] == true )
+			if ( isset($options['recursive']) && $options['recursive'] != false )
 			{
 				// Get Class Name (default is to camelCase the sql table
 				$className	= (isset($options['class'])) ? $options['class'] : \Strings::camelCase($options['table'], true);
 
 				// Is Plugin?
-				$plugin		= (isset($options['plugin'])&&strlen($options['plugin'])) ? $options['plugin'] : null;
+				$plugin		= (isset($options['plugin'])&& strlen($options['plugin'])) ? $options['plugin'] : null;
 
+				// Is Core?
+				$core		= (isset($options['core']) && $options['core']) ? true : false;
+				
+				if ($core) {
+					$path	= CORE_TABLE.DS.$className.'Table.php';
+				}
+				else {
+					$path	= ($plugin) ? USR_PLUGINS_PATH.DS.$plugin.DS.'tables'.DS.$className.'Table.php' : USR_TABLES_PATH.DS.$className.'Table.php';
+				}
+				
 				// File exists?
-				$path		= ($plugin) ? USR_PLUGINS_PATH.DS.$plugin.DS.'tables'.DS.$className.'Table.php' : USR_TABLES_PATH.DS.$className.'Table.php';
-
 				if ( !is_file($path) )
 				{
 					if ( !isset($options['class']) )
@@ -389,11 +403,58 @@ class Validate05Tables extends aBootTemplate
 					{
 						self::$error = 'Recursive Table File does not exist. Path: '.$path;
 					}
+					self::$error .= '<br/>If it is a core or plugin table you will have to specifiy either \'core\' = true or \'plugin\' = \'name_of_plugin\'';
 					return false;
 				}
 				// TODO:!!! validate correct alias namings of the file itself
 			}
 
+			// If recursive relation is limited to follow only specific relations, we have to check if those
+			// specific relation(s) exist in the other class exists
+			if ( isset($options['recursive']) && is_array($options['recursive']) )
+			{
+				foreach ($options['recursive'] as $relType => $aliasNames)
+				{
+					// wrong relation name
+					if ( !($relType == 'hasOne' || $relType == 'hasMany' || $relType == 'belongsTo' || $relType == 'hasAndBelongsToMany') )
+					{
+						self::$error = $tbl_name.'::'.$type.'[\''.$alias.'\'][\'recursive\'] = array(\'<strong style="color:red;">'.$relType.'\'</strong> => ...)<br/>';
+						self::$error.= $relType.'is not a valid relation<br/>';
+						self::$error.= 'Specify one of the following: \'hasOne\', \'hasMany\', \'belongsTo\' or \'hasAndBelongsToMany\'';
+						return false;
+					}
+					
+					// Check if all specified aliasNames exist in the corresponding table in that particular relation
+					foreach ($aliasNames as $aName)
+					{
+						if ($core) {
+							$recTable = \Loader::LoadCoreTable($className);
+						} else if ($plugin) {
+							$recTable = \Loader::LoadPluginTable($className, $plugin);
+						} else {
+							$recTable = \Loader::LoadTable($className);
+						}
+						
+						// check if the relation to follow has been defined as array
+						if ( !is_array($recTable->$relType) || !count($recTable->$relType) )
+						{
+							self::$error = $tbl_name.'::'.$type.'[\''.$alias.'\'][\'recursive\'] = array(\'<strong style="color:red;">'.$relType.'\'</strong> => ...)<br/>';
+							self::$error.= 'has been set to follow, but <strong>'.$relType.'</strong> is not properly defined in '.$className;
+							return false;
+						}
+						
+						// Check if the alias to follow has been defined in the relation Type
+						if ( !in_array($aName, array_keys($recTable->$relType)) )
+						{
+							self::$error = $tbl_name.'::'.$type.'[\''.$alias.'\'][\'recursive\'] = array(\''.$relType.'\' => \'<strong style="color:red;">'.$aName.'</strong>\')<br/>';
+							self::$error.= 'has been set to follow, but <strong>'.$aName.'</strong> is not set in '.$className.'::'.$relType;
+							return false;
+						}
+					}
+				}
+			}
+			
+			
 			// specific relation check
 			if ( $type == 'hasOne' )
 			{
