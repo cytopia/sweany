@@ -231,8 +231,7 @@ class Forums extends PageController
 	public function index()
 	{
 		$data = $this->model->ForumCategories->find('all', array('recursive' => 2));
-		debug($data);
-		
+
 		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 
 		// ADD TEMPLATE ELEMENTS
@@ -265,50 +264,42 @@ class Forums extends PageController
 
 	public function showForum($forum_id = null, $seo_url = null)
 	{
-		if ( !$this->model->forumExists($forum_id) )
+		$data = $this->model->ForumForums->load($forum_id, null, null, 2);
+
+		if ( !$data )
 		{
 			$this->redirect(__CLASS__, 'index');
-			return;
 		}
-		if ( !$this->model->ForumForums->isDisplayable($forum_id) )
+		if ( !$data->Forum->display )
 		{
 			$this->redirect(__CLASS__, 'index');
-			return;
 		}
-		if ( $this->model->getForumSeoUrl($forum_id) != $seo_url )
+
+		if ( $data->Forum->seo_url != $seo_url )
 		{
-			$this->redirect(__CLASS__, __FUNCTION__, array($forum_id, $this->model->getForumSeoUrl($forum_id)));
-			return;
+			$this->redirect(__CLASS__, __FUNCTION__, array($forum_id, $data->Forum->seo_url));
 		}
-
-
-		$forum_name 	= $this->model->getForumName($forum_id);
-		$threads		= $this->model->getThreads($forum_id);
-
 		// check wheter thread or post was last and sort by it accordingly
-		usort($threads, array('ForumsModel', 'sortForumThreadsByLastEntry'));
+		//usort($threads, array('ForumsModel', 'sortForumThreadsByLastEntry'));
 
-		$can_create		= $this->model->ForumForums->canCreate($forum_id);
 		$isAdmin		= $this->user->isAdmin();
 
-		$bOnlineUsers	= Blocks::get('Forums', 'Forum', 'onlineUsers');
-		$navigation		= Html::l($this->language->forum, __CLASS__, '').' -&gt; '.$forum_name;
 
+		$navigation		= Html::l($this->language->forum, __CLASS__, '').' -&gt; '.$data->Forum->name;
 
 		// ADD TEMPLATE ELEMENTS
-		HtmlTemplate::setTitle($forum_name.' '.$this->language->forum);
+		HtmlTemplate::setTitle($data->Forum->name.' '.$this->language->forum);
 
 		// ADD CSS
 		Css::addFile('/plugins/Forums/css/forum.css');
 
+		// BLOCKS
+		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
+
 		// VIEW VARIABLES
 		$this->set('language', $this->language);
-		$this->set('bOnlineUsers', $bOnlineUsers['html']);
-		$this->set('forum_name', $forum_name);
-		$this->set('forum_id', $forum_id);
-		$this->set('can_create', $can_create);
+		$this->set('data', $data);
 		$this->set('isAdmin', $isAdmin);
-		$this->set('threads', $threads);
 
 		$this->set('date_format', $this->dateFormat);
 		$this->set('time_format', $this->timeFormat);
@@ -319,7 +310,7 @@ class Forums extends PageController
 
 		// VIEW OPTIONS
 		$this->set('navi', $navigation);
-		$this->set('headline', $forum_name.' '.$this->language->forum);
+		$this->set('headline', $data->Forum->name.' '.$this->language->forum);
 		$this->view('show_forum');
 
 		// LAYOUT OPTIONS

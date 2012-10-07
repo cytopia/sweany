@@ -18,24 +18,6 @@ class ForumForumsTable extends Table
 		'seo_url'				=> 'seo_url',
 		'created'				=> 'created',
 		'modified'				=> 'modified',
-
-		// SUBSELECTS
-//		'thread_count'			=> '(SELECT COUNT(*)	FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id)',
-//		'post_count'			=> '(SELECT COUNT(*)	FROM [[post]]	WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id))',
-
-//		'last_thread_id'		=> '(SELECT id			FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-//		'last_thread_created'	=> '(SELECT created		FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-//		'last_thread_title'		=> '(SELECT title		FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-//		'last_thread_seo_url'	=> '(SELECT seo_url		FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-//		'last_thread_user_id'	=> '(SELECT fk_user_id	FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ORDER BY [[thread]].created DESC LIMIT 1)',
-//		'last_thread_username'	=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = last_thread_user_id )',
-
-//		'last_post_thread_id'	=> '(SELECT fk_forum_thread_id FROM [[post]] WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ) ORDER BY [[post]].created DESC LIMIT 1)',
-//		'last_post_created'		=> '(SELECT created		FROM [[post]]	WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ) ORDER BY [[post]].created DESC LIMIT 1)',
-//		'last_post_title'		=> '(SELECT title		FROM [[thread]]	WHERE id = last_post_thread_id)',
-//		'last_post_seo_url'		=> '(SELECT seo_url		FROM [[thread]] WHERE id = last_post_thread_id)',
-//		'last_post_user_id'		=> '(SELECT fk_user_id	FROM [[post]]	WHERE fk_forum_thread_id IN (SELECT id FROM [[thread]] WHERE fk_forum_forums_id = [[this]].id ) ORDER BY [[post]].created DESC LIMIT 1)',
-//		'last_post_username'	=> '(SELECT username	FROM [[user]]	WHERE [[user]].id = last_post_user_id )',
 	);
 
 
@@ -47,9 +29,17 @@ class ForumForumsTable extends Table
 			'primaryKey'	=> 'id',						# primary key in Category table
 			'foreignKey'	=> 'fk_forum_forums_id',		# Foreign key in Forum's table
 			'conditions'	=> array(),
-			'fields'		=> array('id', 'title', 'fk_user_id', 'seo_url'),
-		//	'order'			=> array('sort' => 'ASC'),
-			'limit'			=> array(),
+			'fields'		=> array('id', 'title', 'fk_user_id', 'seo_url', 'created', 'last_post_id', 'last_post_created'),
+			'subQueries'	=> array(
+				'username'		=> 'SELECT username		FROM users		 WHERE users.id = LastThread.fk_user_id',
+				'post_count'	=> 'SELECT COUNT(*) 	FROM forum_posts WHERE forum_posts.id = LastThread.last_post_id',
+				'post_title'	=> 'SELECT title		FROM forum_posts WHERE forum_posts.id = LastThread.last_post_id',
+				'post_seo_url'	=> 'SELECT seo_url		FROM forum_posts WHERE forum_posts.id = LastThread.last_post_id',
+				'post_user_id'	=> 'SELECT fk_user_id	FROM forum_posts WHERE forum_posts.id = LastThread.last_post_id',
+				'post_username'	=> 'SELECT username		FROM users		 WHERE users.id = (SELECT fk_user_id FROM forum_posts WHERE forum_posts.id = LastThread.last_post_id)',
+			),
+			'order'			=> array('GREATEST(created, last_post_created)'=>'DESC'),	# order by last thread or last post in thread
+			'limit'			=> 1,							# Limit by one thread only
 			'dependent'		=> false,
 			'hasCreated'	=> 'datetime',
 			'hasModified'	=> 'datetime',
@@ -59,21 +49,26 @@ class ForumForumsTable extends Table
 			'plugin'		=> 'Forums',
 			'primaryKey'	=> 'id',						# primary key in Category table
 			'foreignKey'	=> 'fk_forum_forums_id',		# Foreign key in Forum's table
-			'conditions'	=> array(),
-			'fields'		=> array('id', 'title', 'fk_user_id', 'seo_url'),
-		//	'order'			=> array('sort' => 'ASC'),
-			'limit'			=> array(),
+//			'conditions'	=> array(),
+			'fields'		=> array('id', 'title', 'body', 'view_count', 'is_sticky', 'is_locked', 'is_closed', 'fk_user_id', 'seo_url', 'created', 'last_post_id', 'last_post_created'),
+			'subQueries'	=> array(
+				'username'		=> 'SELECT username		FROM users		 WHERE users.id = Thread.fk_user_id',
+				'post_count'	=> 'SELECT COUNT(*) 	FROM forum_posts WHERE forum_posts.id = Thread.last_post_id',
+			),
+			'order'			=> array('GREATEST(created, last_post_created)'=>'DESC'),
+//			'limit'			=> array(),
+			'recursive'		=> array('hasMany' => array('LastPost')),	// only follow PostThread in $hasMany of ForumThreadsTable | instead of TRUE (which follows all relations)
 			'dependent'		=> false,
 			'hasCreated'	=> 'datetime',
 			'hasModified'	=> 'datetime',
 		),
 	);
-	
-	
-	
-	
-	/************************************************** GET FUNCTIONS **************************************************/
 
+
+
+
+	/************************************************** GET FUNCTIONS **************************************************/
+/*
 	public function getAllByCat($category_id, $order = array('sort' => 'ASC'), $limit = NULL)
 	{
 		$where	= sprintf("`fk_forum_category_id` = %d AND `display` = 1", $category_id);
@@ -89,20 +84,21 @@ class ForumForumsTable extends Table
 	public function getSeoUrl($forum_id)
 	{
 		return $this->getField($forum_id, 'seo_url');
-	}
+	}*/
 
 	/**
 	 *
 	 * Get all posts/threads ordered by last submitted
 	 * @param unknown_type $limit
 	 */
+	/*
 	public function getLatestEntries($limit = 10)
 	{
 		$query = '';
-	}
+	}*/
 
 	/************************************************** CHECK FUNCTIONS **************************************************/
-
+/*
 	public function isDisplayable($forum_id)
 	{
 		return $this->getField($forum_id, 'display');
@@ -116,5 +112,5 @@ class ForumForumsTable extends Table
 	public function canReply($forum_id)
 	{
 		return $this->getField($forum_id, 'can_reply');
-	}
+	}*/
 }
