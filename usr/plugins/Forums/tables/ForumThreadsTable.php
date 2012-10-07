@@ -6,8 +6,8 @@ class ForumThreadsTable extends Table
 
 	protected $hasModified	= array('created' => 'datetime');
 	protected $hasCreated	= array('created' => 'datetime');
-	
-	
+
+
 	public $fields	= array(
 		// FIELDS
 		'id'					=> 'id',
@@ -29,19 +29,19 @@ class ForumThreadsTable extends Table
 	public $subQueries		= array(
 		'count_posts'			=> 'SELECT COUNT(id) FROM forum_posts WHERE Thread.id=fk_forum_thread_id',
 	);
-	
+
+	public $order = array('created' => 'DESC');
+
 	// many to one
 	public $belongsTo = array(
 		'User' => array(
 			'table'			=> 'users',
 			'core'			=> true,
-			'primaryKey'	=> 'id',	// foreign key in the current model
+			'primaryKey'	=> 'id',			// foreign key in the current model
 			'foreignKey'	=> 'fk_user_id',	// foreign key in the current model
 			'conditions'	=> array(),
 			'fields'		=> array('id', 'username'),
 			'subQueries'	=> array(),
-			'order'			=> array(),
-			'limit'			=> array(),
 			'dependent'		=> false,
 			'hasCreated'	=> array('created' => 'datetime'),	# If set, adds date-time value on insert (sql field: 'created')
 			'hasModified'	=> array('modified' => 'datetime'),	# If set, adds date-time value on update (sql field: 'modified')
@@ -54,14 +54,13 @@ class ForumThreadsTable extends Table
 			'conditions'	=> array(),
 			'fields'		=> array('id', 'name', 'seo_url'),
 			'subQueries'	=> array(),
-			'order'			=> array(),
-			'limit'			=> array(),
 			'dependent'		=> false,
 			'hasCreated'	=> array('created' => 'datetime'),	# If set, adds date-time value on insert (sql field: 'created')
 			'hasModified'	=> array('modified' => 'datetime'),	# If set, adds date-time value on update (sql field: 'modified')
         ),
     );
-	public $hasOne = array(
+	// one to many
+	public $hasMany = array(
 		'LastPost'	=> array(
 			'table'			=> 'forum_posts',					# Name of the sql table
 			'plugin'		=> 'Forums',
@@ -71,13 +70,18 @@ class ForumThreadsTable extends Table
 			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created'),							# Array of fields to fetch
 			'subQueries'	=> array('username' => 'SELECT username FROM users WHERE users.id=LastPost.fk_user_id'),	# Array of subqueries to append
 			'order'			=> array('created'=>'DESC'),		# Array of order clauses on the given table
+			'limit'			=> 1,
 			'dependent'		=> false,
 			'recursive'		=> 1,								# Level of recursions (0-2)
 			'hasCreated'	=> array('created' => 'datetime'),	# If set, adds date-time value on insert (sql field: 'created')
 			'hasModified'	=> array('modified' => 'datetime'),	# If set, adds date-time value on update (sql field: 'modified')
 		),
 	);
-	
+
+	// one to one
+	public $hasOne = array(
+	);
+
 	/************************************************** GET FUNCTIONS **************************************************/
 
 
@@ -92,7 +96,7 @@ class ForumThreadsTable extends Table
 	{
 		return $this->find('all', array(
 			'fields'	=> $fields,
-			'order'		=> array('GREATEST(Thread.created, Thread.last_post_created)' => 'DESC'),
+			'order'		=> array('GREATEST(created, last_post_created)' => 'DESC'),
 			'limit'		=> $limit,
 		));
 	}

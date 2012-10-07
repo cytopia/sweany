@@ -34,15 +34,14 @@ class Arrays
 	 *	Prepend one or more associative elements
 	 *	to the beginning of an array.
 	 *
-	 *	@param	mixed[]	$arr	Array
+	 *	@param	mixed[]	&$arr	Array
 	 *	@param	mixed	$key	Array key
 	 *	@param	mixed	$va		Array value
-	 *	@return	mixed[]	$arr	Array with new element at top
-	 */	
-	public static function array_unshift_assoc($arr, $key, $val) 
-	{ 
-		$arr		= array_reverse($arr, true); 
-		$arr[$key]	= $val; 
-		return array_reverse($arr, true); 
-	} 
+	 */
+	public static function array_unshift_assoc(&$arr, $key, $val)
+	{
+		$arr		= array_reverse($arr, true);
+		$arr[$key]	= $val;
+		$arr		= array_reverse($arr, true);
+	}
 }
