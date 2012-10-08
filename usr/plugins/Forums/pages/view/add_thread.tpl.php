@@ -60,7 +60,7 @@
 							</div>
 						</div><br/>
 						<?php
-						echo Form::inputHidden('forum_id', $forum_id);
+						echo Form::inputHidden('forum_id', $Forum->id);
 						echo Form::submitButton('add_thread_submit', $language->create);
 						echo Form::submitButton('add_thread_preview', $language->preview);
 					echo Form::end();

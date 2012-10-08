@@ -92,18 +92,18 @@ class mysql extends aBootTemplate implements iDBO
 	}
 
 
-	
-	
+
+
 	/* ************************************************************************************************************************** *
 	 *
 	 *	SQL FUNCTIONS
 	 *
 	 * ************************************************************************************************************************** */
 
-	 
+
 	/* **************************************************** GENERIC SELECT **************************************************** */
-	 
-	 
+
+
 	/**
 	 *	Raw select function (optional with callback)
 	 *
@@ -128,7 +128,7 @@ class mysql extends aBootTemplate implements iDBO
 			SysLog::sqlError('select', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
 			return (-1);
 		}
-		
+
 		if ( $callback )
 		{
 			// TODO: use: mysql_fetch_assoc | might be faster
@@ -190,7 +190,7 @@ class mysql extends aBootTemplate implements iDBO
 		{
 			SysLog::sqlWarn('fetchField', 'result hash more than one row', self::$query, $data);
 		}
-		return $data[0][$field];	
+		return $data[0][$field];
 	}
 
 
@@ -272,12 +272,12 @@ class mysql extends aBootTemplate implements iDBO
 	public function rowExists($table, $id)
 	{
 		$count	= (is_numeric($id)) ? $this->count($table, sprintf('`id` = %d', (int)$id)) : 0;
-		
+
 		if ($count > 1)
 		{
 			SysLog::sqlWarn('rowExists', 'More than one row exists', $query);
 		}
-		
+
 		return (bool)$count;
 	}
 
@@ -400,7 +400,7 @@ class mysql extends aBootTemplate implements iDBO
 	{
 		// Prepare where clause
 		$where		= $condition ? 'WHERE '.$this->_prepare($condition) : '';
-		
+
 		// Anonymous functions
 		$fIncFields = function($field){
 			return '`'.$field.'` = `'.$field.'` + 1';
@@ -408,7 +408,7 @@ class mysql extends aBootTemplate implements iDBO
 		$fUpdFields = function($field, $value){
 			return '`'.$field.'` = '.$this->escape($value, true);
 		};
-		
+
 		// Apply anonymous functions
 		$incFields	= is_array($incFields) ? $incFields : array();
 		$updFields	= is_array($updFields) ? $updFields : array();
@@ -432,13 +432,13 @@ class mysql extends aBootTemplate implements iDBO
 
 		SysLog::sqlAppendTime($time);
 		SysLog::sqlInfo('incrementFields', $incFields, $query, null, $time);
-	
+
 		return true;
 	}
 
-	
-	
-	
+
+
+
 	/* **************************************************** DELETE **************************************************** */
 
 	/**
@@ -490,8 +490,8 @@ class mysql extends aBootTemplate implements iDBO
 		return $this->delete($table, sprintf('`id` = %d', (int)$id));
 	}
 
-	
-	
+
+
 	/* ************************************************************************************************************************** *
 	 *
 	 *	HELPER FUNCTIONS
@@ -517,7 +517,7 @@ class mysql extends aBootTemplate implements iDBO
 		return (bool)count($data);
 	}
 
-	
+
 	public function getColumnNames($table)
 	{
 		$query = 'SELECT
@@ -526,9 +526,9 @@ class mysql extends aBootTemplate implements iDBO
 					information_schema.columns
 				WHERE
 					TABLE_SCHEMA = DATABASE()
-				AND 
+				AND
 					TABLE_NAME = \''.$table.'\'';
-		
+
 		return $this->select($query, function($row, &$data){ $data[] = $row['name']; });
 	}
 	public function getPrimaryKey($table)
@@ -573,8 +573,8 @@ class mysql extends aBootTemplate implements iDBO
 		return $id;
 	}
 
-	
-	
+
+
 	/**
 	 *	Prepares and escapes a statement
 	 *
@@ -601,12 +601,12 @@ class mysql extends aBootTemplate implements iDBO
 
 		$stmt	= (isset($statement[0]) && is_string($statement[0]) && strlen($statement[0]))	? $statement[0] : null;
 		$vars	= (isset($statement[1])	&& is_array($statement[1])	&& count($statement[1]))	? $statement[1] : null;
-		
+
 		if ( !$stmt || !$vars )
 		{
 			return $stmt;
 		}
-		
+
 		$fPrepare = function(&$value, $key) {
 			if ($key[0]==':') {
 				$value = $this->escape($value, true);

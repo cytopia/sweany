@@ -59,8 +59,8 @@
 							</div>
 						</div><br/>
 						<?php
-						echo Form::inputHidden('forum_id', $forum_id);
-						echo Form::inputHidden('thread_id', $thread_id);
+						echo Form::inputHidden('forum_id', $data->Forum->id);
+						echo Form::inputHidden('thread_id', $data->Thread->id);
 						echo Form::submitButton('add_post_submit', $language->answer);
 						echo Form::submitButton('add_post_preview', $language->preview);
 					echo Form::end();
@@ -79,9 +79,10 @@
 			</tr>
 		</thead>
 	</table><br/>
+
 	<?php foreach ($entries as $entry): ?>
 		<?php
-			$timestamp	= strtotime($entry['created']);
+			$timestamp	= strtotime($entry->created);
 			$date		= date($date_format, $timestamp);
 			$time		= date($time_format, $timestamp);
 		?>
@@ -92,11 +93,11 @@
 				</tr>
 				<tr>
 					<td style="width:150px;">
-						<div class="forumUsername"><?php echo strlen($entry['username']) ? $entry['username'] : 'anonymous'; ?></div><br/>
+						<div class="forumUsername"><?php echo strlen($entry->username) ? $entry->username : 'anonymous'; ?></div><br/>
 					</td>
 					<td>
 						<div class="forumPostBody">
-							<?php echo Bbcode::parse($entry['body'], '/plugins/Forums/img/smiley'); ?>
+							<?php echo Bbcode::parse($entry->body, '/plugins/Forums/img/smiley'); ?>
 						</div>
 					</td>
 				</tr>
