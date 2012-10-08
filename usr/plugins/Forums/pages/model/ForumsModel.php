@@ -113,7 +113,7 @@ class ForumsModel extends PageModel
 
 	public function updateThreadView($thread_id)
 	{
-		$this->ForumThreads->incrementViewCount($thread_id);
+		$this->ForumThreads->increment($thread_id, array('view_count'));
 	}
 	/************************************************** EXIST FUNCTIONS **************************************************/
 	public function forumExists($forum_id)

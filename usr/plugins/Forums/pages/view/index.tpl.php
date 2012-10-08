@@ -28,10 +28,10 @@
 			</tr>
 			<?php foreach ($row->Forum as $forum):?>
 				<?php
+				$lastThread	= isset($forum->LastThread[0]) ? $forum->LastThread[0] : null;
+
 				if ( $forum->thread_count > 0 )
 				{
-					$lastThread				= $forum->LastThread[0];
-
 					$last_entry_created 	= $lastThread->created;
 					$last_entry_title		= Strings::shorten($lastThread->title,40, true);
 					$last_entry_user		= ($lastThread->fk_user_id > 0) ? $lastThread->username : 'anonymous';
@@ -95,7 +95,7 @@
 						<div class="forumEntryTime"><?php echo $date.' '.$time; ?></div>
 					</td>
 					<td style="text-align:center;vertical-align:middle;"><?php echo $forum->thread_count; ?></td>
-					<td style="text-align:center;vertical-align:middle;"><?php echo $lastThread->post_count; ?></td>
+					<td style="text-align:center;vertical-align:middle;"><?php echo isset($forum->post_count) ? $forum->post_count : 0; ?></td>
 				</tr>
 			<?php endforeach;?>
 		<?php endforeach;?>

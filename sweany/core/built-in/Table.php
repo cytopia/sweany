@@ -162,29 +162,42 @@ class Table
 	public $condition		= null;
 
 
+
+
 	/* ***************************************  R E L A T I O N   D E F I N E S  *************************************** */
 
 	/**
-	 *
-	 *	$hasOne		One-to-One Relation
+	 *	$hasOne		One-to-One Relation (fetches one row)
 	 *
 	 *	@param mixed[]	= Array(
-	 *		'<alias>' => array(							# Table alias of <table_name> (must match the alias name in the corresponding php class)
-	 *			'table'			=> '<table_name>',		# Name of the sql table
-	 *			'class'			=> '<class_name>',		# Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
-	 *			'core'			=> false				# True if this table file is in sweany/core/built-in/tables
-	 *			'plugin'		=> '<plugin_name>'|null,# Name of the plugin or (null or not set if it is not a plugin)
-	 *			'primaryKey'	=> 'id',				# Primary key in other table (<table_name>) (defaults to: 'id')
-	 *			'foreignKey'	=> '<foreign_key>',		# Foreign key in other table (<table_name>) (defaults to: 'fk_<$this->table>_id')
-	 *			'conditions'	=> array(),				# Array of conditions
-	 *			'fields'		=> array(),				# Array of fields to fetch
-	 *			'subQueries'	=> array(),				# Array of subqueries to append
-	 *			'dependent'		=> false,
-	 *			'recursive'		=> false|true,			# true: also load the depending table with its relations | false: only load this relation
-	 *			'recursive'		=> array('hasMany' => array('Alias1', 'Alias', 'belongsTo' => array('One'))
-	 *				# only follow specific relations recursively (in this case the Alias1 & Alias2 from 'hasMany' and 'One' from 'belongsTo')
-	 *			'hasCreated'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on insert (sql def field: 'created') or specify field name
-	 *			'hasModified'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on update (sql def field: 'modified') or specify field name
+	 *		'<alias>' => array(							# SQL Table alias to use (will also be the name of the array|object after fetching)
+	 *			'table'			=> '<table_name>',		# string:	Name of the sql table
+	 *			'class'			=> '<class_name>',		# string:	Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
+	 *			'core'			=> true|false			# boolean:	True if this table file is in sweany/core/built-in/tables
+	 *			'plugin'		=> '<plugin_name>'		# string:	Name of the plugin table (does not work with 'core' => true)
+	 *
+	 *			'primaryKey'	=> 'id',				# string:	Primary key of the hasOne table (<table_name>) (defaults to: 'id')
+	 *			'foreignKey'	=> '<foreign_key>',		# string:	Foreign key of the hasOne table (<table_name>) (defaults to: 'fk_<$this->table>_id')
+	 *
+	 *			'fields'		=> array(),				# mixed[]:	Array of fields and/or alias-field pairs to fetch
+	 *														'fields' => array(
+	 *															'id', 'name', '<alias1>' => '<field1>'
+	 *														)
+	 *			'subQueries'	=> array(),				# mixed[]:	Associative Array of subqueries to append
+	 *														'subQueries' => array(
+	 *															'id' => 'SELECT id FROM <table> WHERE <condition> LIMIT 1'
+	 *														)
+	 *			'condition'		=> '<condition>',		# string:	Conditions
+	 *
+	 *			'recursive'		=> false|true,			# boolean:	true: Also load the depending table with all its relations | false: only load this relation
+	 *			'recursive'		=> array()				# mixed[]:	Only follow the relations specified here
+	 *														'recursive' => array(
+	 *															'hasMany'	=> array('Alias1', 'Alias2'),
+	 *															'belongsTo'	=> array('Alias1')
+	 *
+	 *			'dependent'		=> false,				# boolean:	true: Also call the delete function of this hasOne relation on deleting
+	 *															Note: the delete function can be overwritten in each corresponding table
+	 *																  setting a row to is_deleted=1 for example
 	 *		),
 	 *	);
 	 */
@@ -193,29 +206,41 @@ class Table
 
 
 	/**
-	 *
-	 *	$hasMany	One-to-Many Relation
+	 *	$hasMany	One-to-Many Relation (fetches many rows)
 	 *
 	 *	@param mixed[]	= Array(
-	 *		'<alias>'	=> array(						# Table alias of <table_name> (must match the alias name in the corresponding php class)
-	 *			'table'			=> '<table_name>',		# Name of the sql table
-	 *			'class'			=> '<class_name>',		# Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
-	 *			'core'			=> false				# True if this table file is in sweany/core/built-in/tables
-	 *			'plugin'		=> '<plugin_name>'|null,# Name of the plugin or (null or not set if it is not a plugin)
-	 *			'primaryKey'	=> 'id',				# primary key in other table (<table_name>) (defaults to: 'id')
-	 *			'foreignKey'	=> '<foreign_key>',		# Foreign key in other table (<table_name>) (defaults to: 'fk_'<$this->table>_id')
-	 *			'conditions'	=> array(),				# Array of conditions
-	 *			'fields'		=> array(),				# Array of fields to fetch
-	 *			'subQueries'	=> array(),				# Array of subqueries to append
-	 *			'order'			=> array(),				# Array of order clauses on the given table
-	 *			'limit'			=> array(),				# Array of Limit clause
-	 *			'dependent'		=> false,
-	 *			'recursive'		=> false|true,			# true: also load the depending table with its relations | false: only load this relation
-	 *			'recursive'		=> array('hasMany' => array('Alias1', 'Alias', 'belongsTo' => array('One'))
-	 *				# only follow specific relations recursively (in this case the Alias1 & Alias2 from 'hasMany' and 'One' from 'belongsTo')
-	 *			'hasCreated'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on insert (sql def field: 'created') or specify field name
-	 *			'hasModified'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on update (sql def field: 'modified') or specify field name
-     *   	),
+	 *		'<alias>' => array(							# SQL Table alias to use (will also be the name of the array|object after fetching)
+	 *			'table'			=> '<table_name>',		# string:	Name of the sql table
+	 *			'class'			=> '<class_name>',		# string:	Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
+	 *			'core'			=> true|false			# boolean:	True if this table file is in sweany/core/built-in/tables
+	 *			'plugin'		=> '<plugin_name>'		# string:	Name of the plugin table (does not work with 'core' => true)
+	 *
+	 *			'primaryKey'	=> 'id',				# string:	Primary key of the hasMany table (<table_name>) (defaults to: 'id')
+	 *			'foreignKey'	=> '<foreign_key>',		# string:	Foreign key of the hasMany table (<table_name>) (defaults to: 'fk_<$this->table>_id')
+	 *
+	 *			'fields'		=> array(),				# mixed[]:	Array of fields and/or alias-field pairs to fetch
+	 *														'fields' => array(
+	 *															'id', 'name', '<alias1>' => '<field1>'
+	 *														)
+	 *			'subQueries'	=> array(),				# mixed[]:	Associative Array of subqueries to append
+	 *														'subQueries' => array(
+	 *															'id' => 'SELECT id FROM <table> WHERE <condition> LIMIT 1'
+	 *														)
+	 *			'condition'		=> '<condition>',		# string:	Conditions
+	 *			'order'			=> array()				# mixed[]:	Associative array of order clauses
+	 *			'limit'			=> int					# integer:	Limit by X rows
+	 *
+	 *			'recursive'		=> false|true,			# boolean:	true: Also load the depending table with all its relations | false: only load this relation
+	 *			'recursive'		=> array()				# mixed[]:	Only follow the relations specified here
+	 *														'recursive' => array(
+	 *															'hasMany'	=> array('Alias1', 'Alias2'),
+	 *															'belongsTo'	=> array('Alias1')
+	 *														),
+	 *
+	 *			'dependent'		=> false,				# boolean:	true: Also call the delete function of this hasMany relation on deleting
+	 *															Note: the delete function can be overwritten in each corresponding table
+	 *																  setting a row to is_deleted=1 for example
+	 *		),
 	 *	);
 	 */
 	public $hasMany			= array();
@@ -224,26 +249,34 @@ class Table
 
 	/**
 	 *
-	 *	$belongsTo	Many-to-One Relation
+	 *	$belongsTo	Many-to-One Relation (fetches one row)
 	 *
 	 *	@param	Array
 	 *	(
-	 *		'<alias>'	=> array(						# Alias (must match the alias name in the corresponding php class)
-	 *			'table'			=> '<table_name>',		# Name of the sql table
-	 *			'class'			=> '<class_name>',		# Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
-	 *			'core'			=> false				# True if this table file is in sweany/core/built-in/tables
-	 *			'plugin'		=> '<plugin_name>'|null,# Name of the plugin or (null or not set if it is not a plugin)
-	 *			'primaryKey'	=> 'id',				# primary key in other table (<table_name>)		(defaults to: 'id')
-	 *			'foreignKey'	=> '<foreign_key>',		# Foreign key in current table (<$this->table>)	(defaults to: 'fk_<table_name>_id')
-	 *			'conditions'	=> array(),				# Array of conditions
-	 *			'fields'		=> array(),				# Array of fields to fetch
-	 *			'subQueries'	=> array(),				# Array of subqueries to append
-	 *			'dependent'		=> false,
-	 *			'recursive'		=> false|true,			# true: also load the depending table with its relations | false: only load this relation
-	 *			'recursive'		=> array('hasMany' => array('Alias1', 'Alias', 'belongsTo' => array('One'))
-	 *				# only follow specific relations recursively (in this case the Alias1 & Alias2 from 'hasMany' and 'One' from 'belongsTo')
-	 *			'hasCreated'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on insert (sql def field: 'created') or specify field name
-	 *			'hasModified'	=> '<SQLDataType>' | array('<field_name>' => '<SQLDataType>'),		# If set, adds date-time value on update (sql def field: 'modified') or specify field name
+	 *		'<alias>' => array(							# SQL Table alias to use (will also be the name of the array|object after fetching)
+	 *			'table'			=> '<table_name>',		# string:	Name of the sql table
+	 *			'class'			=> '<class_name>',		# string:	Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
+	 *			'core'			=> true|false			# boolean:	True if this table file is in sweany/core/built-in/tables
+	 *			'plugin'		=> '<plugin_name>'		# string:	Name of the plugin table (does not work with 'core' => true)
+	 *
+	 *			'primaryKey'	=> 'id',				# string:	Primary key of the belongsTi table (<table_name>) (defaults to: 'id')
+	 *			'foreignKey'	=> '<foreign_key>',		# string:	Foreign key in $this->table (defaults to: 'fk_<table_name>_id')
+	 *
+	 *			'fields'		=> array(),				# mixed[]:	Array of fields and/or alias-field pairs to fetch
+	 *														'fields' => array(
+	 *															'id', 'name', '<alias1>' => '<field1>'
+	 *														)
+	 *			'subQueries'	=> array(),				# mixed[]:	Associative Array of subqueries to append
+	 *														'subQueries' => array(
+	 *															'id' => 'SELECT id FROM <table> WHERE <condition> LIMIT 1'
+	 *														)
+	 *			'condition'		=> '<condition>',		# string:	Conditions
+	 *
+	 *			'recursive'		=> false|true,			# boolean:	true: Also load the depending table with all its relations | false: only load this relation
+	 *			'recursive'		=> array()				# mixed[]:	Only follow the relations specified here
+	 *														'recursive' => array(
+	 *															'hasMany'	=> array('Alias1', 'Alias2'),
+	 *															'belongsTo'	=> array('Alias1')
      *   	),
 	 *	);
 	 */
@@ -280,11 +313,6 @@ class Table
 	 */
 	public function __construct()
 	{
-		// TODO: Error check if all values have been set
-		// Only activate during validation mode
-
-		// TODO: in validation mode, check if all fields are set from this table!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// TODO:!!!!
 		// initialize order to primary
 		if ( !$this->order )
 		{
@@ -357,12 +385,23 @@ class Table
 	 *
 	 *	@return	mixed[]			$data		Returns all found entities
 	 */
-	public function loadMany($ids, $fields = null, $subQueries = null, $order = null, $recursive = 2, $return = 'object')
+	public function loadMany($ids, $fields = null, $subQueries = null, $order = null, $recursive = 1, $return = 'object')
 	{
-		$condition	= $this->primary_key.' IN ('.implode(',', $ids).')';
+		$fields		= ( is_array($fields) && count($fields) ) ? $fields : $this->fields;
+		$subQueries	= ( is_array($subQueries) && count($subQueries) ) ? $subQueries : $this->subQueries;
+
+		if ( count($ids) == 1 ) {
+			// Escape input
+			$condition = $this->prepare(array($this->alias.'.'.$this->primary_key.' = :id', array(':id' => $ids[0])));
+		} else {
+			// Escape input
+			$ids = implode(', ', array_map(function($id){ return $this->db->escape($id); }, $ids));
+			$condition = $this->alias.'.'.$this->primary_key.' IN ('.$ids.')';
+		}
 		$order		= ($order) ? $order : ($this->order ? $this->order : $this->alias.'.'.$this->primary_key);
-		$query		= $this->buildQuery($fields, $subQueries, $condition, $order, null, $recursive);
-		$data		= $this->retrieveResults($query, $return);
+
+		$query		= $this->buildQuery($fields, $subQueries, $condition, $order, null, $recursive, null, null);
+		$data		= $this->retrieveResults($query, $recursive, null, $return);
 		return $data;
 	}
 
@@ -468,11 +507,16 @@ class Table
 	 *			'range'	=> array(5,3)			# 6th ,7th and 8th result
 	 *			[NOTE]				Damn useless in 'count' operation
 	 *
-	 *		recursive	=> 0-3	Overwrite: recursion level
+	 *		recursive	=> 0-3	Overwrite: recursion level for relations
 	 *			'recursive'	=> 0				# Flat - no relations, only this table
-	 *			'recursive'	=> 1				# With relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
-	 *			'recursive'	=> 2				# With relations and follow recursion specified by relation
-	 *			'recursive'	=> 3				# With relations and force recursion on all relations
+	 *			'recursive'	=> 1				# With all relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
+	 *			'recursive'	=> 2				# With all relations and follow recursion (one level) specified by child relation
+	 *			'recursive'	=> 3				# With all relations and force recursion (one level) on all child relations
+	 *		relation		Limit relations to follow (on this level)
+	 *			'relation' => array(
+	 *				'hasMany' => array('Edit', 'Post')	# Only follow Edit and Post in hasMany relation (and their respective recursion settings)
+	 *			)
+	 *
 	 *			[DEFAULT] 1
 	 *			[NOTE]				Useless in 'count' operation
 	 *
@@ -492,12 +536,12 @@ class Table
 			return $this->db->count($condition);
 		}
 
-
 		// Get Options;
 		$fields 	= isset($options['fields'])		? $options['fields']	: $this->fields;
 		$subQueries	= isset($options['subQueries']) ? $options['subQueries']: $this->subQueries;
 		$order		= isset($options['order'])		? $options['order']		: $this->order;
 		$recursive	= isset($options['recursive'])	? $options['recursive']	: 1;	// defaults to 1
+		$relation	= isset($options['relation'])	? $options['relation']	: null;	// only follow specific relations?
 
 		// Get mutually exclusive limit/order (limit takes priority over range)
 		if ( isset($options['limit']) )
@@ -512,10 +556,9 @@ class Table
 		$return		= isset($options['return'])		? $options['return']	: 'object';	// default to object, if no value is set
 		$return		= ($return == 'array' || $return == 'object') ? $return : 'object';	// default to object, if wrong value is set
 
-
 		// Build Query
-		$query		= $this->buildQuery($fields, $subQueries, $condition, $order, $limit, $recursive);
-		$data		= $this->retrieveResults($query, $return);
+		$query		= $this->buildQuery($fields, $subQueries, $condition, $order, $limit, $recursive, $relation, null);
+		$data		= $this->retrieveResults($query, $recursive, $relation, $return);
 
 		// NOTE:
 		// TODO: This is only a temporary solution and will be replaced
@@ -557,6 +600,8 @@ class Table
 	 */
 	public function save($fields, $return = 1)
 	{
+		// TODO: remove fields, that do not belong here
+		// via $this->fields
 		$fields = $this->_appendCreatedFieldIfExist($fields);
 		$ret	= $this->db->insert($this->table, $fields, (($return) ? true : false));
 
@@ -564,7 +609,7 @@ class Table
 		{
 			// return non-recursive row
 			case 2:
-				return $this->load($ret, null, 0);
+				return $this->load($ret, null, null, 0);
 
 			// [DEFAULT] return success of operation or last insert id
 			default:
@@ -609,7 +654,7 @@ class Table
 		switch ($return)
 		{
 			case 1:		return $id;
-			case 2:		return $this->load($id, null, 0);
+			case 2:		return $this->load($id, null, null, 0);
 			default:	return $success;
 		}
 	}
@@ -622,14 +667,13 @@ class Table
 	public function increment($id, $fields, $return = 0)
 	{
 		$condition = $this->prepare(array('id = :id', array(':id' => $id)));
-
-		return $this->db->incrementFields($this->table, $fields, $condition, $return);
+		return $this->db->incrementFields($this->table, $fields, null, $condition, $return);
 	}
 
 	// TODO: return (array)values on $return = 2
 	public function incrementAll($condition, $fields, $return = 0)
 	{
-		return $this->db->incrementFields($this->table, $fields, $this->prepare($condition), $return);
+		return $this->db->incrementFields($this->table, $fields, null, $this->prepare($condition), $return);
 	}
 
 
@@ -711,174 +755,122 @@ class Table
 	}
 
 
-	private function buildDerivedTableQueryWithRowCount($table, $alias, $p_alias = '', $fields, $subQueries, $where, $order = null)
+
+
+
+
+
+
+	private function buildAliasedSubQueries($subQueries, $tbl_alias, $alias_prefix)
 	{
-
-		$fields = $this->buildFields($fields, '', '', '', '', false);
-		$fields = array_merge($fields, $subQueries);
-		$fields	= implode(',', $fields);
-		$where	= $where ? ' WHERE '.$this->prepare($where) : '';
-
-		$order	= (is_array($order) && count($order)) ? 'ORDER BY '.implode(',', array_map( create_function('$field, $direction', 'return $field." ".$direction;'), array_keys($order), array_values($order))) : '';
-		$query	= sprintf(
-			'SELECT '.
-				'%s '.		// FIELDS
-			'FROM '.
-				'%s AS %s, '.		// Table
-				'(SELECT @'.$p_alias.$alias.ROW_COUNT.' := 0)	AS x, '.// ROW_COUNT
-				'(SELECT @'.$p_alias.$alias.PREV_ID.'   := NULL)	AS y '.	// Previous row id
-			'%s '.
-			'%s ',
-			$fields, $table, $alias, $where, $order
-		);
-		return $query;
+		$build = function($alias, $query) use ($tbl_alias, $alias_prefix) {
+			return '('.$query.') AS `'.$alias_prefix.$tbl_alias.'.'.$alias.'`';
+		};
+		return array_map($build, array_keys($subQueries), array_values($subQueries));
 	}
 
-	private function buildSubQueries($subQueries, &$iFields, &$oFields, $i_prefix, $o_prefix, $t_alias)
+
+	private function buildAliasedFields($tbl_fields, $tbl_alias, $field_prefix, $alias_prefix)
 	{
-		$queries		= array();
-
-		foreach ($subQueries as $sAlias => $query)
-		{
-			$queries[]	= '('.$query.') AS `'.$sAlias.'`';
-			$iFields[]	= $i_prefix.$t_alias.'.'.$sAlias.' AS `'.$o_prefix.$t_alias.'_'.$sAlias.'`';
-			$oFields[]	= $o_prefix.$t_alias.'_'.$sAlias.' AS `'.$i_prefix.$t_alias.'.'.$sAlias.'`';
-		}
-		return $queries;
-	}
-	private function buildMainTableSubQueries($subQueries, &$iFields, &$oFields, $t_alias)
-	{
-		$queries		= array();
-
-		foreach ($subQueries as $sAlias => $query)
-		{
-			$queries[]	= '('.$query.') AS `'.$sAlias.'`';
-			$iFields[]	= $t_alias.'.'.$sAlias.' AS `'.$t_alias.'_'.$sAlias.'`';
-			$oFields[]	= $t_alias.'_'.$sAlias.' AS `'.$sAlias.'`';
-		}
-		return $queries;
-	}
-
-	private function buildFields($tbl_fields, $field_prefix, $alias_prefix, $field_seperator = '.', $alias_seperator = '_', $force_alias = true)
-	{
-		$fields	= array();
-
-		foreach ($tbl_fields as $alias => $field)
-		{
-			// numerical array (no alias)		// AS <tbl_alias>.<field_name>
-			if ( is_integer($alias) )
-			{
-				$fields[]	= ($force_alias) ? $field_prefix.$field_seperator.$field.' AS `'.$alias_prefix.$alias_seperator.$field.'`' : $field_prefix.$field_seperator.$field;
+		$build = function($alias, $field) use($tbl_alias, $field_prefix, $alias_prefix) {
+			// numerical array (no alias)		// AS [<parent_tbl_alias>.]<tbl_alias>.<field_name>
+			if ( is_integer($alias) ) {
+				return $field_prefix.$tbl_alias.'.'.$field.' AS `'.$alias_prefix.$tbl_alias.'.'.$field.'`';
 			}
-			// associative array (has alias)	// AS <tbl_alias>.<field_alias>
-			else
-			{
-				$fields[]	= $field_prefix.$field_seperator.$field.' AS `'.$alias_prefix.$alias_seperator.$alias.'`';
+			// associative array (has alias)	// AS [<parent_tbl_alias>.]<tbl_alias>.<field_alias>
+			else {
+				return $field_prefix.$tbl_alias.'.'.$field.' AS `'.$alias_prefix.$tbl_alias.'.'.$alias.'`';
 			}
-		}
-		return $fields;
+		};
+		return array_map($build, array_keys($tbl_fields), array_values($tbl_fields));
 	}
 
-	private function buildQuery($fields = null, $subQueries = null, $where = null, $order = null, $limit = null, $recursive = 1)
+
+
+	/**
+	 * buildQuery
+	 *
+	 * @param mixed[]			$fields
+	 * @param mixed[]			$subQueries
+	 * @param string			$where
+	 * @param mixed[]			$order
+	 * @param integer			$limit
+	 * @param integer			$recursive
+	 *	'recursive':	 0						# Flat - no relations, only this table
+	 *	'recursive':	 1						# With all relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
+	 *	'recursive':	 2						# With all relations and follow recursion (one level) specified by child relation
+	 *	'recursive':	 3						# With all relations and force recursion (one level) on all child relations
+	 * @param mixed[]			$relation		# Follow only specific relations (on this level)
+	 *	'$relation':	 array(
+	 *		'hasMany' => array('Edit', 'Post')	# Only follow Edit and Post in hasMany relation (plus THEIR respective recursion settings)
+	 *	)
+	 * @param object			$tblClass
+	 * @return string
+	 */
+	private function buildQuery($fields, $subQueries, $where = null, $order = null, $limit = null, $recursive = 1, $relation = null, $tblClass = null)
 	{
-		// CHOOSE DEFAULT FIELDS
-		$fields	= ( is_array($fields) && count($fields) ) ? $fields : $this->fields;
+		// Array holding all fields to be selected
+		$allFields	= array();
 
-		// CHOOSE DEFAULT SUBQUERIES
-		$subQueries	= ( is_array($subQueries) && count($subQueries) ) ? $subQueries : $this->subQueries;
+		// ------------------------------------ MAIN QUERY ------------------------------------
 
-		// OUTER FIELDS
-		$o_row_name		= $this->alias.ROW_COUNT;
-		$o_row			= $this->alias.ROW_COUNT.' AS '.ROW_COUNT;
-		$o_pk			= $this->alias.'_'.$this->primary_key.' AS '.PRIM_KEY;
-		$o_fields		= $this->buildFields($fields, $this->alias, /*$this->alias*/'', '_', /*'.'*/'');		// <alias>_<field> AS `<alias>.<field>`
-		array_unshift($o_fields, $o_row);			// _ROW_COUNT_ to the beginning
-		array_unshift($o_fields, $o_pk);			// _PRIM_KEY_ to the beginning
-
-		// INNER FIELDS
-		$i_fields		= $this->buildFields($fields, $this->alias, $this->alias, '.', '_');	// <alias>.<field> AS `<alias>_<field>`
-		$row_num_cond	= '@'.$this->alias.PREV_ID.' = '.$this->alias.'.'.$this->primary_key;
-		$row_num_var	= '@'.$this->alias.ROW_COUNT.' :=  IF('.$row_num_cond.', @'.$this->alias.ROW_COUNT.', @'.$this->alias.ROW_COUNT.'+1) AS '.$o_row_name;
-		$prev_id		= '@'.$this->alias.PREV_ID.  ' := '.$this->alias.'.'.$this->primary_key;
-		array_unshift($i_fields, $row_num_var);		// row_number to the beginning
-
-		// INNER FIELDS to append at the bottom
-		$i_fields_last[]= $prev_id;
+		$aliasedPK	= $this->alias.'.'.$this->primary_key;		// Primary key identifier
+		// Get main query fields
+		$fields		= $this->buildAliasedFields($fields, $this->alias, '', '');
+		$fields 	= array_merge(array($aliasedPK.' AS `'.PRIM_KEY.'`'), $fields);
 
 
-		// SUBQUERIES
-		$subQueries = $this->buildMainTableSubQueries($subQueries, $i_fields, $o_fields, $this->alias);
+		// Get main query subqueries
+		$subQueries = $this->buildAliasedSubQueries($subQueries, $this->alias, '');
 
-		// DERIVED INNER MAIN TABLE
-		$main_table = $this->buildDerivedTableQueryWithRowCount($this->table, $this->alias, '', $fields, $subQueries, $where, $order);
+		// Add fields and subqueries to the fields to be selected
+		$allFields	= array_merge($fields, $subQueries);
+
+		$where		= ($where) ? 'WHERE '	.$where : '';
+		$order		= ($order) ? 'ORDER BY '.implode(',', array_map(create_function('$key, $dir', 'return $key." ".$dir;'), array_keys($order), array_values($order))) : '';
+		$limit		= ($limit) ? 'LIMIT '	.$limit : '';
 
 
-		// BUILD LIMIT
-		if ($limit) {
-			$tmp	= $limit;
-			$limit	= array();
-			$limit[$o_row_name] = $tmp;
-		}
+		// ------------------------------------ JOINS(s) ------------------------------------
 
-		// JOINS
-		$joins	= null;
+		$joins	= array();
 		if ( $recursive > 0)
 		{
-			// Add hasOne (one-to-one)
-			$this->_buildHasOneQuery(null, $o_fields, $i_fields, $i_fields_last, $joins, $row_num_cond, $recursive);
+			// We only join the X->one relations here
+			// All X->many have to be done in a for-loop, otherwise we will have no limit available at them
 
-			// Add hasMany (one-to-many)
-			$this->_buildHasManyQuery(null, $o_fields, $i_fields, $i_fields_last, $joins, $order, $limit, $row_num_cond, $recursive);
+			// Add hasOne (one-to-one)
+			if ($tblClass) {
+				$tblClass->_buildHasOneQuery($relation, $allFields, $joins, $recursive, '');
+			} else {
+				$this->_buildHasOneQuery($relation, $allFields, $joins, $recursive, '');
+			}
 
 			// Add belongsTo (many-to-one)
-			$this->_buildBelongsToQuery(null, $o_fields, $i_fields, $i_fields_last, $joins, $row_num_cond, $recursive);
+			if ($tblClass) {
+				$tblClass->_buildBelongsToQuery($relation, $allFields, $joins, $recursive, '');
+			} else {
+				$this->_buildBelongsToQuery($relation, $allFields, $joins,  $recursive, '');
+			}
 		}
-		// Append bottom INNER FIELDS after relations have been worked through
-		$i_fields = array_merge($i_fields, $i_fields_last);
 
 
-
-		// MAIN CONDITION (empty where, it has already been used in derived table)
-		$where	= null; //($where) ? 'WHERE '.$where : '';
-
-		// GET LIMIT via WHERE row_count
-		$where	= (is_array($limit) && count($limit)) ? 'WHERE '.implode(' AND ', array_map( create_function('$key, $val', 'return $key."<=".$val;'), array_keys($limit), array_values($limit))) : '';
-/*
-		if ($where && $limit) {
-			$where = $where.' AND '.$limit;
-		}
-		else if ($where && !$limit) {
-			$where = $where;
-		}
-		else if (!$where && $limit) {
-			$where = 'WHERE '.$limit;
-		}*/
-
-		// We don't need the order at the end, as we do it in derived tables
-		//$order	= (is_array($order) && count($order)) ? 'ORDER BY '.implode(',', array_map( create_function('$field, $direction', 'return $field." ".$direction;'), array_keys($order), array_values($order))) : '';
-
-		// We use (simulated for mysql) row_numbers to limit the returned rows
-		// so there is no LIMIT clause needed
 		$query =
 			'SELECT '.
-				implode(', ', $o_fields).' '.		// OUTER FIELDS: <alias>_<field> AS <alias>.<field>
-			'FROM ('.
-				'SELECT '.
-					implode(',', $i_fields).' '.	// INNER FIELDS: <alias>.<field> AS <alias>_field> & row_number vars
-				'FROM ('.
-					$main_table.' '.				// Derived Table
-				') AS '.$this->alias.' '.
-				implode('', $joins).' '.							// Derived JOIN(s)
-			') AS z '.
-			$where.' '.		// WHERE
+				implode(', ', $allFields).' '.		// OUTER FIELDS: <alias>_<field> AS <alias>.<field>
+			'FROM '.
+				$this->table.' AS '.$this->alias.' '.
+			implode('', $joins).' '.				// JOIN(s)
+			$where.' '.
 			//'%s '.		// GROUP
 			//'%s '.		// HAVING
-//			$order.			// ORDER
-			//'%s ';		// LIMIT
-			'';
-		//debug($query);
+			$order.' '.
+			$limit;
+
 		return $query;
 	}
+
+
 
 
 	/**
@@ -895,207 +887,133 @@ class Table
 	 *	the result array according to the set entity relations
 	 *	(hasOne, hasMany, belongsTo...)
 	 */
-	private function retrieveResults($query, $return = 'object')
+	private function retrieveResults($query, $recursive = 1, $relation = null, $return = 'object')
 	{
-		$i1			= 0;			// row_count level 1
-		$i2			= 0;			// row_count level 2
-		$i3			= 0;			// row_count level 3
-		$alias		= $this->alias;
+		$count		= 0;
 
+		$getArray = function($row, &$data) use (&$count, $relation, $recursive) {
 
-		$lambdaArray = function ($row, &$data) use (&$i1, &$i2, &$i3, $alias)
-		{
+			$many	= array();
+
 			foreach ($row as $field => $value)
 			{
 				$part	= explode('.', $field);
 				$size	= count($part);
 
-				if ($size == 1 && $field != PRIM_KEY && $field != ROW_COUNT)	// This table
+				// --------------------------------------- Primary Key ---------------------------------------
+				if ($size == 1 && $recursive )
 				{
-					$i1 = ($row[ROW_COUNT]-1);	// current row number
-					$data[$i1][$alias][$field] = $value;
-
-				}
-				else if ($size == 2)	// flat entries
-				{
-					$l2Alias	= $part[0];
-					$i2			= $row[$l2Alias.'.'.ROW_COUNT] - 1;
-					$l2Rel		= $row[$l2Alias.'.'.REL_TYPE];
-
-					if ( $part[1] != PRIM_KEY && $part[1] != ROW_COUNT && $part[1] != REL_TYPE )
+					if ( $recursive>0  || (is_array($relation) && in_array('hasMany', array_keys($relation))) )
 					{
-						// <one|many> to <one>
-						if ( $l2Rel == 'one')
-						{
-							$data[$i1][$l2Alias][$part[1]] = $value;
-						}
-						// <one|many> to <many>
-						else if ( $l2Rel == 'many' )
-						{
-							$data[$i1][$l2Alias][$i2][$part[1]] = $value;
-						}
+						$pk		= $value;
+						$many	= $this->_retrieveHasMany($relation, $pk, $recursive);
 					}
 				}
-				else if ( $size == 3 )
+				// --------------------------------------- Flat Entries ---------------------------------------
+				else if ( $size == 2 )
 				{
-					$l3Alias	= $part[1];
-					$i3			= $row[$l2Alias.'.'.$l3Alias.'.'.ROW_COUNT] - 1;
-					$l3Rel		= $row[$l2Alias.'.'.$l3Alias.'.'.REL_TYPE];
-
-					if ( $part[2] != PRIM_KEY && $part[2] != ROW_COUNT && $part[2] != REL_TYPE )
-					{
-						// <one|many> to <one>
-						if ( $l3Rel == 'one')
-						{
-							// <one|many> to <one>
-							if ( $l2Rel == 'one')
-							{
-								$data[$i1][$l2Alias][$l3Alias][$part[2]] = $value;
-							}
-							// <one|many> to <many>
-							else if ( $l2Rel == 'many' )
-							{
-								$data[$i1][$l2Alias][$i2][$l3Alias][$part[2]] = $value;
-							}
-						}
-						// <one|many> to <many>
-						else if ( $l3Rel == 'many' )
-						{
-							// <one|many> to <one>
-							if ( $l2Rel == 'one')
-							{
-								$data[$i1][$l2Alias][$l3Alias][$i3][$part[2]] = $value;
-							}
-							// <one|many> to <many>
-							else if ( $l2Rel == 'many' )
-							{
-								$data[$i1][$l2Alias][$i2][$l3Alias][$i3][$part[2]] = $value;
-							}
-						}
+					$alias1 = $part[0];
+					$field	= $part[1];
+					if ( $field != PRIM_KEY ) {
+						$data[$count][$alias1][$field] = $value;
+					}
+					else {
+						//if ( in_array($alias1, $hasMany) ){}	// We have found a hasMany relation here
+						// TODO:!! do we need to load something here?
+					}
+				}
+				// --------------------------------------- Recursive Entries ---------------------------------------
+				if ( $size == 3 )
+				{
+					$alias1 = $part[0];
+					$alias2 = $part[1];
+					$field	= $part[2];
+					if ( $field != PRIM_KEY ) {
+						$data[$count][$alias1][$alias2][$field] = $value;
+					}
+					else {
+						// check for recursion here
+						//if ( in_array($alias1, $hasMany) ){}	// We have found a hasMany relation here
+						// TODO:!! do we need to load something here?
 					}
 				}
 			}
+			$data[$count] = array_merge($data[$count], $many);
+			$count++;
 		};
 
-		$lambdaObject = function ($row, &$data) use (&$i1, &$i2, &$i3, $alias)
-		{
+
+
+		$getObject = function($row, &$data) use (&$count, $relation, $recursive) {
+
+			$many	= array();
+
 			foreach ($row as $field => $value)
 			{
 				$part	= explode('.', $field);
 				$size	= count($part);
 
-				if ($size == 1 && $field != PRIM_KEY && $field != ROW_COUNT)	// This table
+				// --------------------------------------- Primary Key ---------------------------------------
+				if ($size == 1 && $recursive)
 				{
-					$i1 = ($row[ROW_COUNT]-1);	// current row number
 
-					if ( !isset($data[$i1]) ) {
-						$data[$i1] = new stdClass;
-					}
-					if ( !isset($data[$i1]->$alias) ) {
-						$data[$i1]->$alias = new stdClass;
-					}
-					$data[$i1]->$alias->$field = $value;
-
-				}
-				else if ($size == 2)	// flat entries
-				{
-					$l2Alias	= $part[0];
-					$i2			= $row[$l2Alias.'.'.ROW_COUNT] -1;
-					$l2Rel		= $row[$l2Alias.'.'.REL_TYPE];
-
-					if ( $part[1] != PRIM_KEY && $part[1] != ROW_COUNT && $part[1] != REL_TYPE )
+					if ( $recursive>0 || (is_array($relation) && in_array('hasMany', array_keys($relation))) )
 					{
-						// <one|many> to <one>
-						if ( $l2Rel == 'one')
-						{
-							if ( !isset($data[$i1]) ) {
-								$data[$i1] = new stdClass;
-							}
-							if ( !isset($data[$i1]->$l2Alias) ) {
-								$data[$i1]->{$l2Alias} = new stdClass;
-							}
-							//debug('OK: in Table.php retrieveResults, size==2  X->one');
-							$data[$i1]->{$l2Alias}->$part[1] = $value;
-						}
-						// <one|many> to <many>
-						//else if ( $l2Rel == 'many' )
-						else
-						{
-							if ( !isset($data[$i1]->{$l2Alias}[$i2]) ) {
-								$data[$i1]->{$l2Alias}[$i2] = new stdClass;
-							}
-							//debug('FIXME: in Table.php retrieveResults, size==2  X->many');
-							(object)$data[$i1]->{$l2Alias}[$i2] = (object)array_merge((array)$data[$i1]->{$l2Alias}[$i2], array($part[1] => $value));
-							//(object)$data[$i][$l2Alias]->$l2Index->$part[1] = $value;
-						}
+						$pk		= $value;
+						$many	= $this->_retrieveHasMany($relation, $pk, $recursive);
 					}
 				}
+				// --------------------------------------- Flat Entries ---------------------------------------
+				else if ( $size == 2 )
+				{
+					$alias1 = $part[0];
+					$field	= $part[1];
+					if ( $field == PRIM_KEY ) {
+						//if ( in_array($alias1, $hasMany) ){}	// We have found a hasMany relation here
+						// TODO:!! do we need to load something here?
+
+					} else {
+						if ( !isset($data[$count]) ) {
+							$data[$count] = new stdClass();
+						}
+						if ( !isset($data[$count]->$alias1 ) ) {
+							$data[$count]->$alias1 = new stdClass();
+						}
+						$data[$count]->$alias1->$field = $value;
+					}
+				}
+				// --------------------------------------- Recursive Entries ---------------------------------------
 				else if ( $size == 3 )
 				{
-					$l3Alias	= $part[1];
-					$i3			= $row[$l2Alias.'.'.$l3Alias.'.'.ROW_COUNT] -1;
-					$l3Rel		= $row[$l2Alias.'.'.$l3Alias.'.'.REL_TYPE];
-
-					if ( $part[2] != PRIM_KEY && $part[2] != ROW_COUNT && $part[2] != REL_TYPE )
-					{
-						// <one|many> to <one|many> to <one>
-						if ( $l3Rel == 'one')
-						{
-							// <one|many> to <one> to <one>
-							if ( $l2Rel == 'one')
-							{
-								//debug('FIXME: in Table.php retrieveResults, size==3  X->one->one');
-								(object)$data[$i1]->$l2Alias->$l3Alias->$part[2] = 'aaaa';	// TODO: add this!!!
-							}
-							// <one|many> to <many> to <one>
-							//else if ( $l2Rel == 'many' )
-							else
-							{
-								//debug('FIXME: in Table.php retrieveResults, size==3  X->many->one');
-								(object)$data[$i1]->$l2Alias->$i2->$l3Alias->$part[2] = 'vvvv';
-							}
+					$alias1 = $part[0];
+					$alias2 = $part[1];
+					$field	= $part[2];
+					if ( $field == PRIM_KEY ) {
+						// check for recursion here
+						//if ( in_array($alias1, $hasMany) ){}	// We have found a hasMany relation here
+						// TODO:!! do we need to load something here?
+						//$data[$count]->$alias1 = new stdClass();
+					}
+					else {
+						if ( !isset($data[$count]->$alias1->$alias2) ) {
+							$data[$count]->$alias1->$alias2 = new stdClass();
 						}
-						// <one|many> to <one|many> to <many>
-						//else if ( $l3Rel == 'many' )
-						else
-						{
-							// <one|many> to <one> to <many>
-							if ( $l2Rel == 'one')
-							{
-								//debug('FIXME: in Table.php retrieveResults, size==3  X->one->many');
-								(object)$data[$i1]->$l2Alias->$l3Alias->$i3->$part[2] = 'abbbbb';
-							}
-							// <one|many> to <many> to <many>
-							//else if ( $l2Rel == 'many' )
-							else
-							{
-								if ( !isset($data[$i1]->{$l2Alias}[$i2]) ) {
-									$data[$i1]->{$l2Alias}[$i2] = new stdClass;
-								}
-								if ( !isset($data[$i1]->{$l2Alias}[$i2]->{$l3Alias}[$i3]) ) {
-									$data[$i1]->{$l2Alias}[$i2]->{$l3Alias}[$i3] = new stdClass;
-								}
-								//debug('FIXME: in Table.php retrieveResults, size==3  X->many->many');
-								$data[$i1]->{$l2Alias}[$i2]->{$l3Alias}[$i3]->$part[2] = $value;//->{$l2Index}[$part[2]]= $value;//(array)array_merge((array)$data[$i][$l2Alias][$l2Index]->$l3Alias, array($l3Index => array($part[2] => $value)));
-								//(object)$data[$i][$l2Alias][$l2Index]->$l3Alias->{$l2Index}[$part[2]]= $value;//(array)array_merge((array)$data[$i][$l2Alias][$l2Index]->$l3Alias, array($l3Index => array($part[2] => $value)));
-							}
-						}
+						$data[$count]->$alias1->$alias2->$field = $value;
 					}
 				}
 			}
+			$data[$count] = (object)array_merge((array)$data[$count], (array)$many);
+			$count++;
 		};
 
-		// TODO: This is still buggy, as the variables are only available
-		// during the second query. But we do not want to have two queries
 		if ( $return == 'array' )
 		{
-			$return = $this->db->select($query, $lambdaArray);
+			$return = $this->db->select($query, $getArray);
 		}
 		else
 		{
-			$return = $this->db->select($query, $lambdaObject);
+			$return = $this->db->select($query, $getObject);
 		}
-
 		return $return;
 	}
 
@@ -1109,103 +1027,49 @@ class Table
 	 * ************************************************************************************************************************** */
 
 
-
-	private function _buildHasOneQuery($limitAliase = false, &$oFields, &$iFields, &$iFieldsBottom, &$joins, $parent_row_num_cond, $recursive, $prefix = '')
+	private function _buildHasOneQuery($limitAliase = false, &$allFields, &$joins, $recursive, $prefix)
 	{
 		$joinType	= 'LEFT JOIN';
-		$relType	= 'one';
 
 		foreach ( $this->hasOne as $alias => $properties )
 		{
 			// This is used for the recursive relations, so that we can limit what to follow
-			if ( !$limitAliase || in_array($alias, $limitAliase) )
+			if ( !$limitAliase || ( isset($limitAliase['hasOne']) && in_array($alias, $limitAliase['hasOne']) ) )
 			{
 				// Associations
-				$mainPK			= $this->alias.'.'.$this->primary_key;
+				$mainAliasedPK	= $this->alias.'.'.$this->primary_key;
 				$thisPK			= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
 				$thisAliasedPK	= $alias.'.'.$thisPK;
 				$thisFK			= $properties['foreignKey'];
 				$thisAliasedFK	= $alias.'.'.$thisFK;
-				$thisON			= $mainPK.'='.$thisAliasedFK;
-
-				// Fields
-				$thisFields		= $properties['fields'];
-
-				// SubQueries
-				$thisSubQ		= isset($properties['subQueries'])	? $properties['subQueries'] : array();
-
-				// Conditions and Order
-				$thisCondition	= isset($properties['condition'])	? $properties['condition']	: null;
+				$thisON			= $mainAliasedPK.'='.$thisAliasedFK;
 
 				// Table Data
 				$thisTable		= $properties['table'];
 
+				// Fields
+				$thisPKField	= array(PRIM_KEY => $thisPK);
+				$thisFields		= $properties['fields'];
+				$thisFields		= array_merge($thisPKField, $thisFields);
+				$thisFields		= $this->buildAliasedFields($thisFields, $alias, '', $prefix);
 
-				// FIELD PREFIXE
-				$o_prefix		= $prefix ? $prefix.'_' : '';	// outer prefix
-				$i_prefix		= $prefix ? $prefix.'.' : '';	// inner prefix
-				$a_prefix		= $prefix ? $prefix.'.' : '';	// aliased prefix
+				// SubQueries
+				$thisSubQ		= isset($properties['subQueries'])	? $properties['subQueries'] : array();
+				$thisSubQ		= $this->buildAliasedSubQueries($thisSubQ, $alias, $prefix);
 
+				// Conditions
+				$thisCondition	= isset($properties['condition'])	? $properties['condition']	: null;
 
-				// ---------------------------- OUTER FIELDS (Level 1)
-				$o_row_name		= $o_prefix.$alias.'_'.ROW_COUNT;
-				$o_pk_name		= $o_prefix.$alias.'_'.$thisPK;
-				$o_rel_name		= "'".$relType."'";
+				$joinCondition	= ($thisCondition) ? array($thisON, $thisCondition) : array($thisON);
+				$joinCondition	= implode(' AND ', $joinCondition);
 
-				$o_row_alias	= $a_prefix.$alias.'.'.ROW_COUNT;
-				$o_pk_alias		= $a_prefix.$alias.'.'.PRIM_KEY;
-				$o_rel_alias	= $a_prefix.$alias.'.'.REL_TYPE;
-
-				$o_row			= $o_row_name.' AS `'. $o_row_alias.'`';	// Row Count
-				$o_pk			= $o_pk_name. ' AS `'. $o_pk_alias. '`';	// Primary Key
-				$o_type			= $o_rel_name.' AS `'.$o_rel_alias. '`';	// Relation Type X->One
-
-				$o_fields		= $this->buildFields($thisFields, $o_prefix.$alias, $i_prefix.$alias, '_', '.');// <alias>_<field> AS `<alias>.<field>`
-				array_unshift($o_fields, $o_type);			// relation type to the beginning
-				array_unshift($o_fields, $o_row);			// row_count alias to the beginning
-				array_unshift($o_fields, $o_pk);			// _PRIM_KEY_ to the very beginning
+				// JOIN
+				$thisJoin		= $joinType.' '.$thisTable.' AS '.$alias.' ON('.$joinCondition.')';
 
 
-				// ---------------------------- INNER FIELDS (Level 2)
-				$prev_id_name	= '@'.$o_prefix.$alias.PREV_ID;
-				$row_count_name	= '@'.$o_prefix.$alias.ROW_COUNT;
-
-				$row_num_cond	= $prev_id_name.' = '.$thisAliasedPK;
-				$row_num		= $row_count_name.' :=  IF('.$row_num_cond.', '.$row_count_name.', IF('.$parent_row_num_cond.', '.$row_count_name.' +1, 1)) AS `'.$o_prefix.$alias.'_'.ROW_COUNT.'`';
-				$prev_id		= $prev_id_name.' := '.$thisAliasedPK;
-
-				$i_fields		= $this->buildFields($thisFields, $i_prefix.$alias, $o_prefix.$alias, '.', '_');// <alias>.<field> AS `<alias>_<field>`
-				array_unshift($i_fields, $row_num);		// row_number to the beginning
-
-
-				// ---------------------------- SUBQUERIES (Level 1,2,3)
-				$thisSubQ		= $this->buildSubQueries($thisSubQ, $i_fields, $o_fields, $i_prefix, $o_prefix, $alias);
-
-
-				// ---------------------------- JOIN FIELDS (Level 3)
-				// make sure to add all fields that are required by order, where and join on(...)
-				$thisDFields	= $thisFields;
-				if ( !in_array($thisFK, $thisDFields) ) {
-					$thisDFields[]	= $thisFK;
-				}
-				if ( !in_array($thisPK, $thisDFields) ) {
-					$thisDFields[]	= $thisPK;
-				}
-				$thisDTable		= $this->buildDerivedTableQueryWithRowCount($thisTable, $alias, $o_prefix, $thisDFields, $thisSubQ, $thisCondition);
-				$thisJoinTable	= $joinType.'('.
-						$thisDTable.
-						') AS '.$alias.' ON('.$thisON.')';
-
-
-				// ---------------------------- MERGE ALL FIELDS
-				$oFields		= array_merge($oFields, $o_fields);
-				$iFields		= array_merge($iFields, $i_fields);
-				$iFieldsBottom[]= $prev_id;				// prev_id to the end
-
-				// ---------------------------- ADD JOINS (Level 3)
-				$joins[]	= $thisJoinTable;
-
-
+				// Fill referenced function variables
+				$allFields		= array_merge($allFields, $thisFields, $thisSubQ);
+				$joins[]		= $thisJoin;
 
 
 				// Check for recursive Joining
@@ -1229,21 +1093,18 @@ class Table
 					// do not limit recursion
 					if ( $properties['recursive'] === true || $recursive > 2 )
 					{
+
 						// recurse all relations once, and set recursion to false, so that we don't loop any deeper
-						$oTable->_buildHasOneQuery(null, $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
-						$oTable->_buildHasManyQuery(null, $oFields, $iFields, $iFieldsBottom, $joins, $order, $limit, $row_num_cond, 0, $alias);
-						$oTable->_buildBelongsToQuery(null, $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
+						$oTable->_buildHasOneQuery(null, $allFields, $joins, 0, $alias.'.');
+						$oTable->_buildBelongsToQuery(null, $allFields, $joins, 0, $alias.'.');
 					}
 					else
 					{
 						if ( isset($properties['recursive']['hasOne']) ) {
-							$oTable->_buildHasOneQuery($properties['recursive']['hasOne'], $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
-						}
-						if ( isset($properties['recursive']['hasMany']) ) {
-							$oTable->_buildHasManyQuery($properties['recursive']['hasMany'], $oFields, $iFields, $iFieldsBottom, $joins, $order, $limit, $row_num_cond, 0, $alias);
+							$oTable->_buildHasOneQuery($properties['recursive']['hasOne'], $allFields, $joins, 0, $alias.'.');
 						}
 						if ( isset($properties['recursive']['belongsTo']) ) {
-							$oTable->_buildBelongsToQuery($properties['recursive']['belongsTo'], $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
+							$oTable->_buildBelongsToQuery($properties['recursive']['belongsTo'], $allFields, $joins, 0, $alias.'.');
 						}
 					}
 				}
@@ -1252,134 +1113,51 @@ class Table
 	}
 
 
-
-	private function _buildHasManyQuery($limitAliase = false, &$oFields, &$iFields, &$iFieldsBottom, &$joins, &$order, &$limit, $parent_row_num_cond, $recursive, $prefix = '')
+	// prefix is used for inner calls to append prefix to alias: Users.Thread.id
+	private function _buildBelongsToQuery($limitAliase = false, &$allFields, &$joins, $recursive, $prefix)
 	{
-		$joinType	= 'LEFT JOIN';
-		$relType	= 'many';
+		$joinType	= 'JOIN';	// maybe LEFT JOIN if the belongint entity does not exist...
 
-		foreach ( $this->hasMany as $alias => $properties )
+		foreach ( $this->belongsTo as $alias => $properties )
 		{
 			// This is used for the recursive relations, so that we can limit what to follow
-			if ( !$limitAliase || in_array($alias, $limitAliase) )
+			if ( !$limitAliase || ( isset($limitAliase['belongsTo']) && in_array($alias, $limitAliase['belongsTo']) ) )
 			{
 				// Associations
-				$mainPK			= $this->alias.'.'.$this->primary_key;
+				$mainAliasedPK	= $this->alias.'.'.$this->primary_key;
+				$mainAliasedFK	= $this->alias.'.'.$properties['foreignKey'];
 				$thisPK			= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
 				$thisAliasedPK	= $alias.'.'.$thisPK;
 				$thisFK			= $properties['foreignKey'];
 				$thisAliasedFK	= $alias.'.'.$thisFK;
-				$thisON			= $mainPK.'='.$thisAliasedFK;
+				$thisON			= $mainAliasedFK.'='.$thisAliasedPK;
+
+							// Table Data
+				$thisTable		= $properties['table'];
 
 				// Fields
+				$thisPKField	= array(PRIM_KEY => $thisPK);
 				$thisFields		= $properties['fields'];
+				$thisFields		= array_merge($thisPKField, $thisFields);
+				$thisFields		= $this->buildAliasedFields($thisFields, $alias, '', $prefix);
 
 				// SubQueries
 				$thisSubQ		= isset($properties['subQueries'])	? $properties['subQueries'] : array();
+				$thisSubQ		= $this->buildAliasedSubQueries($thisSubQ, $alias, $prefix);
 
-				// Conditions and Order
+				// Conditions
 				$thisCondition	= isset($properties['condition'])	? $properties['condition']	: null;
-				$thisOrder		= isset($properties['order'])		? $properties['order']		: array();
+
+				$joinCondition	= ($thisCondition) ? array($thisON, $thisCondition) : array($thisON);
+				$joinCondition	= implode(' AND ', $joinCondition);
+
+				// JOIN
+				$thisJoin		= $joinType.' '.$thisTable.' AS '.$alias.' ON('.$joinCondition.')';
 
 
-				// Table Data
-				$thisTable		= $properties['table'];
-
-
-				// FIELD PREFIXE
-				$o_prefix		= $prefix ? $prefix.'_' : '';	// outer prefix
-				$i_prefix		= $prefix ? $prefix.'.' : '';	// inner prefix
-				$a_prefix		= $prefix ? $prefix.'.' : '';	// aliased prefix
-
-
-				// ---------------------------- ORDER FIELDS (Level 2 and 3)
-				// We have to add the order fields to level 3 and level 2, otherwise it will be unknown and we cannot order by it
-				//$orderFields	= array_keys($thisOrder);
-
-				// ---------------------------- OUTER FIELDS (Level 1)
-				$o_row_name		= $o_prefix.$alias.'_'.ROW_COUNT;
-				$o_pk_name		= $o_prefix.$alias.'_'.$thisPK;
-				$o_rel_name		= "'".$relType."'";
-
-				$o_row_alias	= $a_prefix.$alias.'.'.ROW_COUNT;
-				$o_pk_alias		= $a_prefix.$alias.'.'.PRIM_KEY;
-				$o_rel_alias	= $a_prefix.$alias.'.'.REL_TYPE;
-
-				$o_row			= $o_row_name.' AS `'. $o_row_alias.'`';	// Row Count
-				$o_pk			= $o_pk_name. ' AS `'. $o_pk_alias. '`';	// Primary Key
-				$o_type			= $o_rel_name.' AS `'.$o_rel_alias. '`';	// Relation Type X->One
-
-				$o_fields		= $this->buildFields($thisFields, $o_prefix.$alias, $i_prefix.$alias, '_', '.');// <alias>_<field> AS `<alias>.<field>`
-				array_unshift($o_fields, $o_type);			// relation type to the beginning
-				array_unshift($o_fields, $o_row);			// row_count alias to the beginning
-				array_unshift($o_fields, $o_pk);			// _PRIM_KEY_ to the very beginning
-
-
-
-				// ---------------------------- INNER FIELDS (Level 2)
-				$prev_id_name	= '@'.$o_prefix.$alias.PREV_ID;
-				$row_count_name	= '@'.$o_prefix.$alias.ROW_COUNT;
-
-				$row_num_cond	= $prev_id_name.' = '.$thisAliasedPK;
-				$row_num		= $row_count_name.' :=  IF('.$row_num_cond.', '.$row_count_name.', IF('.$parent_row_num_cond.', '.$row_count_name.' +1, 1)) AS `'.$o_prefix.$alias.'_'.ROW_COUNT.'`';
-				$prev_id		= $prev_id_name.' := '.$thisAliasedPK;
-
-				// also add order fields to level 2
-				//$i_fields		= array_merge($thisFields, array_keys($thisOrder));
-				$i_fields		= array_unique($thisFields);
-
-				$i_fields		= $this->buildFields($i_fields, $i_prefix.$alias, $o_prefix.$alias, '.', '_');// <alias>.<field> AS `<alias>_<field>`
-				array_unshift($i_fields, $row_num);		// row_number to the beginning
-
-
-				// ---------------------------- SUBQUERIES (Level 1,2,3)
-				$thisSubQ		= $this->buildSubQueries($thisSubQ, $i_fields, $o_fields, $i_prefix, $o_prefix, $alias);
-
-
-				// ---------------------------- JOIN FIELDS (Level 3)
-				// make sure to add all fields that are required by order, where and join on(...)
-				$thisDFields	= array_merge($thisFields, array($thisFK, $thisPK));
-				//$thisDFields	= array_merge($thisDFields, $orderFields);
-				$thisDFields	= array_unique($thisDFields);
-
-				$thisDTable		= $this->buildDerivedTableQueryWithRowCount($thisTable, $alias, $o_prefix, $thisDFields, $thisSubQ, $thisCondition, $thisOrder);
-				$thisJoinTable	= $joinType.'('.
-						$thisDTable.
-						') AS '.$alias.' ON('.$thisON.')';
-
-
-				// ---------------------------- MERGE ALL FIELDS
-				$oFields		= array_merge($oFields, $o_fields);
-				$iFields		= array_merge($iFields, $i_fields);
-				$iFieldsBottom[]= $prev_id;				// prev_id to the end
-
-				// ---------------------------- ADD JOINS (Level 3)
-				$joins[]	= $thisJoinTable;
-
-
-				// ---------------------------- MERGE ORDER
-				// merge parent order
-				if ($thisOrder) {
-					foreach ($thisOrder as $key => $dir) {
-						$order[$o_prefix.$alias.'_'.$key] = $dir;
-					}
-				}
-
-
-				// ---------------------------- ADD LIMIT to outer WHERE (limit by rowcount) (Level 1)
-				if ( isset($properties['limit']) ) {
-					if (!is_array($limit)) {
-						$limit = array();	// initialize
-					}
-					$limit[$o_row_name] = $properties['limit'];
-				}
-				else if ( isset($properties['range']) ) {
-					if (!is_array($limit)) {
-						$limit = array();	// initialize
-					}
-					$limit[$o_row_name] = $properties['range'];
-				}
-
+				// Fill referenced function variables
+				$allFields		= array_merge($allFields, $thisFields, $thisSubQ);
+				$joins[]		= $thisJoin;
 
 				// Check for recursive Joining
 				if ( ($recursive > 1 &&	isset($properties['recursive']) && $properties['recursive']) ||
@@ -1399,179 +1177,125 @@ class Table
 						$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
 					}
 
-									// do not limit recursion
-					if ( $properties['recursive'] === true || $recursive > 2 )
+					// do not limit recursion
+					if ( (isset($properties['recursive']) && $properties['recursive'] === true) || $recursive > 2 )
 					{
 						// recurse all relations once, and set recursion to false, so that we don't loop any deeper
-						$oTable->_buildHasOneQuery(null, $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
-						$oTable->_buildHasManyQuery(null, $oFields, $iFields, $iFieldsBottom, $joins, $order, $limit, $row_num_cond, 0, $alias);
-						$oTable->_buildBelongsToQuery(null, $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
+						$oTable->_buildHasOneQuery(null, $allFields, $joins, 0, $alias.'.');
+						$oTable->_buildBelongsToQuery(null, $allFields, $joins, 0, $alias.'.');
 					}
 					else
 					{
+
 						if ( isset($properties['recursive']['hasOne']) ) {
-							$oTable->_buildHasOneQuery($properties['recursive']['hasOne'], $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
-						}
-						if ( isset($properties['recursive']['hasMany']) ) {
-							$oTable->_buildHasManyQuery($properties['recursive']['hasMany'], $oFields, $iFields, $iFieldsBottom, $joins, $order, $limit, $row_num_cond, 0, $alias);
+							$oTable->_buildHasOneQuery($properties['recursive']['hasOne'], $allFields, $joins, 0, $alias.'.');
 						}
 						if ( isset($properties['recursive']['belongsTo']) ) {
-							$oTable->_buildBelongsToQuery($properties['recursive']['belongsTo'], $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
+							$oTable->_buildBelongsToQuery($properties['recursive']['belongsTo'], $allFields, $joins, 0, $alias.'.');
 						}
 					}
 				}
 			}
 		}
 	}
-
-	// prefix is used for inner calls to append prefix to alias: Users.Thread.id
-	private function _buildBelongsToQuery($limitAliase = false, &$oFields, &$iFields, &$iFieldsBottom, &$joins, $parent_row_num_cond, $recursive, $prefix = '')
+	private function _retrieveHasMany($limitAliase = false, $mainPKValue, $recursive)
 	{
-		$joinType	= 'JOIN';
-		$relType	= 'one';
+		$data = array();
 
-		foreach ( $this->belongsTo as $alias => $properties )
+		foreach ( $this->hasMany as $alias => $properties )
 		{
 			// This is used for the recursive relations, so that we can limit what to follow
-			if ( !$limitAliase || in_array($alias, $limitAliase) )
+			if ( !$limitAliase || (isset($limitAliase['hasMany']) && in_array($alias, $limitAliase['hasMany'])) )
 			{
-				// Associations
-				$mainPK			= $this->alias.'.'.$this->primary_key;
-				$mainAliasedFK	= $this->alias.'.'.$properties['foreignKey'];
+
+				// Table Data
+				$thisTable		= $properties['table'];
+
 				$thisPK			= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
-				$thisAliasedPK	= $alias.'.'.$thisPK;
 				$thisFK			= $properties['foreignKey'];
-				$thisAliasedFK	= $alias.'.'.$thisFK;
-				$thisON			= $mainAliasedFK.'='.$thisAliasedPK;
 
 				// Fields
 				$thisFields		= $properties['fields'];
 
 				// SubQueries
-				$thisSubQ		= isset($properties['subQueries'])	? $properties['subQueries'] : array();
+				$thisSubQ		= isset($properties['subQueries'])	? $properties['subQueries'] : null;
 
-				// Conditions and Order
+
+				// Conditions
+				$mainCondition	= $alias.'.'.$thisFK.' = '.$mainPKValue;
 				$thisCondition	= isset($properties['condition'])	? $properties['condition']	: null;
-				$thisOrder		= isset($properties['order'])		? $properties['order']		: null;
+				$thisCondition	= ($thisCondition) ? $mainCondition.' AND '.$thisCondition : $mainCondition;
 
-				// Table Data
-				$thisTable		= $properties['table'];
+				// Order
+				$thisOrder	= isset($properties['order'])	? $properties['order']	: null;
 
-
-				// FIELD PREFIXE
-				$o_prefix		= $prefix ? $prefix.'_' : '';	// outer prefix
-				$i_prefix		= $prefix ? $prefix.'.' : '';	// inner prefix
-				$a_prefix		= $prefix ? $prefix.'.' : '';	// aliased prefix
+				// Order
+				$thisLimit	= isset($properties['limit'])	? $properties['limit']	: null;
 
 
-				// ---------------------------- OUTER FIELDS (Level 1)
-				$o_row_name		= $o_prefix.$alias.'_'.ROW_COUNT;
-				$o_pk_name		= $o_prefix.$alias.'_'.$thisPK;
-				$o_rel_name		= "'".$relType."'";
-
-				$o_row_alias	= $a_prefix.$alias.'.'.ROW_COUNT;
-				$o_pk_alias		= $a_prefix.$alias.'.'.PRIM_KEY;
-				$o_rel_alias	= $a_prefix.$alias.'.'.REL_TYPE;
-
-				$o_row			= $o_row_name.' AS `'. $o_row_alias.'`';	// Row Count
-				$o_pk			= $o_pk_name. ' AS `'. $o_pk_alias. '`';	// Primary Key
-				$o_type			= $o_rel_name.' AS `'.$o_rel_alias. '`';	// Relation Type X->One
-
-				$o_fields		= $this->buildFields($thisFields, $o_prefix.$alias, $i_prefix.$alias, '_', '.');// <alias>_<field> AS `<alias>.<field>`
-				array_unshift($o_fields, $o_type);			// relation type to the beginning
-				array_unshift($o_fields, $o_row);			// row_count alias to the beginning
-				array_unshift($o_fields, $o_pk);			// _PRIM_KEY_ to the very beginning
+				$options['fields']		= $thisFields;
+				$options['subQueries']	= $thisSubQ;
+				$options['condition']	= $thisCondition;
+				$options['order']		= $thisOrder;
+				$options['limit']		= $thisLimit;
+				$options['recursive']	= $recursive;
 
 
-
-				// ---------------------------- INNER FIELDS (Level 2)
-				$prev_id_name	= '@'.$o_prefix.$alias.PREV_ID;
-				$row_count_name	= '@'.$o_prefix.$alias.ROW_COUNT;
-
-				$row_num_cond	= $prev_id_name.' = '.$thisAliasedPK;
-				$row_num		= $row_count_name.' :=  IF('.$row_num_cond.', '.$row_count_name.', IF('.$parent_row_num_cond.', '.$row_count_name.' +1, 1)) AS `'.$o_prefix.$alias.'_'.ROW_COUNT.'`';
-				$prev_id		= $prev_id_name.' := '.$thisAliasedPK;
-
-				$i_fields		= $this->buildFields($thisFields, $i_prefix.$alias, $o_prefix.$alias, '.', '_');// <alias>.<field> AS `<alias>_<field>`
-				array_unshift($i_fields, $row_num);		// row_number to the beginning
-
-
-				// ---------------------------- SUBQUERIES (Level 1,2,3)
-				$thisSubQ		= $this->buildSubQueries($thisSubQ, $i_fields, $o_fields, $i_prefix, $o_prefix, $alias);
-
-
-				// ---------------------------- JOIN FIELDS (Level 3)
-				// make sure to add all fields that are required by order, where and join on(...)
-				$thisDFields	= $thisFields;
-				// Do not add this in belongsTo, as the FK is
-				// the one of the other table
-				/* if ( !in_array($thisFK, $thisDFields) ) {
-					$thisDFields[]	= $thisFK;
-				}*/
-				if ( !in_array($thisPK, $thisDFields) ) {
-					$thisDFields[]	= $thisPK;
+				if ($options['recursive'] > 3) {
+					$options['recursive'] = 2;
 				}
-				$thisDTable		= $this->buildDerivedTableQueryWithRowCount($thisTable, $alias, $o_prefix, $thisDFields, $thisSubQ, $thisCondition, $thisOrder);
-				$thisJoinTable	= $joinType.'('.
-						$thisDTable.
-						') AS '.$alias.' ON('.$thisON.')';
+				// decrease
+				if ( isset($properties['recursive']) && $properties['recursive'] ) {
+					$options['recursive']--;	// decrease recursion level by 1
+				} else {
+					$options['recursive']--;
+					$options['recursive']--;
+				}
+				// Normalize to zero
+				if ($options['recursive'] < 0) {
+					$options['recursive'] = 0;
+				}
+
+				// Check if we want to limit the relations
+				if ( isset($properties['recursive']) && is_array($properties['recursive']) ) {
+					$options['relation'] = $properties['recursive'];
+				}
 
 
-				// ---------------------------- MERGE ALL FIELDS
-				$oFields		= array_merge($oFields, $o_fields);
-				$iFields		= array_merge($iFields, $i_fields);
-				$iFieldsBottom[]= $prev_id;				// prev_id to the end
+				$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
+				$core	= isset($properties['core'])  ? $properties['core']  : false;
 
-				// ---------------------------- ADD JOINS (Level 3)
-				$joins[]	= $thisJoinTable;
-
-
-				// Check for recursive Joining
-				if ( ($recursive > 1 &&	isset($properties['recursive']) && $properties['recursive']) ||
-						($recursive > 2) // force
-				)
+				if ($core)
 				{
-					$class	= isset($properties['class']) ? $properties['class'] : Strings::camelCase($properties['table'], true);
-					$core	= isset($properties['core'])  ? $properties['core']  : false;
-
-					if ($core)
-					{
-						$oTable = Loader::loadCoreTable($class);
-					}
-					else
-					{
-						$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-						$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
-					}
-
-					// do not limit recursion
-					if ( $properties['recursive'] === true || $recursive > 2 )
-					{
-						// recurse all relations once, and set recursion to false, so that we don't loop any deeper
-						$oTable->_buildHasOneQuery(null, $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
-						$oTable->_buildHasManyQuery(null, $oFields, $iFields, $iFieldsBottom, $joins, $order, $limit, $row_num_cond, 0, $alias);
-						$oTable->_buildBelongsToQuery(null, $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
-					}
-					else
-					{
-						if ( isset($properties['recursive']['hasOne']) ) {
-							$oTable->_buildHasOneQuery($properties['recursive']['hasOne'], $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
-						}
-						if ( isset($properties['recursive']['hasMany']) ) {
-							$oTable->_buildHasManyQuery($properties['recursive']['hasMany'], $oFields, $iFields, $iFieldsBottom, $joins, $order, $limit, $row_num_cond, 0, $alias);
-						}
-						if ( isset($properties['recursive']['belongsTo']) ) {
-							$oTable->_buildBelongsToQuery($properties['recursive']['belongsTo'], $oFields, $iFields, $iFieldsBottom, $joins, $row_num_cond, 0, $alias);
-						}
-					}
+					$oTable = Loader::loadCoreTable($class);
 				}
+				else
+				{
+					$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
+					$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+				}
+				// need to overwrite the alias, as we could define
+				// an acronym e,g. LastThread and the table alias is actually thread
+				$tmp_alias		= $oTable->alias;
+				$oTable->alias	= $alias;
+
+				$result	= $oTable->find('all', $options);
+				$flatten = function($el) use ($alias) {
+					$el		= (array)$el;
+					$main	= $el[$alias];
+					unset($el[$alias]);
+					$result = (object)array_merge((array)$main, (array)$el);
+					return $result;
+				};
+
+				// restore alias (VERY IMPORTANT!!!)
+				$oTable->alias	= $tmp_alias;
+
+				$data[$alias] = array_map($flatten, $result);
 			}
 		}
+		return $data;
 	}
-
-
-
-
 
 
 	private function _appendModifiedFieldIfExist($fields)

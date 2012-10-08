@@ -39,7 +39,7 @@ class ContactTable extends Table
 		$data['host']		= gethostbyaddr($_SERVER['REMOTE_ADDR']);
 		$data['session_id']	= Session::getId();
 		
-		parent::save($data, $return);
+		return parent::save($data, $return);
 	}
 	
 	/**
@@ -67,7 +67,7 @@ class ContactTable extends Table
 	
 	public function countNew()
 	{
-		$condition = array('is_read = :read', array(':read' => 0));
+		$condition = array('`is_read` = :read', array(':read' => 0));
 		return $this->find('count', array('condition' => $condition));
 	}
 	

@@ -36,7 +36,7 @@
 	<tbody>
 		<?php foreach ($data->Thread as $thread): ?>
 			<?php
-				$lastPost	= $thread->LastPost[0];
+				$lastPost	= isset($thread->LastPost[0]) ? $thread->LastPost[0] : null;
 
 				if ( $thread->post_count > 0 )
 				{
