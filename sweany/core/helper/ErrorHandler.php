@@ -25,6 +25,10 @@ class ErrorHandler
 
 		$from	= $class.$func.' in '.$file.':'.$line;
 
+		// We need this to be false, otherwise SysLog will print the error,
+		// which will also lead to an error and nothing would be displayed
+		$GLOBALS['BREAK_ON_ERROR'] = 0;
+
 		\Sweany\SysLog::i('Output Buffering', 'Using ob_error_handler() from '.$from);
 
 		// If error orrocured
@@ -35,6 +39,9 @@ class ErrorHandler
 						ini_get('error_append_string');
 
 			\Sweany\SysLog::e('Output Buffering', $error);
+
+			$error =\Sweany\SysLog::show(true);
+
 			return $error;
 		}
 		return $str;
@@ -59,8 +66,8 @@ class ErrorHandler
 //				debug($context);
 				echo	'EXIT...<br/>';
 				echo '</div>';
-//				exit(1);
-				break;
+
+//				break;
 
 			case E_USER_WARNING:
 				echo '<div style="z-index:555;font-size:11px;font-family:arial;border:solid 1px #FFA500;padding:5px;background:gray;color:black;">';
@@ -70,7 +77,7 @@ class ErrorHandler
 				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
 //				debug($context);
 				echo '</div>';
-				break;
+//				break;
 
 			case E_USER_NOTICE:
 				echo '<div style="z-index:555;font-size:11px; font-family:arial;border:solid 1px #FFA500;padding:5px;background:gray">';
@@ -80,7 +87,7 @@ class ErrorHandler
 				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
 //				debug($context);
 				echo '</div>';
-				break;
+//				break;
 
 			case E_WARNING:
 				echo '<div style="z-index:555;font-size:11px;font-family:arial;border:solid 1px red;padding:5px;background:gray;color:black;">';
@@ -90,7 +97,7 @@ class ErrorHandler
 				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
 //				debug($context);
 				echo '</div>';
-				break;
+//				break;
 
 			case E_NOTICE:
 				echo '<div style="z-index:555;font-size:11px;font-family:arial;border:solid 1px #FFA500;padding:5px;background:gray;color:black;">';
@@ -100,7 +107,7 @@ class ErrorHandler
 				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
 //				debug($context);
 				echo '</div>';
-				break;
+//				break;
 
 			default:
 				echo '<div style="z-index:555;font-size:11px;font-family:arial;border:solid 1px red;padding:5px;background:gray;color:black;">';
@@ -110,7 +117,7 @@ class ErrorHandler
 				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
 //				debug($context);
 				echo '</div>';
-				break;
+//				break;
 		}
 		// IMPORTANT!!! Flush all buffers on error,
 		// otherwise it will not be displayed

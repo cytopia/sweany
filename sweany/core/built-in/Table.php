@@ -215,7 +215,6 @@ class Table
 	 *			'core'			=> true|false			# boolean:	True if this table file is in sweany/core/built-in/tables
 	 *			'plugin'		=> '<plugin_name>'		# string:	Name of the plugin table (does not work with 'core' => true)
 	 *
-	 *			'primaryKey'	=> 'id',				# string:	Primary key of the hasMany table (<table_name>) (defaults to: 'id')
 	 *			'foreignKey'	=> '<foreign_key>',		# string:	Foreign key of the hasMany table (<table_name>) (defaults to: 'fk_<$this->table>_id')
 	 *
 	 *			'fields'		=> array(),				# mixed[]:	Array of fields and/or alias-field pairs to fetch
@@ -229,8 +228,8 @@ class Table
 	 *			'condition'		=> '<condition>',		# string:	Conditions
 	 *			'order'			=> array()				# mixed[]:	Associative array of order clauses
 	 *			'limit'			=> int					# integer:	Limit by X rows
-	 *
-	 *			'recursive'		=> false|true,			# boolean:	true: Also load the depending table with all its relations | false: only load this relation
+	 *			'flatten'		=> true|false,			# boolean:	If you know that only one result comes back (LIMIT 1), then you can flatten the result by one level
+	 *			'recursive'		=> true|false,			# boolean:	true: Also load the depending table with all its relations | false: only load this relation
 	 *			'recursive'		=> array()				# mixed[]:	Only follow the relations specified here
 	 *														'recursive' => array(
 	 *															'hasMany'	=> array('Alias1', 'Alias2'),
@@ -313,7 +312,7 @@ class Table
 	 */
 	public function __construct()
 	{
-		// initialize order to primary
+		// initialize order to primary key
 		if ( !$this->order )
 		{
 			$this->order = array($this->alias.'.'.$this->primary_key => 'ASC');
@@ -321,6 +320,8 @@ class Table
 
 		$this->db = \Sweany\Database::getInstance();
 	}
+
+
 
 
 
@@ -334,125 +335,115 @@ class Table
 
 	/**
 	 *
-	 *	Load One entity by id
+	 * Load One Entity by Id
 	 *
-	 *	@param	integer			$id			Id of the entity
-	 *	@param	string[]|null	$fields		Array of fields or 'null' for default
-	 *	@param	string[]|null	$subQueries	Override Array of subqueries or 'null' for default
-	 *		Array(
-	 *			'alias1' => 'subquery here',
-	 *			'alias2' => 'another subquery here',
-	 *			...
-	 *		)
-	 *	@param	integer			$recursive	Level of recursions (0-3)
-	 *		0: flat - no relations, only this table
-	 *		1: with relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
-	 *		2: with relations and follow recursion specified by relation
-	 *		3: with relations and force recursion on all relations
-	 *
-	 *	@return	mixed[]			$data		Returns single entity
-	 */
-	public function load($id, $fields = null, $subQueries = null, $recursive = 1, $return = 'object')
-	{
-		$data = $this->loadMany(array($id), $fields, $subQueries, null, $recursive, $return);
-		return ( isset($data[0]) ) ? $data[0] : array();
-	}
-
-
-	/**
-	 *
-	 *	Load Many entities by an array of ids
-	 *
-	 *	@param	integer			$id			Id of the entity
-	 *	@param	string[]|null	$fields		Array of fields or 'null' for default
-	 *	@param	string[]|null	$subQueries	Override Array of subqueries or 'null' for default
-	 *		Array(
-	 *			'alias1' => 'subquery here',
-	 *			'alias2' => 'another subquery here',
-	 *		)
-	 *	@param	mixed[]			$order		Override Array of order clauses (only applies to fields in this table)
-	 *		Array(
-	 *			'field1' => 'ASC',
-	 *			'field2' => 'DESC',
-	 *			'GREATEST(field1, field2)' => 'ASC',
-	 *			 ...
-	 *		)
-	 *	@param	integer			$recursive	Level of recursions (0-3)
+	 * @param	integer			$id				# Id of the entity
+	 * @param	integer			$recursive		# Level of recursions (0-3)
 	 *		0: flat - no relations, only this table
 	 *		1: with relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
 	 *		2: with relations and follow recursion (if set to true in respective relations defintion of the current table)
 	 *		3: with relations and force recursion on all relations (even if not set or set to false)
 	 *
-	 *	@return	mixed[]			$data		Returns all found entities
+	 * @param	mixed[]			$options
+	 * 		@param	mixed[]			'fields'		# Override Array of fields or Alias-Field pairs
+ 	 *	 		Array(
+	 *				'field1',
+	 *				'alias1' => 'field1',
+	 *			)
+	 *		@param	mixed[]			'subQueries'	# Override Array of subqueries
+	 *			Array(
+	 *				'alias1' => 'subquery here',
+	 *				'alias2' => 'another subquery here',
+	 *			)
+	 *		@param	mixed[]			'order'			# Override Array of order clauses (only applies to fields in this table)
+	 *			Array(
+	 *				'Alias.field1' => 'ASC',
+	 *				'Alias.field2' => 'DESC',
+	 *				'GREATEST(Alias.field1, Alias.field2)' => 'ASC',
+	 *			)
+	 *		@param	string			'return'		# Override Return Type 'object': Array of Objects (default) | 'array': Array of arrays
+	 *
+	 * @return	mixed[]			$data			# Returns all found entities
 	 */
-	public function loadMany($ids, $fields = null, $subQueries = null, $order = null, $recursive = 1, $return = 'object')
+	public function load($id, $recursive = 1, $options = array())
 	{
-		$fields		= ( is_array($fields) && count($fields) ) ? $fields : $this->fields;
-		$subQueries	= ( is_array($subQueries) && count($subQueries) ) ? $subQueries : $this->subQueries;
+		$data = $this->loadMany(array($id), $recursive, $options);
+		return ( isset($data[0]) ) ? $data[0] : array();
+	}
 
+
+
+	/**
+	 *
+	 * Load many entities by an array of ids
+	 *
+	 * @param	integer[]		$ids			# Array if Ids of the entities
+	 * @param	integer			$recursive		# Level of recursions (0-3)
+	 *		0: flat - no relations, only this table
+	 *		1: with relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
+	 *		2: with relations and follow recursion (if set to true in respective relations defintion of the current table)
+	 *		3: with relations and force recursion on all relations (even if not set or set to false)
+	 *
+	 * @param	mixed[]			$options		# Array of options (to override default values specified in corresponding Table)
+	 * 		@param	mixed[]			'fields'		# Override Array of fields or Alias-Field pairs
+ 	 *	 		Array(
+	 *				'field1',
+	 *				'alias1' => 'field1',
+	 *			)
+	 *		@param	mixed[]			'subQueries'	# Override Array of subqueries
+	 *			Array(
+	 *				'alias1' => 'subquery here',
+	 *				'alias2' => 'another subquery here',
+	 *			)
+	 *		@param	mixed[]			'order'			# Override Array of order clauses (only applies to fields in this table)
+	 *			Array(
+	 *				'Alias.field1' => 'ASC',
+	 *				'Alias.field2' => 'DESC',
+	 *				'GREATEST(Alias.field1, Alias.field2)' => 'ASC',
+	 *			)
+	 *		@param	string			'return'		# Override Return Type 'object': Array of Objects (default) | 'array': Array of arrays
+	 *
+	 * @return	mixed[]			$data			# Returns all found entities
+	 */
+	public function loadMany($ids, $recursive = 1, $options = array())
+	{
+		// ----------------- Create Condition
 		if ( count($ids) == 1 ) {
 			// Escape input
-			$condition = $this->prepare(array($this->alias.'.'.$this->primary_key.' = :id', array(':id' => $ids[0])));
+			$condition = array($this->alias.'.'.$this->primary_key.' = :id', array(':id' => $ids[0]));
 		} else {
 			// Escape input
-			$ids = implode(', ', array_map(function($id){ return $this->db->escape($id); }, $ids));
+			$ids = implode(', ', array_map(function($id){ return sprintf('%d', (int)$id); }, $ids));
 			$condition = $this->alias.'.'.$this->primary_key.' IN ('.$ids.')';
 		}
-		$order		= ($order) ? $order : ($this->order ? $this->order : $this->alias.'.'.$this->primary_key);
 
-		$query		= $this->buildQuery($fields, $subQueries, $condition, $order, null, $recursive, null, null);
-		$data		= $this->retrieveResults($query, $recursive, null, $return);
-		return $data;
+
+		// ----------------- Unset all information from Optpions
+		$tmp = $options;
+		unset($options);
+		$options = array();
+
+
+		// ----------------- Rebuild Optpions
+		$options['condition'] = $condition;
+		$options['recursive'] = $recursive;
+
+		if ( isset($tmp['fields']) ) {
+			$options['fields']  = $tmp['fields'];
+		}
+		if ( isset($tmp['subQueries']) ) {
+			$option['subQueries'] = $tmp['subQueries'];
+		}
+		if ( isset($tmp['order']) ) {
+			$options['order'] =  $tmp['order'];
+		}
+		if ( isset($tmp['return']) ) {
+			$options['return'] = $tmp['return'];
+		}
+
+		return $this->find('all', $options);
 	}
 
-
-
-	/**
-	 *
-	 *	Check if the entity exists
-	 *
-	 *	@param	integer		$id		Id of the entity (row)
-	 *	@return	boolean		exists?
-	 */
-	public function exist($id)
-	{
-		return $this->db->rowExists($this->table, $id);
-	}
-
-
-	public function existBy($condition)
-	{
-		return $this->find('count', array('condition' => $condition));
-	}
-
-	/**
-	 *
-	 *	Get value of a field from the entity (row)
-	 *
-	 *	@param	name		$name	Name of the field (in row)
-	 *	@param	integer		$id		Id of the entity (row)
-	 *	@return	mixed		$value	Value of the field
-	 *
-	 */
-	public function Field($name, $id)
-	{
-		return $this->db->fetchRowField($this->table, $name, $id);
-	}
-
-
-	/**
-	 *
-	 *	Get value of a field by condition
-	 *
-	 *	@param	name		$name		Name of the field (in row)
-	 *	@param	string		$condition	SQL Condition (make sure to escape the values)
-	 *	@return	mixed		$value		Value of the field
-	 *
-	 */
-	public function FieldBy($name, $condition)
-	{
-		return $this->db->fetchField($this->table, $name, $this->prepare($condition));
-	}
 
 
 
@@ -484,9 +475,16 @@ class Table
 	 *			[DEFAULT]			$this->subQueries
 	 *			[NOTE]				Useless in 'count' operation
 	 *
-	 *		condition		Overwrite: Condition to append
-	 *			'condition' => array('field1 LIKE :t AND id IN(5,1)' => array(':t' => '%patu%'))	// escapable statement
-	 *			'condition'	=> 'id = 5'	// non-escapable statement
+	 *		condition		Overwrite: Escapable condition
+	 *	 		@param	mixed[]		$condition
+	 *				Array (
+	 *					[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *					[1]	=>	Array (
+	 *						':foo' 	=> $id,
+	 *						':bar'	=> $name
+	 *					),
+	 *				);
+
 	 *			[DEFAULT]			$this->condition
 	 *			[DEFAULT OVERRIDE] 'condition' => null
 	 *
@@ -528,7 +526,7 @@ class Table
 	{
 		// Extract Condition
 		$condition	= isset($options['condition'])	? $options['condition'] : $this->condition;
-		$condition	= $this->prepare($condition);
+		$condition	= $this->db->prepare($condition);
 
 		// Return count immediately, if chosen
 		if ( $type == 'count' )
@@ -575,6 +573,82 @@ class Table
 
 
 
+
+	/**
+	 *
+	 *	Check if the entity exists
+	 *
+	 *	@param	integer		$id			Id of the entity (row)
+	 *	@return	boolean					exists?
+	 */
+	public function exist($id)
+	{
+		return $this->db->rowExists($this->table, $id);
+	}
+
+
+
+	/**
+	 *
+	 * Check if an (or many) entity(s) exist by a condition
+	 *
+	 * @param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 * @return	integer					number of existing entity(s)
+	 */
+	public function existBy($condition)
+	{
+		return $this->find('count', array('condition' => $condition));
+	}
+
+
+
+	/**
+	 *
+	 * Get value of a field from the entity (row)
+	 *
+	 * @param	name		$name		Name of the field (in row)
+	 * @param	integer		$id			Id of the entity (row)
+	 * @return	mixed		$value		Value of the field
+	 *
+	 */
+	public function Field($name, $id)
+	{
+		return $this->db->fetchRowField($this->table, $name, $id);
+	}
+
+
+
+	/**
+	 *
+	 * Get value of a field by condition
+	 *
+	 * @param	name		$name		Name of the field (in row)
+	 * @param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 * @return	mixed		$value		Value of the field
+	 */
+	public function FieldBy($name, $condition)
+	{
+		return $this->db->fetchField($this->table, $name, $condition);
+	}
+
+
+
+
+
 	/* ************************************************************************************************************************** *
 	 *
 	 *	E N T I T Y   S A V E   F U N C T I O N S
@@ -583,12 +657,20 @@ class Table
 
 
 	/**
+	 *
 	 *	Save entity (by id)
 	 *
-	 *	@param	mixed[]	$fields			Array of field-value pairs
+	 *	@param	mixed[]	$fields			Array of field-value (and/or alias-value) pairs
+	 *		+ You can use all aliases specified in $this->fields, which will automatically be
+	 *		  mapped to the corresponding field.
+	 *		+ Non matching fields (no field or alias in $this->fields found) will automatically
+	 *		  be removed, to prevent sql errors
+	 *		+ Field/Alias values will automatically be escaped, no worry about this.
+	 *
 	 *		Array = (
 	 *			'<field1>	=> '<value1>',
 	 *			'<field2>	=> '<value2>',
+	 *			'<alias1>	=> '<value3>',
 	 *		);
 	 *
 	 *	@param	integer	$return			(0-2) Whether or not to return anything
@@ -600,8 +682,10 @@ class Table
 	 */
 	public function save($fields, $return = 1)
 	{
-		// TODO: remove fields, that do not belong here
-		// via $this->fields
+		// 1.) converts field aliases to fields (if using aliases to insert)
+		// 2.) removes all fields not available in this table
+		$fields	= $this->_prepareFields($fields);
+
 		$fields = $this->_appendCreatedFieldIfExist($fields);
 		$ret	= $this->db->insert($this->table, $fields, (($return) ? true : false));
 
@@ -628,52 +712,126 @@ class Table
 
 
 	/**
-	 *	Update entity (by id)
 	 *
-	 *	@param	integer	$id			Id of the row/entity
-	 *	@param	mixed[]	$fields		Array of field-value pairs
+	 * Update entity (by id)
+	 *
+	 * @param	integer	$id				Id of the row/entity
+	 * @param	mixed[]	$data			Array of field-value (and/or alias-value) pairs
+	 *		+ You can use all aliases specified in $this->fields, which will automatically be
+	 *		  mapped to the corresponding field.
+	 *		+ Non matching fields (no field or alias in $this->fields found) will automatically
+	 *		  be removed, to prevent sql errors
+	 *		+ Field/Alias values will automatically be escaped, no worry about this.
+	 *
 	 *		Array = (
 	 *			'<field1>	=> '<value1>',
 	 *			'<field2>	=> '<value2>',
+	 *			'<alias1>	=> '<value3>',
 	 *		);
 	 *
-	 *	@param	integer	$return		(0-2) Whether or not to return anything
+	 * @param	integer	$return		(0-2) Whether or not to return anything
 	 *		0:	return boolean	Success
 	 *		1:	return integer	Last insert id
 	 *		2:	return mixed[]	Updated row
 	 *
-	 *	@return	boolean|integer|mixed[]
+	 * @return	boolean|integer|mixed[]
 	 */
-	public function update($id, $fields, $return = 0)
+	public function update($id, $data, $return = 0)
 	{
-		$fields = $this->_appendModifiedFieldIfExist($fields);
+		// 1.) converts field aliases to fields (if using aliases to insert)
+		// 2.) removes all fields not available in this table
+		$data	= $this->_prepareFields($data);
 
-		// TODO, only extract all fields that actually exist as specified in the table
-		$success	= $this->db->updateRow($this->table, $id, $fields);
+		$data	= $this->_appendModifiedFieldIfExist($data);
+		$success= $this->db->updateRow($this->table, $id, $data);
 
 		switch ($return)
 		{
 			case 1:		return $id;
-			case 2:		return $this->load($id, null, null, 0);
+			case 2:		return $this->load($id, 0);
 			default:	return $success;
 		}
 	}
-	public function updateAll($condition, $fields, $return = 0)
+
+
+
+	/**
+	 *
+	 * Update many entities (rows) by condition
+	 *
+	 * @param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 *
+	 * @param	mixed[]	$data			Array of field-value (and/or alias-value) pairs
+	 *		+ You can use all aliases specified in $this->fields, which will automatically be
+	 *		  mapped to the corresponding field.
+	 *		+ Non matching fields (no field or alias in $this->fields found) will automatically
+	 *		  be removed, to prevent sql errors
+	 *		+ Field/Alias values will automatically be escaped, no worry about this.
+	 *
+	 *		Array = (
+	 *			'<field1>	=> '<value1>',
+	 *			'<field2>	=> '<value2>',
+	 *			'<alias1>	=> '<value3>',
+	 *		);
+	 *
+	 * @return	boolean	success
+	 */
+	public function updateAll($condition, $data)
 	{
-		return $this->db->update($this->table, $fields, $this->prepare($condition), $return);
+		// 1.) converts field aliases to fields (if using aliases to insert)
+		// 2.) removes all fields not available in this table
+		$data	= $this->_prepareFields($data);
+
+		return $this->db->update($this->table, $data, $condition);
 	}
 
 
-	public function increment($id, $fields, $return = 0)
+
+	/**
+	 *
+	 * Increment an Entity's field(s)
+	 *
+	 * @param	integer		$id			Id of the entity (row)
+	 * @param	string[]	$fields		Array of field names
+	 *
+	 * @return	boolean	success
+	 */
+	public function increment($id, $fields)
 	{
-		$condition = $this->prepare(array('id = :id', array(':id' => $id)));
-		return $this->db->incrementFields($this->table, $fields, null, $condition, $return);
+		$condition = array('id = :id', array(':id' => $id));
+
+		return $this->db->incrementFields($this->table, $fields, null, $condition);
 	}
 
-	// TODO: return (array)values on $return = 2
-	public function incrementAll($condition, $fields, $return = 0)
+
+
+	/**
+	 *
+	 * Increment an Field(s) of many entities by condition)
+	 *
+	 * @param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 *
+	 * @param	string[]	$fields		Array of field names
+	 *
+	 * @return	boolean					Success of operation
+	 */
+	public function incrementAll($condition, $fields)
 	{
-		return $this->db->incrementFields($this->table, $fields, null, $this->prepare($condition), $return);
+		return $this->db->incrementFields($this->table, $fields, null, $condition);
 	}
 
 
@@ -685,21 +843,42 @@ class Table
 
 
 	/**
-	 *	Delete entity (by id)
 	 *
-	 *	@param	integer	$id			Id of the row/entity
-	 *	@return	boolean				Success of operation
+	 * Delete entity (by id)
+	 *
+	 * @param	integer		$id			Id of the row/entity
+	 * @param	boolean		$related	Also delete related Data (hasOne, hasMany, hasAndBelongsToMAny)
+	 *
+	 * @return	boolean					Success of operation
 	 */
 	public function delete($id, $related = false)
 	{
-		// TODO: delete related data in this->[relations]
+		// TODO: implement: delete related data
 		return $this->db->deleteRow($this->table, $id);
 	}
 
-	public function deleteAll($condition, $related = false, $return = 0)
+
+
+	/**
+	 *
+	 * Delete many entities (rows) by condition
+	 *
+	 * @param	mixed[]		$condition	Escapable condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 * @param	boolean		$related	Also delete related Data (hasOne, hasMany, hasAndBelongsToMAny)
+	 *
+	 * @return	boolean					Success of operation
+	 */
+	public function deleteAll($condition, $related = false)
 	{
-		// TODO: delete related data in this->[relations]
-		return $this->db->delete($this->table, $this->prepare($condition));
+		// TODO: implement: delete related data
+		return $this->db->delete($this->table, $condition);
 	}
 
 
@@ -712,52 +891,6 @@ class Table
 	*	P R I V A T E   C L A S S   F U N C T I O N S
 	*
 	* ************************************************************************************************************************** */
-
-
-	/**
-	 *	Prepares and escapes a statement
-	 *
-	 *	@param	mixed[]	$statement
-	 *
-	 *		example:
-	 *		Array
-	 *		(
-	 *			[0]	=>	'`id` = :id AND `username` LIKE %:name%',
-	 *			[1]	=>	Array
-	 *				(
-	 *					':id' 	=> $id,
-	 *					':name'	=> $name
-	 *				),
-	 *		);
-	 *
-	 *	@return	string	escape safe string
-	 */
-	private function prepare($statement = null)
-	{
-		if ( is_string($statement) ) {
-			return $statement;
-		}
-		$stmt	= (isset($statement[0]) && is_string($statement[0]) && strlen($statement[0]))	? $statement[0] : '';
-		$vars	= (isset($statement[1])	&& is_array($statement[1])	&& count($statement[1]))	? $statement[1] : null;
-
-		if ( !$stmt || !$vars )
-		{
-			return $stmt;
-		}
-
-		$fPrepare = function(&$value, $key) /*use ($this)*/ {
-			if ($key[0]==':') {
-				$value = $this->db->escape($value, true);
-			}
-		};
-		array_walk($vars, $fPrepare);
-		return str_replace(array_keys($vars), array_values($vars), $stmt);
-	}
-
-
-
-
-
 
 
 
@@ -796,13 +929,13 @@ class Table
 	 * @param mixed[]			$order
 	 * @param integer			$limit
 	 * @param integer			$recursive
-	 *	'recursive':	 0						# Flat - no relations, only this table
-	 *	'recursive':	 1						# With all relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
-	 *	'recursive':	 2						# With all relations and follow recursion (one level) specified by child relation
-	 *	'recursive':	 3						# With all relations and force recursion (one level) on all child relations
+	 *		'recursive':	 0						# Flat - no relations, only this table
+	 *		'recursive':	 1						# With all relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
+	 *		'recursive':	 2						# With all relations and follow recursion (one level) specified by child relation
+	 *		'recursive':	 3						# With all relations and force recursion (one level) on all child relations
 	 * @param mixed[]			$relation		# Follow only specific relations (on this level)
 	 *	'$relation':	 array(
-	 *		'hasMany' => array('Edit', 'Post')	# Only follow Edit and Post in hasMany relation (plus THEIR respective recursion settings)
+	 *		'hasMany' => array('Edit', 'Post')		# Only follow Edit and Post in hasMany relation (plus THEIR respective recursion settings)
 	 *	)
 	 * @param object			$tblClass
 	 * @return string
@@ -832,8 +965,9 @@ class Table
 
 
 		// ------------------------------------ JOINS(s) ------------------------------------
-
+		$prefix = $this->alias.'.';	// Prefix Joins (2nd level) by <alias>.
 		$joins	= array();
+
 		if ( $recursive > 0)
 		{
 			// We only join the X->one relations here
@@ -841,16 +975,16 @@ class Table
 
 			// Add hasOne (one-to-one)
 			if ($tblClass) {
-				$tblClass->_buildHasOneQuery($relation, $allFields, $joins, $recursive, '');
+				$tblClass->_buildHasOneQuery($relation, $allFields, $joins, $recursive, $prefix);
 			} else {
-				$this->_buildHasOneQuery($relation, $allFields, $joins, $recursive, '');
+				$this->_buildHasOneQuery($relation, $allFields, $joins, $recursive, $prefix);
 			}
 
 			// Add belongsTo (many-to-one)
 			if ($tblClass) {
-				$tblClass->_buildBelongsToQuery($relation, $allFields, $joins, $recursive, '');
+				$tblClass->_buildBelongsToQuery($relation, $allFields, $joins, $recursive, $prefix);
 			} else {
-				$this->_buildBelongsToQuery($relation, $allFields, $joins,  $recursive, '');
+				$this->_buildBelongsToQuery($relation, $allFields, $joins,  $recursive, $prefix);
 			}
 		}
 
@@ -959,7 +1093,14 @@ class Table
 
 					if ( $recursive>0 || (is_array($relation) && in_array('hasMany', array_keys($relation))) )
 					{
-						$pk		= $value;
+						//debug($recursive);
+						$pk			= $value;
+
+						// If recursive is set to 3 (force all, not only those which are specified)
+						// We need to destroy the limitations
+						$relation	= ($recursive == 3) ? null : $relation;
+
+						// Get the hasMany Relations
 						$many	= $this->_retrieveHasMany($relation, $pk, $recursive);
 					}
 				}
@@ -1002,7 +1143,7 @@ class Table
 					}
 				}
 			}
-			$data[$count] = (object)array_merge((array)$data[$count], (array)$many);
+			$data[$count] = (object)array_merge((array)$data[$count]->$alias1, (array)$many);
 			$count++;
 		};
 
@@ -1207,19 +1348,12 @@ class Table
 			// This is used for the recursive relations, so that we can limit what to follow
 			if ( !$limitAliase || (isset($limitAliase['hasMany']) && in_array($alias, $limitAliase['hasMany'])) )
 			{
-
-				// Table Data
-				$thisTable		= $properties['table'];
-
-				$thisPK			= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
+				// Relation info
 				$thisFK			= $properties['foreignKey'];
 
-				// Fields
+				// Fields (and aliases) and Subqueries
 				$thisFields		= $properties['fields'];
-
-				// SubQueries
 				$thisSubQ		= isset($properties['subQueries'])	? $properties['subQueries'] : null;
-
 
 				// Conditions
 				$mainCondition	= $alias.'.'.$thisFK.' = '.$mainPKValue;
@@ -1229,9 +1363,8 @@ class Table
 				// Order
 				$thisOrder	= isset($properties['order'])	? $properties['order']	: null;
 
-				// Order
+				// Limit
 				$thisLimit	= isset($properties['limit'])	? $properties['limit']	: null;
-
 
 				$options['fields']		= $thisFields;
 				$options['subQueries']	= $thisSubQ;
@@ -1241,24 +1374,29 @@ class Table
 				$options['recursive']	= $recursive;
 
 
+				// Normalize wrong recursive values
 				if ($options['recursive'] > 3) {
-					$options['recursive'] = 2;
+					$options['recursive'] = 3;
 				}
+				if ($options['recursive'] < 0) {
+					$options['recursive'] = 0;
+				}
+
+
+				// If we do not want to force recursion,
+				// check if we want to limit to only specific relations
+				if ($options['recursive'] < 3) {
+					if ( isset($properties['recursive']) && is_array($properties['recursive']) ) {
+						$options['relation'] = $properties['recursive'];
+					}
+				}
+
 				// decrease
 				if ( isset($properties['recursive']) && $properties['recursive'] ) {
 					$options['recursive']--;	// decrease recursion level by 1
 				} else {
 					$options['recursive']--;
 					$options['recursive']--;
-				}
-				// Normalize to zero
-				if ($options['recursive'] < 0) {
-					$options['recursive'] = 0;
-				}
-
-				// Check if we want to limit the relations
-				if ( isset($properties['recursive']) && is_array($properties['recursive']) ) {
-					$options['relation'] = $properties['recursive'];
 				}
 
 
@@ -1274,24 +1412,25 @@ class Table
 					$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
 					$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
 				}
+
 				// need to overwrite the alias, as we could define
 				// an acronym e,g. LastThread and the table alias is actually thread
 				$tmp_alias		= $oTable->alias;
 				$oTable->alias	= $alias;
 
-				$result	= $oTable->find('all', $options);
-				$flatten = function($el) use ($alias) {
-					$el		= (array)$el;
-					$main	= $el[$alias];
-					unset($el[$alias]);
-					$result = (object)array_merge((array)$main, (array)$el);
-					return $result;
-				};
+				$result			= $oTable->find('all', $options);
 
 				// restore alias (VERY IMPORTANT!!!)
 				$oTable->alias	= $tmp_alias;
 
-				$data[$alias] = array_map($flatten, $result);
+				// Apply FLATTENING if specified
+				// This is only useful, if you know that you will receive only one element
+				if ( isset($properties['flatten']) && $properties['flatten'] === true ) {
+					// TODO: add flatten => true check to validator!!
+					$result = isset($result[0]) ? $result[0] : new stdClass();
+				}
+
+				$data[$alias] = $result;
 			}
 		}
 		return $data;
@@ -1337,5 +1476,47 @@ class Table
 		{
 			return $fields;
 		}
+	}
+
+
+
+	/**
+	 * _prepareFields()
+	 *
+	 * This allows the user to insert/update fields by their alias names.
+	 * And also put in all kinds of values. Even the whole $_POST array,
+	 * we will strip out all illegal fields
+	 *
+	 * 1.) Convert aliases to their corresponding fields.
+	 * 2.) Remove all illegal fields, that are not present in the table
+	 *
+	 * @param mixed[]	$data		$field-value pair for insert/update
+	 */
+	private function _prepareFields($data)
+	{
+		$availFields	= array_values($this->fields);
+		$availAliase	= array_keys($this->fields);
+
+		$valid			= array();
+
+		foreach ($data as $field => $value)
+		{
+			// Field-Value-Pair is valid by default
+			if ( in_array($field, $availFields) ) {
+				$valid[$field] = $value;
+			}
+			// Field-Value-Pair is using an alias, so we need to rewrite it
+			else if ( in_array($field, $availAliase) ) {
+				// get actualy field by alias
+				$real_name = $this->fields[$field];
+				$valid[$real_name] = $value;
+				\Sweany\SysLog::i('Insert/Update', '['.get_class($this).': Field Rewrite] Used Alias: '.$field.' is changed to Field: '.$real_name);
+			}
+			// Discard all other value
+			else {
+				\Sweany\SysLog::w('Insert/Update', '['.get_class($this).': Wrong Field] Field: '.$field.' does not exist');
+			}
+		}
+		return $valid;
 	}
 }

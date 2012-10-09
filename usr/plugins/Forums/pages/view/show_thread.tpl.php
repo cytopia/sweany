@@ -1,5 +1,5 @@
 ﻿<?php
-$timestamp	= strtotime($data->Thread->created);
+$timestamp	= strtotime($Thread->created);
 $thread_date= date($date_format, $timestamp);
 $thread_time= date($time_format, $timestamp);
 ?>
@@ -25,25 +25,25 @@ $thread_time= date($time_format, $timestamp);
 			<td>
 				<div>
 					<div style="float:left;">
-						<?php echo (strtotime($data->Thread->modified)>0)? $language->editedOn.' '.date($date_format, strtotime($data->Thread->modified)).' '.$language->atTime.' '.date($time_format, strtotime($data->Thread->modified)).' ':''; ?>
+						<?php echo (strtotime($Thread->modified)>0)? $language->editedOn.' '.date($date_format, strtotime($Thread->modified)).' '.$language->atTime.' '.date($time_format, strtotime($Thread->modified)).' ':''; ?>
 					</div>
 					<div style="float:right;">
-						<?php if ( $data->Thread->fk_user_id == $user->id() ):?>
-							<img src="/plugins/Forums/img/button_edit.png" alt="edit" onclick="quickEditThread(<?php echo $data->Thread->id;?>);" />
+						<?php if ( $Thread->fk_user_id == $user->id() ):?>
+							<img src="/plugins/Forums/img/button_edit.png" alt="edit" onclick="quickEditThread(<?php echo $Thread->id;?>);" />
 						<?php endif; ?>
 					</div>
 					<div style="float:right;">
 						<?php if ( $user->id()>0 ):?>
-							<?php echo Form::start('form_add_post', '/Forums/addPost/'.$data->Forum->id.'/'.$data->Thread->id, array('id' => 'form_post_quote_'.$data->Forum->id.'_'.$data->Thread->id)); ?>
-								<?php echo Form::inputHidden('thisBody', htmlentities($data->Thread->body), array('id' => 'thisBodyId'.$data->Thread->id)); ?>
-								<?php echo Form::inputHidden('body', htmlentities($data->Thread->body), array('id' => 'bodyId')); ?>
-								<?php echo Form::inputHidden('forum_id', $data->Forum->id); ?>
-								<?php echo Form::inputHidden('thread_id', $data->Thread->id); ?>
+							<?php echo Form::start('form_add_post', '/Forums/addPost/'.$Thread->Forum->id.'/'.$Thread->id, array('id' => 'form_post_quote_'.$Thread->Forum->id.'_'.$Thread->id)); ?>
+								<?php echo Form::inputHidden('thisBody', htmlentities($Thread->body), array('id' => 'thisBodyId'.$Thread->id)); ?>
+								<?php echo Form::inputHidden('body', htmlentities($Thread->body), array('id' => 'bodyId')); ?>
+								<?php echo Form::inputHidden('forum_id', $Thread->Forum->id); ?>
+								<?php echo Form::inputHidden('thread_id', $Thread->id); ?>
 								<img src="/plugins/Forums/img/button_quote.png" alt="quote"
-									onclick="var body=(document.getElementById('thisBodyId<?php echo $data->Thread->id;?>').value);
-											body='[quote=<?php echo $data->User->username;?>]'+(body)+'[/quote]';
+									onclick="var body=(document.getElementById('thisBodyId<?php echo $Thread->id;?>').value);
+											body='[quote=<?php echo $Thread->User->username;?>]'+(body)+'[/quote]';
 											document.getElementById('bodyId').value=body;
-											document.getElementById('form_post_quote_<?php echo $data->Forum->id.'_'.$data->Thread->id; ?>').submit();" />
+											document.getElementById('form_post_quote_<?php echo $Thread->Forum->id.'_'.$Thread->id; ?>').submit();" />
 							<?php echo Form::end(); ?>
 						<?php endif; ?>
 					</div>
@@ -53,22 +53,22 @@ $thread_time= date($time_format, $timestamp);
 	</tfoot>
 	<tbody>
 		<?php
-			$author_name= ($data->User->id>0) ? $data->User->username : 'anonymous';
-			$author_link= ($userProfileLink) ? Html::l($author_name, $userProfileCtl, $userProfileMethod, array($data->User->id)) : $author_name;
+			$author_name= ($Thread->User->id>0) ? $Thread->User->username : 'anonymous';
+			$author_link= ($userProfileLink) ? Html::l($author_name, $userProfileCtl, $userProfileMethod, array($Thread->User->id)) : $author_name;
 		?>
 		<tr>
 			<td style="width:150px;">
 				<div class="forumUsername"><?php echo $author_link; ?></div>
 				<br/>
 				<div style="font-size:11px;">
-					<div style="float:left; width:90px;"><?php echo $language->entries; ?>:</div><div style="float:left;"><?php echo $data->User->num_entries;?></div>
+					<div style="float:left; width:90px;"><?php echo $language->entries; ?>:</div><div style="float:left;"><?php echo $Thread->User->num_entries;?></div>
 					<br/>
 				</div><br/><br/>
 				<div style="clear:both;"></div>
 				<div>
 					<?php if ( $userMessageLink ):?>
 						<div style="font-size:11px;">
-							<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$data->User->id;?>" title="<?php echo $language->sendMessage;?>">
+							<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$Thread->User->id;?>" title="<?php echo $language->sendMessage;?>">
 								<img src="/plugins/Forums/img/pm.png" title="<?php echo $language->sendMessage;?>" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
 							</a>
 						</div>
@@ -77,15 +77,15 @@ $thread_time= date($time_format, $timestamp);
 			</td>
 			<td>
 				<div id="startThread">
-					<div class="forumThreadTitle"><?php echo $data->Thread->title; ?></div>
-					<div class="forumThreadBody"><?php echo Bbcode::parse($data->Thread->body, '/plugins/Forums/img/smiley'); ?></div>
+					<div class="forumThreadTitle"><?php echo $Thread->title; ?></div>
+					<div class="forumThreadBody"><?php echo Bbcode::parse($Thread->body, '/plugins/Forums/img/smiley'); ?></div>
 				</div>
 			</td>
 		</tr>
 	</tbody>
 </table>
 
-<?php foreach ($data->Post as $Post): ?>
+<?php foreach ($Thread->Post as $Post): ?>
 	<?php
 		$timestamp	= strtotime($Post->created);
 		$date		= date($date_format, $timestamp);
@@ -114,16 +114,16 @@ $thread_time= date($time_format, $timestamp);
 						</div>
 						<div style="float:right;">
 							<?php if ( $user->id()>0 ):?>
-								<?php echo Form::start('form_add_post', '/Forums/addPost/'.$data->Forum->id.'/'.$data->Thread->id, array('id' => 'form_post_quote_'.$data->Forum->id.'_'.$data->Thread->id)); ?>
+								<?php echo Form::start('form_add_post', '/Forums/addPost/'.$Thread->Forum->id.'/'.$Thread->id, array('id' => 'form_post_quote_'.$Thread->Forum->id.'_'.$Thread->id)); ?>
 									<?php echo Form::inputHidden('thisBody', $Post->body, array('id' => 'thisBodyId'.$Post->id)); ?>
 									<?php echo Form::inputHidden('body', $Post->body, array('id' => 'bodyId')); ?>
-									<?php echo Form::inputHidden('forum_id', $data->Forum->id); ?>
-									<?php echo Form::inputHidden('thread_id', $data->Thread->id); ?>
+									<?php echo Form::inputHidden('forum_id', $Thread->Forum->id); ?>
+									<?php echo Form::inputHidden('thread_id', $Thread->id); ?>
 									<img src="/plugins/Forums/img/button_quote.png" alt="quote"
 										onclick="var body=document.getElementById('thisBodyId<?php echo $Post->id;?>').value;
 												body='[quote=<?php echo $Post->username;?>]'+body+'[/quote]';
 												document.getElementById('bodyId').value=body;
-												document.getElementById('form_post_quote_<?php echo $data->Forum->id.'_'.$data->Thread->id; ?>').submit();" />
+												document.getElementById('form_post_quote_<?php echo $Thread->Forum->id.'_'.$Thread->id; ?>').submit();" />
 								<?php echo Form::end(); ?>
 							<?php endif; ?>
 						</div>
@@ -148,7 +148,7 @@ $thread_time= date($time_format, $timestamp);
 					<div>
 						<?php if ( $userMessageLink ):?>
 							<div style="font-size:11px;">
-								<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$Post->fk_user_id;?>" title="private Nachricht an <?php echo $data->User->username; ?> schreiben">
+								<a href="/<?php echo $userMessageToCtl.'/'.$userMessageToMethod.'/'.$Post->fk_user_id;?>" title="private Nachricht an <?php echo $Thread->User->username; ?> schreiben">
 									<img src="/plugins/Forums/img/pm.png" title="Private Nachricht" style="vertical-align:middle;"/> <?php echo $language->sendMessage;?>
 								</a>
 							</div>
@@ -169,15 +169,15 @@ $thread_time= date($time_format, $timestamp);
 <?php endforeach; ?>
 
 
-<?php if (!$data->Forum->can_reply): ?>
+<?php if (!$Thread->Forum->can_reply): ?>
 	<p><?php echo $language->cantReply; ?></p>
 <?php elseif (!$user->isLoggedIn()):?>
 	<br/>
 	<div style="font-size:16px;"><?php echo $language->directAnswer; ?></div>
 	<p><?php echo $language->replyLoginNote;?> <?php echo Html::l($language->here, $userLoginCtl,$userLoginMethod);?> <?php echo $language->or; ?> <?php echo Html::l($language->registerFree, $userRegisterCtl,$userRegisterMethod);?></p>
-<?php elseif ($data->Thread->is_closed): ?>
+<?php elseif ($Thread->is_closed): ?>
 	<p><?php echo $language->hasBeenClosed;?></p>
-<?php elseif ($data->Thread->is_locked): ?>
+<?php elseif ($Thread->is_locked): ?>
 	<p><?php echo $language->hasBeenLocked;?></p>
 <?php else: ?>
 	<br/>
@@ -199,7 +199,7 @@ $thread_time= date($time_format, $timestamp);
 				</td>
 				<td>
 					<?php
-					echo Form::start('form_add_post', null, array('id' => 'formAddPostId'));
+					echo Form::start('form_add_post', '/Forums/addPost/'.$Thread->Forum->id.'/'.$Thread->id, array('id' => 'formAddPostId'));
 						echo Form::getError('forum_id');
 						echo Form::getError('thread_id');
 						echo Form::getError('body'); ?>
@@ -213,10 +213,10 @@ $thread_time= date($time_format, $timestamp);
 							</div>
 						</div><br/>
 						<?php
-						echo Form::inputHidden('forum_id', $data->Forum->id);
-						echo Form::inputHidden('thread_id', $data->Thread->id);
-						echo Form::submitButton('add_comment_submit', $language->answer);
-						echo Form::submitButton('add_comment_advanced', $language->advanced, array('onClick' => 'document.getElementById(\'formAddPostId\').action=\'/Forums/addPost/'.$data->Forum->id.'/'.$data->Thread->id.'\''));
+						echo Form::inputHidden('forum_id', $Thread->Forum->id);
+						echo Form::inputHidden('thread_id', $Thread->id);
+						echo Form::submitButton('add_post_submit', $language->answer);
+						echo Form::submitButton('add_comment_advanced', $language->advanced, array('onClick' => 'document.getElementById(\'formAddPostId\').action=\'/Forums/addPost/'.$Thread->Forum->id.'/'.$Thread->id.'\''));
 					echo Form::end();
 					?><br/>
 				</td>

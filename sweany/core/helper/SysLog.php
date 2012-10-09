@@ -213,7 +213,7 @@ class SysLog
 	{
 		if ( !(\Sweany\Settings::$showPhpErrors ||
 			 \Sweany\Settings::$showFwErrors ||
-			 \Sweany\Settings::$showSqlErrors ) )
+			 \Sweany\Settings::$showSqlErrors ) && $return == false)
 			return;
 
 		$pre  	= '<style type="text/css">'.
@@ -316,15 +316,19 @@ class SysLog
 				default: 			$error .= '<span style="color:#FF0000;">[SQL UNKNOWN]</span>';	break;
 
 			}
+
 			$error .= '</td>';
 			$color	= (self::$dbStore[$i]['type'] != 'INFO') ? 'color:#28F0BE;' : '';
 			$error .= '<td style="'.$color.'"><strong>'.self::$dbStore[$i]['title'] .'</strong></td>';
 
 			$error .= '<td>';
 			$error .=	self::$dbStore[$i]['message'];
-			$error .= 	'<pre>'.print_r(self::$dbStore[$i]['trace'], true).'</pre>';
+			if ( isset(self::$dbStore[$i]['trace']) ) {
+				$error .= 	'<pre>'.print_r(self::$dbStore[$i]['trace'], true).'</pre>';
+			}
 			$error .= '</td>';
 			$error .= '</tr>';
+
 		}
 
 		if ( $GLOBALS['SQL_ENABLE'] )
@@ -340,7 +344,7 @@ class SysLog
 			$error .= '</tr>';
 		//}
 		}
-		
+
 		//if ( \Sweany\Settings::$showFwErrors > 2 )
 		//{
 			// MISC

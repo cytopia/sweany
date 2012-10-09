@@ -12,7 +12,9 @@ class ForumThreadsTable extends Table
 		// FIELDS
 		'id',
 		'fk_forum_forums_id',
+		'forum_id' => 'fk_forum_forums_id',
 		'fk_user_id',
+		'user_id' => 'fk_user_id',
 		'title',
 		'body',
 		'view_count',
@@ -43,7 +45,7 @@ class ForumThreadsTable extends Table
 //			'condition'		=> '',
 			'fields'		=> array('id', 'username'),
 			'subQueries'	=> array(
-				'num_entries'	=> 'SELECT (SELECT COUNT(*) FROM forum_threads WHERE Thread.fk_user_id = User.id) + (SELECT COUNT(*) FROM forum_posts WHERE Thread.fk_user_id = User.id)'
+				'num_entries'	=> 'SELECT (SELECT COUNT(*) FROM forum_threads WHERE fk_user_id = User.id) + (SELECT COUNT(*) FROM forum_posts WHERE fk_user_id = User.id)'
 			),	# Array of subqueries to append
 			'dependent'		=> false,
         ),
@@ -63,7 +65,6 @@ class ForumThreadsTable extends Table
 		'Post'	=> array(
 			'table'			=> 'forum_posts',					# Name of the sql table
 			'plugin'		=> 'Forums',
-			'primaryKey'	=> 'id',							# Primary key in other table (<table_name>) (defaults to: 'id')
 			'foreignKey'	=> 'fk_forum_thread_id',			# Foreign key in other table (<table_name>) (defaults to: 'fk_<$this->table>_id')
 			'condition'		=> '',								# String of conditions
 			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created', 'modified'),							# Array of fields to fetch
@@ -79,13 +80,13 @@ class ForumThreadsTable extends Table
 		'LastPost'	=> array(
 			'table'			=> 'forum_posts',					# Name of the sql table
 			'plugin'		=> 'Forums',
-			'primaryKey'	=> 'id',							# Primary key in other table (<table_name>) (defaults to: 'id')
 			'foreignKey'	=> 'fk_forum_thread_id',			# Foreign key in other table (<table_name>) (defaults to: 'fk_<$this->table>_id')
 //			'condition'		=> '',								# String of conditions
 			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created'),							# Array of fields to fetch
 			'subQueries'	=> array('username' => 'SELECT username FROM users WHERE users.id=LastPost.fk_user_id'),	# Array of subqueries to append
 			'order'			=> array('LastPost.created'=>'DESC'),		# Array of order clauses on the given table
 			'limit'			=> 1,
+			'flatten'		=> true,							# As we only receive one element, we will flatten it down #data[0] to $data7
 			'dependent'		=> false,
 			'recursive'		=> true,							# true|false or array('hasMany' => array('Alias1', 'Alias2')) <= from Post-Table
 		),

@@ -9,13 +9,15 @@ class ForumPostsTable extends Table
 	
 	public $fields	= array(
 		// FIELDS
-		'id'					=> 'id',
-		'fk_forum_thread_id'	=> 'fk_forum_thread_id',
-		'fk_user_id'			=> 'fk_user_id',
-		'title'					=> 'title',
-		'body'					=> 'body',
-		'created'				=> 'created',
-		'modified'				=> 'modified',
+		'id',
+		'fk_forum_thread_id',
+		'thread_id'	=> 'fk_forum_thread_id',
+		'fk_user_id',
+		'user_id'	=> 'fk_user_id',
+		'title',
+		'body',
+		'created',
+		'modified',
 	);
 
 	// many to one
@@ -62,10 +64,10 @@ class ForumPostsTable extends Table
 		$Post	= parent::save($fields, 2);
 		
 		// Update the thread's last_post time and id (so we can order by it to get the last entries)
-		$updFields['last_post_created']	= $Post->Post->created;
-		$updFields['last_post_id']		= $Post->Post->id;
+		$updFields['last_post_created']	= $Post->created;
+		$updFields['last_post_id']		= $Post->id;
 		$this->db->updateRow('forum_threads', $updFields, $fields['fk_forum_thread_id']);
 		
-		return $Post->Post->id;
+		return $Post->id;
 	}
 }

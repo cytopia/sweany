@@ -5,22 +5,21 @@ class ForumCategoriesTable extends Table
 	public $alias	= 'Category';
 
 	public $fields	= array(
-		'id'	=> 'id',
-		'name'	=> 'name',
-		'sort'	=> 'sort',
+		'id',
+		'name',
+		'sort',
 	);
 	public $subQueries = array(
 	);
 
 	public $order	= array(
-		'sort'	=> 'ASC',
+		'Category.sort'	=> 'ASC',
 	);
 
 	public $hasMany = array(
 		'Forum'	=> array(
 			'table'			=> 'forum_forums',
 			'plugin'		=> 'Forums',
-			'primaryKey'	=> 'id',						# primary key in Category table
 			'foreignKey'	=> 'fk_forum_category_id',		# Foreign key in Forum's table
 			'condition'		=> '',
 			'fields'		=> array('id', 'name', 'description', 'icon', 'seo_url'),
@@ -28,7 +27,7 @@ class ForumCategoriesTable extends Table
 				'thread_count'	=> 'SELECT COUNT(*) FROM forum_threads WHERE forum_threads.fk_forum_forums_id = Forum.id',
 				'post_count'	=> 'SELECT COUNT(*) FROM forum_posts WHERE forum_posts.fk_forum_thread_id IN (SELECT id FROM forum_threads WHERE forum_threads.fk_forum_forums_id = Forum.id)',
 			),
-			'order'			=> array('sort' => 'ASC'),
+			'order'			=> array('Forum.sort' => 'ASC'),
 			'limit'			=> 5,
 			'dependent'		=> false,
 			'recursive'		=> array('hasMany' => array('LastThread')),	// only follow LastThread in $hasMany of ForumForumsTable | instead of TRUE (which follows all relations)
