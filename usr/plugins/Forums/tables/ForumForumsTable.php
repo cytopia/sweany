@@ -4,29 +4,26 @@ class ForumForumsTable extends Table
 	public $table	= 'forum_forums';
 	public $alias	= 'Forum';
 
-
 	public $fields	= array(
-		'id'					=> 'id',
-		'fk_forum_category_id'	=> 'fk_forum_category_id',
-		'sort'					=> 'sort',
-		'display'				=> 'display',
-		'can_create'			=> 'can_create',
-		'can_reply'				=> 'can_reply',
-		'name'					=> 'name',
-		'description'			=> 'description',
-		'icon'					=> 'icon',
-		'seo_url'				=> 'seo_url',
-		'created'				=> 'created',
-		'modified'				=> 'modified',
+		'id',
+		'fk_forum_category_id',
+		'category_id'	=> 'fk_forum_category_id',	// Alias for better readability
+		'sort',
+		'display',
+		'can_create',
+		'can_reply',
+		'name',
+		'description',
+		'icon',
+		'seo_url',
+		'created',
+		'modified',
 	);
-
-
-
+	
 	public $hasMany = array(
 		'LastThread'	=> array(
 			'table'			=> 'forum_threads',
 			'plugin'		=> 'Forums',
-			'primaryKey'	=> 'id',						# primary key in Category table
 			'foreignKey'	=> 'fk_forum_forums_id',		# Foreign key in Forum's table
 			'condition'		=> '',
 			'fields'		=> array('id', 'title', 'fk_user_id', 'seo_url', 'created', 'last_post_id', 'last_post_created'),
@@ -39,7 +36,7 @@ class ForumForumsTable extends Table
 			),
 			'order'			=> array('GREATEST(LastThread.created, LastThread.last_post_created)'=>'DESC'),	# order by last thread or last post in thread
 			'limit'			=> 1,							# Limit by one thread only
-//			'recursive'		=> array('hasMany' =>array('LastPost')),
+			'flatten'		=> true,
 			'dependent'		=> false,
 		),
 		'Thread'	=> array(
@@ -53,10 +50,11 @@ class ForumForumsTable extends Table
 				'username'		=> 'SELECT username		FROM users		 WHERE users.id = Thread.fk_user_id',
 				'post_count'	=> 'SELECT COUNT(*) 	FROM forum_posts WHERE forum_posts.fk_forum_thread_id = Thread.id',
 			),
-			'order'			=> array('GREATEST(Thread.created, Thread.last_post_created)'=>'DESC'),
+			'order'			=> array(
+				'Thread.is_sticky' => 'DESC',	# sticky threads first!!!
+				'GREATEST(Thread.created, Thread.last_post_created)' => 'DESC'),	# 2nd order: threads or posts of threads with latest activity
 //			'limit'			=> array(),
 			'recursive'		=> array('hasMany' => array('LastPost')),	// only follow PostThread in $hasMany of ForumThreadsTable | instead of TRUE (which follows all relations)
-//			'recursive'		=> true,
 			'dependent'		=> false,
 		),
 	);

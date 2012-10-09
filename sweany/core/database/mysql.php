@@ -131,7 +131,6 @@ class mysql extends aBootTemplate implements iDBO
 
 		if ( $callback )
 		{
-			// TODO: use: mysql_fetch_assoc | might be faster
 			while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
 			{
 				$callback($row, $data);
@@ -139,7 +138,6 @@ class mysql extends aBootTemplate implements iDBO
 		}
 		else
 		{
-			// TODO: use: mysql_fetch_assoc | might be faster
 			while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
 			{
 				$data[] = $row;
@@ -177,7 +175,7 @@ class mysql extends aBootTemplate implements iDBO
 	 */
 	public function fetchField($table, $field, $condition)
 	{
-		$where	= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$where	= $condition ? 'WHERE '.$this->prepare($condition) : '';
 		$query	= sprintf('SELECT `%s` FROM `%s` %s;', $field, $table, $where);
 		$data	= $this->select($query);
 
@@ -228,7 +226,7 @@ class mysql extends aBootTemplate implements iDBO
 	 */
 	public function count($table, $condition)
 	{
-		$where	= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$where	= $condition ? 'WHERE '.$this->prepare($condition) : '';
 		$query	= sprintf('SELECT COUNT(*) AS counter FROM `%s` %s;', $table, $where);
 		$data	= $this->select($query);
 
@@ -254,7 +252,7 @@ class mysql extends aBootTemplate implements iDBO
 	 */
 	public function countDistinct($table, $field, $condition)
 	{
-		$where	= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$where	= $condition ? 'WHERE '.$this->prepare($condition) : '';
 		$query	= sprintf('SELECT COUNT(DISTINCT `%s`) AS counter FROM `%s` %s;', $field, $table, $where);
 		$data	= $this->select($query);
 
@@ -297,7 +295,7 @@ class mysql extends aBootTemplate implements iDBO
 	public function insert($table, $fields, $ret_ins_id)
 	{
 		$names	= implode(',', array_map( create_function('$key', 'return "`".$key."`";'), array_keys($fields)));
-		$values = implode(',', array_map( create_function('$val', 'return "\'".mysql_real_escape_string($val)."\'";'), array_values($fields)));
+		$values = implode(',', array_map( function($val) {return $this->escape($val, true);}, array_values($fields)));
 
 		$query	= sprintf('INSERT INTO `%s` (%s) VALUES(%s);', $table, $names, $values);
 
@@ -341,7 +339,7 @@ class mysql extends aBootTemplate implements iDBO
 	public function update($table, $fields, $condition)
 	{
 		// Prepare where clause
-		$where		= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$where		= $condition ? 'WHERE '.$this->prepare($condition) : '';
 
 		// Prepare fields
 		$fields	= implode(',', array_map( create_function('$key, $val', 'return "`".$key."`=\'".mysql_real_escape_string($val)."\'";'), array_keys($fields), array_values($fields)));
@@ -399,7 +397,7 @@ class mysql extends aBootTemplate implements iDBO
 	public function incrementFields($table, $incFields, $updFields, $condition)
 	{
 		// Prepare where clause
-		$where		= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$where		= $condition ? 'WHERE '.$this->prepare($condition) : '';
 
 		// Anonymous functions
 		$fIncFields = function($field){
@@ -458,7 +456,7 @@ class mysql extends aBootTemplate implements iDBO
 	 */
 	public function delete($table, $condition)
 	{
-		$where	= $condition ? 'WHERE '.$this->_prepare($condition) : '';
+		$where	= $condition ? 'WHERE '.$this->prepare($condition) : '';
 		$query	= sprintf('DELETE FROM `%s` %s;', $table, $where);
 
 		$start	= microtime(true);
@@ -591,7 +589,7 @@ class mysql extends aBootTemplate implements iDBO
 	 *
 	 *	@return	string	escape safe string
 	 */
-	private function _prepare($statement = null)
+	public function prepare($statement = null)
 	{
 		// Non escapable string
 		if ( is_string($statement) )

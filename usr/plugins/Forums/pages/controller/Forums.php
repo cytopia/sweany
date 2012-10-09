@@ -230,7 +230,7 @@ class Forums extends PageController
 	* **********************************************************************************************************************/
 	public function index()
 	{
-		$data = $this->model->ForumCategories->find('all', array('recursive' => 2));
+		$Categories = $this->model->ForumCategories->find('all', array('recursive' => 2));
 
 		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 
@@ -241,8 +241,8 @@ class Forums extends PageController
 		Css::addFile('/plugins/Forums/css/forum.css');
 
 		// VIEW VARIABLES
+		$this->set('Categories', $Categories);
 		$this->set('language', $this->language);
-		$this->set('data', $data);
 		$this->set('date_format', $this->dateFormat);
 		$this->set('time_format', $this->timeFormat);
 
@@ -264,20 +264,20 @@ class Forums extends PageController
 
 	public function showForum($forum_id = null, $seo_url = null)
 	{
-		$data = $this->model->ForumForums->load($forum_id, null, null, 2);
+		$Forum = $this->model->ForumForums->load($forum_id, 2);
 
-		if ( !$data )
+		if ( !$Forum )
 		{
 			$this->redirect(__CLASS__, 'index');
 		}
-		if ( !$data->Forum->display )
+		if ( !$Forum->display )
 		{
 			$this->redirect(__CLASS__, 'index');
 		}
 
-		if ( $data->Forum->seo_url != $seo_url )
+		if ( $Forum->seo_url != $seo_url )
 		{
-			$this->redirect(__CLASS__, __FUNCTION__, array($forum_id, $data->Forum->seo_url));
+			$this->redirect(__CLASS__, __FUNCTION__, array($forum_id, $Forum->seo_url));
 		}
 		// check wheter thread or post was last and sort by it accordingly
 		//usort($threads, array('ForumsModel', 'sortForumThreadsByLastEntry'));
@@ -285,10 +285,10 @@ class Forums extends PageController
 		$isAdmin		= $this->user->isAdmin();
 
 
-		$navigation		= Html::l($this->language->forum, __CLASS__, '').' -&gt; '.$data->Forum->name;
+		$navigation		= Html::l($this->language->forum, __CLASS__, '').' -&gt; '.$Forum->name;
 
 		// ADD TEMPLATE ELEMENTS
-		HtmlTemplate::setTitle($data->Forum->name.' '.$this->language->forum);
+		HtmlTemplate::setTitle($Forum->name.' '.$this->language->forum);
 
 		// ADD CSS
 		Css::addFile('/plugins/Forums/css/forum.css');
@@ -297,8 +297,8 @@ class Forums extends PageController
 		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 
 		// VIEW VARIABLES
+		$this->set('Forum', $Forum);
 		$this->set('language', $this->language);
-		$this->set('data', $data);
 		$this->set('isAdmin', $isAdmin);
 
 		$this->set('date_format', $this->dateFormat);
@@ -310,7 +310,7 @@ class Forums extends PageController
 
 		// VIEW OPTIONS
 		$this->set('navi', $navigation);
-		$this->set('headline', $data->Forum->name.' '.$this->language->forum);
+		$this->set('headline', $Forum->name.' '.$this->language->forum);
 		$this->view('show_forum');
 
 		// LAYOUT OPTIONS
@@ -324,21 +324,21 @@ class Forums extends PageController
 
 	public function showThread($forum_id = null, $thread_id = null, $seo_url = null)
 	{
-		$data = $this->model->ForumThreads->load($thread_id);
+		$Thread = $this->model->ForumThreads->load($thread_id);
 
-		if ( !$forum_id || $forum_id != $data->Forum->id )
+		if ( !$forum_id || $forum_id != $Thread->Forum->id )
 		{
 			$this->redirect(__CLASS__, 'index');
 		}
 
-		if ( !$thread_id || $thread_id != $data->Thread->id )
+		if ( !$thread_id || $thread_id != $Thread->id )
 		{
-			$this->redirect(__CLASS__, 'showForum', array($data->Forum->id, $data->Forum->seo_url));
+			$this->redirect(__CLASS__, 'showForum', array($Thread->Forum->id, $Thread->Forum->seo_url));
 		}
 
-		if ( $seo_url != $data->Thread->seo_url )
+		if ( $seo_url != $Thread->seo_url )
 		{
-			$this->redirect(__CLASS__, __FUNCTION__, array($forum_id, $thread_id, $data->Thread->seo_url));
+			$this->redirect(__CLASS__, __FUNCTION__, array($forum_id, $thread_id, $Thread->seo_url));
 		}
 
 		if ( !$this->user->isLoggedIn() )
@@ -349,37 +349,15 @@ class Forums extends PageController
 		}
 
 
-		// ------------------------- FORM SUBMITTED AND VALID -------------------------
-		if ( $this->validateForm('form_add_post') && $this->user->isLoggedIn() && !$data->Thread->is_closed && !$data->Thread->is_locked )
-		{
-			// ------------------------- GET FORM VALUES -------------------------
-			//$fields['fk_forum_forums_id']	= Form::getValue('forum_id');
-			$fields['fk_forum_thread_id']	= Form::getValue('thread_id');
-			$fields['title']				= Form::getValue('title');
-			$fields['body']					= Form::getValue('body');
-			$fields['fk_user_id']			= $this->user->id();
-
-			$Thread	= $this->model->ForumPosts->save($fields,2);
-
-			$this->redirect(__CLASS__, 'showThread', array($forum_id, $Thread->Thread->id, $Thread->Thread->seo_url));
-
-			$this->redirect(__CLASS__, 'showThread', array($forum_id, $thread_id, $this->model->getThreadSeoUrl($thread_id)));
-			return;
-		}
-		else
-		{
-			$this->model->updateThreadView($thread_id);
-		}
-
-	//	$posts			= $this->model->getPostsWithUserInfo($thread_id);
+		$this->model->updateThreadView($thread_id);
 
 		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 
-		$navigation		= Html::l($this->language->forum, __CLASS__, 'index').' -&gt; '.Html::l($data->Forum->name, __CLASS__, 'showForum', array($forum_id, $data->Forum->seo_url));
+		$navigation		= Html::l($this->language->forum, __CLASS__, 'index').' -&gt; '.Html::l($Thread->Forum->name, __CLASS__, 'showForum', array($forum_id, $Thread->Forum->seo_url));
 
 
 		// ADD TEMPLATE ELEMENTS
-		HtmlTemplate::setTitle($data->Forum->name.' - '.$data->Thread->title);
+		HtmlTemplate::setTitle($Thread->Forum->name.' - '.$Thread->title);
 
 		// ADD CSS
 		Css::addFile('/plugins/Forums/css/forum.css');
@@ -389,8 +367,8 @@ class Forums extends PageController
 		Javascript::addFile('/plugins/Forums/js/forum.js');
 
 		// VIEW VARIABLES
+		$this->set('Thread', $Thread);
 		$this->set('language', $this->language);
-		$this->set('data', $data);
 		$this->set('user', $this->user);
 		$this->set('messageBBCodeIconBar', $this->model->getMessageBBCodeIconBar('postMessage'));
 		$this->set('date_format', $this->dateFormat);
@@ -411,7 +389,7 @@ class Forums extends PageController
 
 		// VIEW OPTIONS
 		$this->set('navi', $navigation);
-		$this->set('headline', $data->Forum->name.' '.$this->language->forum);
+		$this->set('headline', $Thread->Forum->name.' '.$this->language->forum);
 		$this->view('show_thread');
 
 		// LAYOUT OPTIONS
@@ -426,8 +404,7 @@ class Forums extends PageController
 
 	public function addThread($forum_id = null)
 	{
-		$data	= $this->model->ForumForums->load($forum_id, null, null, 0);
-		$Forum	= isset($data->Forum) ? $data->Forum : null;
+		$Forum	= $this->model->ForumForums->load($forum_id, 0);
 
 		if ( !$Forum )
 		{
@@ -458,14 +435,13 @@ class Forums extends PageController
 			if ( Form::fieldIsSet('add_thread_submit') )
 			{
 				// ------------------------- GET FORM VALUES -------------------------
-				$fields['fk_forum_forums_id']	= Form::getValue('forum_id');
-				$fields['title']					= Form::getValue('title');
-				$fields['body']					= Form::getValue('body');
-				$fields['fk_user_id']			= $this->user->id();
-
+				$fields['forum_id']	= Form::getValue('forum_id');
+				$fields['title']	= Form::getValue('title');
+				$fields['body']		= Form::getValue('body');
+				$fields['user_id']	= $this->user->id();
 				$Thread	= $this->model->ForumThreads->save($fields,2);
 
-				$this->redirect(__CLASS__, 'showThread', array($forum_id, $Thread->Thread->id, $Thread->Thread->seo_url));
+				$this->redirect(__CLASS__, 'showThread', array($forum_id, $Thread->id, $Thread->seo_url));
 			}
 			else if ( Form::fieldIsSet('add_thread_preview') )
 			{
@@ -514,9 +490,8 @@ class Forums extends PageController
 
 	public function addPost($forum_id = null, $thread_id = null)
 	{
-		$data	= $this->model->ForumThreads->load($thread_id, null, null, 1);
-		$Thread	= isset($data->Thread)? $data->Thread: null;
-		$Forum	= isset($data->Forum) ? $data->Forum : null;
+		$Thread	= $this->model->ForumThreads->load($thread_id, 1);
+		$Forum	= isset($Thread->Forum) ? $Thread->Forum : null;
 
 		// --------------- VALIDATE FORUM
 		if ( !$Forum || !$Thread )
@@ -547,7 +522,7 @@ class Forums extends PageController
 		}
 
 		// ------------------------- FORM SUBMITTED AND VALID -------------------------
-		if ( $this->validateForm('form_add_post') && $this->user->isLoggedIn() )
+		if ( $this->validateForm('form_add_post') && $this->user->isLoggedIn() && !$Thread->is_closed && !$Thread->is_locked )
 		{
 			// Note:
 			// need to check for the submit button of this form
@@ -571,12 +546,15 @@ class Forums extends PageController
 				$this->set('postPreview', array('title' => Form::getValue('title'), 'body' => Form::getValue('body')));
 			}
 		}
-		// Get Posts in reverse order (and append thread) to display below add box
-//		$posts			= $this->model->ForumPosts->getPosts($thread_id, array('created' => 'DESC'));
-//		$thread			= $this->model->getThread($thread_id);
-//		$entries		= array_merge($posts, array($thread));
 
-		$entries		= array_merge(array($data->Thread), $data->Post);
+		// Get Posts in reverse order (and append thread) to display below add box
+		$posts			= array_reverse($Thread->Post);
+		$_thread		= clone $Thread;
+		unset($_thread->User);
+		unset($_thread->Forum);
+		unset($_thread->Post);
+		unset($_thread->LastPost);
+		$entries		= array_merge($posts, array($_thread));
 
 		$navigation	= Html::l($this->language->forum, __CLASS__, 'index').' -&gt; '.Html::l($Forum->name, __CLASS__, 'showForum', array($forum_id, $Forum->seo_url)).' -&gt; '.$Thread->title;
 
@@ -591,11 +569,10 @@ class Forums extends PageController
 		Javascript::addFile('/plugins/Forums/js/forum.js');
 
 		// VIEW VARIABLES
+		$this->set('Thread', $Thread);
+		$this->set('entries', $entries);
 		$this->set('language', $this->language);
 		$this->set('user', $this->user);
-		$this->set('data', $data);
-		$this->set('entries', $entries);
-		$this->set('entries', $entries);
 		$this->set('date_format', $this->dateFormat);
 		$this->set('time_format', $this->timeFormat);
 

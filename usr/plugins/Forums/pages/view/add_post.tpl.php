@@ -59,8 +59,8 @@
 							</div>
 						</div><br/>
 						<?php
-						echo Form::inputHidden('forum_id', $data->Forum->id);
-						echo Form::inputHidden('thread_id', $data->Thread->id);
+						echo Form::inputHidden('forum_id', $Thread->Forum->id);
+						echo Form::inputHidden('thread_id', $Thread->id);
 						echo Form::submitButton('add_post_submit', $language->answer);
 						echo Form::submitButton('add_post_preview', $language->preview);
 					echo Form::end();
