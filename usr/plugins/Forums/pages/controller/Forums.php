@@ -143,20 +143,26 @@ class Forums extends PageController
 		// do not render
 		$this->render = false;
 
+		$Thread = $this->model->ForumThreads->load($thread_id, 0);
+
+		if (!$Thread) {
+			return '';
+		}
+
+
 		if ( !isset($_POST['threadId']) )				{return -1;}	// If no post value is set, exit
 		if ( $_POST['threadId'] != $thread_id )			{return -2;}	// basic check: if POST and GET values differ, return false
 		if ( !isset($_POST['body']))					{return -3;}	// Body is not set!!!
 		if ( !$this->user->isLoggedIn() )				{return -4;}	// If not logged in you cannot edit post
-		if ( !$this->model->threadExists($thread_id) )	{return -5;	}	// If the Post does not exist, you cannot edit it
-		if ( !$this->model->isMyThread($thread_id, $this->user->id()) ) {return -6;}	// If it is not my post, I cannot edit it
+		if ( $Thread->user_id != $this->user->id() )	{return -6;}	// If it is not my post, I cannot edit it
 
-		$threadBody = $_POST['body'];
-		$this->model->ForumThreads->update($thread_id, $threadBody);
-		$thread = $this->model->getThread($thread_id);
+		$this->model->ForumThreads->update($thread_id, array('body' => $_POST['body']));
+
+		$Thread = $this->model->ForumThreads->load($thread_id, 0);
 
 		// return the new box
-		$box = '<strong>'.$thread['title'].'</strong><br/><hr/><br/>';
-		$box.= Bbcode::parse($thread['body'], '/plugins/Forums/img/smiley');
+		$box = '<strong>'.$Thread->title.'</strong><br/><hr/><br/>';
+		$box.= Bbcode::parse($Thread->body, '/plugins/Forums/img/smiley');
 		$box.= '<br/><br/>';
 		return $box;
 	}
@@ -196,20 +202,24 @@ class Forums extends PageController
 		// do not render
 		$this->render = false;
 
+		$Thread = $this->model->ForumThreads->load($thread_id, 0);
+
+		if (!$Thread) {
+			return '';
+		}
+
 		if ( !isset($_POST['threadId']) )				{return '';}	// If no post value is set, exit
 		if ( $_POST['threadId'] != $thread_id )			{return '';}	// basic check: if POST and GET values differ, return false
 		if ( !$this->user->isLoggedIn() )				{return '';}	// If not logged in you cannot edit post
-		if ( !$this->model->threadExists($thread_id) )	{return '';}	// If the Post does not exist, you cannot edit it
-		if ( !$this->model->isMyThread($thread_id, $this->user->id()) ) {return '';}	// If it is not my post, I cannot edit it
+		if ( $Thread->user_id != $this->user->id() )	{return '';}	// If it is not my thread, I cannot edit it
 
-		$thread = $this->model->getThread($thread_id);
 
 		$box = '<div style="text-align:left; padding:8px; border:solid 1px black; width:505px; background-color:#FDFDFD;">';
 		$box.= 		'<div style="height:20px;">';
 		$box.=			$this->model->getMessageBBCodeIconBar('quickEditBoxText');
 		$box.= 		'</div>';
 		$box.= 		'<div>';
-		$box.= 			Form::textArea('body', 60, 5, $thread['body'], array('id' => 'quickEditBoxText'));
+		$box.= 			Form::textArea('body', 60, 5, $Thread->body, array('id' => 'quickEditBoxText'));
 		$box.= 		'</div>';
 		$box.=		'<button onclick=\'submitEditThread('.$thread_id.')\'>&auml;ndern</button>';
 		$box.=		'<button onclick=\'cancelEdit()\'>abbrechen</button>';

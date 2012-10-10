@@ -722,6 +722,7 @@ class Table
 	 *		+ Non matching fields (no field or alias in $this->fields found) will automatically
 	 *		  be removed, to prevent sql errors
 	 *		+ Field/Alias values will automatically be escaped, no worry about this.
+	 *		+ SysLog will log all involved aliases with INFO and all stripped fields with a warning
 	 *
 	 *		Array = (
 	 *			'<field1>	=> '<value1>',
@@ -743,7 +744,8 @@ class Table
 		$data	= $this->_prepareFields($data);
 
 		$data	= $this->_appendModifiedFieldIfExist($data);
-		$success= $this->db->updateRow($this->table, $id, $data);
+
+		$success= $this->db->updateRow($this->table, $data, $id);
 
 		switch ($return)
 		{
@@ -774,6 +776,7 @@ class Table
 	 *		+ Non matching fields (no field or alias in $this->fields found) will automatically
 	 *		  be removed, to prevent sql errors
 	 *		+ Field/Alias values will automatically be escaped, no worry about this.
+	 *		+ SysLog will log all involved aliases with INFO and all stripped fields with a warning
 	 *
 	 *		Array = (
 	 *			'<field1>	=> '<value1>',
@@ -796,25 +799,42 @@ class Table
 
 	/**
 	 *
-	 * Increment an Entity's field(s)
+	 * Increment an Entity's field(s) (and optionally update other fields simultaneously)
 	 *
 	 * @param	integer		$id			Id of the entity (row)
 	 * @param	string[]	$fields		Array of field names
+	 * @param	mixed[]		$data		[Optional] Array of field-value (and/or alias-value) pairs for additional updating
+	 *		+ You can use all aliases specified in $this->fields, which will automatically be
+	 *		  mapped to the corresponding field.
+	 *		+ Non matching fields (no field or alias in $this->fields found) will automatically
+	 *		  be removed, to prevent sql errors
+	 *		+ Field/Alias values will automatically be escaped, no worry about this.
+	 *		+ SysLog will log all involved aliases with INFO and all stripped fields with a warning
+	 *
+	 *		Array = (
+	 *			'<field1>	=> '<value1>',
+	 *			'<field2>	=> '<value2>',
+	 *			'<alias1>	=> '<value3>',
+	 *		);
 	 *
 	 * @return	boolean	success
 	 */
-	public function increment($id, $fields)
+	public function increment($id, $fields, $data = array())
 	{
 		$condition = array('id = :id', array(':id' => $id));
 
-		return $this->db->incrementFields($this->table, $fields, null, $condition);
+		// 1.) converts field aliases to fields (if using aliases to insert)
+		// 2.) removes all fields not available in this table
+		$data	= $this->_prepareFields($data);
+
+		return $this->db->incrementFields($this->table, $fields, $data, $condition);
 	}
 
 
 
 	/**
 	 *
-	 * Increment an Field(s) of many entities by condition)
+	 * Increment an Field(s) of many entities by condition (and optionally update other fields simultaneously)
 	 *
 	 * @param	mixed[]		$condition	Escapable condition
 	 *		Array (
@@ -826,12 +846,25 @@ class Table
 	 *		);
 	 *
 	 * @param	string[]	$fields		Array of field names
+	 * @param	mixed[]		$data		[Optional] Array of field-value (and/or alias-value) pairs for additional updating
+	 *		+ You can use all aliases specified in $this->fields, which will automatically be
+	 *		  mapped to the corresponding field.
+	 *		+ Non matching fields (no field or alias in $this->fields found) will automatically
+	 *		  be removed, to prevent sql errors
+	 *		+ Field/Alias values will automatically be escaped, no worry about this.
+	 *		+ SysLog will log all involved aliases with INFO and all stripped fields with a warning
+	 *
+	 *		Array = (
+	 *			'<field1>	=> '<value1>',
+	 *			'<field2>	=> '<value2>',
+	 *			'<alias1>	=> '<value3>',
+	 *		);
 	 *
 	 * @return	boolean					Success of operation
 	 */
-	public function incrementAll($condition, $fields)
+	public function incrementAll($condition, $fields, $data = array())
 	{
-		return $this->db->incrementFields($this->table, $fields, null, $condition);
+		return $this->db->incrementFields($this->table, $fields, $data, $condition);
 	}
 
 
