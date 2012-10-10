@@ -52,14 +52,14 @@ class TimeHelper
 	{
 		$day		= 86400;	// (60*60*24) seconds
 		$agoDays	= count($dayAgoNames);
-		$checkDate	= date('Ymd',strtotime($dateTimeString));
+		$checkDate	= date('Ymd',self::toTimeStamp($dateTimeString));
 
 		for ( $i=0; $i<$agoDays; $i++ ) {
 			if ( $checkDate == date('Ymd', time()-($day*$i)) ) {
 				return $dayAgoNames[$i];
 			}
 		}
-		return date($format, strtotime($dateTimeString));
+		return date($format, self::toTimeStamp($dateTimeString));
 	}
 
 
@@ -129,14 +129,14 @@ class TimeHelper
 	 */
 	public static function toTimeStamp($date, $timezone = null)
 	{
-		if (empty($dateString)) {
+		if (empty($date)) {
 			return false;
 		}
 
 		if (is_integer($date) || is_numeric($date)) {
-			$date = intval($dateString);
+			$date = intval($date);
 		} else {
-			$date = strtotime($dateString);
+			$date = strtotime($date);
 		}
 
 		if ($date === -1 || empty($date)) {
@@ -144,7 +144,7 @@ class TimeHelper
 		}
 
 		if ($timezone === null) {
-			$timezone = $GLOBALS['$DEFAULT_TIME_ZONE'];
+			//$timezone = $GLOBALS['$DEFAULT_TIME_ZONE'];
 		}
 
 		if ($timezone !== null) {

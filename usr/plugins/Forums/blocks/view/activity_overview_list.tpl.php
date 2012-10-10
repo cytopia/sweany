@@ -17,11 +17,11 @@
 				<div style="font-size:10px; line-height:120%; text-align:right;">
 				<?php if ($thread['last_post_id']): ?>
 					<?php $last_user_link = ($userProfileLink) ? Html::l($thread['last_post_username'], $userProfileCtl, $userProfileMethod, array($thread['last_post_user_id'])) : $thread['last_post_username'];?>
-					<?php echo TimeHelper::getFormattedDate($thread['last_post_created'], 'd.m.Y', $language->today, $language->yesterday); ?> <span style="color:gray;"><?php echo date('H:i',strtotime($thread['last_post_created']));?></span><br/>
+					<?php echo TimeHelper::getFormattedDate($thread['last_post_created'], 'd.m.Y', $language->today, $language->yesterday); ?> <span style="color:gray;"><?php echo date('H:i',$thread['last_post_created']);?></span><br/>
 					<?php echo $language->by;?> <?php echo $last_user_link;?>
 				<?php else: ?>
 					<?php $last_user_link = ($userProfileLink) ? Html::l($thread['username'], $userProfileCtl, $userProfileMethod, array($thread['fk_user_id'])) : $thread['username'];?>
-					<?php echo TimeHelper::getFormattedDate($thread['created'], 'd.m.Y', $language->today, $language->yesterday); ?> <span style="color:gray"><?php echo date('H:i',strtotime($thread['created']));?></span><br/>
+					<?php echo TimeHelper::getFormattedDate($thread['created'], 'd.m.Y', $language->today, $language->yesterday); ?> <span style="color:gray"><?php echo date('H:i',$thread['created']);?></span><br/>
 					<?php echo $language->by;?> <?php echo $last_user_link;?>
 				<?php endif; ?>
 				</div>

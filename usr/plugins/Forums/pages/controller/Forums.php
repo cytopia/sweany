@@ -152,7 +152,6 @@ class Forums extends PageController
 			return '';
 		}
 
-
 		if ( !isset($_POST['threadId']) )				{return -1;}	// If no post value is set, exit
 		if ( $_POST['threadId'] != $thread_id )			{return -2;}	// basic check: if POST and GET values differ, return false
 		if ( !isset($_POST['body']))					{return -3;}	// Body is not set!!!
@@ -279,15 +278,10 @@ class Forums extends PageController
 	{
 		$Forum = $this->model->ForumForums->load($forum_id, 2);
 
-		if ( !$Forum )
+		if ( !$Forum || !$Forum->display )
 		{
 			$this->redirect(__CLASS__, 'index');
 		}
-		if ( !$Forum->display )
-		{
-			$this->redirect(__CLASS__, 'index');
-		}
-
 		if ( $Forum->seo_url != $seo_url )
 		{
 			$this->redirect(__CLASS__, __FUNCTION__, array($forum_id, $Forum->seo_url));
@@ -339,7 +333,7 @@ class Forums extends PageController
 	{
 		$Thread = $this->model->ForumThreads->load($thread_id);
 
-		if ( !$forum_id || $forum_id != $Thread->Forum->id )
+		if ( !$forum_id || $forum_id != $Thread->Forum->id || !$Thread->Forum->display )
 		{
 			$this->redirect(__CLASS__, 'index');
 		}
@@ -366,7 +360,7 @@ class Forums extends PageController
 
 		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 
-		$navigation		= Html::l($this->language->forum, __CLASS__, 'index').' -&gt; '.Html::l($Thread->Forum->name, __CLASS__, 'showForum', array($forum_id, $Thread->Forum->seo_url));
+		$navigation = Html::l($this->language->forum, __CLASS__, 'index').' -&gt; '.Html::l($Thread->Forum->name, __CLASS__, 'showForum', array($forum_id, $Thread->Forum->seo_url));
 
 
 		// ADD TEMPLATE ELEMENTS
@@ -419,11 +413,7 @@ class Forums extends PageController
 	{
 		$Forum	= $this->model->ForumForums->load($forum_id, 0);
 
-		if ( !$Forum )
-		{
-			$this->redirect(__CLASS__, 'index');
-		}
-		if ( !$Forum->display )
+		if ( !$Forum || !$Forum->display )
 		{
 			$this->redirect(__CLASS__, 'index');
 		}
@@ -507,21 +497,11 @@ class Forums extends PageController
 		$Forum	= isset($Thread->Forum) ? $Thread->Forum : null;
 
 		// --------------- VALIDATE FORUM
-		if ( !$Forum || !$Thread )
+		if ( !$Forum || !$Thread || !$Forum->display || !$Forum->can_reply )
 		{
 			$this->redirect(__CLASS__, 'index');
 		}
-		if ( !$Forum->display || !$Forum->can_reply )
-		{
-			$this->redirect(__CLASS__, 'index');
-		}
-		if ( $Thread->id != $thread_id || $Forum->id != $forum_id)	// Does the thread belong to the correct forum?
-		{
-			$this->redirect(__CLASS__, 'showForum', array($forum_id, $Forum->seo_url));
-		}
-
-		// --------------- VALIDATE TREAD
-		if ( $Thread->is_locked || $Thread->is_closed )
+		if ( $Thread->id != $thread_id || $Forum->id != $forum_id || $Thread->is_locked || $Thread->is_closed )
 		{
 			$this->redirect(__CLASS__, 'showForum', array($forum_id, $Forum->seo_url));
 		}

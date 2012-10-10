@@ -38,7 +38,7 @@
 			<?php
 				if ( $Thread->post_count > 0 )
 				{
-					$timestamp		= strtotime($Thread->last_post_created);
+					$timestamp		= $Thread->last_post_created;
 					$last_date		= date($date_format, $timestamp);
 					$last_time		= date($time_format, $timestamp);
 					$last_user		= ($Thread->LastPost->fk_user_id > 0) ? $Thread->LastPost->username : 'anonymous';
@@ -58,7 +58,7 @@
 				$sticky		= ($Thread->is_sticky) ? Html::img('/plugins/Forums/img/threads/is_sticky.png', $language->threadIsSticky, array('title' => $language->threadIsSticky)) : '';
 				$locked		= ($Thread->is_locked) ? Html::img('/plugins/Forums/img/threads/is_locked.png', $language->threadIsLocked, array('title' => $language->threadIsLocked)) : '';
 				$closed		= ($Thread->is_closed) ? Html::img('/plugins/Forums/img/threads/is_closed.png', $language->threadIsClosed, array('title' => $language->threadIsClosed)) : '';
-				$timestamp	= strtotime($Thread->created);
+				$timestamp	= $Thread->created;
 				$date		= date($date_format, $timestamp);
 				$time		= date($time_format, $timestamp);
 

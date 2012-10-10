@@ -15,8 +15,9 @@ Features:
  * Plugins (have Pages, Blocks and Tables)
  * Vendors (needs proper testing)
  * Helpers (various integrated helper classes)
+ * SQL ORM array or object based
  * Sophisticated HTML Form creation/validation (even automated validation against database entries)
- * Supports different languages on the fly (via adding xml files)
+ * Supports different languages on the fly via xml files or t() function
  * Integrated user management (groups still to come)
  * Validator mode
  * Syslog (Internal Debug Mode to monitor performance and engine calls)

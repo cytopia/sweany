@@ -12,7 +12,7 @@
 			<td>
 				<?php echo Html::l('&quot;'.Strings::shorten(Bbcode::remove($post['body']),100,true).'&quot;', 'Forums', 'showThread', array($post['forum_id'], $post['fk_forum_thread_id'], $post['thread_seo_url'])); ?>
 				<div>
-					<?php echo $language->youReplied;?> <?php echo date('M d, Y', strtotime($post['created'])).' '.$language->at.' '.date('H:i', strtotime($post['created'])); ?>
+					<?php echo $language->youReplied;?> <?php echo date('M d, Y', $post['created']).' '.$language->at.' '.date('H:i', $post['created']); ?>
 				</div>
 			</td>
 			<td>

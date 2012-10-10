@@ -1,3 +1,11 @@
+2012-10-10
+-----------------
++ ORM Rewritten
++ More validation on user defined tables
++ Even more validation...
++ Migrated Forum and Contacts module to new ORM
+
+
 2012-09-27
 -----------------
 + Further speed optimizations on ORM
