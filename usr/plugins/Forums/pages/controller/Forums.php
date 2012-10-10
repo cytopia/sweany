@@ -119,20 +119,23 @@ class Forums extends PageController
 		// do not render
 		$this->render = false;
 
+		$Post = $this->model->ForumPosts->load($post_id, 0);
+
+		if (!$Post) {
+			return '';
+		}
+
 		if ( !isset($_POST['postId']) )				{return -1;	}	// If no post value is set, exit
 		if ( $_POST['postId'] != $post_id )			{return -2;	}	// basic check: if POST and GET values differ, return false
 		if ( !isset($_POST['body']))				{return -3; }	// Body is not set!!!
 		if ( !$this->user->isLoggedIn() )			{return -4;	}	// If not logged in you cannot edit post
-		if ( !$this->model->postExists($post_id) )	{return -5;	}	// If the Post does not exist, you cannot edit it
-		if ( !$this->model->isMyPost($post_id, $this->user->id()) ) {return -6;}	// If it is not my post, I cannot edit it
+		if ( $Post->fk_user_id != $this->user->id() ) { return ''; }	// If it is not my post, I cannot edit it
 
-		$postBody = $_POST['body'];
-		$this->model->ForumPosts->update($post_id, $postBody);
-		$post= $this->model->getPost($post_id);
+		$Post = $this->model->ForumPosts->update($post_id, array('body' =>  $_POST['body']), 2);	// update and retrive updated Post
 
 		// return the new box
-		$box = '<strong>'.$post['title'].'</strong><br/><hr/><br/>';
-		$box.= Bbcode::parse($post['body'], '/plugins/Forums/img/smiley');
+		$box = '<strong>'.$Post->title.'</strong><br/><hr/><br/>';
+		$box.= Bbcode::parse($Post->body, '/plugins/Forums/img/smiley');
 		$box.= '<br/><br/>';
 		return $box;
 	}
@@ -156,9 +159,7 @@ class Forums extends PageController
 		if ( !$this->user->isLoggedIn() )				{return -4;}	// If not logged in you cannot edit post
 		if ( $Thread->user_id != $this->user->id() )	{return -6;}	// If it is not my post, I cannot edit it
 
-		$this->model->ForumThreads->update($thread_id, array('body' => $_POST['body']));
-
-		$Thread = $this->model->ForumThreads->load($thread_id, 0);
+		$Thread = $this->model->ForumThreads->update($thread_id, array('body' => $_POST['body']), 2);
 
 		// return the new box
 		$box = '<strong>'.$Thread->title.'</strong><br/><hr/><br/>';
@@ -174,20 +175,23 @@ class Forums extends PageController
 		// do not render
 		$this->render = false;
 
+		$Post = $this->model->ForumPosts->load($post_id, 0);
+
+		if (!$Post) {
+			return '';
+		}
+
 		if ( !isset($_POST['postId']) )				{ return ''; }	// If no post value is set, exit
 		if ( $_POST['postId'] != $post_id )			{ return ''; }	// basic check: if POST and GET values differ, return false
 		if ( !$this->user->isLoggedIn() )			{ return ''; }	// If not logged in you cannot edit post
-		if ( !$this->model->postExists($post_id) )	{ return ''; }	// If the Post does not exist, you cannot edit it
-		if ( !$this->model->isMyPost($post_id, $this->user->id()) ) { return ''; }	// If it is not my post, I cannot edit it
-
-		$post= $this->model->getPost($post_id);
+		if ( $Post->fk_user_id != $this->user->id() ) { return ''; }	// If it is not my post, I cannot edit it
 
 		$box = '<div style="text-align:left; padding:8px; border:solid 1px black; width:505px; background-color:#FDFDFD;">';
 		$box.= 		'<div style="height:20px;">';
 		$box.=			$this->model->getMessageBBCodeIconBar('quickEditBoxText');
 		$box.= 		'</div>';
 		$box.= 		'<div>';
-		$box.= 			Form::textArea('body', 60, 5, $post['body'], array('id' => 'quickEditBoxText'));
+		$box.= 			Form::textArea('body', 60, 5, $Post->body, array('id' => 'quickEditBoxText'));
 		$box.= 		'</div>';
 		$box.=		'<button onclick=\'submitEditPost('.$post_id.')\'>&auml;ndern</button>';
 		$box.=		'<button onclick=\'cancelEdit()\'>abbrechen</button>';
