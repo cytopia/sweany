@@ -4,8 +4,8 @@ class ForumThreadsTable extends Table
 	public $table 	= 'forum_threads';
 	public $alias	= 'Thread';
 
-	protected $hasModified	= array('modified' => 'datetime');
-	protected $hasCreated	= array('created' => 'datetime');
+	public $hasModified	= array('modified' => 'integer');
+	public $hasCreated	= array('created' => 'integer');
 
 
 	public $fields	= array(
@@ -46,8 +46,7 @@ class ForumThreadsTable extends Table
 			'fields'		=> array('id', 'username'),
 			'subQueries'	=> array(
 				'num_entries'	=> 'SELECT (SELECT COUNT(*) FROM forum_threads WHERE fk_user_id = User.id) + (SELECT COUNT(*) FROM forum_posts WHERE fk_user_id = User.id)'
-			),	# Array of subqueries to append
-			'dependent'		=> false,
+			),
         ),
 		'Forum' => array(
 			'table'			=> 'forum_forums',
@@ -57,7 +56,6 @@ class ForumThreadsTable extends Table
 //			'condition'		=> '',
 			'fields'		=> array('id', 'name', 'seo_url', 'display', 'can_reply'),
 			'subQueries'	=> array(),
-			'dependent'		=> false,
         ),
     );
 	// one to many

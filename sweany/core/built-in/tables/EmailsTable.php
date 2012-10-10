@@ -16,5 +16,5 @@ class EmailsTable extends Table
 	);
 	
 	// AUTO FIELDS
-	protected $hasCreated	= array('created' => 'integer');
+	public $hasCreated	= array('created' => 'integer');
 }

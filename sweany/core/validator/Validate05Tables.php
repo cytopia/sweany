@@ -76,6 +76,10 @@ class Validate05Tables extends aBootTemplate
 						self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
 						return false;
 					}
+					
+					// ---------------- VALIDATE CREATED/MODIFIED Fields
+					if ( !self::__checkCreatedModifiedFields($tblClass, $file, $db) ) {return false;}
+					
 
 					// ---------------- VALIDATE FIELDS
 					$sqlColumns	= $db->getColumnNames($tblClass->table);
@@ -153,6 +157,10 @@ class Validate05Tables extends aBootTemplate
 						self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
 						return false;
 					}
+
+					// ---------------- VALIDATE CREATED/MODIFIED Fields
+					if ( !self::__checkCreatedModifiedFields($tblClass, $file, $db) ) {return false;}
+
 
 					// ---------------- VALIDATE FIELDS
 					$sqlColumns	= $db->getColumnNames($tblClass->table);
@@ -239,6 +247,10 @@ class Validate05Tables extends aBootTemplate
 									self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
 									return false;
 								}
+
+								// ---------------- VALIDATE CREATED/MODIFIED Fields
+								if ( !self::__checkCreatedModifiedFields($tblClass, $file, $db) ) {return false;}
+
 								// ---------------- VALIDATE FIELDS
 								$sqlColumns	= $db->getColumnNames($tblClass->table);
 								$tblColumns	= $tblClass->fields;
@@ -308,6 +320,196 @@ class Validate05Tables extends aBootTemplate
 
 	/* ******************************************* PRIVATE HELPERS ******************************************* */
 	
+	
+	private static function __checkCreatedModifiedFields($tblClass, $tblName, $db)
+	{
+		$data	= $db->getColumnTypes($tblClass->table);
+		$names	= array_keys($data);
+		$types	= array_values($data);
+		
+			// --------------------------- CHECK CREATED ---------------------------
+		if ( !is_null($tblClass->hasCreated) )
+		{
+			if ( is_string($tblClass->hasCreated) )
+			{
+				if ( !in_array('created', $names) )
+				{
+					self::$error = $tblName.'Table.php $hasCreated = \''.$tblClass->hasCreated.'\';<br/>Only type has been set. Assuming field name to be <strong>created</strong>, but field \'created\' does not exist in sql table '.$tblClass->table.'.<br/>Consider using $hasCreated = array(\'sql_fieldName\' => \''.$tblClass->hasCreated.'\');';
+					return false;
+				}
+				if ( $tblClass->hasCreated == 'datetime' )
+				{
+					if ( strtolower($data['created']) != 'datetime' )
+					{
+						self::$error = $tblName.'Table.php $hasCreated = \''.$tblClass->hasCreated.'\';<br/>But SQL Type of '.$tblClass->table.'.created is <strong>'.strtolower($data['created']).'</strong>';
+						return false;
+					}
+				}
+				if ( $tblClass->hasCreated == 'timestamp' )
+				{
+					if ( strtolower($data['created']) != 'timestamp' )
+					{
+						self::$error = $tblName.'Table.php $hasCreated = \''.$tblClass->hasCreated.'\';<br/>But SQL Type of '.$tblClass->table.'.created is <strong>'.strtolower($data['created']).'</strong>';
+						return false;
+					}
+				}
+				if ( $tblClass->hasCreated == 'integer' )
+				{
+					if ( strtolower($data['created']) != 'int' )
+					{
+						self::$error = $tblName.'Table.php $hasCreated = \''.$tblClass->hasCreated.'\';<br/>But SQL Type of '.$tblClass->table.'.created is <strong>'.strtolower($data['created']).'</strong>';
+						return false;
+					}
+				}
+				else
+				{
+					self::$error = $tblName.'Table.php $hasCreated = \''.$tblClass->hasCreated.'\';<br/> Is a wrong type! SQL Type of '.$tblClass->table.'.created is <strong>'.strtolower($data['created']).'</strong><br/>Allowed types are \'datetime\', \'timestamp\' and \'integer\'';
+					return false;
+				}
+			}
+			else if ( is_array($tblClass->hasCreated) )
+			{
+				$name	= array_keys($tblClass->hasCreated);
+				$name	= isset($name[0]) ? $name[0] : null;
+				$type	= array_values($tblClass->hasCreated);
+				$type	= isset($type[0]) ? $type[0] : null;
+
+				if ( !in_array($name, $names) )
+				{
+					self::$error = $tblName.'Table.php $hasCreated = array(\''.$name.'\' => \''.$type.'\');<br/>Field <strong>'.$name.'</strong> does not exist in sql table '.$tblClass->table;
+					return false;
+				}
+				if ( $type == 'datetime' )
+				{
+					if ( strtolower($data[$name]) != 'datetime' )
+					{
+						self::$error = $tblName.'Table.php $hasCreated = array(\''.$name.'\' => \''.$type.'\');<br/>But SQL Type of '.$tblClass->table.'.'.$name.' is <strong>'.strtolower($data['created']).'</strong>';
+						return false;
+					}
+				}
+				if ( $type == 'timestamp' )
+				{
+					if ( strtolower($data[$name]) != 'timestamp' )
+					{
+						self::$error = $tblName.'Table.php $hasCreated = array(\''.$name.'\' => \''.$type.'\');<br/>But SQL Type of '.$tblClass->table.'.'.$name.' is <strong>'.strtolower($data['created']).'</strong>';
+						return false;
+					}
+				}
+				if ( $type == 'integer' )
+				{
+					if ( strtolower($data[$name]) != 'int' )
+					{
+						self::$error = $tblName.'Table.php $hasCreated = array(\''.$name.'\' => \''.$type.'\');<br/>But SQL Type of '.$tblClass->table.'.'.$name.' is <strong>'.strtolower($data['created']).'</strong>';
+						return false;
+					}
+				}
+				else
+				{
+					self::$error = $tblName.'Table.php $hasCreated = array(\''.$name.'\' => \''.$type.'\');<br/>Is a wrong type ! SQL Type if '.$tblClass->table.'.'.$name.' is <strong>'.strtolower($data['created']).'</strong><br/>Allowed types are \'datetime\', \'timestamp\' and \'integer\'';
+					return false;
+				}
+			}
+			else
+			{
+				self::$error = $tblName.'Table.php $hasCreated has a wrong format.<br/>Allowed values: $hasCreated = \'sql_type\' or $hasCreated = array(\'field_name\' => \'sql_type\')';
+				return false;
+			}
+		}
+		
+
+		// --------------------------- CHECK MODIFIED ---------------------------
+		if ( !is_null($tblClass->hasModified) )
+		{
+			if ( is_string($tblClass->hasModified) )
+			{
+				if ( !in_array('modified', $names) )
+				{
+					self::$error = $tblName.'Table.php $hasModified = \''.$tblClass->hasModified.'\';<br/>Only type has been set. Assuming field name to be <strong>modified</strong>, but field \'modified\' does not exist in sql table '.$tblClass->table.'.<br/>Consider using $hasModified = array(\'sql_fieldName\' => \''.$tblClass->hasModified.'\');';
+					return false;
+				}
+				if ( $tblClass->hasModified == 'datetime' )
+				{
+					if ( strtolower($data['modified']) != 'datetime' )
+					{
+						self::$error = $tblName.'Table.php $hasModified = \''.$tblClass->hasModified.'\';<br/>But SQL Type of '.$tblClass->table.'.modified is <strong>'.strtolower($data['modified']).'</strong>';
+						return false;
+					}
+				}
+				if ( $tblClass->hasModified == 'timestamp' )
+				{
+					if ( strtolower($data['modified']) != 'timestamp' )
+					{
+						self::$error = $tblName.'Table.php $hasModified = \''.$tblClass->hasModified.'\';<br/>But SQL Type of '.$tblClass->table.'.modified is <strong>'.strtolower($data['modified']).'</strong>';
+						return false;
+					}
+				}
+				if ( $tblClass->hasModified == 'integer' )
+				{
+					if ( strtolower($data['created']) != 'int' )
+					{
+						self::$error = $tblName.'Table.php $hasModified = \''.$tblClass->hasModified.'\';<br/>But SQL Type of '.$tblClass->table.'.modified is <strong>'.strtolower($data['modified']).'</strong>';
+						return false;
+					}
+				}
+				else
+				{
+					self::$error = $tblName.'Table.php $hasModified = \''.$tblClass->hasModified.'\';<br/> Is a wrong type! SQL Type of '.$tblClass->table.'.modified is <strong>'.strtolower($data['modified']).'</strong><br/>Allowed types are \'datetime\', \'timestamp\' and \'integer\'';
+					return false;
+				}
+			}
+			else if ( is_array($tblClass->hasModified) )
+			{
+				$name	= array_keys($tblClass->hasModified);
+				$name	= isset($name[0]) ? $name[0] : null;
+				$type	= array_values($tblClass->hasModified);
+				$type	= isset($type[0]) ? $type[0] : null;
+
+				if ( !in_array($name, $names) )
+				{
+					self::$error = $tblName.'Table.php $hasModified = array(\''.$name.'\' => \''.$type.'\');<br/>Field <strong>'.$name.'</strong> does not exist in sql table '.$tblClass->table;
+					return false;
+				}
+				if ( $type == 'datetime' )
+				{
+					if ( strtolower($data[$name]) != 'datetime' )
+					{
+						self::$error = $tblName.'Table.php $hasModified = array(\''.$name.'\' => \''.$type.'\');<br/>But SQL Type of '.$tblClass->table.'.'.$name.' is <strong>'.strtolower($data['modified']).'</strong>';
+						return false;
+					}
+				}
+				if ( $type == 'timestamp' )
+				{
+					if ( strtolower($data[$name]) != 'timestamp' )
+					{
+						self::$error = $tblName.'Table.php $hasModified = array(\''.$name.'\' => \''.$type.'\');<br/>But SQL Type of '.$tblClass->table.'.'.$name.' is <strong>'.strtolower($data['modified']).'</strong>';
+						return false;
+					}
+				}
+				if ( $type == 'integer' )
+				{
+					if ( strtolower($data[$name]) != 'int' )
+					{
+						self::$error = $tblName.'Table.php $hasModified = array(\''.$name.'\' => \''.$type.'\');<br/>But SQL Type of '.$tblClass->table.'.'.$name.' is <strong>'.strtolower($data['modified']).'</strong>';
+						return false;
+					}
+				}
+				else
+				{
+					self::$error = $tblName.'Table.php $hasModified = array(\''.$name.'\' => \''.$type.'\');<br/>Is a wrong type ! SQL Type if '.$tblClass->table.'.'.$name.' is <strong>'.strtolower($data['modified']).'</strong><br/>Allowed types are \'datetime\', \'timestamp\' and \'integer\'';
+					return false;
+				}
+			}
+			else
+			{
+				self::$error = $tblName.'Table.php $hasModified has a wrong format.<br/>Allowed values: $hasModified = \'sql_type\' or $hasModified = array(\'field_name\' => \'sql_type\')';
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	
+	
 	private static function __checkRelation($relation, $tbl_name, $tblClass, $type, $db)
 	{
 		foreach ($relation as $alias => $options)
@@ -318,7 +520,17 @@ class Validate05Tables extends aBootTemplate
 				self::$error = '<b>\'table\'</b> property missing in '.$tbl_name.'->'.$type.'[\''.$alias.'\']';
 				return false;
 			}
+			// Get Class Name (default is to camelCase the sql table
+			$className	= (isset($options['class'])) ? $options['class'] : \Strings::camelCase($options['table'], true);
 
+			// Is Plugin?
+			$plugin		= (isset($options['plugin'])&& strlen($options['plugin'])) ? $options['plugin'] : null;
+
+			// Is Core?
+			$core		= (isset($options['core']) && $options['core']) ? true : false;
+
+			
+			
 			// Table exists in database?
 			if ( !$db->tableExists($options['table']) )
 			{
@@ -369,22 +581,19 @@ class Validate05Tables extends aBootTemplate
 				{
 					self::$error = 'Field <b>'.$field.'</b> specified in: '.$tbl_name.'->'.$type.'[\''.$alias.'\'][\'fields\'] Does not exist in database table: '.$options['table'];
 					return false;
-
 				}
 			}
 
 			// If recursive relation, we have to check if the other class exists
-			if ( isset($options['recursive']) && $options['recursive'] != false )
+			if ( isset($options['recursive']) && !is_array($options['recursive']) )
 			{
-				// Get Class Name (default is to camelCase the sql table
-				$className	= (isset($options['class'])) ? $options['class'] : \Strings::camelCase($options['table'], true);
+				// Check if recursive is true or false
+				if ( $options['recursive'] !== true && $options['recursive'] !== false )
+				{
+					self::$error = 'Wrong value specified in: '.$tbl_name.'Table $'.$type.'[\''.$alias.'\'][\'recursive\'] Can only be true or false or an array of specific Relations to follow';
+					return false;
+				}
 
-				// Is Plugin?
-				$plugin		= (isset($options['plugin'])&& strlen($options['plugin'])) ? $options['plugin'] : null;
-
-				// Is Core?
-				$core		= (isset($options['core']) && $options['core']) ? true : false;
-				
 				if ($core) {
 					$path	= CORE_TABLE.DS.$className.'Table.php';
 				}
@@ -454,7 +663,6 @@ class Validate05Tables extends aBootTemplate
 				}
 			}
 			
-			
 			// specific relation check
 			if ( $type == 'hasOne' )
 			{
@@ -490,6 +698,12 @@ class Validate05Tables extends aBootTemplate
 
 	private static function __checkHasOne($options, $alias, $tbl_name, $tblClass, $db)
 	{
+		// Validate allowed fields
+		$allOptions	= array('table', 'class', 'core', 'plugin', 'primaryKey', 'foreignKey', 'fields', 'subQueries', 'condition', 'recursive', 'dependent');
+		$setFields	= array_keys($options);
+		// TODO:!!!
+		debug('IMPLEMENT ME IN Validate05Table.php -see __checkHasMany for example');
+
 		$tblFK		= (isset($options['foreignKey'])) ? $options['foreignKey'] : 'fk_'.$tblClass->table.'_id';
 		$sqlColumns	= $db->getColumnNames($options['table']);
 
@@ -510,6 +724,28 @@ class Validate05Tables extends aBootTemplate
 
 	private static function __checkHasMany($options, $alias, $tbl_name, $tblClass, $db)
 	{
+		// Validate allowed fields
+		$allOptions	= array('table', 'class', 'core', 'plugin', 'foreignKey', 'fields', 'subQueries', 'condition', 'order', 'limit', 'flatten', 'recursive', 'dependent');
+		foreach (array_keys($options) as $opt)
+		{
+			if ( !in_array($opt, $allOptions) )
+			{
+				self::$error = 'Invalid Option: <strong>'.$opt.'</strong> in '.$tbl_name.'Table.php $hasMany[\''.$alias.'\']';
+				return false;
+			}
+		}
+
+		if ( isset($options['flatten']) && ($options['flatten'] !== true && $options['flatten'] !== false) )
+		{
+				self::$error = 'Invalid Value for: <strong>flatten</strong> in '.$tbl_name.'Table.php $hasMany[\''.$alias.'\'][\'flatten\'] - can only be true or false';
+				return false;
+		}
+		if ( isset($options['dependent']) && ($options['dependent'] !== true && $options['dependent'] !== false) )
+		{
+				self::$error = 'Invalid Value for: <strong>dependent</strong> in '.$tbl_name.'Table.php $hasMany[\''.$alias.'\'][\'dependent\'] - can only be true or false';
+				return false;
+		}
+
 		$tblFK		= (isset($options['foreignKey'])) ? $options['foreignKey'] : 'fk_'.$tblClass->table.'_id';
 		$sqlColumns	= $db->getColumnNames($options['table']);
 
@@ -530,6 +766,17 @@ class Validate05Tables extends aBootTemplate
 
 	private static function __checkBelongsTo($options, $alias, $tbl_name, $tblClass, $db)
 	{
+		// Validate allowed fields
+		$allOptions	= array('table', 'class', 'core', 'plugin', 'primaryKey', 'foreignKey', 'fields', 'subQueries', 'condition', 'recursive');
+		foreach (array_keys($options) as $opt)
+		{
+			if ( !in_array($opt, $allOptions) )
+			{
+				self::$error = 'Invalid Option: <strong>'.$opt.'</strong> in '.$tbl_name.'Table.php $belongsTo[\''.$alias.'\']';
+				return false;
+			}
+		}
+
 		$tblFK 		= (isset($options['foreignKey'])) ? $options['foreignKey'] : 'fk_'.$options['table'].'_id';
 		$sqlColumns	= $db->getColumnNames($tblClass->table);
 
@@ -550,6 +797,18 @@ class Validate05Tables extends aBootTemplate
 
 	private static function __checkHabtm($habtm, $alias, $tbl_name, $tblClass, $db)
 	{
+		debug('Implement me in Validate05Tables __checkHabtm');
+		// Validate allowed fields
+		$allOptions	= array('table', 'class', 'core', 'plugin', 'primaryKey', 'foreignKey', 'fields', 'subQueries', 'condition', 'recursive');
+		foreach (array_keys($options) as $opt)
+		{
+			if ( !in_array($opt, $allOptions) )
+			{
+				self::$error = 'Invalid Option: <strong>'.$opt.'</strong> in '.$tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\']';
+				return false;
+			}
+		}
+
 		// TODO: add validation for hasAndBelongsToMany relation on foreignKeys
 		return true;
 	}

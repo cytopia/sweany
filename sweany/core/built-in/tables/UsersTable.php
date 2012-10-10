@@ -33,8 +33,8 @@ class UsersTable extends Table
 		'modified',
 	);
 
-	protected $hasModified	= array('created' => 'integer');
-	protected $hasCreated	= array('created' => 'integer');
+	public $hasCreated	= 'integer';
+	public $hasModified	= 'integer';
 
 
 

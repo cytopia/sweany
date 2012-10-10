@@ -47,16 +47,12 @@
 						if ( $Forum->LastThread->created <= $Forum->LastThread->last_post_created )
 						{
 							$last_entry_created 	= $Forum->LastThread->last_post_created;
-							$last_entry_title		= Strings::shorten($Forum->LastThread->post_title, 40, true);
 							$last_entry_user		= ($Forum->LastThread->post_user_id > 0) ? $Forum->LastThread->post_username : 'anonymous';
 
 							if ( ($userProfileLink) )
 								$last_entry_user_link	= ($Forum->LastThread->post_user_id > 0) ? Html::l($last_entry_user, $userProfileCtl, $userProfileMethod, array($Forum->LastThread->post_user_id)) : $last_entry_user;
 							else
 								$last_entry_user_link	= $last_entry_user;
-
-							//$last_entry_thread_id	= $forum['last_post_thread_id'];
-							//$last_entry_seo_url		= $forum['last_post_seo_url'];
 						}
 					}
 

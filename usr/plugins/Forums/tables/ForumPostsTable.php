@@ -4,8 +4,8 @@ class ForumPostsTable extends Table
 	public $table	= 'forum_posts';
 	public $alias	= 'Post';
 
-	protected $hasModified	= array('modified' => 'datetime');
-	protected $hasCreated	= array('created' => 'datetime');	
+	public $hasModified	= array('modified' => 'integer');
+	public $hasCreated	= array('created' => 'integer');	
 	
 	public $fields	= array(
 		// FIELDS
@@ -30,7 +30,6 @@ class ForumPostsTable extends Table
 //			'condition'		=> '',
 			'fields'		=> array('id', 'username'),
 //			'subQueries'	=> array(),
-			'dependent'		=> false,
         ),
 		'Thread' => array(
 			'table'			=> 'forum_threads',
@@ -40,7 +39,6 @@ class ForumPostsTable extends Table
 //			'condition'		=> '',
 			'fields'		=> array('id', 'title', 'fk_forum_forums_id', 'seo_url', 'is_locked', 'is_closed'),
 //			'subQueries'	=> array(''),
-			'dependent'		=> false,
         ),
     );	
 
