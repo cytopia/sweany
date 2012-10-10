@@ -53,6 +53,7 @@ class ForumsModel extends PageModel
 		return $categories;
 	}
 */
+	/*
 	public function getThreadWithUserInfo($thread_id)
 	{
 		$thread		= $this->ForumThreads->getRow($thread_id);
@@ -80,7 +81,8 @@ class ForumsModel extends PageModel
 		}
 		return $posts;
 	}
-
+*/
+	/*
 	public function getForumName($forum_id)
 	{
 		return $this->ForumForums->getName($forum_id);
@@ -105,7 +107,7 @@ class ForumsModel extends PageModel
 	public function getPost($post_id)
 	{
 		return $this->ForumPosts->getRow($post_id);
-	}
+	}*/
 
 
 
@@ -116,6 +118,7 @@ class ForumsModel extends PageModel
 		$this->ForumThreads->increment($thread_id, array('view_count'));
 	}
 	/************************************************** EXIST FUNCTIONS **************************************************/
+	/*
 	public function forumExists($forum_id)
 	{
 		return $this->ForumForums->rowExists($forum_id);
@@ -127,7 +130,7 @@ class ForumsModel extends PageModel
 	public function postExists($post_id)
 	{
 		return $this->ForumPosts->rowExists($post_id);
-	}
+	}*/
 	/************************************************** CHECK FUNCTIONS **************************************************/
 	public function isMyPost($post_id, $user_id)
 	{
@@ -137,11 +140,13 @@ class ForumsModel extends PageModel
 	{
 		return $this->ForumThreads->isMyThread($thread_id, $user_id);
 	}
+	/*
 	public function forumOwnsThread($forum_id, $thread_id)
 	{
 		$condition = sprintf("id = %d AND fk_forum_forums_id = %d", $thread_id, $forum_id);
 		return $this->ForumThreads->count($condition);
 	}
+
 	public function threadIsLocked($thread_id)
 	{
 		return $this->ForumThreads->getField($thread_id, 'is_locked');
@@ -150,9 +155,9 @@ class ForumsModel extends PageModel
 	{
 		return $this->ForumThreads->getField($thread_id, 'is_closed');
 	}
-
+*/
 	/************************************************** SORT FUNCTIONS **************************************************/
-
+/*
 	public static function sortForumThreadsByLastEntry($a, $b)
 	{
 		$a_last_post	= trim($a['last_post_created']);
@@ -171,5 +176,5 @@ class ForumsModel extends PageModel
 			$b['last_post_created'] = $b['created'];
 
 		return ( $a['last_post_created'] < $b['last_post_created'] );
-	}
+	}*/
 }
