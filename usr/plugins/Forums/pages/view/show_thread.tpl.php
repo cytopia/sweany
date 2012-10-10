@@ -1,7 +1,6 @@
 ﻿<?php
-$timestamp	= strtotime($Thread->created);
-$thread_date= date($date_format, $timestamp);
-$thread_time= date($time_format, $timestamp);
+$thread_date= date($date_format, $Thread->created);
+$thread_time= date($time_format, $Thread->created);
 ?>
 
 
@@ -25,7 +24,7 @@ $thread_time= date($time_format, $timestamp);
 			<td>
 				<div>
 					<div style="float:left;">
-						<?php echo (strtotime($Thread->modified)>0)? $language->editedOn.' '.date($date_format, strtotime($Thread->modified)).' '.$language->atTime.' '.date($time_format, strtotime($Thread->modified)).' ':''; ?>
+						<?php echo ($Thread->modified>0)? $language->editedOn.' '.date($date_format, $Thread->modified).' '.$language->atTime.' '.date($time_format, $Thread->modified).' ':''; ?>
 					</div>
 					<div style="float:right;">
 						<?php if ( $Thread->fk_user_id == $user->id() ):?>
@@ -87,7 +86,7 @@ $thread_time= date($time_format, $timestamp);
 
 <?php foreach ($Thread->Post as $Post): ?>
 	<?php
-		$timestamp	= strtotime($Post->created);
+		$timestamp	= $Post->created;
 		$date		= date($date_format, $timestamp);
 		$time		= date($time_format, $timestamp);
 	?>
@@ -105,7 +104,7 @@ $thread_time= date($time_format, $timestamp);
 				<td>
 					<div>
 						<div style="float:left;">
-							<?php echo (strtotime($Post->modified)>0)? $language->editedOn.' '.date($date_format, strtotime($Post->modified)).' '.$language->atTime.' '.date($time_format, strtotime($Post->modified)).'':''; ?>
+							<?php echo ($Post->modified>0)? $language->editedOn.' '.date($date_format, $Post->modified).' '.$language->atTime.' '.date($time_format, $Post->modified).'':''; ?>
 						</div>
 						<div style="float:right;">
 							<?php if ( $Post->fk_user_id == $user->id() ):?>

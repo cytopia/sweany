@@ -56,7 +56,7 @@
 						}
 					}
 
-					$timestamp	= strtotime($last_entry_created);
+					$timestamp	= $last_entry_created;
 					$date		= date($date_format, $timestamp);
 					$time		= date($time_format, $timestamp);
 				}

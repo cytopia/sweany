@@ -43,11 +43,11 @@
 									<?php echo TimeHelper::getFormattedDate($entry['last_post_created'], 'd.m.Y', $language->today, $language->yesterday); ?>
 								</span>
 								<span class="forum_time">
-									 <?php echo date('H:i',strtotime($entry['last_post_created']));?>
+									 <?php echo date('H:i',$entry['last_post_created']);?>
 								</span>
 								<span class="forum_user">
 									<?php $last_user_link = ($userProfileLink) ? Html::l($thread['username'], $userProfileCtl, $userProfileMethod, array($thread['fk_user_id'])) : $entry['last_post_username'];?>
-									<?php echo TimeHelper::getFormattedDate($thread['created'], 'd.m.Y', $language->today, $language->yesterday); ?> <span style="color:gray"><?php echo date('H:i',strtotime($thread['created']));?></span><br/>
+									<?php echo TimeHelper::getFormattedDate($thread['created'], 'd.m.Y', $language->today, $language->yesterday); ?> <span style="color:gray"><?php echo date('H:i',$thread['created']);?></span><br/>
 									<?php echo $language->by;?> <?php echo $last_user_link;  ?>
 								</span>
 							<?php else: ?>
@@ -55,7 +55,7 @@
 									<?php echo TimeHelper::getFormattedDate($entry['created'], 'd.m.Y', $language->today, $language->yesterday); ?>
 								</span>
 								<span class="forum_time">
-									<?php echo date('H:i',strtotime($entry['created']));?>
+									<?php echo date('H:i',$entry['created']);?>
 								</span>
 								<span class="forum_user">
 									<?php $last_user_link = ($userProfileLink) ? Html::l($entry['username'], $userProfileCtl, $userProfileMethod, array($entry['fk_user_id'])) : $entry['username'];?>
