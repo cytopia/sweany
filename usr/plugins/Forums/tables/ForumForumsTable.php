@@ -42,7 +42,6 @@ class ForumForumsTable extends Table
 		'Thread'	=> array(
 			'table'			=> 'forum_threads',
 			'plugin'		=> 'Forums',
-			'primaryKey'	=> 'id',						# primary key in Category table
 			'foreignKey'	=> 'fk_forum_forums_id',		# Foreign key in Forum's table
 //			'condition'		=> '',
 			'fields'		=> array('id', 'title', 'body', 'view_count', 'is_sticky', 'is_locked', 'is_closed', 'fk_user_id', 'seo_url', 'created', 'last_post_id', 'last_post_created'),

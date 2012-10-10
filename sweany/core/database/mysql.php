@@ -529,6 +529,21 @@ class mysql extends aBootTemplate implements iDBO
 
 		return $this->select($query, function($row, &$data){ $data[] = $row['name']; });
 	}
+	public function getColumnTypes($table)
+	{
+		$query = 'SELECT
+					COLUMN_NAME AS name,
+					DATA_TYPE AS `type`
+				FROM
+					information_schema.columns
+				WHERE
+					TABLE_SCHEMA = DATABASE()
+				AND
+					TABLE_NAME = \''.$table.'\'';
+
+		return $this->select($query, function($row, &$data){ $data[$row['name']] = $row['type']; });
+	}
+	
 	public function getPrimaryKey($table)
 	{
 		$query = 'SELECT

@@ -84,7 +84,7 @@ class Table
 	 *		'timestamp'		store via date('Y-m-d H:i:s', $timestamp);
 	 *		'integer'		store via time();	# unix timestamp
 	 */
-	 protected $hasModified	= null;
+	 public $hasModified	= null;
 
 
 
@@ -110,7 +110,7 @@ class Table
 	 *		'timestamp'		store via date('Y-m-d H:i:s', $timestamp);
 	 *		'integer'		store via time();	# unix timestamp
 	 */
-	protected $hasCreated	= null;
+	public $hasCreated	= null;
 
 
 
