@@ -7,14 +7,13 @@ class ForumThreadsTable extends Table
 	public $hasModified	= array('modified' => 'integer');
 	public $hasCreated	= array('created' => 'integer');
 
-
 	public $fields	= array(
 		// FIELDS
 		'id',
 		'fk_forum_forums_id',
-		'forum_id' => 'fk_forum_forums_id',
+		'forum_id' => 'fk_forum_forums_id',	// alias for better readability
 		'fk_user_id',
-		'user_id' => 'fk_user_id',
+		'user_id' => 'fk_user_id',			// alias for better readability
 		'title',
 		'body',
 		'view_count',
@@ -40,7 +39,8 @@ class ForumThreadsTable extends Table
 		'User' => array(
 			'table'			=> 'users',
 			'core'			=> true,
-			'primaryKey'	=> 'id',			// foreign key in the current model
+			'primaryKey'	=> 'id',
+//			'primaryKey'	=> 'id',			// primary key in the current model
 			'foreignKey'	=> 'fk_user_id',	// foreign key in the current model
 //			'condition'		=> '',
 			'fields'		=> array('id', 'username'),
@@ -51,7 +51,7 @@ class ForumThreadsTable extends Table
 		'Forum' => array(
 			'table'			=> 'forum_forums',
 			'plugin'		=> 'Forums',
-			'primaryKey'	=> 'id',					// foreign key in the current model
+//			'primaryKey'	=> 'id',					// primary key in the current model
 			'foreignKey'	=> 'fk_forum_forums_id',	// foreign key in the current model
 //			'condition'		=> '',
 			'fields'		=> array('id', 'name', 'seo_url', 'display', 'can_reply'),
@@ -65,12 +65,12 @@ class ForumThreadsTable extends Table
 			'plugin'		=> 'Forums',
 			'foreignKey'	=> 'fk_forum_thread_id',			# Foreign key in other table (<table_name>) (defaults to: 'fk_<$this->table>_id')
 			'condition'		=> '',								# String of conditions
-			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created', 'modified'),							# Array of fields to fetch
+			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created', 'modified'),
 			'subQueries'	=> array(
 				'username'		=> 'SELECT username FROM users WHERE users.id=Post.fk_user_id',
 				'num_entries'	=> 'SELECT (SELECT COUNT(*) FROM forum_threads WHERE forum_threads.fk_user_id = Post.fk_user_id) + (SELECT COUNT(*) FROM forum_posts WHERE forum_posts.fk_user_id = Post.fk_user_id)',
 			),
-			'order'			=> array('Post.created'=>'ASC'),		# Array of order clauses on the given table
+			'order'			=> array('Post.created'=>'ASC'),	# Array of order clauses on the given table
 			'dependent'		=> false,
 			'recursive'		=> true,							# true|false or array('hasMany' => array('Alias1', 'Alias2')) <= from Post-Table
 		),
@@ -80,11 +80,11 @@ class ForumThreadsTable extends Table
 			'plugin'		=> 'Forums',
 			'foreignKey'	=> 'fk_forum_thread_id',			# Foreign key in other table (<table_name>) (defaults to: 'fk_<$this->table>_id')
 //			'condition'		=> '',								# String of conditions
-			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created'),							# Array of fields to fetch
+			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created'),									# Array of fields to fetch
 			'subQueries'	=> array('username' => 'SELECT username FROM users WHERE users.id=LastPost.fk_user_id'),	# Array of subqueries to append
-			'order'			=> array('LastPost.created'=>'DESC'),		# Array of order clauses on the given table
+			'order'			=> array('LastPost.created'=>'DESC'),# Array of order clauses on the given table
 			'limit'			=> 1,
-			'flatten'		=> true,							# As we only receive one element, we will flatten it down #data[0] to $data7
+			'flatten'		=> true,							# As we only receive one element, we will flatten it down $data = $data[0]
 			'dependent'		=> false,
 			'recursive'		=> true,							# true|false or array('hasMany' => array('Alias1', 'Alias2')) <= from Post-Table
 		),
@@ -100,7 +100,7 @@ class ForumThreadsTable extends Table
 			'joinThisFK'	=> 'fk_forum_thread_id',
 			'joinOtherFK'	=> 'fk_user_id',
 			'fields'		=> array('user_id' => 'id'),
-			'list'			=> true,
+			'list'			=> true,						# we only use one field, so we can retrieve the results as a list (numerical array)
 //			'flatten'		=> true,
 //			'dependent'		=> true,
 		),
@@ -129,59 +129,7 @@ class ForumThreadsTable extends Table
 		));
 	}
 
-/*
-	public function getLatestForumThread($forum_id)
-	{
-		$where	= sprintf("`fk_forum_forums_id` = %d", $forum_id);
-		$thread		= $this->_get(NULL, $where, NULL, array('created' => 'DESC'));
-		return isset($thread[0]) ? $thread[0] : array();
-	}
-*/
-	// TODO: this might even be better for activity overview
-	/*
-	public function getLatestEntries()
-	{
-		$aliases	= array(
-			'(SELECT IF((SELECT forum_posts.id FROM forum_posts WHERE forum_posts.fk_forum_thread_id = forum_threads.id ORDER BY created DESC LIMIT 1), 1,0))' => 'is_post',
-			'(SELECT forum_posts.id FROM forum_posts WHERE forum_posts.fk_forum_thread_id = forum_threads.id ORDER BY created DESC LIMIT 1)' => 'post_id',
-			'(SELECT IFNULL((SELECT forum_posts.username FROM forum_posts WHERE forum_posts.fk_forum_thread_id = forum_threads.id ORDER BY created DESC LIMIT 1), username))' => 'username',
-			'(SELECT IFNULL((SELECT forum_posts.created FROM forum_posts WHERE forum_posts.fk_forum_thread_id = forum_threads.id ORDER BY created DESC LIMIT 1), created))' => 'created',
-			'(SELECT name FROM forum_forums WHERE id = fk_forum_forums_id)' => 'forum_name',
-			'id'					=> 'thread_id',
-			'username'				=> 'thread_username',
-			'created'				=> 'thread_created',
-			'fk_forum_forums_id'	=> 'forum_id',
-		);
-		$this->aliases = array_merge($aliases, $this->aliases);
-		return $this->_get();
-	}*/
-
-	// public function getAll
-	/*
-	public function getByForum($forum_id, $limit = null)
-	{
-		$where	= sprintf("`fk_forum_forums_id` = %d", $forum_id);
-
-		return $this->_get(NULL, $where, NULL, array('is_sticky' => 'DESC', 'last_post_created' => 'DESC'), $limit);
-	}
-
-
-	public function getSeoUrl($thread_id)
-	{
-		return $this->getField($thread_id, 'seo_url');
-	}
-
-	public function isMyThread($thread_id, $user_id)
-	{
-		$where = sprintf('`id` = %d AND `fk_user_id` = %d', $thread_id, $user_id);
-		return $this->_count($where);
-	}
-	public function countUserThreads($user_id)
-	{
-		return $this->_count(sprintf('`fk_user_id` = %d', $user_id));
-	}
-*/
-	/************************************************** ADD/UPDATE FUNCTIONS **************************************************/
+/*********************************************** ADD/UPDATE FUNCTIONS **************************************************/
 	
 	/**
 	 *	@Override
@@ -193,15 +141,5 @@ class ForumThreadsTable extends Table
 		
 		return parent::save($fields, $return);
 	}
-/*
-	public function incrementViewCount($thread_id)
-	{
-		$this->db->incrementField($this->table, 'view_count', sprintf("id = %d", $thread_id));
-	}
 
-	public function count($condition)
-	{
-		return $this->_count($condition);
-	}
-	*/
 }

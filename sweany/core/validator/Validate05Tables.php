@@ -73,10 +73,29 @@ class Validate05Tables extends aBootTemplate
 					$file		= str_replace('Table.php', '', $file);
 					$tblClass	= \Loader::loadCoreTable($file);
 
-					// ---------------- VALIDATE ALIAS
+					// ---------------- VALIDATE TABLE
+					if ( !$tblClass->table )
+					{
+						self::$error	= 'Table Property is not set in <b>'.$file.'Table.php</b><br/>Expected:<br/>public $table = \'sql_table_name\';';
+						return false;
+					}
+					if ( !$db->tableExists($tblClass->table) )
+					{
+						self::$error	= 'Table Property in <b>'.$file.'Table.php</b><br/>public $table = \''.$tblClass->table.'\' Does not exist in database';
+						return false;
+					}
+
+					// ---------------- VALIDATE TABLE ALIAS
 					if ( !$tblClass->alias || !strlen($tblClass->alias) )
 					{
-						self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
+						self::$error	= 'Table Alias Property is not set in <b>'.$file.'Table.php</b><br/>Expected:<br/>public $alias = \'alias_name\';';
+						return false;
+					}
+
+					// ---------------- VALIDATE TABLE PRIMARY KEY
+					if ( ($pkError = self::__validatePK($tblClass->table, $tblClass->primary_key, $db)) !== true )
+					{
+						self::$error	= 'Error in <strong>'.$file.'Table.php</strong><br/>Error on <strong>$this->primary_key</strong><br/>'.$pkError;
 						return false;
 					}
 
@@ -107,15 +126,6 @@ class Validate05Tables extends aBootTemplate
 						}
 					}
 
-					// ---------------- VALIDATE PK
-					$sqlPK	= $db->getPrimaryKey($tblClass->table);
-					$tblPK	= $tblClass->primary_key;
-
-					if ( $sqlPK != $tblPK )
-					{
-						self::$error	= 'SQL Primary Key ('.$sqlPK.') does not match tables Primary Key ('.$tblPK.')';
-						return false;
-					}
 
 					// ---------------- VALIDATE RELATIONS
 					$hasOne		= $tblClass->hasOne;
@@ -154,10 +164,29 @@ class Validate05Tables extends aBootTemplate
 					$file		= str_replace('Table.php', '', $file);
 					$tblClass	= \Loader::loadTable($file);
 
-					// ---------------- VALIDATE ALIAS
+									// ---------------- VALIDATE TABLE
+					if ( !$tblClass->table )
+					{
+						self::$error	= 'Table Property is not set in <b>'.$file.'Table.php</b><br/>Expected:<br/>public $table = \'sql_table_name\';';
+						return false;
+					}
+					if ( !$db->tableExists($tblClass->table) )
+					{
+						self::$error	= 'Table Property in <b>'.$file.'Table.php</b><br/>public $table = \''.$tblClass->table.'\' Does not exist in database';
+						return false;
+					}
+
+					// ---------------- VALIDATE TABLE ALIAS
 					if ( !$tblClass->alias || !strlen($tblClass->alias) )
 					{
-						self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
+						self::$error	= 'Table Alias Property is not set in <b>'.$file.'Table.php</b><br/>Expected:<br/>public $alias = \'alias_name\';';
+						return false;
+					}
+
+					// ---------------- VALIDATE TABLE PRIMARY KEY
+					if ( ($pkError = self::__validatePK($tblClass->table, $tblClass->primary_key, $db)) !== true )
+					{
+						self::$error	= 'Error in <strong>'.$file.'Table.php</strong><br/>Error on <strong>$this->primary_key</strong><br/>'.$pkError;
 						return false;
 					}
 
@@ -186,16 +215,6 @@ class Validate05Tables extends aBootTemplate
 							self::$error	= 'Table Field '.$file.'->fields(<b>\''.$col.'\'</b>) is missing in sql table: <b>'.$tblClass->table;
 							return false;
 						}
-					}
-
-					// ---------------- VALIDATE PK
-					$sqlPK	= $db->getPrimaryKey($tblClass->table);
-					$tblPK	= $tblClass->primary_key;
-
-					if ( $sqlPK != $tblPK )
-					{
-						self::$error	= 'SQL Primary Key ('.$sqlPK.') does not match tables Primary Key ('.$tblPK.')';
-						return false;
 					}
 
 					// ---------------- VALIDATE RELATIONS
@@ -244,10 +263,29 @@ class Validate05Tables extends aBootTemplate
 								$file		= str_replace('Table.php', '', $file);
 								$tblClass	= \Loader::loadPluginTable($file, $plugin);
 
-								// ---------------- VALIDATE ALIAS
+								// ---------------- VALIDATE TABLE
+								if ( !$tblClass->table )
+								{
+									self::$error	= 'Table Property is not set in <b>'.$file.'Table.php</b><br/>Expected:<br/>public $table = \'sql_table_name\';';
+									return false;
+								}
+								if ( !$db->tableExists($tblClass->table) )
+								{
+									self::$error	= 'Table Property in <b>'.$file.'Table.php</b><br/>public $table = \''.$tblClass->table.'\' Does not exist in database';
+									return false;
+								}
+
+								// ---------------- VALIDATE TABLE ALIAS
 								if ( !$tblClass->alias || !strlen($tblClass->alias) )
 								{
-									self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
+									self::$error	= 'Table Alias Property is not set in <b>'.$file.'Table.php</b><br/>Expected:<br/>public $alias = \'alias_name\';';
+									return false;
+								}
+
+								// ---------------- VALIDATE TABLE PRIMARY KEY
+								if ( ($pkError = self::__validatePK($tblClass->table, $tblClass->primary_key, $db)) !== true )
+								{
+									self::$error	= 'Error in <strong>'.$file.'Table.php</strong><br/>Error on <strong>$this->primary_key</strong><br/>'.$pkError;
 									return false;
 								}
 
@@ -267,6 +305,7 @@ class Validate05Tables extends aBootTemplate
 										return false;
 									}
 								}
+
 								// Table -> SQL
 								foreach ($tblColumns as $col)
 								{
@@ -275,17 +314,6 @@ class Validate05Tables extends aBootTemplate
 										self::$error	= 'Table Field '.$file.'->fields(<b>\''.$col.'\'</b>) is missing in sql table: <b>'.$tblClass->table;
 										return false;
 									}
-								}
-
-
-								// ---------------- VALIDATE PK
-								$sqlPK	= $db->getPrimaryKey($tblClass->table);
-								$tblPK	= $tblClass->primary_key;
-
-								if ( $sqlPK != $tblPK )
-								{
-									self::$error	= 'SQL Primary Key ('.$sqlPK.') does not match tables Primary Key ('.$tblPK.')';
-									return false;
 								}
 
 
@@ -541,21 +569,31 @@ class Validate05Tables extends aBootTemplate
 				return false;
 			}
 
+
+
+
 			// Check Primary Key
 			$tblPK	= (isset($options['primaryKey'])) ? $options['primaryKey'] : 'id';
-			$sqlPK	= $db->getPrimaryKey($options['table']);
-			if ( $sqlPK != $tblPK )
+
+			if ( ($pkError = self::__validatePK($options['table'], $tblPK, $db)) !== true )
 			{
-				if ( !isset($options['primaryKey']) )
-				{
-					self::$error	= 'SQL Primary Key ('.$options['table'].':'.$sqlPK.') does not match relations Primary Key ('.$tblPK.') in '.$tbl_name.'->'.$type.'[\''.$alias.'\']. Primary key not specified, guessing default <b>id</b>';
+				self::$error = 'Error in '.$tbl_name.'Table.php<br/>';
+			//	self::$error.= 'SQL Primary Key does not match relations Primary key in '.$tbl_name.'Table';
+
+				if ( !isset($options['primaryKey']) ) {
+					self::$error.= 'public $'.$type.'[\''.$alias.'\'] Does not define <strong>PrimaryKey</strong>, guessing default <b>id</b><br/>';
+				} else {
+					if ( is_array($tblPK) ) {
+						$sect = 'array(\''.implode('\',\'', $tblPK).'\')';
+					} else {
+						$sect = $tblPK;
+					}
+					self::$error.= 'public $'.$type.'[\''.$alias.'\'][\'primaryKey\'] => '.$sect.' Does not match database.<br/>';
 				}
-				else
-				{
-					self::$error	= 'SQL Primary Key ('.$options['table'].':'.$sqlPK.') does not match relations specified Primary Key ('.$tblPK.') in '.$tbl_name.'->'.$type.'[\''.$alias.'\'][\'primaryKey\']=\''.$options['primaryKey'].'\'';
-				}
+				self::$error.= $pkError.'<br/>';
 				return false;
 			}
+
 
 
 			// Check Fields
@@ -881,4 +919,92 @@ class Validate05Tables extends aBootTemplate
 		}
 		return true;
 	}
+
+
+
+	/* TODO: ENABLE ONCE primary_key with arrays (multiple) have been activated
+	public static function __validatePK($table, $myPK, $db)
+	{
+		$myPK	= is_array($myPK) ? $myPK : array($myPK);
+		$sqlPK	= $db->getPrimaryKey($table);
+
+		if ( count($sqlPK) == 1 && count($myPK) == 1 )
+		{
+			if ( $sqlPK[0] != $myPK[0] )
+			{
+				return 'SQL Primary Key (<strong>'.$sqlPK[0].'</strong>) from sql table : <strong>'.$table.'</strong> does not match defined properties: '.$myPK[0];
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else if ( count($sqlPK) != count($myPK) )
+		{
+			return 'SQL Primary Key(s) (<strong>'.implode(',', $sqlPK).'</strong>) from sql table : <strong>'.$table.'</strong> do(es) not match defined properties: '.implode('', $myPK);
+		}
+		else
+		{
+			foreach ($sqlPK as $pk)
+			{
+				if ( !in_array($pk, $myPK) )
+				{
+					return 'SQL Primary Key <strong>'.$pk.'</strong> from sql table : <strong>'.$table.'</strong> is not defined';
+				}
+			}
+			foreach ($myPK as $pk)
+			{
+				if ( !in_array($pk, $myPK) )
+				{
+					return 'Defined SQL Primary Key Property <strong>'.$pk.'</strong> does not exist in sql table : <strong>'.$table.'</strong>';
+				}
+			}
+			return true;
+		}
+	}*/
+	public static function __validatePK($table, $myPK, $db)
+	{
+		if ( is_array($myPK) )
+		{
+			return 'Specified Primary Key Property can not be an array. Multiple PK\'s are not yet supported. Sorry';
+		}
+
+		$myPK	= array($myPK);
+		$sqlPK	= $db->getPrimaryKey($table);
+
+		if ( count($sqlPK) == 1 && count($myPK) == 1 )
+		{
+			if ( $sqlPK[0] != $myPK[0] )
+			{
+				return 'SQL Primary Key (<strong>'.$sqlPK[0].'</strong>) from sql table : <strong>'.$table.'</strong> does not match defined properties: '.$myPK[0];
+			}
+			else
+			{
+				return true;
+			}
+		}
+		else if ( count($sqlPK) != count($myPK) )
+		{
+			return 'SQL Primary Key(s) (<strong>'.implode(',', $sqlPK).'</strong>) from sql table : <strong>'.$table.'</strong> do(es) not match defined properties: '.implode('', $myPK);
+		}
+		else
+		{
+			foreach ($sqlPK as $pk)
+			{
+				if ( !in_array($pk, $myPK) )
+				{
+					return 'SQL Primary Key <strong>'.$pk.'</strong> from sql table : <strong>'.$table.'</strong> is not defined';
+				}
+			}
+			foreach ($myPK as $pk)
+			{
+				if ( !in_array($pk, $myPK) )
+				{
+					return 'Defined SQL Primary Key Property <strong>'.$pk.'</strong> does not exist in sql table : <strong>'.$table.'</strong>';
+				}
+			}
+			return true;
+		}
+	}
+
 }
