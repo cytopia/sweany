@@ -38,6 +38,7 @@ class Validate08LogVisitors extends aBootTemplate
 			if ( !self::_checkLogVisitors() )
 			{
 				echo '<h1>Validation Error</h2>';
+				echo self::$error;
 				return false;
 			}
 		}

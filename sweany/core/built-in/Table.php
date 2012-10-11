@@ -1,9 +1,6 @@
 <?php
 
 define('PRIM_KEY',	'__PRIM_KEY__');	// primary indicator to append at each trable
-define('ROW_COUNT',	'__ROW_COUNT__');
-define('PREV_ID',	'__PREV_ID__');
-define('REL_TYPE',	'__REL_TYPE__');
 
 
 class Table
@@ -172,6 +169,7 @@ class Table
 	 *	@param mixed[]	= Array(
 	 *		'<alias>' => array(							# SQL Table alias to use (will also be the name of the array|object after fetching)
 	 *			'table'			=> '<table_name>',		# string:	Name of the sql table
+	 *
 	 *			'class'			=> '<class_name>',		# string:	Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
 	 *			'core'			=> true|false			# boolean:	True if this table file is in sweany/core/built-in/tables
 	 *			'plugin'		=> '<plugin_name>'		# string:	Name of the plugin table (does not work with 'core' => true)
@@ -211,6 +209,7 @@ class Table
 	 *	@param mixed[]	= Array(
 	 *		'<alias>' => array(							# SQL Table alias to use (will also be the name of the array|object after fetching)
 	 *			'table'			=> '<table_name>',		# string:	Name of the sql table
+	 *
 	 *			'class'			=> '<class_name>',		# string:	Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
 	 *			'core'			=> true|false			# boolean:	True if this table file is in sweany/core/built-in/tables
 	 *			'plugin'		=> '<plugin_name>'		# string:	Name of the plugin table (does not work with 'core' => true)
@@ -254,6 +253,7 @@ class Table
 	 *	(
 	 *		'<alias>' => array(							# SQL Table alias to use (will also be the name of the array|object after fetching)
 	 *			'table'			=> '<table_name>',		# string:	Name of the sql table
+	 *
 	 *			'class'			=> '<class_name>',		# string:	Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
 	 *			'core'			=> true|false			# boolean:	True if this table file is in sweany/core/built-in/tables
 	 *			'plugin'		=> '<plugin_name>'		# string:	Name of the plugin table (does not work with 'core' => true)
@@ -283,7 +283,41 @@ class Table
 
 
 
-	// TODO implement:
+	/**
+	 *
+	 *	$hasAndBelongsToMany	Many-to-Many Relation (fetches many rows)
+	 *
+	 *	@param	Array
+	 *	(
+	 *		'<alias>' => array(							# SQL Table alias to use (will also be the name of the array|object after fetching)
+	 *			'table'			=> '<table_name>',		# string:	Name of the sql table
+	 *
+	 *			'class'			=> '<class_name>',		# string:	Defaults from <sql_table_name> to <SqlTableName>Table (underscore -> camelcase)
+	 *			'core'			=> true|false			# boolean:	True if this table file is in sweany/core/built-in/tables
+	 *			'plugin'		=> '<plugin_name>'		# string:	Name of the plugin table (does not work with 'core' => true)
+	 *
+	 *			'primaryKey'	=> 'id',				# string:	Primary key of the $hasAndBelongsToMany table (<table_name>) (defaults to: 'id')
+	 *
+	 *			'joinTable'		=> '<table_name>'		# string:	Name of the sql table that holds the relation between $this->table and 'alias' => 'table'
+	 *			'joinThisFK'	=> '<foreign_key>'		# string:	Foreign key of the join table, that links to $this->primary_key
+	 *			'joinOtherFK'	=> '<foreign_key>'		# string:	Foreign key of the join table, that links to 'alias' => 'primaryKey'
+	 *
+	 *			'fields'		=> array(),				# mixed[]:	Array of fields and/or alias-field pairs to fetch
+	 *														'fields' => array(
+	 *															'id', 'name', '<alias1>' => '<field1>'
+	 *														)
+	 *			'subQueries'	=> array(),				# mixed[]:	Associative Array of subqueries to append
+	 *														'subQueries' => array(
+	 *															'id' => 'SELECT id FROM <table> WHERE <condition> LIMIT 1'
+	 *														)
+	 *			'condition'		=> '<condition>',		# string:	Conditions
+	 *			'list'			=> true|false,			# boolean:	If you specify only a single field, you can get a list (numerical array of values of that field). This is useful for php's in_array() checks
+	 *			'flatten'		=> true|false,			# boolean:	If you know that only one result comes back (LIMIT 1), then you can flatten the result by one level
+	 *
+	 *			'dependent'		=> false,				# boolean:	true: On delete of $this->table record, also delete the according entries in the joinTable (NOTE: Not 'alias' => 'table')
+     *   	),
+	 *	);
+	 */
 	public $hasAndBelongsToMany	= array();
 
 
@@ -295,6 +329,8 @@ class Table
 	 *	@param	class	Database Class
 	 */
 	protected $db;
+
+
 
 
 
@@ -458,7 +494,7 @@ class Table
 	 *		last	Return last result
 	 *		count	Count results only
 	 *
-	 *	@param	mixed[]	$options
+	 *	@param	mixed[]	$options	Associative array of options:
 	 *
 	 *		return			Specify how to retrieve the results
 	 *			'return'	=> 'array'	return an array of arrays
@@ -466,7 +502,12 @@ class Table
 	 *			[DEFAULT]	Returns array of objects
 	 *
 	 *		fields	 		Overwrite: Array of fields to fetch
-	 *			'fields' => array('field_name', 'alias' => 'field_name')
+	 *			'fields' => array(
+	 *				'field_name1',
+	 *				'field_name2',
+	 *				'alias_name1' => 'field_name1',
+	 *				'alias_name2' => 'field_name1'
+	 *			)
 	 *			[DEFAULT]			$this->fields
 	 *			[NOTE]				Useless in 'count' operation
 	 *
@@ -508,31 +549,33 @@ class Table
 	 *		recursive	=> 0-3	Overwrite: recursion level for relations
 	 *			'recursive'	=> 0				# Flat - no relations, only this table
 	 *			'recursive'	=> 1				# With all relations (hasOne, hasMany, belongsTo, hasAndBelongsToMany)
-	 *			'recursive'	=> 2				# With all relations and follow recursion (one level) specified by child relation
-	 *			'recursive'	=> 3				# With all relations and force recursion (one level) on all child relations
+	 *			'recursive'	=> 2				# With all relations and follow recursion (one level) IF recursive is set child relations
+	 *			'recursive'	=> 3				# With all relations and force recursion (one level) EVEN IF NOT set by child relations
+	 *			[DEFAULT]			1
+	 *			[NOTE]				Useless in 'count' operation
+	 *
 	 *		relation		Limit relations to follow (on this level)
 	 *			'relation' => array(
 	 *				'hasMany' => array('Edit', 'Post')	# Only follow Edit and Post in hasMany relation (and their respective recursion settings)
 	 *			)
 	 *
-	 *			[DEFAULT] 1
-	 *			[NOTE]				Useless in 'count' operation
 	 *
-	 *
-	 *	@return	mixed[]|integer		Array of results or integer (if $type == 'count')
+	 *	@return	mixed[]|integer		Array of objects|arrays or integer (if $type == 'count')
 	 *
 	 */
 	public function find($type = 'all', $options = array())
 	{
 		// Extract Condition
 		$condition	= isset($options['condition'])	? $options['condition'] : $this->condition;
-		$condition	= $this->db->prepare($condition);
 
 		// Return count immediately, if chosen
 		if ( $type == 'count' )
 		{
-			return $this->db->count($condition);
+			return $this->db->count($this->table, $condition);
 		}
+
+		// prepare condition
+		$condition	= $this->db->prepare($condition);
 
 		// Get Options;
 		$fields 	= isset($options['fields'])		? $options['fields']	: $this->fields;
@@ -613,13 +656,24 @@ class Table
 	 *
 	 * Get value of a field from the entity (row)
 	 *
-	 * @param	name		$name		Name of the field (in row)
+	 * @param	name		$name		Name (or alias specified by $this->fields) of the field (in row)
 	 * @param	integer		$id			Id of the entity (row)
 	 * @return	mixed		$value		Value of the field
 	 *
 	 */
-	public function Field($name, $id)
+	public function field($name, $id)
 	{
+		// 1.) converts field aliases to field names
+		// 2.) removes all fields not available in this table
+		$fields = $this->_prepareFields(array($name));
+
+		if ( !isset($fields[0]) ) {
+			\Sweany\SysLog::e('[Table] Alias to field rewrite', 'field(): Failed to rewrite alias: <strong>'.$name.'</strong>');
+			return -9999999;
+		}
+
+		$name	= $fields[0];
+
 		return $this->db->fetchRowField($this->table, $name, $id);
 	}
 
@@ -629,7 +683,7 @@ class Table
 	 *
 	 * Get value of a field by condition
 	 *
-	 * @param	name		$name		Name of the field (in row)
+	 * @param	name		$name		Name (or alias specified by $this->fields) of the field (in row)
 	 * @param	mixed[]		$condition	Escapable condition
 	 *		Array (
 	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
@@ -640,8 +694,18 @@ class Table
 	 *		);
 	 * @return	mixed		$value		Value of the field
 	 */
-	public function FieldBy($name, $condition)
+	public function fieldBy($name, $condition)
 	{
+		// 1.) converts field aliases to field names
+		// 2.) removes all fields not available in this table
+		$fields = $this->_prepareFields(array($name));
+
+		if ( !isset($fields[0]) ) {
+			\Sweany\SysLog::e('[Table] Alias to field rewrite', 'field(): Failed to rewrite alias: <strong>'.$name.'</strong>');
+			return -9999999;
+		}
+
+		$name	= $fields[0];
 		return $this->db->fetchField($this->table, $name, $condition);
 	}
 
@@ -660,7 +724,7 @@ class Table
 	 *
 	 *	Save entity (by id)
 	 *
-	 *	@param	mixed[]	$fields			Array of field-value (and/or alias-value) pairs
+	 *	@param	mixed[]	$data			Array of field=>value / alias=>value pairs
 	 *		+ You can use all aliases specified in $this->fields, which will automatically be
 	 *		  mapped to the corresponding field.
 	 *		+ Non matching fields (no field or alias in $this->fields found) will automatically
@@ -680,20 +744,20 @@ class Table
 	 *
 	 *	@return	boolean|integer|mixed[]	Depending on $return param
 	 */
-	public function save($fields, $return = 1)
+	public function save($data, $return = 1)
 	{
-		// 1.) converts field aliases to fields (if using aliases to insert)
+		// 1.) converts field aliases to field names
 		// 2.) removes all fields not available in this table
-		$fields	= $this->_prepareFields($fields);
+		$data	= $this->_prepareDataFields($data);
 
-		$fields = $this->_appendCreatedFieldIfExist($fields);
-		$ret	= $this->db->insert($this->table, $fields, (($return) ? true : false));
+		$data = $this->_appendCreatedFieldIfExist($data);
+		$ret	= $this->db->insert($this->table, $data, (($return) ? true : false));
 
 		switch ($return)
 		{
 			// return non-recursive row
 			case 2:
-				return $this->load($ret, null, null, 0);
+				return $this->load($ret, 0);
 
 			// [DEFAULT] return success of operation or last insert id
 			default:
@@ -739,9 +803,9 @@ class Table
 	 */
 	public function update($id, $data, $return = 0)
 	{
-		// 1.) converts field aliases to fields (if using aliases to insert)
+		// 1.) converts field aliases to field names
 		// 2.) removes all fields not available in this table
-		$data	= $this->_prepareFields($data);
+		$data	= $this->_prepareDataFields($data);
 
 		$data	= $this->_appendModifiedFieldIfExist($data);
 
@@ -788,9 +852,9 @@ class Table
 	 */
 	public function updateAll($condition, $data)
 	{
-		// 1.) converts field aliases to fields (if using aliases to insert)
+		// 1.) converts field aliases to field names
 		// 2.) removes all fields not available in this table
-		$data	= $this->_prepareFields($data);
+		$data	= $this->_prepareDataFields($data);
 
 		return $this->db->update($this->table, $data, $condition);
 	}
@@ -802,7 +866,7 @@ class Table
 	 * Increment an Entity's field(s) (and optionally update other fields simultaneously)
 	 *
 	 * @param	integer		$id			Id of the entity (row)
-	 * @param	string[]	$fields		Array of field names
+	 * @param	string[]	$fields		Array of field names or alias names (if specified ub $this->fields)
 	 * @param	mixed[]		$data		[Optional] Array of field-value (and/or alias-value) pairs for additional updating
 	 *		+ You can use all aliases specified in $this->fields, which will automatically be
 	 *		  mapped to the corresponding field.
@@ -823,9 +887,13 @@ class Table
 	{
 		$condition = array('id = :id', array(':id' => $id));
 
-		// 1.) converts field aliases to fields (if using aliases to insert)
+		// 1.) converts field aliases to field names
 		// 2.) removes all fields not available in this table
-		$data	= $this->_prepareFields($data);
+		$fields = $this->_prepareFields($fields);
+
+		// 1.) converts field aliases to field names
+		// 2.) removes all fields not available in this table
+		$data	= $this->_prepareDataFields($data);
 
 		return $this->db->incrementFields($this->table, $fields, $data, $condition);
 	}
@@ -864,6 +932,14 @@ class Table
 	 */
 	public function incrementAll($condition, $fields, $data = array())
 	{
+		// 1.) converts field aliases to field names
+		// 2.) removes all fields not available in this table
+		$fields = $this->_prepareFields($fields);
+
+		// 1.) converts field aliases to field names
+		// 2.) removes all fields not available in this table
+		$data	= $this->_prepareDataFields($data);
+
 		return $this->db->incrementFields($this->table, $fields, $data, $condition);
 	}
 
@@ -1114,6 +1190,7 @@ class Table
 		$getObject = function($row, &$data) use (&$count, $relation, $recursive) {
 
 			$many	= array();
+			$habtm	= array();
 
 			foreach ($row as $field => $value)
 			{
@@ -1134,7 +1211,20 @@ class Table
 						$relation	= ($recursive == 3) ? null : $relation;
 
 						// Get the hasMany Relations
-						$many	= $this->_retrieveHasMany($relation, $pk, $recursive);
+						$many		= $this->_retrieveHasMany($relation, $pk, $recursive);
+					}
+
+					if ( $recursive>0 || (is_array($relation) && in_array('hasAndBelongsToMAny', array_keys($relation))) )
+					{
+						//debug($recursive);
+						$pk			= $value;
+
+						// If recursive is set to 3 (force all, not only those which are specified)
+						// We need to destroy the limitations
+						$relation	= ($recursive == 3) ? null : $relation;
+
+						// Get the hasMany Relations
+						$habtm		= $this->_retrieveHasAndBelongsToMany($relation, $pk, $recursive);
 					}
 				}
 				// --------------------------------------- Flat Entries ---------------------------------------
@@ -1176,7 +1266,17 @@ class Table
 					}
 				}
 			}
-			$data[$count] = (object)array_merge((array)$data[$count]->$alias1, (array)$many);
+			// merge hasMany with hasAndBelongsToMany
+			$tmp = (object)array_merge((array)$many, (array)$habtm);
+
+			// merge results with the above merge
+			$data[$count] = (object)array_merge((array)$data[$count]->$alias1, (array)$tmp);	// merge hasMany
+
+//			debug($tmp);
+//			$data[$count] = (object)array_merge((array)$data[$count]->$alias1, (array)$many);	// merge hasMany
+//			$data[$count] = (object)array_merge((array)$data[$count]->$alias1, (array)$habtm);	// merge hasAndBelongsToMany
+//			debug($habtm);
+//			debug($many);
 			$count++;
 		};
 
@@ -1459,7 +1559,6 @@ class Table
 				// Apply FLATTENING if specified
 				// This is only useful, if you know that you will receive only one element
 				if ( isset($properties['flatten']) && $properties['flatten'] === true ) {
-					// TODO: add flatten => true check to validator!!
 					$result = isset($result[0]) ? $result[0] : new stdClass();
 				}
 
@@ -1469,8 +1568,95 @@ class Table
 		return $data;
 	}
 
+	private function _retrieveHasAndBelongsToMany($limitAliase = false, $mainPKValue, $recursive)
+	{
+		$data = array();
 
-	private function _appendModifiedFieldIfExist($fields)
+		foreach ( $this->hasAndBelongsToMany as $alias => $properties )
+		{
+			// This is used for the recursive relations, so that we can limit what to follow
+			if ( !$limitAliase || (isset($limitAliase['hasAndBelongsToMany']) && in_array($alias, $limitAliase['hasAndBelongsToMany'])) )
+			{
+				// Array holding all fields to be selected
+				$allFields	= array();
+
+				// ------------------------------------ MAIN QUERY ------------------------------------
+				$PK			= isset($properties['primaryKey']) ? $properties['primaryKey'] : 'id';
+				$aliasedPK	= '`'.$alias.'`.`'.$PK.'`';		// Primary key identifier
+
+				// Get main query fields
+				$fields		= $properties['fields'];
+				$fields		= $this->buildAliasedFields($fields, $alias, '', '');
+				$fields 	= array_merge(array($aliasedPK.' AS `'.PRIM_KEY.'`'), $fields);
+
+				// Get main query subqueries
+				if ( isset($properties['subQueries']) )
+				{
+					$subQueries	= $properties['subQueries'];
+					$subQueries = $this->buildAliasedSubQueries($subQueries, $alias, '');
+					$allFields	= array_merge($fields, $subQueries);
+				}
+				else
+				{
+					$allFields = $fields;
+				}
+
+				// Get main query condition
+				$condition	= 'WHERE `'.$this->alias.'`.`'.$this->primary_key.'` = \''.$mainPKValue.'\'';
+
+
+				// Additional query information
+				$where		= isset($properties['condition'])	? $properties['condition']	: null;
+				$order		= isset($properties['order'])		? $properties['order']		: null;
+				$limit		= isset($properties['limit'])		? $properties['limit']		: null;
+
+				$where		= ($where) ? 'WHERE '	.$condition.' AND '.$where : $condition;
+				$order		= ($order) ? 'ORDER BY '.implode(',', array_map(create_function('$key, $dir', 'return $key." ".$dir;'), array_keys($order), array_values($order))) : '';
+				$limit		= ($limit) ? 'LIMIT '	.$limit : '';
+
+
+				$query =
+					'SELECT '.
+						implode(', ', $allFields).' '.		// OUTER FIELDS: <alias>_<field> AS <alias>.<field>
+					'FROM '.
+						'`'.$this->table.'` AS `'.$this->alias.'` '.
+					// table holding the relations of both other tables
+					'JOIN '.
+						'`'.$properties['joinTable'].'` AS `_JOIN_TABLE`'.
+					'ON ( `'.$this->alias.'`.`'.$this->primary_key.'` = `_JOIN_TABLE`.`'.$properties['joinThisFK'].'` ) '.
+					// Other table which also contains the fields to fetch
+					'JOIN '.
+						'`'.$properties['table'].'` AS `'.$alias.'`' .
+					'ON ( `_JOIN_TABLE`.`'.$properties['joinOtherFK'].'` = '.$aliasedPK.' ) '.
+					$where.' '.
+					//'%s '.		// GROUP
+					//'%s '.		// HAVING
+					$order.' '.
+					$limit;
+
+				$result = $this->retrieveResults($query, 0, null, 'object');
+
+				// Apply LISTING if specified
+				// This is only useful, if you know that you will receive only one element
+				if ( isset($properties['list']) && $properties['list'] === true ) {
+					// Get field-name or field-alias (whichever has been set)
+					$field = isset($properties['fields'][0]) ? $properties['fields'][0] : key($properties['fields']);
+					$result = array_map(function($row) use ($field){ $row = (array)$row; return $row[$field]; }, (array)$result);
+				}
+				// Apply FLATTENING if specified
+				// This is only useful, if you know that you will receive only one element
+				if ( isset($properties['flatten']) && $properties['flatten'] === true ) {
+					$result = isset($result[0]) ? $result[0] : new stdClass();
+				}
+				$data[$alias] = $result;
+			}
+		}
+		return $data;
+	}
+
+
+
+	private function _appendModifiedFieldIfExist($data)
 	{
 		if ( $this->hasModified )
 		{
@@ -1479,18 +1665,18 @@ class Table
 
 			switch ($sqlDataType)
 			{
-				case 'datetime':	return array_merge($fields, array($field_name	=> $this->db->getNowDateTime()));
-				case 'timestamp':	return array_merge($fields, array($field_name	=> $this->db->getNowTimeStamp()));
-				case 'integer':		return array_merge($fields, array($field_name	=> $this->db->getNowUnixTimeStamp()));
-				default:			return $fields;
+				case 'datetime':	return array_merge($data, array($field_name	=> $this->db->getNowDateTime()));
+				case 'timestamp':	return array_merge($data, array($field_name	=> $this->db->getNowTimeStamp()));
+				case 'integer':		return array_merge($data, array($field_name	=> $this->db->getNowUnixTimeStamp()));
+				default:			return $data;
 			}
 		}
 		else
 		{
-			return $fields;
+			return $data;
 		}
 	}
-	private function _appendCreatedFieldIfExist($fields)
+	private function _appendCreatedFieldIfExist($data)
 	{
 		if ( $this->hasCreated )
 		{
@@ -1499,22 +1685,22 @@ class Table
 
 			switch ($sqlDataType)
 			{
-				case 'datetime':	return array_merge($fields, array($field_name	=> $this->db->getNowDateTime()));
-				case 'timestamp':	return array_merge($fields, array($field_name	=> $this->db->getNowTimeStamp()));
-				case 'integer':		return array_merge($fields, array($field_name	=> $this->db->getNowUnixTimeStamp()));
-				default:			return $fields;
+				case 'datetime':	return array_merge($data, array($field_name	=> $this->db->getNowDateTime()));
+				case 'timestamp':	return array_merge($data, array($field_name	=> $this->db->getNowTimeStamp()));
+				case 'integer':		return array_merge($data, array($field_name	=> $this->db->getNowUnixTimeStamp()));
+				default:			return $data;
 			}
 		}
 		else
 		{
-			return $fields;
+			return $data;
 		}
 	}
 
 
 
 	/**
-	 * _prepareFields()
+	 * _prepareDataFields()
 	 *
 	 * This allows the user to insert/update fields by their alias names.
 	 * And also put in all kinds of values. Even the whole $_POST array,
@@ -1523,9 +1709,9 @@ class Table
 	 * 1.) Convert aliases to their corresponding fields.
 	 * 2.) Remove all illegal fields, that are not present in the table
 	 *
-	 * @param mixed[]	$data		$field-value pair for insert/update
+	 * @param mixed[]	$data		field=>value/alias=>value pair for insert/update
 	 */
-	private function _prepareFields($data)
+	private function _prepareDataFields($data)
 	{
 		$availFields	= array_values($this->fields);
 		$availAliase	= array_keys($this->fields);
@@ -1543,6 +1729,34 @@ class Table
 				// get actualy field by alias
 				$real_name = $this->fields[$field];
 				$valid[$real_name] = $value;
+				\Sweany\SysLog::i('Insert/Update', '['.get_class($this).': Field Rewrite] Used Alias: '.$field.' is changed to Field: '.$real_name);
+			}
+			// Discard all other value
+			else {
+				\Sweany\SysLog::w('Insert/Update', '['.get_class($this).': Wrong Field] Field: '.$field.' does not exist');
+			}
+		}
+		return $valid;
+	}
+
+	private function _prepareFields($fields)
+	{
+		$availFields	= array_values($this->fields);
+		$availAliase	= array_keys($this->fields);
+
+		$valid			= array();
+
+		foreach ($fields as $field)
+		{
+			// Field-Value-Pair is valid by default
+			if ( in_array($field, $availFields) ) {
+				$valid[] = $field;
+			}
+			// Field-Value-Pair is using an alias, so we need to rewrite it
+			else if ( in_array($field, $availAliase) ) {
+				// get actualy field by alias
+				$real_name	= $this->fields[$field];
+				$valid[]	= $real_name;
 				\Sweany\SysLog::i('Insert/Update', '['.get_class($this).': Field Rewrite] Used Alias: '.$field.' is changed to Field: '.$real_name);
 			}
 			// Discard all other value

@@ -38,18 +38,21 @@ class Validate04Database extends aBootTemplate
 			if ( !self::_checkVariableExistance() )
 			{
 				echo '<h1>Validation Error: Variable missing in Config.php</h2>';
+				echo self::$error;
 				return false;
 			}
 
 			if ( !self::_checkVariableValue() )
 			{
 				echo '<h1>Validation Error: Variable with wrong value in Config.php</h2>';
+				echo self::$error;
 				return false;
 			}
 
 			if ( !self::_checkSQLConnection() )
 			{
 				echo '<h1>Validation Error: SQL</h2>';
+				echo self::$error;
 				return false;
 			}
 		}

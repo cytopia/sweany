@@ -36,6 +36,7 @@ class Validate09Plugins extends aBootTemplate
 		if ( !self::_checkPlugins() )
 		{
 			echo '<h1>Validation Error: Plugins</h2>';
+			echo self::$error;
 			return false;
 		}
 		return true;
