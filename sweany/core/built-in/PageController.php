@@ -173,8 +173,8 @@ abstract Class PageController extends BaseController
 		// If it is not active, always authorize positively
 		if ( $GLOBALS['USER_ENABLE'] == true )
 		{
-			// NOTE: Late static binding call, to get the childs value
-			//       rather than my own.
+			// NOTE: Using <late static binding> call, to get the
+			//		 childs value (overwritten value) rather than my own.
 			if ( static::$admin_area && !\Sweany\Users::isAdmin() )
 			{
 				return false;

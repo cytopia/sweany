@@ -39,24 +39,28 @@ class Validate03Language extends aBootTemplate
 			if ( !self::_checkVariableExistance() )
 			{
 				echo '<h1>Validation Error: Variable missing in Config.php</h2>';
+				echo self::$error;
 				return false;
 			}
 
 			if ( !self::_checkVariableValue() )
 			{
 				echo '<h1>Validation Error: Variable with wrong value in Config.php</h2>';
+				echo self::$error;
 				return false;
 			}
 
 			if ( !self::_checkPluginLanguageFiles() )
 			{
 				echo '<h1>Validation Error: Plugins Files missing</h2>';
+				echo self::$error;
 				return false;
 			}
 
 			if ( !self::_checkXMLSyntax() )
 			{
 				echo '<h1>Validation Error: Language</h2>';
+				echo self::$error;
 				return false;
 			}
 		}

@@ -6,7 +6,7 @@
 		<div class="line forum_entry_row <?php echo ($even) ? 'forum_entry_row_even' : 'forum_entry_row_odd';?>">
 			<div class="unit size1of9">
 				<div class="line">
-					<img src="/img/profiles/avatar/16x16/default.png" alt="" />
+					<img src="/plugins/Forums/img/profiles/avatar/16x16/default.png" alt="" />
 				</div>
 			</div>
 

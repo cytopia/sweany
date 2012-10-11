@@ -92,6 +92,19 @@ class ForumThreadsTable extends Table
 
 	// one to one
 	public $hasOne = array();
+	
+	public $hasAndBelongsToMany = array(
+		'UserHasRead'	=> array(
+			'table'			=> 'users',
+			'joinTable'		=> 'forum_thread_is_read',
+			'joinThisFK'	=> 'fk_forum_thread_id',
+			'joinOtherFK'	=> 'fk_user_id',
+			'fields'		=> array('user_id' => 'id'),
+			'list'			=> true,
+//			'flatten'		=> true,
+//			'dependent'		=> true,
+		),
+	);
 
 	/************************************************** GET FUNCTIONS **************************************************/
 

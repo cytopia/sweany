@@ -38,17 +38,20 @@ class Validate05Tables extends aBootTemplate
 		{
 			if ( !self::checkCoreTables() )
 			{
-				echo '<h1>Validation Error: SQL</h2>';
+				echo '<h1>Validation Error: Table</h2>';
+				echo self::$error;
 				return false;
 			}
 			if ( !self::checkUsrTables() )
 			{
-				echo '<h1>Validation Error: SQL</h2>';
+				echo '<h1>Validation Error: Table</h2>';
+				echo self::$error;
 				return false;
 			}
 			if ( !self::checkUsrPluginTables() )
 			{
-				echo '<h1>Validation Error: SQL</h2>';
+				echo '<h1>Validation Error: Table</h2>';
+				echo self::$error;
 				return false;
 			}
 		}
@@ -76,10 +79,10 @@ class Validate05Tables extends aBootTemplate
 						self::$error	= 'Table Alias is not set in <b>'.$tblClass->table.'.</b><br/>Expected:<br/>public $alias = \'alias_name\';';
 						return false;
 					}
-					
+
 					// ---------------- VALIDATE CREATED/MODIFIED Fields
 					if ( !self::__checkCreatedModifiedFields($tblClass, $file, $db) ) {return false;}
-					
+
 
 					// ---------------- VALIDATE FIELDS
 					$sqlColumns	= $db->getColumnNames($tblClass->table);
@@ -319,14 +322,14 @@ class Validate05Tables extends aBootTemplate
 
 
 	/* ******************************************* PRIVATE HELPERS ******************************************* */
-	
-	
+
+
 	private static function __checkCreatedModifiedFields($tblClass, $tblName, $db)
 	{
 		$data	= $db->getColumnTypes($tblClass->table);
 		$names	= array_keys($data);
 		$types	= array_values($data);
-		
+
 			// --------------------------- CHECK CREATED ---------------------------
 		if ( !is_null($tblClass->hasCreated) )
 		{
@@ -415,7 +418,7 @@ class Validate05Tables extends aBootTemplate
 				return false;
 			}
 		}
-		
+
 
 		// --------------------------- CHECK MODIFIED ---------------------------
 		if ( !is_null($tblClass->hasModified) )
@@ -507,9 +510,9 @@ class Validate05Tables extends aBootTemplate
 		}
 		return true;
 	}
-	
-	
-	
+
+
+
 	private static function __checkRelation($relation, $tbl_name, $tblClass, $type, $db)
 	{
 		foreach ($relation as $alias => $options)
@@ -529,8 +532,8 @@ class Validate05Tables extends aBootTemplate
 			// Is Core?
 			$core		= (isset($options['core']) && $options['core']) ? true : false;
 
-			
-			
+
+
 			// Table exists in database?
 			if ( !$db->tableExists($options['table']) )
 			{
@@ -600,7 +603,7 @@ class Validate05Tables extends aBootTemplate
 				else {
 					$path	= ($plugin) ? USR_PLUGINS_PATH.DS.$plugin.DS.'tables'.DS.$className.'Table.php' : USR_TABLES_PATH.DS.$className.'Table.php';
 				}
-				
+
 				// File exists?
 				if ( !is_file($path) )
 				{
@@ -632,7 +635,7 @@ class Validate05Tables extends aBootTemplate
 						self::$error.= 'Specify one of the following: \'hasOne\', \'hasMany\', \'belongsTo\' or \'hasAndBelongsToMany\'';
 						return false;
 					}
-					
+
 					// Check if all specified aliasNames exist in the corresponding table in that particular relation
 					foreach ($aliasNames as $aName)
 					{
@@ -643,7 +646,7 @@ class Validate05Tables extends aBootTemplate
 						} else {
 							$recTable = \Loader::LoadTable($className);
 						}
-						
+
 						// check if the relation to follow has been defined as array
 						if ( !is_array($recTable->$relType) || !count($recTable->$relType) )
 						{
@@ -651,7 +654,7 @@ class Validate05Tables extends aBootTemplate
 							self::$error.= 'has been set to follow, but <strong>'.$relType.'</strong> is not properly defined in '.$className;
 							return false;
 						}
-						
+
 						// Check if the alias to follow has been defined in the relation Type
 						if ( !in_array($aName, array_keys($recTable->$relType)) )
 						{
@@ -662,7 +665,7 @@ class Validate05Tables extends aBootTemplate
 					}
 				}
 			}
-			
+
 			// specific relation check
 			if ( $type == 'hasOne' )
 			{
@@ -761,6 +764,13 @@ class Validate05Tables extends aBootTemplate
 			}
 			return false;
 		}
+
+		if ( isset($options['flatten']) && $options['flatten'] !== true && $options['flatten'] !== false )
+		{
+			self::$error = $tbl_name.'Table.php $hasMany[\''.$alias.'\'][\'flatten\'] = \''.$options['flatten'].'\';<br/>But it can only be true or false';
+			return false;
+		}
+
 		return true;
 	}
 
@@ -795,11 +805,10 @@ class Validate05Tables extends aBootTemplate
 		return true;
 	}
 
-	private static function __checkHabtm($habtm, $alias, $tbl_name, $tblClass, $db)
+	private static function __checkHabtm($options, $alias, $tbl_name, $tblClass, $db)
 	{
-		debug('Implement me in Validate05Tables __checkHabtm');
 		// Validate allowed fields
-		$allOptions	= array('table', 'class', 'core', 'plugin', 'primaryKey', 'foreignKey', 'fields', 'subQueries', 'condition', 'recursive');
+		$allOptions	= array('table', 'class', 'core', 'plugin', 'primaryKey', 'joinTable', 'joinThisFK', 'joinOtherFK', 'fields', 'subQueries', 'condition', 'dependent', 'flatten', 'list');
 		foreach (array_keys($options) as $opt)
 		{
 			if ( !in_array($opt, $allOptions) )
@@ -809,10 +818,67 @@ class Validate05Tables extends aBootTemplate
 			}
 		}
 
-		// TODO: add validation for hasAndBelongsToMany relation on foreignKeys
+		if ( !isset($options['joinTable']) )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinTable\'] not set.<br/>You have to specify the sql table name that holds the associations for: <strong>'.$tblClass->table.'</strong> and <strong>'.$options['table'].'</strong>';
+			return false;
+		}
+		if ( !$db->tableExists($options['joinTable']) )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinTable\'] = \'<strong>'.$options['joinTable'].'</strong>\';<br/> But <strong>'.$options['joinTable'].'</strong> does not exist in database';
+			return false;
+		}
+
+
+		$joinColumns = $db->getColumnNames($options['joinTable']);
+		if ( !isset($options['joinThisFK']) )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinThisFK\'] not set.<br/>You have to specify foreign key of the associations table (\'joinTable\') that links to: <strong>'.$tblClass->table.'.'.$tblClass->primary_key.'</strong>';
+			return false;
+		}
+		if ( !in_array($options['joinThisFK'], $joinColumns) )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinThisFK\'] = \''.$options['joinThisFK'].'\';<br/>But '.$options['joinThisFK'].' does not exist in sql table: '.$options['joinTable'];
+			return false;
+		}
+
+
+		$otherPK	= isset($options['primaryKey']) ? $options['primaryKey'] : 'id';
+		if ( !isset($options['joinOtherFK']) )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinOtherFK\'] not set.<br/>You have to specify foreign key of the associations table (\'joinTable\') that links to: <strong>'.$options['table'].'.'.$otherPK.'</strong>';
+			return false;
+		}
+
+		if ( !in_array($options['joinOtherFK'], $joinColumns) )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinOtherFK\'] = \''.$options['joinOtherFK'].'\';<br/>But '.$options['joinOtherFK'].' does not exist in sql table: '.$options['joinTable'];
+			return false;
+		}
+
+
+		if ( isset($options['flatten']) && $options['flatten'] !== true && $options['flatten'] !== false )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'flatten\'] = \''.$options['flatten'].'\';<br/>But it can only be true or false';
+			return false;
+		}
+
+
+		if ( isset($options['list']) && $options['list'] !== true && $options['list'] !== false )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'list\'] = \''.$options['list'].'\';<br/>But it can only be true or false';
+			return false;
+		}
+		if ( isset($options['list']) && $options['list'] === true && count($options['fields'])> 1 )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'list\'] = \''.$options['list'].'\';<br/>But you have specified more than 1 field from table <strong>'.$options['table'].'</strong> to fetch.<br/>Listed results only works with one field!';
+			return false;
+		}
+		if ( isset($options['list']) && $options['list'] === true && (isset($options['subQueries']) && count($options['subQueries'])>0) )
+		{
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'list\'] = \''.$options['list'].'\';<br/>But you have specified subQueries to use. Listed results only works with one field!';
+			return false;
+		}
 		return true;
 	}
-
-
-
 }

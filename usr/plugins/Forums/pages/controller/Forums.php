@@ -292,6 +292,8 @@ class Forums extends PageController
 		$isAdmin		= $this->user->isAdmin();
 
 
+//		debug($Forum);
+
 		$navigation		= Html::l($this->language->forum, __CLASS__, '').' -&gt; '.$Forum->name;
 
 		// ADD TEMPLATE ELEMENTS

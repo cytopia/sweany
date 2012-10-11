@@ -38,11 +38,13 @@ class Validate02Config extends aBootTemplate
 		if ( !self::_checkVariableExistance() )
 		{
 			echo '<h1>Validation Error: Variable missing in Config.php</h2>';
+			echo self::$error;
 			return false;
 		}
 		if ( !self::_checkVariableValue() )
 		{
 			echo '<h1>Validation Error: Variable with wrong value in Config.php</h2>';
+			echo self::$error;
 			return false;
 		}
 		return true;

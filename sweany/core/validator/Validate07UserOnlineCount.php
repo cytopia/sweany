@@ -38,18 +38,21 @@ class Validate07UserOnlineCount extends aBootTemplate
 			if ( !self::_checkVariableExistance() )
 			{
 				echo '<h1>Validation Error</h2>';
+				echo self::$error;
 				return false;
 			}
 
 			if ( !self::_checkVariableValue() )
 			{
 				echo '<h1>Validation Error: Variable with wrong value in Config.php</h2>';
+				echo self::$error;
 				return false;
 			}
 
 			if ( !self::_checkUserOnlineCount() )
 			{
 				echo '<h1>Validation Error</h2>';
+				echo self::$error;
 				return false;
 			}
 		}

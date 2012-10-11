@@ -38,6 +38,7 @@ class Validate06User extends aBootTemplate
 			if ( !self::_checkUser() )
 			{
 				echo '<h1>Validation Error: User</h2>';
+				echo self::$error;
 				return false;
 			}
 		}
