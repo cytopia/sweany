@@ -543,7 +543,7 @@ class mysql extends aBootTemplate implements iDBO
 
 		return $this->select($query, function($row, &$data){ $data[$row['name']] = $row['type']; });
 	}
-	
+
 	public function getPrimaryKey($table)
 	{
 		$query = 'SELECT
@@ -561,7 +561,7 @@ class mysql extends aBootTemplate implements iDBO
 				AND
 					t.table_name=\''.$table.'\'';
 
-		return $this->select($query, function($row, &$data){ $data = $row['pk']; });
+		return $this->select($query, function($row, &$data){ $data[] = $row['pk']; });
 	}
 
 
