@@ -14,4 +14,4 @@
 		echo Form::getError('test_input');
 		echo Form::label('test_input', 'input');
 		echo Form::inputField('test_input');		echo '<br/><br/>';		echo Form::submitButton('form_submit', 'submit button');
-	echo Form::fieldSetEnd();echo Form::end();if (Form::isSubmitted('form_test')){	debug($_POST);}?>
+	echo Form::fieldSetEnd();echo Form::end();if (Form::isSubmitted('form_test')){	debug($_POST);}

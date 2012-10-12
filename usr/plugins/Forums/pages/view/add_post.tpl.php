@@ -104,5 +104,4 @@
 			</tbody>
 		</table>
 	<?php endforeach; ?>
-
 <?php endif;?>

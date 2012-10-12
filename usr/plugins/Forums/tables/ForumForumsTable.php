@@ -19,7 +19,7 @@ class ForumForumsTable extends Table
 		'created',
 		'modified',
 	);
-	
+
 	public $hasMany = array(
 		'LastThread'	=> array(
 			'table'			=> 'forum_threads',

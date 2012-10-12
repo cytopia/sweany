@@ -185,9 +185,8 @@ select option {
 
 
 
-img 
-{
-border:none;
+img {
+	border:none;
 }
 
 /**************************************************************************************************************
@@ -209,10 +208,7 @@ border:none;
 	border: solid 1px #F00; 	
 }
 
-.txthighlight
-{
+.txthighlight {
 	font-weight:bold;
 	color:black;
 }
-
-

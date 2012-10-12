@@ -3,6 +3,7 @@ class ForumBlock extends BlockController
 {
 	protected $plugin			= 'Forums';
 
+
 	private $userProfileLink	= false;
 	private $userProfileCtl;
 	private $userProfileMethod;
@@ -82,7 +83,6 @@ class ForumBlock extends BlockController
 		return count($threads) ? 1 : 0;
 	}
 
-
 	public function latestPostsByUser($user_id, $numEntries = 10)
 	{
 		$tblPosts	= Loader::loadPluginTable('ForumPosts', $this->plugin);
@@ -90,7 +90,9 @@ class ForumBlock extends BlockController
 
 		$this->set('language', $this->language);
 		$this->set('posts', $posts);
+
 		$this->view('latest_posts_by_user');
+
 	}
 
 	public function onlineUsers()
@@ -107,3 +109,4 @@ class ForumBlock extends BlockController
 		$this->view('online_users');
 	}
 }
+

@@ -49,7 +49,7 @@ class Strings
 		$string = str_replace(' ', '', $string);
 		return ($first) ? $string : lcfirst($string);
 	}
-	
+
 	/**
 	 *
 	 *	Convert camel-cased string to underscored string

@@ -38,14 +38,14 @@ class ContactTable extends Table
 		$data['ip']			= $_SERVER['REMOTE_ADDR'];
 		$data['host']		= gethostbyaddr($_SERVER['REMOTE_ADDR']);
 		$data['session_id']	= Session::getId();
-		
+
 		return parent::save($data, $return);
 	}
-	
+
 	/**
 	 *	@override
 	 *	@param	integer		$id			Id of entity
-	 *	@param	void		$related	No effect here (no relations defined) 
+	 *	@param	void		$related	No effect here (no relations defined)
 	 *	@return	boolean		success
 	 */
 	public function delete($id, $related = null)
@@ -64,13 +64,13 @@ class ContactTable extends Table
 	}
 
 
-	
+
 	public function countNew()
 	{
 		$condition = array('`is_read` = :read', array(':read' => 0));
 		return $this->find('count', array('condition' => $condition));
 	}
-	
+
 	public function markRead($id)
 	{
 		return $this->update($id, array('is_read' => 1));

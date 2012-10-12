@@ -5,8 +5,8 @@ class ForumPostsTable extends Table
 	public $alias	= 'Post';
 
 	public $hasModified	= array('modified' => 'integer');
-	public $hasCreated	= array('created' => 'integer');	
-	
+	public $hasCreated	= array('created' => 'integer');
+
 	public $fields	= array(
 		// FIELDS
 		'id',
@@ -40,7 +40,7 @@ class ForumPostsTable extends Table
 			'fields'		=> array('id', 'title', 'fk_forum_forums_id', 'seo_url', 'is_locked', 'is_closed'),
 //			'subQueries'	=> array(''),
         ),
-    );	
+    );
 
 	/************************************************** GET FUNCTIONS **************************************************/
 /*
@@ -51,21 +51,21 @@ class ForumPostsTable extends Table
 	}
 */
 	/************************************************** INSERT/UPDATE FUNCTIONS **************************************************/
-	
+
 	/**
 	 *	@Override
 	 */
 	public function save($fields, $return = 1)
 	{
 		$fields['title']	= Strings::removeTags($fields['title']);
-		
+
 		$Post	= parent::save($fields, 2);
-		
+
 		// Update the thread's last_post time and id (so we can order by it to get the last entries)
 		$updFields['last_post_created']	= $Post->created;
 		$updFields['last_post_id']		= $Post->id;
 		$this->db->updateRow('forum_threads', $updFields, $fields['fk_forum_thread_id']);
-		
+
 		return $Post->id;
 	}
 }

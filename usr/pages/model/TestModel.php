@@ -1,1 +1,1 @@
-<?phpclass TestModel extends PageModel{	protected $tables = array();}
+<?phpclass TestModel extends PageModel{	protected $tables = array();}

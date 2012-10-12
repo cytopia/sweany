@@ -58,6 +58,4 @@ class Request
 	{}
 	public static function isWap()
 	{}
-
-
 }

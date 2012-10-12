@@ -47,6 +47,7 @@ class Mailer
 	private static $br		= "\r\n";
 
 
+
 	/**
 	 * Database table to store send emails,
 	 * if specified in config.php
@@ -84,8 +85,6 @@ class Mailer
 	{
 		return self::_send($to, $subject, $message, 'html');
 	}
-
-
 
 
 

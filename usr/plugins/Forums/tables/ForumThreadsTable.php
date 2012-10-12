@@ -92,7 +92,7 @@ class ForumThreadsTable extends Table
 
 	// one to one
 	public $hasOne = array();
-	
+
 	public $hasAndBelongsToMany = array(
 		'UserHasRead'	=> array(
 			'table'			=> 'users',
@@ -130,7 +130,7 @@ class ForumThreadsTable extends Table
 	}
 
 /*********************************************** ADD/UPDATE FUNCTIONS **************************************************/
-	
+
 	/**
 	 *	@Override
 	 */
@@ -138,7 +138,7 @@ class ForumThreadsTable extends Table
 	{
 		$fields['title']	= Strings::removeTags($fields['title']);
 		$fields['seo_url']	= Url::cleanUrlParams($fields['title']).'.html';
-		
+
 		return parent::save($fields, $return);
 	}
 

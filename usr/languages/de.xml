@@ -115,6 +115,7 @@
 	<!-- /Normal Page Controller Defines -->
 
 
+
 	<!-- Custom path to add stuff that does not fit anywhere else, can also be named differently (anything you like). -->
 	<!-- Access this via $this->language->getCustom(full_path_with_id, key). -->
 	<!-- e.g. -->
