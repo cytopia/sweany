@@ -1,6 +1,8 @@
 2012-10-12
 -----------------
 + Changed required version to >= PHP 5.4.0
++ Added mor timing output to syslog
++ updated db.sql
 
 
 2012-10-10
