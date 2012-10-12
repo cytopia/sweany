@@ -32,7 +32,7 @@ class mysql extends aBootTemplate implements iDBO
 		$user		= $options['user'];
 		$pass		= $options['pass'];
 
-		self::$link	= @mysql_connect($host, $user, $pass);
+		self::$link	= mysql_connect($host, $user, $pass);
 
 		if (!self::$link)
 		{
@@ -40,19 +40,19 @@ class mysql extends aBootTemplate implements iDBO
 			return false;
 		}
 
-		if (!@mysql_select_db($db, self::$link))
+		if (!mysql_select_db($db, self::$link))
 		{
 			self::$error = 'Database, '.'Coult not select db: '.$db;
 			return false;
 		}
 
 		// activate total utf-8
-		if (!@mysql_set_charset('utf8', self::$link))
+		if (!mysql_set_charset('utf8', self::$link))
 		{
 			self::$error = 'Charset, Coult not be set to utf8';
 			return false;
 		}
-		if (!@mysql_query("SET character_set_results = 'utf8', character_set_client = 'utf8', character_set_connection = 'utf8', character_set_database = 'utf8', character_set_server = 'utf8'", self::$link))
+		if (!mysql_query("SET character_set_results = 'utf8', character_set_client = 'utf8', character_set_connection = 'utf8', character_set_database = 'utf8', character_set_server = 'utf8'", self::$link))
 		{
 			self::$error = 'Encodings and Connections could not be set to utf8';
 			return false;

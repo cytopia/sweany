@@ -132,7 +132,7 @@ class Render
 			ob_start();
 		}
 
-		@include($view_path);
+		include($view_path);
 
 		$content = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
 

@@ -152,7 +152,6 @@ require(CORE_BUILT_IN.DS.'Table.php');
 
 
 
-// TODO: outcomment in live version
 $FILE_LOAD_TIME = ( microtime(true) - ($_SERVER['REQUEST_TIME']+$SERVER_REACTION_TIME) );
 
 
@@ -172,7 +171,6 @@ if ( !\Sweany\Settings::initialize() )
 	echo \Sweany\Settings::getError();
 	exit();
 }
-\Sweany\SysLog::i('-- SERVER --', 'Reaction Time  '.round($SERVER_REACTION_TIME, 4).' seconds');
 \Sweany\SysLog::i('-- LOAD --', 'Framework files loaded in '.round($FILE_LOAD_TIME, 4).' seconds');
 \Sweany\SysLog::i('Core', 'Settings loaded successfully.');
 
@@ -285,8 +283,6 @@ $BOOTSTRAP_TIME = ( microtime(true) - ($_SERVER['REQUEST_TIME']+$SERVER_REACTION
 
 
 
-
-
 /* ************************************************************************************************************
  *
  * CALL
@@ -319,6 +315,9 @@ if ( $GLOBALS['LANGUAGE_ENABLE'] == true )
  * faster than call_user_func_array
  */
 $paramSize = count($params);
+
+\Sweany\SysLog::time('core', microtime(true)-$SCRIPT_START_TIME);	// now everything by sweany has been done!
+
 switch ( $paramSize )
 {
 	case 0:  $result = $c->{$method}();break;
@@ -428,7 +427,7 @@ else
 
 
 	// ------ LOGGIN
-	\Sweany\SysLog::i('DONE', 'Total Page Time: '.round(microtime(true) - $_SERVER['REQUEST_TIME'], 4).' seconds');
+	\Sweany\SysLog::time('total', microtime(true)-$SCRIPT_START_TIME);
 	\Sweany\SysLog::show();
 	exit();
 }

@@ -379,6 +379,13 @@ class Validate02Config extends aBootTemplate
 			self::$error  = '<b>$RUNTIME_MODE</b> has a wrong value in <b>config.php</b>. Can only be <b>SWEANY_DEVELOPMENT</b>, <b>SWEANY_PRODUCTION</b>, <b>SWEANY_PRODUCTION_FAST_CORE</b> or <b>SWEANY_PRODUCTION_DAEMON</b>.';
 			return false;
 		}
+		
+		// TODO: remove me, once the modes have been implemented
+		if ( $GLOBALS['RUNTIME_MODE'] != SWEANY_DEVELOPMENT )
+		{
+			self::$error  = '<b>$RUNTIME_MODE</b> is currentyl bound to SWEANY_DEVELOPMENT only. To deactivate debugging set the SHOW_(PHP|SQL|FRAMEWORK)_ERRORS flags to <b>0</b>.<br/>Other modes will be available in beta 1';
+			return false;
+		}
 
 		// ---------- Validation Mode
 		if ( !($GLOBALS['VALIDATION_MODE'] == 0 || $GLOBALS['VALIDATION_MODE'] == 1) )

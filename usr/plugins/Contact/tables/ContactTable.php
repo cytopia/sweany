@@ -5,22 +5,23 @@ class ContactTable extends Table
 	public $alias	= 'Contact';
 
 	public $fields	= array(
-		'id'			=> 'id',
-		'fk_user_id'	=> 'fk_user_id',
-		'username'		=> 'username',
-		'name'			=> 'name',
-		'email'			=> 'email',
-		'subject'		=> 'subject',
-		'message'		=> 'message',
-		'is_read'		=> 'is_read',
-		'is_archived'	=> 'is_archived',
-		'is_deleted'	=> 'is_deleted',
-		'referer'		=> 'referer',
-		'useragent'		=> 'useragent',
-		'ip'			=> 'ip',
-		'host'			=> 'host',
-		'session_id'	=> 'session_id',
-		'created'		=> 'created',
+		'id',
+		'fk_user_id',
+		'user_id' => 'fk_user_id',	// use nice alias here
+		'username',
+		'name',
+		'email',
+		'subject',
+		'message',
+		'is_read',
+		'is_archived',
+		'is_deleted',
+		'referer',
+		'useragent',
+		'ip',
+		'host',
+		'session_id',
+		'created',
 	);
 
 	public $hasCreated	= array('created' => 'integer');
@@ -48,19 +49,19 @@ class ContactTable extends Table
 	 *	@param	void		$related	No effect here (no relations defined)
 	 *	@return	boolean		success
 	 */
-	public function delete($id, $related = null)
+	public function delete($id, $related = true, $force = false)
 	{
 		$fields = array(
 			'is_deleted'	=> 1,
 		);
 		return parent::update($id, $fields, 0);
 	}
-	public function deleteAll($condition, $related = false, $return = 0)
+	public function deleteAll($condition, $related = true, $force = false)
 	{
 		$fields = array(
 			'is_deleted'	=> 1,
 		);
-		return parent::updateAll($condition, $fields, $return);
+		return parent::updateAll($condition, $fields);
 	}
 
 

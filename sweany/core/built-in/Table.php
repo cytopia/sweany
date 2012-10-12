@@ -16,16 +16,16 @@ class Table
 	/* ***************************************  T A B L E   D E F I N E S  *************************************** */
 
 	/**
-	 *	@param	string		Name of the sql table
+	 *	@param	string		Name of the sql table (required)
 	 */
-	public $table;
+	public $table			= null;
 
 
 
 	/**
-	 *	@param	string		Name of the alias to use
+	 *	@param	string		Name of the alias to use (required)
 	 */
-	public $alias;
+	public $alias			= null;
 
 
 
@@ -33,13 +33,6 @@ class Table
 	 *	@param	string		Primary key of this table
 	 */
 	public $primary_key		= 'id';
-
-
-
-	/**
-	 *	@param	string[]	Array of foreign keys
-	 */
-	public $foreign_keys	= array();
 
 
 
@@ -107,7 +100,7 @@ class Table
 	 *		'timestamp'		store via date('Y-m-d H:i:s', $timestamp);
 	 *		'integer'		store via time();	# unix timestamp
 	 */
-	public $hasCreated	= null;
+	public $hasCreated		= null;
 
 
 
@@ -326,7 +319,15 @@ class Table
 	/* ***************************************  C L A S S E S  *************************************** */
 
 	/**
-	 *	@param	class	Database Class
+	 * @param	class	Database Class
+	 *
+	 * Useable by all child Tables.
+	 * Useful if you want to overwrite a function,
+	 * you can then simply use the database functionality
+	 * of the current chosen engine.
+	 *
+	 * @See: sweany/core/database/iDBO.php (aClass)
+	 *       for all available functions to use.
 	 */
 	protected $db;
 
@@ -944,6 +945,8 @@ class Table
 	}
 
 
+
+
 	/* ************************************************************************************************************************** *
 	 *
 	 *	E N T I T Y   D E L E T E   F U N C T I O N S
@@ -956,11 +959,18 @@ class Table
 	 * Delete entity (by id)
 	 *
 	 * @param	integer		$id			Id of the row/entity
-	 * @param	boolean		$related	Also delete related Data (hasOne, hasMany, hasAndBelongsToMAny)
+	 * @param	boolean		$related	Also delete related data from local relations (hasOne, hasMany, hasAndBelongsToMany)
+	 * 									NOTE-1: Only deletes related data, if specified by the relation via 'dependent' => true
+	 * 									NOTE-2: Does not delete recursively in the specified relations. If you like to do so, overwrite this function
+	 *
+	 * @param	boolean		$force		Delete related data from local relation (hasOne, hasMany, hasAndBelongsToMany)
+	 * 									NOTE-1: Even deletes related data, if it is not specified. This is a FORCED DELETE
+	 * 									NOTE-2: Does not delete recursively in the specified relations. If you like to do so, overwrite this function
+	 * 									NOTE-3: This flag is useless if $related is set to false
 	 *
 	 * @return	boolean					Success of operation
 	 */
-	public function delete($id, $related = false)
+	public function delete($id, $related = true, $force = false)
 	{
 		// TODO: implement: delete related data
 		return $this->db->deleteRow($this->table, $id);
@@ -980,11 +990,19 @@ class Table
 	 *				':bar'	=> $name
 	 *			),
 	 *		);
-	 * @param	boolean		$related	Also delete related Data (hasOne, hasMany, hasAndBelongsToMAny)
+	 *
+	 * @param	boolean		$related	Also delete related data from local relations (hasOne, hasMany, hasAndBelongsToMany)
+	 * 									NOTE-1: Only deletes related data, if specified by the relation via 'dependent' => true
+	 * 									NOTE-2: Does not delete recursively in the specified relations. If you like to do so, overwrite this function
+	 *
+	 * @param	boolean		$force		Delete related data from local relation (hasOne, hasMany, hasAndBelongsToMany)
+	 * 									NOTE-1: Even deletes related data, if it is not specified. This is a FORCED DELETE
+	 * 									NOTE-2: Does not delete recursively in the specified relations. If you like to do so, overwrite this function
+	 * 									NOTE-3: This flag is useless if $related is set to false
 	 *
 	 * @return	boolean					Success of operation
 	 */
-	public function deleteAll($condition, $related = false)
+	public function deleteAll($condition, $related = true, $force = false)
 	{
 		// TODO: implement: delete related data
 		return $this->db->delete($this->table, $condition);

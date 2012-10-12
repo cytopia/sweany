@@ -40,18 +40,18 @@ class UsersTable extends Table
 
 	/************************************************** OVERRIDES **************************************************/
 
-	public function delete($id, $related = false)
+	public function delete($id, $related = true, $force = false)
 	{
 		$fields = array(
 			'is_deleted'	=> 1,
 		);
 		return parent::update($id, $fields, 0);
 	}
-	public function deleteAll($condition, $related = false, $return = 0)
+	public function deleteAll($condition, $related = true, $force = false)
 	{
 		$fields = array(
 			'is_deleted'	=> 1,
 		);
-		return parent::updateAll($condition, $fields, $return);
+		return parent::updateAll($condition, $fields);
 	}
 }

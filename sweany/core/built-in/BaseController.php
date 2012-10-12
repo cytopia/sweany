@@ -94,15 +94,15 @@ abstract Class BaseController
 
 
 	/**
-	 *	
+	 *
 	 *	Array of variables parsed to the view
 	 *
 	 *
 	 *	@param	mixed[]	$vars
 	 */
 	private $vars	= array();
-	
-	
+
+
 
 	/**
 	 *
@@ -127,7 +127,7 @@ abstract Class BaseController
 	 *		which will then take
 	 *		$this->view or $this->views
 	 *		and render it accordingly
-	 *	
+	 *
 	 *	Other values can be
 	 *		'json', 'xml', 'pdf', 'jpg', 'png', 'css', 'js', ...
 	 *		@see: sweany/core/views for all available files that can be used.
@@ -279,6 +279,7 @@ abstract Class BaseController
 			$plugin = ($blockPluginName) ? $blockPluginName.':' : '';
 			$params	= '';//@implode(',', $blockMethodParams);
 			\Sweany\SysLog::i('Attach Block', '(rendered) from: '.$plugin.$blockControllerName.'->'.$blockMethodName.'('.$params.')', null, $start);
+			\Sweany\SysLog::time(array($plugin.$blockControllerName.'->'.$blockMethodName), microtime(true)-$start);
 		}
 
 		// Store block html output into local array

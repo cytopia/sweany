@@ -44,13 +44,29 @@ class SysLog
 	private static $baseStore	= array();
 	private static $dbStore		= array();
 
+	private static $timeStore	= array(
+		'httpd'	=> 0,		// webserver reaction time
+		'sql'	=> 0,		// total sql query time
+		'core'	=> 0,		// core execution time
+		'blocks'=> array(),	// separate block execution time
+		'block'	=> 0,		// total block execution time
+		'total'	=> 0,		// total script execution time
+	);
+
 	private static $queryTime	= 0;
 
 
 
 
 	/******************************************  F U N C T I O N S  ******************************************/
-
+	public static function time($type, $val)
+	{
+		if ( is_array($type) ) {
+			self::$timeStore['blocks'][$type[0]] = $val;
+		}else {
+			self::$timeStore[$type] += $val;
+		}
+	}
 
 	/**
 	 *
@@ -246,8 +262,8 @@ class SysLog
 				'</style>';
 		$pre	.= '<div class="sweanylog">';
 
-		$post	= '</table></div>';
-		$error = '<h1>Syslog</h1>';
+		$post	= '</div>';
+		$error	= '<h1>Syslog</h1>';
 
 		$lastErr=error_get_last();
 
@@ -260,7 +276,76 @@ class SysLog
 
 
 		$error .= '<table>';
-		// Framework Logs
+
+
+		// ---------------- Timings
+		$error	.= '<tr>';
+		$error	.=		'<td>'.sprintf('%f', round($GLOBALS['SERVER_REACTION_TIME'], 10)).'s</td>';
+		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>HTTPD</strong></td>';
+		$error	.=		'<td>Webserver reaction time<div style="position:relative;left:50px;">+ The time it takes the webserver to parse the first file to php<br/>+ If this is slow, tune your webserver!</div></td>';
+		$error	.= '</tr>';
+		$error	.= '<tr>';
+		$error	.=		'<td>'.sprintf('%f', round(self::$queryTime, 10)).'s</td>';
+		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>SQL</strong></td>';
+		$error	.=		'<td>Total SQL execution time</td>';
+		$error	.= '</tr>';
+		$error	.= '<tr>';
+		$error	.=		'<td>'.sprintf('%f', round(self::$timeStore['core'], 10)).'s</td>';
+		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>Sweany Core</strong></td>';
+		$error	.=		'<td>Sweany core execution time<div style="position:relative;left:50px;">+ The time it takes until the whole sweany core has been fully executed<br/>+ Turn off VALIDATION_MODE to see the actual core speed!</div></td>';
+		$error	.= '</tr>';
+
+		$t_blocktime = 0;
+		foreach (self::$timeStore['blocks'] as $block => $blocktime)
+		{
+			$t_blocktime += $blocktime;
+			$error	.= '<tr>';
+			$error	.=		'<td>'.sprintf('%f', round($blocktime, 10)).'s</td>';
+			$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+			$error	.=		'<td><strong>Block</strong></td>';
+			$error	.=		'<td>'.$block.'</td>';
+			$error	.= '</tr>';
+		}
+		$error	.= '<tr>';
+		$error	.=		'<td>'.sprintf('%f', round($t_blocktime, 10)).'s</td>';
+		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>All Blocks</strong></td>';
+		$error	.=		'<td>Total Block execution time</td>';
+		$error	.= '</tr>';
+		$error	.= '<tr>';
+		$error	.=		'<td>'.sprintf('%f', round(self::$timeStore['total']-self::$timeStore['core'], 10)).'s</td>';
+		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>User</strong></td>';
+		$error	.=		'<td>Total User generated code execution time<div style="position:relative;left:50px;">+ The execution time of the code that you have written (including SQL)<br/>+ If this is slow I can\'t help you!</div></td>';
+		$error	.= '</tr>';
+		$error	.= '<tr>';
+		$error	.=		'<td>'.sprintf('%f', round(self::$timeStore['total'], 10)).'s</td>';
+		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>Total</strong></td>';
+		$error	.=		'<td>Total Script execution time<div style="position:relative;left:50px;">+ The actual execution of everything (PHP and SQL)</div></td>';
+		$error	.= '</tr>';
+		$error	.= '<tr>';
+		$error	.=		'<td>'.sprintf('%f', round($GLOBALS['SERVER_REACTION_TIME']+self::$timeStore['total'], 10)).'s</td>';
+		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>HTTPD</strong></td>';
+		$error	.=		'<td>Webserver deliver time<div style="position:relative;left:50px;">+ The time, the webserver receives the parsed php code</td>';
+		$error	.= '</tr>';
+	
+		$error	.= '<tr>';
+		$error	.=		'<th><div style="width:82px;"></div></th>';
+		$error	.=		'<th><div style="width:82px;"></div></th>';
+		$error	.=		'<th><div style="width:142px;"></div></th>';
+		$error	.=		'<th style="width:100%;"></th>';
+		$error	.= '</tr>';
+		$error .= '</table>';
+
+
+		$error .= '<table>';
+
+		// ---------------- Framework Logs
 		for ($i=0; $i<sizeof(self::$baseStore); $i++)
 		{
 			$error .= '<tr>';
@@ -300,7 +385,7 @@ class SysLog
 		}
 
 
-		// MySQL Query Logs
+		// ---------------- MySQL Query Logs
 		for ($i=0; $i<sizeof(self::$dbStore); $i++)
 		{
 			$query_time = (self::$dbStore[$i]['time']) ? sprintf('%f', round(self::$dbStore[$i]['time'], 10)).'s' : '';
@@ -357,6 +442,8 @@ class SysLog
 			$error .=	'</td>';
 			$error .= '</tr>';
 		//}
+
+		$error .= '</table>';
 
 		if ($return)
 			return $pre.$error.$post;
@@ -493,5 +580,3 @@ class SysLog
 	}
 }
 
-
-?>

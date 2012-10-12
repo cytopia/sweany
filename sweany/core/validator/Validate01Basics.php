@@ -32,10 +32,10 @@ class Validate01Basics extends aBootTemplate
 {
 	public static function initialize($options = null)
 	{
-		if ( version_compare(phpversion(), '5.3.0', '<') )
+		if ( version_compare(phpversion(), '5.4.0', '<') )
 		{
 			echo '<h1>Validation Error: Wrong PHP Version</h2>';
-			self::$error  = 'You need at least PHP 5.3.0. Your version is: '.phpversion();
+			self::$error  = 'You need at least PHP 5.4.0. Your version is: '.phpversion();
 			return false;
 		}
 		return true;

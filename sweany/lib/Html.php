@@ -35,14 +35,18 @@ Class Html
 	 *
 	 * Build internal <a href></a> construct
 	 *
+	 * You should use this function to build all links, if you intend
+	 * to enable url rewriting later, otherwise your links will break down.
+	 *
 	 * If controller, method or params are null it will
-	 * get the current controller, method or params
-	 * @param String $name
-	 * @param String $controller
-	 * @param String $method
-	 * @param Array $params
-	 * @param Array $attributes
-	 * @param String $anchor
+	 * get the current controller, method or params.
+	 *
+	 * @param	string	$name			Name of the link text to display
+	 * @param	string	$controller		Name of the controller class (not the url name)
+	 * @param	string	$method			Name of the controller mehtod (not the url name)
+	 * @param	mixed[]	$params			Assoc array of controller method parameters
+	 * @param	mixed[]	$attributes		Assoc array of attributes (style=>'', title=>'', )
+	 * @param	string	$anchor			<a> anchor to append
 	 */
 	public static function l($name, $controller = null, $method = null, $params = array(), $attributes = array(), $anchor = null)
 	{

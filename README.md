@@ -3,27 +3,31 @@ The current downloadable version comes with three pre-coded plugins:
 A user registration/login plugin, a bb-code forum and a site-contact form.
 
 Requirements:
- * at least PHP 5.3.0 (due to use of namespaces and late static binding)
+  * at least PHP 5.4.0 (due to use of
+    + namespaces
+    + late static binding
+    + $this in lambda functions
+  )
 
 Documentation:
- * https://github.com/lockdoc/sweany/wiki
+  * https://github.com/lockdoc/sweany/wiki
 
 Features:
- * Pages, Blocks, Layouts (all Model, View Controller based)
- * Tables (maps the database structure to an ORM model)
- * Self-validating advanced SQL ORM model (array or object based)
- * Fully separated Plugin support (have their own Pages, Blocks, Tables, Configs and www directory)
- * Vendors (third party module inclusion)
- * Helpers (various integrated helper classes, such as BBCode parsers, Mailers, Highlighters, String/Array functionality and many more)
- * Sophisticated HTML Form creation/validation (even automated validation against database entries)
- * Integrated user management
- * Integrated language support (via xml files and/or via t()-function with database backend)
- * Integrated Validator mode (validates a lot of the programmers written code on the fly)
- * Syslog (Internal Debug Mode to monitor performance and engine calls)
- * Fast core (a single file holds everything to reduce disk loading times... needs to be pushed)
- * Integrated CSS Debugger
- * Automated ECSS inclusion (https://github.com/lockdoc/ecss)
- * Fully customizable (can deactivate all core modules if not needed, such as database, users, language, etc)
+  * Pages, Blocks, Layouts (all Model, View Controller based)
+  * Tables (maps the database structure to an ORM model)
+  * Self-validating advanced SQL ORM model (array or object based)
+  * Fully separated Plugin support (have their own Pages, Blocks, Tables, Configs and www directory)
+  * Vendors (third party module inclusion)
+  * Helpers (various integrated helper classes, such as BBCode parsers, Mailers, Highlighters, String/Array functionality and many more)
+  * Sophisticated HTML Form creation/validation (even automated validation against database entries)
+  * Integrated user management
+  * Integrated language support (via xml files and/or via t()-function with database backend)
+  * Integrated Validator mode (validates a lot of the programmers written code on the fly)
+  * Syslog (Internal Debug Mode to monitor performance and engine calls)
+  * Fast core (a single file holds everything to reduce disk loading times... needs to be pushed)
+  * Integrated CSS Debugger
+  * Automated ECSS inclusion (https://github.com/lockdoc/ecss)
+  * Fully customizable (can deactivate all core modules if not needed, such as database, users, language, etc)
 
  
 Core Modules
@@ -91,30 +95,22 @@ Helper are integrated pre-coded static classes that extend the core functionalit
 A few examples are shown below:
 
   * Form Helper
-    - lets you build validatable forms
-
+    + lets you build validatable forms
   * HTML/CSS/JS Helper
-    - used to add css/js files, set html title, keywords, namespaces etc on-the-fly
-
+    + used to add css/js files, set html title, keywords, namespaces etc on-the-fly
   * Mail Helper
-    - send emails
-	- store sent emails in database
-
+    + send emails
+	+ store sent emails in database
   * Rules
-    - functions used to validate form input against
-
+    + functions used to validate form input against
   * Highlighter
-    - php side code highlighter
-
+    + php side code highlighter
   * String/Array Helper
-    - manipulate strings/arrays (e.g. shorten strings)
-
+    + manipulate strings/arrays (e.g. shorten strings)
   * LogCat
-    - project specific file logging functionality
-	
+    + project specific file logging functionality
   * BBCode
-    - translate BBCode to nice-looking html code
-
+    + translate BBCode to nice-looking html code
   * and many more
 
 
@@ -157,21 +153,21 @@ Advanced Features
     + Scenario 1:
       You have activated xml-language support in config.php and set 3 languages (english, german and russian),
       but you forgot to add the russian xml file.
-        -> sweany will complain and tell you to add this file.
+      - sweany will complain and tell you to add this file.
 
       You have added the russian xml file, and you have also added 2 more texts to the russian file, but not
       to the others.
-        -> sweany will complain and tell you what texts need to be added in the other files
+      - sweany will complain and tell you what texts need to be added in the other files
 
     + Scenario 2:
       You want to add a new hasOne relation for ProfileTable but have no idea how to properly do this.
       You start off by just specifying the name:
-        -> sweany will complain and tell you what exactly is missing for each step
+      - sweany will complain and tell you what exactly is missing for each step
       You then follow to add everyting sweany tells you. Now you add the foreignKey, but mix up the table it belongs to:
-        -> sweany automatically checks the tables and tells you, that it does not exist in table X
+      - sweany automatically checks the tables and tells you, that it does not exist in table X
       You add the new key to table X or change the name and start adding fields to fetch, but not all of them are actually available
       in the database:
-        -> sweany complains about the fields that do not exist
+      - sweany complains about the fields that do not exist
 
     + There are various other scenarious where sweany will tell you about misconfigured arrays or missing stuff
 

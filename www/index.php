@@ -2,14 +2,15 @@
 /* Sweany MVC PHP framework
  * Copyright (C) 2011-2012 Patu.
  * Frontend for handling everything */
-$SERVER_REACTION_TIME=(microtime(true)-$_SERVER['REQUEST_TIME']);
+$SCRIPT_START_TIME=microtime(true);
+$SERVER_REACTION_TIME=($SCRIPT_START_TIME-$_SERVER['REQUEST_TIME']);
 define('ROOT',(dirname(dirname(__FILE__))));
 define('SWEANY_DEVELOPMENT',0x1);
 define('SWEANY_PRODUCTION',0x2);
 define('SWEANY_PRODUCTION_FAST_CORE',0x3);
 define('SWEANY_PRODUCTION_DAEMON',0x4);
 require(ROOT.DIRECTORY_SEPARATOR.'usr'.DIRECTORY_SEPARATOR.'config.php');
-if($GLOBALS['RUNTIME_MODE']==SWEANY_DEVELOPMENT){require(ROOT.DIRECTORY_SEPARATOR.'www'.DIRECTORY_SEPARATOR.'index_development.php');exit();}
+if(1 /*TODO: sorry, not yet implemented, will be there in beta1 $GLOBALS['RUNTIME_MODE']==SWEANY_DEVELOPMENT*/){require(ROOT.DIRECTORY_SEPARATOR.'www'.DIRECTORY_SEPARATOR.'index_development.php');exit();}
 /* FAST CORE MODE STARTS HERE */
 else{
 define('DS',DIRECTORY_SEPARATOR);

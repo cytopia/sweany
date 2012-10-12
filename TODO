@@ -4,14 +4,16 @@
 
 High Priority
 -------------------------
-* Caching
+* Multiple Primary keys for ORM Model
 * URL rewriting
 * Security testings
+* Users: read data from session rather than from database (performance)
 * Function name freeze
 
 
 Medium Priority
 -------------------------
+* Caching
 * daemonize-mode
 * re-activate Fast core
 * Vendors need propper testing (check out mailer)
