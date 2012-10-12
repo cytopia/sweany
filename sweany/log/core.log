@@ -26815,4 +26815,15 @@
 2012-10-12 03:21:58	['.WARNING.'] [fetchField]	SELECT `username` FROM `users` WHERE `id` = 0;
 2012-10-12 03:21:59	['.WARNING.'] [Callback]	no url request made - using default controller
 2012-10-12 03:21:59	['.WARNING.'] [fetchField]	SELECT `username` FROM `users` WHERE `id` = 0;
+2012-10-12 03:30:17	['.WARNING.'] [Callback]	no url request made - using default controller
+2012-10-12 03:30:17	['.WARNING.'] [fetchField]	SELECT `username` FROM `users` WHERE `id` = 0;
+2012-10-12 03:30:19	['.WARNING.'] [fetchField]	SELECT `username` FROM `users` WHERE `id` = 0;
+2012-10-12 03:30:20	['.WARNING.'] [Auto-Loader]	Class not found plugins in all paths
+2012-10-12 03:30:21	['.WARNING.'] [fetchField]	SELECT `username` FROM `users` WHERE `id` = 0;
+2012-10-12 03:30:21	['.WARNING.'] [fetchField]	SELECT `is_admin` FROM `users` WHERE `id` = 0;
+2012-10-12 03:30:24	['.WARNING.'] [fetchField]	SELECT `username` FROM `users` WHERE `id` = 0;
+2012-10-12 03:30:30	['.WARNING.'] [fetchField]	SELECT `username` FROM `users` WHERE `id` = 0;
+2012-10-12 03:30:33	['.WARNING.'] [fetchField]	SELECT `username` FROM `users` WHERE `id` = 0;
+2012-10-12 03:30:34	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
+2012-10-12 03:30:38	['.WARNING.'] [Auto-Loader]	Class not found favicon.ico in all paths
 
