@@ -66,11 +66,17 @@ class Mailer
 	 * @param	string	$to
 	 * @param	string	$subject
 	 * @param	string	$message
+	 * @param	mixed[]	$options
+	 * 		$option = array(
+	 * 			'charset'	=> 'UTF-8'		# Change charset 'ISO-8859-1' or 'UTF-8'	default: ''UTF-8'
+	 * 			'br'		=> "\r"			# Change line feeds	"\r" or "\r\n" or "\n"	default: "\r\n"
+	 * 		)
+	 *
 	 * @return	boolean	success
 	 */
-	public static function sendText($to, $subject, $message)
+	public static function sendText($to, $subject, $message, $options = array())
 	{
-		return self::_send($to, $subject, $message, 'text');
+		return self::_send($to, $subject, $message, 'text', $options);
 	}
 
 	/**
@@ -79,11 +85,17 @@ class Mailer
 	 * @param	string	$to
 	 * @param	string	$subject
 	 * @param	string	$message
+	 * @param	mixed[]	$options
+	 * 		$option = array(
+	 * 			'charset'	=> 'UTF-8'		# Change charset 'ISO-8859-1' or 'UTF-8'	default: ''UTF-8'
+	 * 			'br'		=> "\r"			# Change line feeds	"\r" or "\r\n" or "\n"	default: "\r\n"
+	 * 		)
+	 *
 	 * @return	boolean	success
 	 */
-	public static function sendHtml($to, $subject, $message)
+	public static function sendHtml($to, $subject, $message, $options = array())
 	{
-		return self::_send($to, $subject, $message, 'html');
+		return self::_send($to, $subject, $message, 'html', $options);
 	}
 
 
@@ -99,10 +111,13 @@ class Mailer
 	 * @param	string	$type
 	 * @return	boolean success
 	 */
-	private static function _send($to, $subject, $message, $type)
+	private static function _send($to, $subject, $message, $type, $options)
 	{
-		$headers = self::__getHeaders($type, $to);
-		$headers = implode(self::$br, $headers);
+		$charset = isset($options['charset'])	? $options['charset']	: self::$charset;
+		$br		 = isset($options['br'])		? $options['br']		: self::$br;
+
+		$headers = self::__getHeaders($type, $charset, $to);
+		$headers = implode($br, $headers);
 
 		$message = \Sweany\Render::email($message, USR_MAIL_SKELETON_PATH.DS.'default.tpl.php');
 
@@ -121,7 +136,7 @@ class Mailer
 		// Make sure to only send email when desired
 		if ( !$GLOBALS['EMAIL_DO_NOT_SEND'] )
 		{
-			return mail($to, self::__charset_encode($subject), $message, $headers);
+			return mail($to, self::__charset_encode($subject, $charset), $message, $headers);
 		}
 	}
 
@@ -131,15 +146,15 @@ class Mailer
 	 *  (also takes care of encoding the from name
 	 *  depending on the chosen charset encoding
 	 */
-	private static function __getHeaders($content_type = 'text', $to_email)
+	private static function __getHeaders($content_type, $charset, $recipient)
 	{
 		$type = ($content_type == 'text') ? 'text/plain' : 'text/html';
 
-		$headers[] = 'Content-Type: '.$type.'; charset="'.self::$charset.'";';
+		$headers[] = 'Content-Type: '.$type.'; charset="'.$charset.'";';
 		$headers[] = 'MIME-Version: 1.0';
 		$headers[] = 'Content-Transfer-Encoding: 8bit';
-		$headers[] = 'Message-ID:'.md5(time()).$to_email;
-		$headers[] = 'From: '.self::__charset_encode($GLOBALS['EMAIL_SYSTEM_FROM_NAME']).' <'.$GLOBALS['EMAIL_SYSTEM_FROM_ADDRESS'].'>';
+		$headers[] = 'Message-ID:'.md5(time()).$recipient;
+		$headers[] = 'From: '.self::__charset_encode($GLOBALS['EMAIL_SYSTEM_FROM_NAME'], $charset).' <'.$GLOBALS['EMAIL_SYSTEM_FROM_ADDRESS'].'>';
 		$headers[] = 'Reply-To: '.$GLOBALS['EMAIL_SYSTEM_REPLY_ADDRESS'];
 		$headers[] = 'Return-Path: '.$GLOBALS['EMAIL_SYSTEM_RETURN_EMAIL'];
 		$headers[] = 'X-Sender-IP: '.$_SERVER['REMOTE_ADDR'];
@@ -152,8 +167,8 @@ class Mailer
 	 *  If using UTF-8, then we need special
 	 *  encoding plus pre- and postfixing some elements
 	 */
-	private static function __charset_encode($string)
+	private static function __charset_encode($string, $charset)
 	{
-		return (self::$charset == 'utf-8') ? '=?UTF-8?B?'.base64_encode($string).'?=' : $string;
+		return ($charset == 'utf-8') ? '=?UTF-8?B?'.base64_encode($string).'?=' : $string;
 	}
 }
