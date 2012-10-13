@@ -105,21 +105,45 @@ Class Language extends aBootTemplate
 	public static function initialize($options = null)
 	{
 		$short		= self::chooseLanguage();
-		$success	= self::loadProjectFile($short);
 
-		// TODO: use config!!!!
-		$success2	= self::_resetLocale();
+		if ( !self::loadProjectFile($short) )
+		{
+			self::$error = '<strong>Cannot Load Language File<strong><br/>'.self::$error;
+			return false;
+		}
 
-		return ($success && $success2);
+		if ( !self::_resetLocale() )
+		{
+			self::$error = '<strong>Cannot Set Language File specific locale<strong><br/>'.self::$error;
+			return false;
+		}
+
+		return true;
 	}
 
 
 	public static function _resetLocale()
 	{
-		$ret1 = setlocale(LC_ALL, 'en_US.UTF-8');
-		$ret2 = setlocale(LC_TIME, self::$locale);
+		// Try to set everything to an utf-8 standard
+		if ( !setlocale(LC_ALL, 'en_US.UTF-8') )
+		{
+			// Didn't work, use the default
+			if ( !setlocale(LC_ALL, null) )
+			{
+				self::$error = 'Cannot set locale, something is wrong wit your system';
+				return false;
+			}
+		}
 
-		return ($ret1 && $ret2);
+		// Overwrite time locales by config.php settings, so that we have
+		// timebased output from your language
+		// Note: This will be overwritten by the language module (if activated)
+		if ( !setlocale(LC_TIME, self::$locale) )
+		{
+			self::$error = 'You have defined a locale format in config.php that is not supported by your system: <strong>'.self::$locale.'</strong><br/>Consider adjusting that value.';
+			return false;
+		}
+		return true;
 	}
 
 	/****************************************** STATIC  FUNCTIONS ******************************************/

@@ -52,12 +52,11 @@ class Settings extends aBootTemplate
 	// used for output buffering
 	public static $ob_callback		= null;
 
+
+
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
 	public static function initialize($options = null)
 	{
-		self::_activateUTF8Encoding();
-
-
 		// INITIALIZE VALUES
 		self::$showPhpErrors	= $GLOBALS['SHOW_PHP_ERRORS'];
 		self::$showSqlErrors	= $GLOBALS['SHOW_SQL_ERRORS'];
@@ -74,15 +73,31 @@ class Settings extends aBootTemplate
 		self::$timezone			= $GLOBALS['DEFAULT_TIME_ZONE'];
 		self::$locale			= $GLOBALS['DEFAULT_LOCALE'];
 
-		// TODO: need to synchronize with mysql database timezone
-		self::_setTimeZone();
 
-		if ( !self::_setLocale() )
+		// DEBUGGING MODE
+		self::_setDebugging();
+
+		// CHARACTER ENCODING
+		if ( !self::_activateUTF8Encoding() )
 		{
-			self::$error = 'Cannot set locale, wrong format';
+			self::$error = '<h2>Error Setting Encoding</h2>'.self::$error;
 			return false;
 		}
 
+		// TIMEZONE
+		if ( !self::_setTimeZone() )
+		{
+			self::$error = '<h2>Error Setting Timezone</h2>'.self::$error;
+			return false;
+		}
+
+		// DATE OUTPUT FOR YOUR LOCALE
+		if ( !self::_setLocale() )
+		{
+			self::$error = '<h2>Error Setting Locale</h2>'.self::$error;
+			return false;
+		}
+		// Use custom output function in debug mode, otherwise use compression
 		self::$ob_callback = (self::$showPhpErrors) ? array('\Sweany\ErrorHandler', 'ob_error_handler') : 'ob_gzhandler';
 
 		return true;
@@ -95,7 +110,13 @@ class Settings extends aBootTemplate
 	private static function _activateUTF8Encoding()
 	{
 		ini_set('default_charset', 'UTF-8');
-		mb_internal_encoding('UTF-8');
+
+		if ( !mb_internal_encoding('UTF-8') )
+		{
+			self::$error = 'Cannot set internal encoding to UTF-8.<br/>mb_internal_encoding(\'UTF-8\'); failed unexpectedly';
+			return false;
+		}
+		return true;
 	}
 
 
@@ -122,16 +143,39 @@ class Settings extends aBootTemplate
 		}
 	}
 
+
 	private static function _setTimeZone()
 	{
-		date_default_timezone_set(self::$timezone);
+		if ( !date_default_timezone_set(self::$timezone) )
+		{
+			self::$error = 'You have specified an invalid timezone format in config.php: <strong>'.self::$timezone.'</strong>';
+			return false;
+		}
+		return true;
 	}
+
 
 	private static function _setLocale()
 	{
-		$ret1 = setlocale(LC_ALL, 'en_US.UTF-8');
-		$ret2 = setlocale(LC_TIME, self::$locale);
+		// Try to set everything to an utf-8 standard
+		if ( !setlocale(LC_ALL, 'en_US.UTF-8') )
+		{
+			// Didn't work, use the default
+			if ( !setlocale(LC_ALL, null) )
+			{
+				self::$error = 'Cannot set locale, something is wrong wit your system';
+				return false;
+			}
+		}
 
-		return ($ret1 && $ret2);
+		// Overwrite time locales by config.php settings, so that we have
+		// timebased output from your language
+		// Note: This will be overwritten by the language module (if activated)
+		if ( !setlocale(LC_TIME, self::$locale) )
+		{
+			self::$error = 'You have defined a locale format in config.php that is not supported by your system: <strong>'.self::$locale.'</strong><br/>Consider adjusting that value.';
+			return false;
+		}
+		return true;
 	}
 }
