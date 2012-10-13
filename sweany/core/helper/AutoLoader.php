@@ -31,7 +31,8 @@
  * + LoadModel
  * + LoadModule
  */
-Class Loader
+namespace Sweany;
+Class AutoLoader
 {
 
 	private static $classes = array();
@@ -289,4 +290,4 @@ Class Loader
 		return null;
 	}
 }
-spl_autoload_register(array('Loader', 'autoload'));
+spl_autoload_register(array('\Sweany\AutoLoader', 'autoload'));

@@ -226,7 +226,7 @@ abstract Class BaseController
 		// Therefor $this->blocks needs to be true in the BlockController
 		if ($this->hasModel)
 		{
-			$this->model	= Loader::loadModel(get_class($this), $this->plugin);
+			$this->model	= \Sweany\AutoLoader::loadModel(get_class($this), $this->plugin);
 		}
 	}
 

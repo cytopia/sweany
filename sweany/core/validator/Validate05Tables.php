@@ -71,7 +71,7 @@ class Validate05Tables extends aBootTemplate
 				if ( pathinfo(CORE_TABLE.DS.$file, PATHINFO_EXTENSION) == 'php' )
 				{
 					$file		= str_replace('Table.php', '', $file);
-					$tblClass	= \Loader::loadCoreTable($file);
+					$tblClass	= \Sweany\AutoLoader::loadCoreTable($file);
 
 					// ---------------- VALIDATE TABLE
 					if ( !$tblClass->table )
@@ -162,7 +162,7 @@ class Validate05Tables extends aBootTemplate
 				if ( pathinfo(USR_TABLES_PATH.DS.$file, PATHINFO_EXTENSION) == 'php' )
 				{
 					$file		= str_replace('Table.php', '', $file);
-					$tblClass	= \Loader::loadTable($file);
+					$tblClass	= \Sweany\AutoLoader::loadTable($file);
 
 									// ---------------- VALIDATE TABLE
 					if ( !$tblClass->table )
@@ -261,7 +261,7 @@ class Validate05Tables extends aBootTemplate
 							if ( pathinfo(USR_PLUGINS_PATH.DS.$plugin.DS.'tables'.DS.$file, PATHINFO_EXTENSION) == 'php')
 							{
 								$file		= str_replace('Table.php', '', $file);
-								$tblClass	= \Loader::loadPluginTable($file, $plugin);
+								$tblClass	= \Sweany\AutoLoader::loadPluginTable($file, $plugin);
 
 								// ---------------- VALIDATE TABLE
 								if ( !$tblClass->table )
@@ -678,11 +678,11 @@ class Validate05Tables extends aBootTemplate
 					foreach ($aliasNames as $aName)
 					{
 						if ($core) {
-							$recTable = \Loader::LoadCoreTable($className);
+							$recTable = \Sweany\AutoLoader::LoadCoreTable($className);
 						} else if ($plugin) {
-							$recTable = \Loader::LoadPluginTable($className, $plugin);
+							$recTable = \Sweany\AutoLoader::LoadPluginTable($className, $plugin);
 						} else {
-							$recTable = \Loader::LoadTable($className);
+							$recTable = \Sweany\AutoLoader::LoadTable($className);
 						}
 
 						// check if the relation to follow has been defined as array

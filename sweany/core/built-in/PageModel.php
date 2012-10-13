@@ -62,13 +62,13 @@ abstract Class PageModel
 					foreach ($table as $pluginTable)
 					{
 						$new_var		= $pluginTable;
-						$this->$new_var	= Loader::loadPluginTable($pluginTable, $plugin);
+						$this->$new_var	= \Sweany\AutoLoader::loadPluginTable($pluginTable, $plugin);
 					}
 				}
 				else
 				{
 					$new_var		= $table;
-					$this->$new_var = Loader::loadTable($table);
+					$this->$new_var = \Sweany\AutoLoader::loadTable($table);
 				}
 			}
 		}

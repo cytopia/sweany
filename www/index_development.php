@@ -134,11 +134,7 @@ require(CORE_BOOTSTRAP.DS.'Users.php');
 require(CORE_HELPER.DS.'SysLog.php');
 require(CORE_HELPER.DS.'History.php');
 require(CORE_HELPER.DS.'Render.php');
-
-/*
- * Load Framework Actions
- */
-require(CORE_PATH.DS.'Loader.php');
+require(CORE_HELPER.DS.'AutoLoader.php');
 
 /*
  * Load Framework Structure Template Files
@@ -273,7 +269,7 @@ if ( $GLOBALS['SQL_ENABLE'] == true )
 	// Log visitors to SQL
 	if ( $GLOBALS['SQL_LOG_VISITORS_ENABLE'] == true )
 	{
-		$logger = Loader::loadCoreTable('Visitors');
+		$logger = \Sweany\AutoLoader::loadCoreTable('Visitors');
 		$logger->save();
 	}
 }

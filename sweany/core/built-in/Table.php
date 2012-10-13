@@ -1374,12 +1374,12 @@ class Table
 
 					if ($core)
 					{
-						$oTable = Loader::loadCoreTable($class);
+						$oTable = \Sweany\AutoLoader::loadCoreTable($class);
 					}
 					else
 					{
 						$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-						$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+						$oTable = $plugin ? \Sweany\AutoLoader::loadPluginTable($class, $plugin) : \Sweany\AutoLoader::loadTable($class);
 					}
 
 					// do not limit recursion
@@ -1461,12 +1461,12 @@ class Table
 
 					if ($core)
 					{
-						$oTable = Loader::loadCoreTable($class);
+						$oTable = \Sweany\AutoLoader::loadCoreTable($class);
 					}
 					else
 					{
 						$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-						$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+						$oTable = $plugin ? \Sweany\AutoLoader::loadPluginTable($class, $plugin) : \Sweany\AutoLoader::loadTable($class);
 					}
 
 					// do not limit recursion
@@ -1556,12 +1556,12 @@ class Table
 
 				if ($core)
 				{
-					$oTable = Loader::loadCoreTable($class);
+					$oTable = \Sweany\AutoLoader::loadCoreTable($class);
 				}
 				else
 				{
 					$plugin	= isset($properties['plugin'])? $properties['plugin']: null;
-					$oTable = $plugin ? Loader::loadPluginTable($class, $plugin) : Loader::loadTable($class);
+					$oTable = $plugin ? \Sweany\AutoLoader::loadPluginTable($class, $plugin) : \Sweany\AutoLoader::loadTable($class);
 				}
 
 				// need to overwrite the alias, as we could define

@@ -39,7 +39,7 @@ class Render
 	public static function block($pluginName, $controllerName, $methodName, $params)
 	{
 		// 01) Load in instantiate block
-		$block = \Loader::loadBlock($controllerName, $pluginName);
+		$block = \Sweany\AutoLoader::loadBlock($controllerName, $pluginName);
 
 		if ( !method_exists(get_class($block), $methodName) )
 		{
