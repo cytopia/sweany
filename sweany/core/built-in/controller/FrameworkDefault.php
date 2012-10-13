@@ -108,19 +108,19 @@ class FrameworkDefault extends PageController
 
 				if ( !$GLOBALS['LANGUAGE_ENABLE'] )
 				{
-					\Sweany\SysLog::e($GLOBALS['DEFAULT_SETTINGS_URL'], 'Language Module is not activated, cannot change Language to: '.$value);
+					\Sweany\SysLog::e('built-in', $GLOBALS['DEFAULT_SETTINGS_URL'], 'Language Module is not activated, cannot change Language to: '.$value);
 					$this->redirectBack();
 					exit;
 				}
 
 				if ( !in_array($value, array_keys($GLOBALS['LANGUAGE_AVAILABLE'])) )
 				{
-					\SysLog::e($GLOBALS['DEFAULT_SETTINGS_URL'], 'Language: <b>'.$value.'</b> does not exist.');
+					\SysLog::e('built-in', $GLOBALS['DEFAULT_SETTINGS_URL'], 'Language: <b>'.$value.'</b> does not exist.');
 					$this->redirectBack();
 					exit;
 				}
 
-				\Sweany\SysLog::i($GLOBALS['DEFAULT_SETTINGS_URL'], 'Changing Language to: '.$value);
+				\Sweany\SysLog::i('built-in', $GLOBALS['DEFAULT_SETTINGS_URL'], 'Changing Language to: '.$value);
 
 				/*
 				 * Set language to the core part of the xml file

@@ -98,6 +98,8 @@ Class Language extends aBootTemplate
 
 
 
+	private static $log_section = 'core-module';
+	private static $log_title	= 'Language';
 
 
 	/****************************************** CORE MODULE INITIALIZER ******************************************/
@@ -176,7 +178,7 @@ Class Language extends aBootTemplate
 	 */
 	public static function changeLanguage($short_lang = 'en')
 	{
-		\Sweany\SysLog::i('Language', 'Change to '.$short_lang);
+		\Sweany\SysLog::i(self::$log_section, self::$log_title, 'Change to '.$short_lang);
 		\Sweany\Session::set('language', array('short' => $short_lang));
 
 		// Need to reload the file (as it has changed)
@@ -207,11 +209,11 @@ Class Language extends aBootTemplate
 
 		if ($plugin)
 		{
-			\Sweany\SysLog::i('Language', '[Plugin] Setting path for: ['.$type.'] to: '.$path);
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, '[Plugin] Setting path for: ['.$type.'] to: '.$path);
 		}
 		else
 		{
-			\Sweany\SysLog::i('Language', 'Setting path for: ['.$type.'] to: '.$path);
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, 'Setting path for: ['.$type.'] to: '.$path);
 		}
 	}
 
@@ -284,7 +286,7 @@ Class Language extends aBootTemplate
 		// otherwise there will be a lot of errors and strange results
 		if ( !isset($tmp[0]) )
 		{
-			\Sweany\SysLog::e('Language', '['.$path.'"]['.$key.'] does not exist');
+			\Sweany\SysLog::e(self::$log_section, self::$log_title, '['.$path.'"]['.$key.'] does not exist');
 
 			// return empty string to prevent php notice, if debugging is off
 			if ( \Sweany\Settings::$showPhpErrors == 0)
@@ -292,7 +294,7 @@ Class Language extends aBootTemplate
 		}
 		if ( !count($tmp[0]->$key ) )
 		{
-			\Sweany\SysLog::e('Language', '['.$path.'"]['.$key.'] does not exist');
+			\Sweany\SysLog::e(self::$log_section, self::$log_title, '['.$path.'"]['.$key.'] does not exist');
 
 			// return empty string to prevent php notice, if debugging is off
 			if ( \Sweany\Settings::$showPhpErrors == 0)
@@ -318,7 +320,7 @@ Class Language extends aBootTemplate
 		// otherwise there will be a lot of errors and strange results
 		if ( !isset($this->_store[0]) )
 		{
-			\Sweany\SysLog::e('Language', '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
+			\Sweany\SysLog::e(self::$log_section, self::$log_title, '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
 
 			// return empty string to prevent php notice, if debugging is off
 			if ( \Sweany\Settings::$showPhpErrors == 0)
@@ -326,7 +328,7 @@ Class Language extends aBootTemplate
 		}
 		if ( !count($this->_store[0]->$key) && !count(self::$_sstore[0]->$key) )
 		{
-			\Sweany\SysLog::e('Language', '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
+			\Sweany\SysLog::e(self::$log_section, self::$log_title, '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
 
 			// return empty string to prevent php notice, if debugging is off
 			if ( \Sweany\Settings::$showPhpErrors == 0)
@@ -372,14 +374,14 @@ Class Language extends aBootTemplate
 			// Use the default language
 			if ( !file_exists($file) )
 			{
-				\Sweany\SysLog::w('Language', '[Choose] File does not exist - Using default');
+				\Sweany\SysLog::w(self::$log_section, self::$log_title, '[Choose] File does not exist - Using default');
 				$short = $GLOBALS['LANGUAGE_DEFAULT_SHORT'];
 			}
 		}
 		// No Session yet, so create it based on the default language
 		else
 		{
-			\Sweany\SysLog::w('Language', '[Choose] Session does not exist - Using default');
+			\Sweany\SysLog::w(self::$log_section, self::$log_title, '[Choose] Session does not exist - Using default');
 			$short	= $GLOBALS['LANGUAGE_DEFAULT_SHORT'];
 			\Sweany\Session::set('language', array('short' => $short));
 		}
@@ -418,7 +420,7 @@ Class Language extends aBootTemplate
 		 */
 		if ( array_key_exists($plugin, self::$language) )
 		{
-			\Sweany\SysLog::i('Language', '[Plugin] '.$lang_short.'.xml already loaded for ['.$plugin.'-plugin]. Skipping...');
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, '[Plugin] '.$lang_short.'.xml already loaded for ['.$plugin.'-plugin]. Skipping...');
 			return true;
 		}
 		else
@@ -433,12 +435,12 @@ Class Language extends aBootTemplate
 			if ( file_exists($xml_file) )
 			{
 				self::$language[$plugin] = simplexml_load_file($xml_file);
-				\Sweany\SysLog::i('Language', '[Plugin] First Load of '.$lang_short.'.xml for ['.$plugin.'-plugin]');
+				\Sweany\SysLog::i(self::$log_section, self::$log_title, '[Plugin] First Load of '.$lang_short.'.xml for ['.$plugin.'-plugin]');
 				return true;
 			}
 			else
 			{
-				\Sweany\SysLog::e('Language', '[Plugin] File does not exist for ['.$plugin.'-plugin]: '.$xml_file);
+				\Sweany\SysLog::e(self::$log_section, self::$log_title, '[Plugin] File does not exist for ['.$plugin.'-plugin]: '.$xml_file);
 				return false;
 			}
 		}

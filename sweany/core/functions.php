@@ -105,3 +105,9 @@ function debug($arr)
 	print_r($arr);
 	echo '</pre>';
 }
+function dump($arr)
+{
+	echo '<pre>';
+	var_dump($arr);
+	echo '</pre>';
+}

@@ -16,6 +16,8 @@ class mysql extends aBootTemplate implements iDBO
 	public static $srvTime		= null;
 	public static $srvTimeOff	= null;
 
+	private static $totalQueryTime = 0;
+
 
 
 	/* ************************************************************************************************************************** *
@@ -64,8 +66,9 @@ class mysql extends aBootTemplate implements iDBO
 
 	public static function cleanup()
 	{
-		if (is_object(self::$link))
+		if (is_object(self::$link)) {
 			mysql_close(self::$link);
+		}
 	}
 
 
@@ -125,7 +128,7 @@ class mysql extends aBootTemplate implements iDBO
 
 		if (!$result)
 		{
-			SysLog::sqlError('select', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
+			SysLog::e('sql', 'select', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
 			return (-1);
 		}
 
@@ -144,11 +147,12 @@ class mysql extends aBootTemplate implements iDBO
 			}
 		}
 
-		if (!mysql_free_result($result))
-			SysLog::sqlError('Cannot Free Result', 'mysql_free_result failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
+		if (!mysql_free_result($result)) {
+			SysLog::sqlError('sql', 'Cannot Free Result', $query, 'mysql_free_result failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
+		}
 
-		SysLog::sqlAppendTime($time);
-		SysLog::sqlInfo('select', null, $query, $data, $time);
+		SysLog::time('sql', $time);
+		SysLog::i('sql-query', 'select', $query, $data, $time);
 
 		return ($data);
 	}
@@ -181,12 +185,12 @@ class mysql extends aBootTemplate implements iDBO
 
 		if ( !isset($data[0][$field]) )
 		{
-			SysLog::sqlWarn('fetchField', 'returning empty field', self::$query, $data);
+			SysLog::w('sql', 'fetchField', 'returning empty field', $data);
 			return null;
 		}
 		if ( count($data) > 1 )
 		{
-			SysLog::sqlWarn('fetchField', 'result hash more than one row', self::$query, $data);
+			SysLog::w('sql', 'fetchField', 'result hash more than one row', $data);
 		}
 		return $data[0][$field];
 	}
@@ -305,11 +309,11 @@ class mysql extends aBootTemplate implements iDBO
 
 		if (!$result)
 		{
-			SysLog::sqlError('insertRow', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
+			SysLog::e('sql', 'insert', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
 			return false;
 		}
-		SysLog::sqlAppendTime($time);
-		SysLog::sqlInfo('insertRow', null, $query, null, $time);
+		SysLog::time('sql', $time);
+		SysLog::i('sql-query', 'insert', $query, null, $time);
 
 		// return last insert id ?
 		return ($ret_ins_id) ? $this->_getLastInsertId() : true;
@@ -352,13 +356,12 @@ class mysql extends aBootTemplate implements iDBO
 
 		if (!$result)
 		{
-			SysLog::sqlError('update', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
+			SysLog::e('sql', 'update', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
 			return false;
 		}
 
-		SysLog::sqlAppendTime($time);
-		SysLog::sqlInfo('update', null, $query, null, $time);
-
+		SysLog::time('sql', $time);
+		SysLog::i('sql-query', 'update', $query, null, $time);
 		return true;
 	}
 
@@ -424,12 +427,12 @@ class mysql extends aBootTemplate implements iDBO
 
 		if (!$result)
 		{
-			SysLog::sqlError('incrementField', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
+			SysLog::e('sql', 'incrementField', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
 			return false;
 		}
 
-		SysLog::sqlAppendTime($time);
-		SysLog::sqlInfo('incrementFields', $incFields, $query, null, $time);
+		SysLog::time('sql', $time);
+		SysLog::i('sql-query', 'incrementField', $query, null, $time);
 
 		return true;
 	}
@@ -465,12 +468,12 @@ class mysql extends aBootTemplate implements iDBO
 
 		if (!$result)
 		{
-			SysLog::sqlError('delete', 'mysql_query failed', $query, array(mysql_errno(self::$link),mysql_error(self::$link), $time));
+			SysLog::e('sql', 'delete', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
 			return false;
 		}
 
-		SysLog::sqlAppendTime($time);
-		SysLog::sqlInfo('delete', null, $query, null, $time);
+		SysLog::time('sql', $time);
+		SysLog::i('sql-query', 'delete', $query, null, $time);
 
 		return true;
 	}
@@ -510,7 +513,7 @@ class mysql extends aBootTemplate implements iDBO
 
 	public function tableExists($table)
 	{
-		$query = 'show tables like "'.$table.'"';
+		$query = 'SHOW TABLES LIKE "'.$table.'"';
 		$data	= $this->select($query, function($row, &$data){ $data = $row; });
 		return (bool)count($data);
 	}
@@ -519,27 +522,27 @@ class mysql extends aBootTemplate implements iDBO
 	public function getColumnNames($table)
 	{
 		$query = 'SELECT
-					COLUMN_NAME AS name
+					`COLUMN_NAME` AS `name`
 				FROM
-					information_schema.columns
+					`information_schema`.`columns`
 				WHERE
-					TABLE_SCHEMA = DATABASE()
+					`TABLE_SCHEMA` = DATABASE()
 				AND
-					TABLE_NAME = \''.$table.'\'';
+					`TABLE_NAME` = \''.$table.'\'';
 
 		return $this->select($query, function($row, &$data){ $data[] = $row['name']; });
 	}
 	public function getColumnTypes($table)
 	{
 		$query = 'SELECT
-					COLUMN_NAME AS name,
-					DATA_TYPE AS `type`
+					`COLUMN_NAME` AS `name`,
+					`DATA_TYPE` AS `type`
 				FROM
-					information_schema.columns
+					`information_schema`.`columns`
 				WHERE
-					TABLE_SCHEMA = DATABASE()
+					`TABLE_SCHEMA` = DATABASE()
 				AND
-					TABLE_NAME = \''.$table.'\'';
+					`TABLE_NAME` = \''.$table.'\'';
 
 		return $this->select($query, function($row, &$data){ $data[$row['name']] = $row['type']; });
 	}
@@ -547,19 +550,19 @@ class mysql extends aBootTemplate implements iDBO
 	public function getPrimaryKey($table)
 	{
 		$query = 'SELECT
-					k.COLUMN_NAME AS pk
+					`k`.`COLUMN_NAME` AS `pk`
 				FROM
-					information_schema.table_constraints AS t
+					`information_schema`.`table_constraints` AS `t`
 				LEFT JOIN
-					information_schema.key_column_usage k
+					`information_schema`.`key_column_usage` AS `k`
 				USING
-					(constraint_name,table_schema,table_name)
+					(`constraint_name`,`table_schema`,`table_name`)
 				WHERE
-					t.constraint_type=\'PRIMARY KEY\'
+					`t`.`constraint_type`=\'PRIMARY KEY\'
 				AND
-					t.table_schema=DATABASE()
+					`t`.`table_schema`=DATABASE()
 				AND
-					t.table_name=\''.$table.'\'';
+					`t`.`table_name`=\''.$table.'\'';
 
 		return $this->select($query, function($row, &$data){ $data[] = $row['pk']; });
 	}
@@ -579,10 +582,10 @@ class mysql extends aBootTemplate implements iDBO
 
 	private function _getLastInsertId()
 	{
-		$result	= mysql_query('SELECT LAST_INSERT_ID() AS id');
+		$result	= mysql_query('SELECT LAST_INSERT_ID() AS `id`');
 		$row	= mysql_fetch_array($result, MYSQL_ASSOC);
 		$id		= $row['id'];
-		SysLog::sqlInfo('lastInsertId', $id, null, null);
+		SysLog::i('sql', 'lastInsertId', $id);
 		return $id;
 	}
 
@@ -627,5 +630,10 @@ class mysql extends aBootTemplate implements iDBO
 		};
 		array_walk($vars, $fPrepare);
 		return str_replace(array_keys($vars), array_values($vars), $stmt);
+	}
+
+	public function getTotalQueryTime()
+	{
+
 	}
 }

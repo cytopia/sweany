@@ -31,6 +31,7 @@
 <?php Css::addFile('/css/style.css'); /*use wrapper here, so it can decide whether or not to apply ECSS on them */?>
 <?php Css::addFile('/css/layout.css');/*use wrapper here, so it can decide whether or not to apply ECSS on them */?>
 <?php echo Css::getFiles();?>
+<?php echo Css::getInlineCss();	/*inline CSS Code*/?>
 	<!-- / CSS Stylesheet -->
 
 	<!-- Javascript -->

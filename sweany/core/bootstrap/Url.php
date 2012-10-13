@@ -39,7 +39,8 @@ class Url extends aBootTemplate
 
 	private static $urlParams	= null;
 
-
+	private static $log_section = 'core';
+	private static $log_title	= 'URL';
 
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
 
@@ -83,7 +84,7 @@ class Url extends aBootTemplate
 		// Custom seo controller name :-)
 		if ( isset($CUSTOM_ROUTING[self::$urlParams[0]]['controller']) && strlen($CUSTOM_ROUTING[self::$urlParams[0]]['controller']) )
 		{
-			\Sweany\SysLog::i('Seo-URL', '[SEO] <span style="color:yellow;">'.self::$urlParams[0].'</span> =&gt; <strong style="color:white;">class</strong> <strong style="color:green;">'.$CUSTOM_ROUTING[self::$urlParams[0]]['controller'].'</strong>');
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, '[SEO] <span style="color:yellow;">'.self::$urlParams[0].'</span> =&gt; <strong style="color:white;">class</strong> <strong style="color:green;">'.$CUSTOM_ROUTING[self::$urlParams[0]]['controller'].'</strong>');
 			return $CUSTOM_ROUTING[self::$urlParams[0]]['controller'];
 		}
 

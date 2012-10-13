@@ -41,8 +41,9 @@ class SysLog
 	 * (if debug level is set in config.php)
 	 *
 	 */
-	private static $baseStore	= array();
-	private static $dbStore		= array();
+	private static $store		= array();
+
+	private static $dec_digits	= 6;
 
 	private static $timeStore	= array(
 		'httpd'	=> 0,		// webserver reaction time
@@ -53,12 +54,206 @@ class SysLog
 		'total'	=> 0,		// total script execution time
 	);
 
-	private static $queryTime	= 0;
 
 
 
 
 	/******************************************  F U N C T I O N S  ******************************************/
+
+
+
+	/**
+	 *
+	 * Handle Logging of errors (stdout and file)
+	 *
+	 *
+	 * @param string 			$section		Error Section
+	 * @param string 			$title			Error Title
+	 * @param string 			$message		Error Message
+	 * @param string|string[]	$description	String or array of strings of additional descriptions
+	 * @param float				$time			Time of execution in miliseconds
+	 * @param integer			$start_time		Unix timestamp of starting time
+	 */
+	public static function e($section, $title, $message, $description = null, $time = null, $start_time = null)
+	{
+		// Append information to logfile
+		if ( \Sweany\Settings::$logFwErrors ) {
+			// calculate time
+			if ($time) {
+				$f_time = sprintf('%.'.self::$dec_digits.'F', $time).'s';
+			}
+			else if (!$time && $start_time) {
+				$f_time = sprintf('%.'.self::$dec_digits.'F',microtime(true)-$start_time).'s';
+			}
+			self::_logToFile('error', $section, $title, $message, $description, $f_time);
+		}
+
+		// Only return here if settings allow and also if we do not break on error
+		if ( !\Sweany\Settings::$showFwErrors && !$GLOBALS['BREAK_ON_ERROR'] ) {
+			return;
+		}
+
+		// re-use time if has already been calculated
+		if ( !$f_time ) {
+			if ($time) {
+				$f_time = sprintf('%.'.self::$dec_digits.'F', $time).'s';
+			} else {
+				$f_time = $start_time ? sprintf('%.'.self::$dec_digits.'F',microtime(true)-$start_time).'s' : '';
+			}
+		}
+
+		$store = array(
+			'time'		=> $time,
+			'type'		=> 'error',
+			'section'	=> $section,
+			'title'		=> $title,
+			'message'	=> $message,
+			'description'=>$description,
+			'error'		=> error_get_last(),
+			'trace'		=> debug_backtrace(),
+		);
+		self::$store[] = $store;
+
+		// Check for break on error!!!
+		if ( $GLOBALS['BREAK_ON_ERROR'] ) {
+			echo '<h1 style="color:red">Break on Framework Error</h1>';
+			self::show();
+			exit();
+		}
+	}
+
+
+
+	/**
+	 *
+	 * Handle Logging of warnings (stdout and file)
+	 *
+	 *
+	 * @param string 			$section		Warning Section
+	 * @param string 			$title			Warning Title
+	 * @param string 			$message		Warning Message
+	 * @param string|string[]	$description	String or array of strings of additional descriptions
+	 * @param float				$time			Time of execution in miliseconds
+	 * @param integer			$start_time		Unix timestamp of starting time
+	 */
+	public static function w($section, $title, $message, $description = null, $time = null, $start_time = null)
+	{
+		$f_time = null;
+
+		// Append information to logfile
+		if ( \Sweany\Settings::$logFwErrors > 1 ) {
+			// calculate time
+			if ($time) {
+				$f_time = sprintf('%.'.self::$dec_digits.'F', $time).'s';
+			}
+			else if (!$time && $start_time) {
+				$f_time = sprintf('%.'.self::$dec_digits.'F',microtime(true)-$start_time).'s';
+			}
+			self::_logToFile('warning', $section, $title, $message, $description, $f_time);
+		}
+
+		if ( !\Sweany\Settings::$showFwErrors > 1 ) {
+			return;
+		}
+
+		// re-use time if has already been calculated
+		if ( !$f_time ) {
+			if ($time) {
+				$f_time = sprintf('%.'.self::$dec_digits.'F', $time).'s';
+			} else {
+				$f_time = $start_time ? sprintf('%.'.self::$dec_digits.'F',microtime(true)-$start_time).'s' : '';
+			}
+		}
+
+		$store = array(
+			'time'		=> $time,
+			'type'		=> 'warning',
+			'section'	=> $section,
+			'title'		=> $title,
+			'message'	=> $message,
+			'description'=>$description,
+			'error'		=> error_get_last(),
+			'trace'		=> null,
+		);
+		self::$store[] = $store;
+
+		if ( $store['error'] && $GLOBALS['BREAK_ON_ERROR'] ) {
+			echo '<h1 style="color:red">Break on Framework Error</h1>';
+			self::show();
+			exit();
+		}
+	}
+
+
+
+	/**
+	 *
+	 * Handle Logging of info (stdout and file)
+	 *
+	 *
+	 * @param string 			$section		Info Section
+	 * @param string 			$title			Info Title
+	 * @param string 			$message		Info Message
+	 * @param string|string[]	$description	String or array of strings of additional descriptions
+	 * @param float				$time			Time of execution in miliseconds
+	 * @param integer			$start_time		Unix timestamp of starting time
+	 */
+	public static function i($section, $title, $message, $description = null, $time = null, $start_time = null)
+	{
+		$f_time = null;
+
+		// Append information to logfile
+		if ( \Sweany\Settings::$logFwErrors > 2 ) {
+			// calculate time
+			if ($time) {
+				$f_time = sprintf('%.'.self::$dec_digits.'F', $time).'s';
+			}
+			else if (!$time && $start_time) {
+				$f_time = sprintf('%.'.self::$dec_digits.'F',microtime(true)-$start_time).'s';
+			}
+			self::_logToFile('info', $section, $title, $message, $description, $f_time);
+		}
+
+		if ( !\Sweany\Settings::$showFwErrors > 2 ) {
+			return;
+		}
+
+		// re-use time if has already been calculated
+		if ( !$f_time ) {
+			if ($time) {
+				$f_time = sprintf('%.'.self::$dec_digits.'F', $time).'s';
+			} else {
+				$f_time = $start_time ? sprintf('%.'.self::$dec_digits.'F',microtime(true)-$start_time).'s' : '';
+			}
+		}
+
+		$store = array(
+			'time'		=> $f_time,
+			'type'		=> 'info',
+			'section'	=> $section,
+			'title'		=> $title,
+			'message'	=> $message,
+			'description'=>$description,
+			'error'		=> error_get_last(),
+			'trace'		=> null,
+		);
+		self::$store[] = $store;
+
+		if ( $store['error'] && $GLOBALS['BREAK_ON_ERROR'] ) {
+			echo '<h1 style="color:red">Break on Framework Error</h1>';
+			self::show();
+			exit();
+		}
+	}
+
+
+
+	/**
+	 * Log Total execution times of different types
+	 *
+	 * @param string	$type	Type of operation
+	 * @param float		$val	Time in miliseconds
+	 */
 	public static function time($type, $val)
 	{
 		if ( is_array($type) ) {
@@ -68,168 +263,19 @@ class SysLog
 		}
 	}
 
+
+
 	/**
+	 * Show SysLog Output (or return)
 	 *
-	 * Handle Logging of errors (stdout and file)
-	 *
-	 *
-	 * @param String $title
-	 * 		Title for the error
-	 *
-	 * @param String $message
-	 * 		Error message
-	 *
-	 * @param Array $trace
-	 * 		Debug backtrace array (if desired)
-	 *
-	 * @param Array $start_time
-	 * 		If specified, the logger will calculate the execution time
-	 *
-	 * @param Boolean $log_to_stdout
-	 * 		Override the Settings' loglevel for output loggin
-	 * 		This can be useful for the very start
-	 * 		When the Settings' Loglevel has not been initialized yet
-	 *
-	 * @param Boolean $log_to_file
-	 * 		Override the Settings' loglevel for file logging
-	 * 		This can be useful for the very start
-	 * 		When the Settings' Loglevel has not been initialized yet
+	 * @param	boolean			$return	Wheter to return the string, instead of displaying
+	 * @return	void|string		Error message (as string) or nothing
 	 */
-
-	public static function e($title, $message, $trace = null, $start_time = null, $log_to_stdout = false, $log_to_file = false)
-	{
-		// Append information to logfile
-		if ( \Sweany\Settings::$logFwErrors || $log_to_file )
-		{
-			self::_logToFile('ERROR', $title, $message);
-		}
-
-		// Only return here if settings allow and also if we do not break on error
-		if ( !(\Sweany\Settings::$showFwErrors || $log_to_stdout) && !$GLOBALS['BREAK_ON_ERROR'] )
-			return;
-
-		$time = ($start_time) ? sprintf('%.6F',microtime(true)-$start_time).'s' : '';
-		self::_store('baseStore', 'ERROR', $title, $message, $trace, $time, $log_to_stdout, $log_to_file);
-
-		// Check for break on error!!!
-		if ( $GLOBALS['BREAK_ON_ERROR'] )
-		{
-			echo '<h1 style="color:red">Break on Framework Error</h1>';
-			self::show();
-			exit();
-		}
-	}
-
-	public static function w($title, $message, $trace = null, $start_time = null, $log_to_stdout = false, $log_to_file = false)
-	{
-		// Append information to logfile
-		if ( \Sweany\Settings::$logFwErrors > 1 || $log_to_file )
-		{
-			self::_logToFile('WARNING', $title, $message);
-		}
-
-		if ( !(\Sweany\Settings::$showFwErrors > 1 || $log_to_stdout) )
-			return;
-
-		$time = ($start_time) ? sprintf('%.6F',microtime(true)-$start_time).'s' : '';
-		self::_store('baseStore', 'WARNING', $title, $message, $trace, $time, $log_to_stdout, $log_to_file);
-
-		if ( error_get_last() &&  $GLOBALS['BREAK_ON_ERROR'] )
-		{
-			echo '<h1 style="color:red">Break on Framework Error</h1>';
-			self::show();
-			exit();
-		}
-	}
-
-	public static function i($title, $message, $trace = null, $start_time = null, $log_to_stdout = false, $log_to_file = false)
-	{
-		// Append information to logfile
-		if ( \Sweany\Settings::$logFwErrors > 2 || $log_to_file )
-		{
-			self::_logToFile('INFO', $title, $message);
-		}
-
-		if ( !(\Sweany\Settings::$showFwErrors > 2 || $log_to_stdout) )
-			return;
-
-		$time = ($start_time) ? sprintf('%.6F',microtime(true)-$start_time).'s' : '';
-		self::_store('baseStore', 'INFO', $title, $message, $trace, $time, $log_to_stdout, $log_to_file);
-
-		if ( error_get_last() &&  $GLOBALS['BREAK_ON_ERROR'] )
-		{
-			echo '<h1 style="color:red">Break on Framework Error</h1>';
-			self::show();
-			exit();
-		}
-	}
-
-
-	public static function sqlError($title, $message, $query, $error = array(), $time = null)
-	{
-		// Append information to logfile
-		if ( \Sweany\Settings::$logSqlErrors )
-		{
-			self::_logToFile('ERROR', $title, self::_formatSQLMessageForFile($message, $query, null, $error));
-		}
-
-		if ( !\Sweany\Settings::$showSqlErrors && !$GLOBALS['BREAK_ON_ERROR'])
-			return;
-
-		self::_store('dbStore', 'ERROR', $title, self::_formatSQLMessageForHTML($message, $query, null, $error), null, $time);
-
-		// Check for break on error!!!
-		if ( $GLOBALS['BREAK_ON_ERROR'] )
-		{
-			echo '<h1 style="color:red">Break on SQL Error</h1>';
-			self::show();
-			exit();
-		}
-	}
-
-	public static function sqlWarn($title, $message, $query, $output, $time = null)
-	{
-		// Append information to logfile
-		if ( \Sweany\Settings::$logSqlErrors > 1 )
-		{
-			self::_logToFile('WARNING', $title, self::_formatSQLMessageForFile($message, $query, $output, null));
-		}
-
-		if ( \Sweany\Settings::$showSqlErrors < 2 )
-			return;
-
-		self::_store('dbStore', 'WARNING', $title, self::_formatSQLMessageForHTML($message, $query, $output, null), null, $time);
-	}
-
-	public static function sqlInfo($title, $message, $query, $output, $time = null)
-	{
-		// Append information to logfile
-		if ( \Sweany\Settings::$logSqlErrors > 2 )
-		{
-			self::_logToFile('INFO', $title, self::_formatSQLMessageForFile($message, $query, $output, null));
-		}
-
-		if ( \Sweany\Settings::$showSqlErrors < 3 )
-			return;
-
-		self::_store('dbStore', 'INFO', $title, self::_formatSQLMessageForHTML($message, $query, $output, null), null, $time);
-	}
-
-	public static function sqlAppendTime($time)
-	{
-		if ( !\Sweany\Settings::$showSqlErrors )
-			return;
-
-		self::$queryTime += $time;
-	}
-
-
-
 	public static function show($return = false)
 	{
 		if ( !(\Sweany\Settings::$showPhpErrors ||
 			 \Sweany\Settings::$showFwErrors ||
-			 \Sweany\Settings::$showSqlErrors ) && $return == false)
+			 \Sweany\Settings::$showSqlErrors ) )
 			return;
 
 		$pre  	= '<style type="text/css">'.
@@ -278,24 +324,36 @@ class SysLog
 		$error .= '<table>';
 
 
+
+
 		// ---------------- Timings
+		$error	.= '<tr><td colspan=6>';
+		$error	.= '<span style="font-size:18px; font-weight:bold;font-family:courier;">Timings</span>';
+		$error	.= '</td></tr>';
+
+
 		$error	.= '<tr>';
 		$error	.=		'<td>'.sprintf('%f', round($GLOBALS['SERVER_REACTION_TIME'], 10)).'s</td>';
 		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>external</strong></td>';
 		$error	.=		'<td><strong>HTTPD</strong></td>';
 		$error	.=		'<td>Webserver reaction time<div style="position:relative;left:50px;">+ The time it takes the webserver to parse the first file to php<br/>+ If this is slow, tune your webserver!</div></td>';
+		$error	.=		'<td></td>';
 		$error	.= '</tr>';
 		$error	.= '<tr>';
-		$error	.=		'<td>'.sprintf('%f', round(self::$queryTime, 10)).'s</td>';
+		$error	.=		'<td>'.sprintf('%f', round(self::$timeStore['sql'], 10)).'s</td>';
 		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
 		$error	.=		'<td><strong>SQL</strong></td>';
 		$error	.=		'<td>Total SQL execution time</td>';
+		$error	.=		'<td></td>';
 		$error	.= '</tr>';
 		$error	.= '<tr>';
 		$error	.=		'<td>'.sprintf('%f', round(self::$timeStore['core'], 10)).'s</td>';
 		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>core</strong></td>';
 		$error	.=		'<td><strong>Sweany Core</strong></td>';
 		$error	.=		'<td>Sweany core execution time<div style="position:relative;left:50px;">+ The time it takes until the whole sweany core has been fully executed<br/>+ Turn off VALIDATION_MODE to see the actual core speed!</div></td>';
+		$error	.=		'<td></td>';
 		$error	.= '</tr>';
 
 		$t_blocktime = 0;
@@ -305,143 +363,132 @@ class SysLog
 			$error	.= '<tr>';
 			$error	.=		'<td>'.sprintf('%f', round($blocktime, 10)).'s</td>';
 			$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+			$error	.=		'<td><strong>user</strong></td>';
 			$error	.=		'<td><strong>Block</strong></td>';
 			$error	.=		'<td>'.$block.'</td>';
+			$error	.=		'<td></td>';
 			$error	.= '</tr>';
 		}
 		$error	.= '<tr>';
 		$error	.=		'<td>'.sprintf('%f', round($t_blocktime, 10)).'s</td>';
 		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>user</strong></td>';
 		$error	.=		'<td><strong>All Blocks</strong></td>';
 		$error	.=		'<td>Total Block execution time</td>';
+		$error	.=		'<td></td>';
 		$error	.= '</tr>';
 		$error	.= '<tr>';
 		$error	.=		'<td>'.sprintf('%f', round(self::$timeStore['total']-self::$timeStore['core'], 10)).'s</td>';
 		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>user</strong></td>';
 		$error	.=		'<td><strong>User</strong></td>';
 		$error	.=		'<td>Total User generated code execution time<div style="position:relative;left:50px;">+ The execution time of the code that you have written (including SQL)<br/>+ If this is slow I can\'t help you!</div></td>';
+		$error	.=		'<td></td>';
 		$error	.= '</tr>';
 		$error	.= '<tr>';
 		$error	.=		'<td>'.sprintf('%f', round(self::$timeStore['total'], 10)).'s</td>';
 		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>All</strong></td>';
 		$error	.=		'<td><strong>Total</strong></td>';
 		$error	.=		'<td>Total Script execution time<div style="position:relative;left:50px;">+ The actual execution of everything (PHP and SQL)</div></td>';
+		$error	.=		'<td></td>';
 		$error	.= '</tr>';
 		$error	.= '<tr>';
 		$error	.=		'<td>'.sprintf('%f', round($GLOBALS['SERVER_REACTION_TIME']+self::$timeStore['total'], 10)).'s</td>';
 		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>external</strong></td>';
 		$error	.=		'<td><strong>HTTPD</strong></td>';
 		$error	.=		'<td>Webserver deliver time<div style="position:relative;left:50px;">+ The time, the webserver receives the parsed php code</td>';
+		$error	.=		'<td></td>';
 		$error	.= '</tr>';
-	
+
 		$error	.= '<tr>';
 		$error	.=		'<th><div style="width:82px;"></div></th>';
 		$error	.=		'<th><div style="width:82px;"></div></th>';
 		$error	.=		'<th><div style="width:142px;"></div></th>';
-		$error	.=		'<th style="width:100%;"></th>';
+		$error	.=		'<th></th>';
+		$error	.=		'<th></th>';
+		$error	.=		'<th></th>';
 		$error	.= '</tr>';
-		$error .= '</table>';
 
 
-		$error .= '<table>';
 
-		// ---------------- Framework Logs
-		for ($i=0; $i<sizeof(self::$baseStore); $i++)
+
+
+		// ---------------- Logging
+		$error	.= '<tr><td colspan=6>';
+		$error	.= '<span style="font-size:18px; font-weight:bold;font-family:courier;">Work Cycle</span>';
+		$error	.= '</td></tr>';
+
+
+
+
+		for ($i=0, $size = count(self::$store); $i<$size; ++$i)
 		{
+			$time		= self::$store[$i]['time'];
+			$type		= self::$store[$i]['type'];
+			$section	= self::$store[$i]['section'];
+			$title		= self::$store[$i]['title'];
+			$message	= self::$store[$i]['message'];
+			$description= self::$store[$i]['description'];
+			$err		= self::$store[$i]['error'];
+			$trace		= self::$store[$i]['trace'];
+
+			// format sql
+			if ( $section == 'sql-query' ) {
+				$message = \Highlight::sql($message);
+			}
+			if ($description) {
+				if ( is_array($description) ) {
+					$description = '<pre>'.print_r($description, true).'</pre>';
+				}
+				$description = '<br/><br/>'.$description;
+			}
+			if ($trace) {
+				$trace = '<br/><br/><pre>'.print_r($trace, true).'</pre>';
+			}
+
+			switch ($type)
+			{
+				case 'error': 		$type = '<span style="color:#FF0000;">[ERROR]</span>';		break;
+				case 'warning': 	$type = '<span style="color:#FF6903;">[Warn]</span>';		break;
+				case 'info': 		$type = '<span style="color:#00FF00;">[Info]</span>';		break;
+				default: 			$type = '<span style="color:#FF0000;">[Unknown]</span>';	break;
+
+			}
+			switch ($section)
+			{
+				case 'core':		$section = '<span style="color:#28F0BE;">'.$section.'</span>';	break;
+				case 'core-module':	$section = '<span style="color:#20F0CC;">'.$section.'</span>';	break;
+				case 'internal':	$section = '<span style="color:#2000CC;">'.$section.'</span>';	break;
+				case 'sql':			$section = '<span style="color:purple;">'.$section.'</span>';	break;
+				case 'sql-query':	$section = '<span style="color:purple;">'.$section.'</span>';	break;
+				case 'user':		$section = '<span style="color:white;">'.$section.'</span>';	break;
+				default:			$section = '<span style="color:red;">'.$section.'</span>';		break;
+			}
+
 			$error .= '<tr>';
-			$error .= '<td style="width:80px;">'.self::$baseStore[$i]['time'] .'&nbsp;</td>';
-
-			$error .= '<td style="width:80px;">';
-			switch ( self::$baseStore[$i]['type'] )
-			{
-				case 'ERROR': 		$error .= '<span style="color:#FF0000;">[ERROR]</span>';	break;
-				case 'WARNING': 	$error .= '<span style="color:#FF6903;">[Warn]</span>';		break;
-				case 'INFO': 		$error .= '<span style="color:#00FF00;">[Info]</span>';		break;
-				default: 			$error .= '<span style="color:#FF0000;">[Unknown]</span>';	break;
-
-			}
-			$error .= '</td>';
-
-			$color	= (self::$baseStore[$i]['type'] != 'INFO') ? 'color:#28F0BE;' : '';
-			$error .= '<td style="width:140px;'.$color.'"><strong>'.self::$baseStore[$i]['title'] .'</strong></td>';
-
-			$error .= '<td>';
-			$error .= 	self::$baseStore[$i]['message'];
-/*
-			if (is_array(self::$baseStore[$i]['error']) )
-			{
-				$error .= '<font color="red">[PHP ERROR]</font> ';
-				$error .= '<strong>'.self::$baseStore[$i]['error']['message'].'</strong>: ';
-				$error .= self::$baseStore[$i]['error']['file'] .' on line '.self::$baseStore[$i]['error']['line'].'<br/>';
-			}
-			*/
-			if ( sizeof(self::$baseStore[$i]['trace']) )
-			{
-//				$error .= '<pre>'.print_r(self::$baseStore[$i]['trace'], true) .'</pre><br/>';
-			}
-
-			$error .= '</td>';
+			$error .=	'<td>'.$time.'&nbsp;</td>';
+			$error .=	'<td>'.$type.'</td>';
+			$error .=	'<td>'.$section.'</td>';
+			$error .=	'<td>'.$title.'</td>';
+			$error .=	'<td>'.$message/*.$description.$trace*/.'</td>';
+			$error .=	'<td>'.$err.'</td>';
 			$error .= '</tr>';
 		}
 
+		// APPEND SESSION
+		$error .= '<tr>';
+		$error .= 	'<td>&nbsp;</td>';
+		$error .= 	'<td><span style="color:pink;">[SESS]</span></td>';
+		$error .= 	'<td style="color:#28F0BE;"><strong>SESSION</strong></td>';
+		$error .= 	'<td style="color:#28F0BE;"><strong>SESSION</strong></td>';
+		$error .= 	'<td>';
+		$error .=		self::_traverseSession(isset($_SESSION)?$_SESSION:null, 1);
+		$error .=	'</td>';
+		$error .= '</tr>';
 
-		// ---------------- MySQL Query Logs
-		for ($i=0; $i<sizeof(self::$dbStore); $i++)
-		{
-			$query_time = (self::$dbStore[$i]['time']) ? sprintf('%f', round(self::$dbStore[$i]['time'], 10)).'s' : '';
-			$error .= '<tr>';
-			$error .= '<td>'.$query_time .'&nbsp;</td>';
 
-			$error .= '<td>';
-			switch ( self::$dbStore[$i]['type'] )
-			{
-				case 'ERROR': 		$error .= '<span style="color:#FF0000;">[SQL ERR]</span>';		break;
-				case 'WARNING': 	$error .= '<span style="color:#FF6903;">[SQL WARN]</span>';		break;
-				case 'INFO': 		$error .= '<span style="color:purple;">[SQL INFO]</span>';		break;
-				default: 			$error .= '<span style="color:#FF0000;">[SQL UNKNOWN]</span>';	break;
-
-			}
-
-			$error .= '</td>';
-			$color	= (self::$dbStore[$i]['type'] != 'INFO') ? 'color:#28F0BE;' : '';
-			$error .= '<td style="'.$color.'"><strong>'.self::$dbStore[$i]['title'] .'</strong></td>';
-
-			$error .= '<td>';
-			$error .=	self::$dbStore[$i]['message'];
-			if ( isset(self::$dbStore[$i]['trace']) ) {
-				$error .= 	'<pre>'.print_r(self::$dbStore[$i]['trace'], true).'</pre>';
-			}
-			$error .= '</td>';
-			$error .= '</tr>';
-
-		}
-
-		if ( $GLOBALS['SQL_ENABLE'] )
-		{
-		//if ( \Sweany\Settings::$showSqlErrors > 2 )
-		//{
-			// Append total query time
-			$error .= '<tr>';
-			$error .= 	'<td>&nbsp;</td>';
-			$error .= 	'<td><span style="color:pink;">[SQL SUM]</span></td>';
-			$error .= 	'<td style="color:#28F0BE;"><strong>Total Query Time</strong></td>';
-			$error .= 	'<td><span style="color:green;">All queries took: '.sprintf('%f', round(self::$queryTime, 10)).' seconds</strong></td>';
-			$error .= '</tr>';
-		//}
-		}
-
-		//if ( \Sweany\Settings::$showFwErrors > 2 )
-		//{
-			// MISC
-			$error .= '<tr>';
-			$error .= 	'<td>&nbsp;</td>';
-			$error .= 	'<td><span style="color:pink;">[SESS]</span></td>';
-			$error .= 	'<td style="color:#28F0BE;"><strong>SESSION</strong></td>';
-			$error .= 	'<td>';
-			$error .=		self::_traverseSession(isset($_SESSION)?$_SESSION:null, 1);
-			$error .=	'</td>';
-			$error .= '</tr>';
-		//}
 
 		$error .= '</table>';
 

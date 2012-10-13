@@ -669,7 +669,7 @@ class Table
 		$fields = $this->_prepareFields(array($name));
 
 		if ( !isset($fields[0]) ) {
-			\Sweany\SysLog::e('[Table] Alias to field rewrite', 'field(): Failed to rewrite alias: <strong>'.$name.'</strong>');
+			\Sweany\SysLog::e('user', '[Table] Alias to field rewrite', 'field(): Failed to rewrite alias: <strong>'.$name.'</strong>');
 			return -9999999;
 		}
 
@@ -702,7 +702,7 @@ class Table
 		$fields = $this->_prepareFields(array($name));
 
 		if ( !isset($fields[0]) ) {
-			\Sweany\SysLog::e('[Table] Alias to field rewrite', 'field(): Failed to rewrite alias: <strong>'.$name.'</strong>');
+			\Sweany\SysLog::e('user', '[Table] Alias to field rewrite', 'field(): Failed to rewrite alias: <strong>'.$name.'</strong>');
 			return -9999999;
 		}
 
@@ -1747,11 +1747,11 @@ class Table
 				// get actualy field by alias
 				$real_name = $this->fields[$field];
 				$valid[$real_name] = $value;
-				\Sweany\SysLog::i('Insert/Update', '['.get_class($this).': Field Rewrite] Used Alias: '.$field.' is changed to Field: '.$real_name);
+				\Sweany\SysLog::i('user', 'Insert/Update', '['.get_class($this).': Field Rewrite] Used Alias: '.$field.' is changed to Field: '.$real_name);
 			}
 			// Discard all other value
 			else {
-				\Sweany\SysLog::w('Insert/Update', '['.get_class($this).': Wrong Field] Field: '.$field.' does not exist');
+				\Sweany\SysLog::w('user', 'Insert/Update', '['.get_class($this).': Wrong Field] Field: '.$field.' does not exist');
 			}
 		}
 		return $valid;
@@ -1775,11 +1775,11 @@ class Table
 				// get actualy field by alias
 				$real_name	= $this->fields[$field];
 				$valid[]	= $real_name;
-				\Sweany\SysLog::i('Insert/Update', '['.get_class($this).': Field Rewrite] Used Alias: '.$field.' is changed to Field: '.$real_name);
+				\Sweany\SysLog::i('user', 'Insert/Update', '['.get_class($this).': Field Rewrite] Used Alias: '.$field.' is changed to Field: '.$real_name);
 			}
 			// Discard all other value
 			else {
-				\Sweany\SysLog::w('Insert/Update', '['.get_class($this).': Wrong Field] Field: '.$field.' does not exist');
+				\Sweany\SysLog::w('user', 'Insert/Update', '['.get_class($this).': Wrong Field] Field: '.$field.' does not exist');
 			}
 		}
 		return $valid;

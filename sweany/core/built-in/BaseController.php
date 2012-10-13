@@ -276,10 +276,11 @@ abstract Class BaseController
 
 		if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 )
 		{
+			$time	= microtime(true)-$start;
 			$plugin = ($blockPluginName) ? $blockPluginName.':' : '';
 			$params	= '';//@implode(',', $blockMethodParams);
-			\Sweany\SysLog::i('Attach Block', '(rendered) from: '.$plugin.$blockControllerName.'->'.$blockMethodName.'('.$params.')', null, $start);
-			\Sweany\SysLog::time(array($plugin.$blockControllerName.'->'.$blockMethodName), microtime(true)-$start);
+			\Sweany\SysLog::i('user', 'Attach Block', '(rendered) from: '.$plugin.$blockControllerName.'->'.$blockMethodName.'('.$params.')', null, $time);
+			\Sweany\SysLog::time(array($plugin.$blockControllerName.'->'.$blockMethodName), $time);
 		}
 
 		// Store block html output into local array

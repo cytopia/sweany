@@ -42,7 +42,7 @@ define('FRAMEWORK', ROOT.DS.'sweany');							// Path where the framework resides
 //---------- Framework root folders
 define('CORE_PATH', FRAMEWORK.DS.'core');						// Core Framework Path
 define('LOG_PATH', FRAMEWORK.DS.'log');							// Path to Logfile folder
-define('LIB_PATH', FRAMEWORK.DS.'lib');							// Path to Libraries users can use
+define('LIB_PATH', FRAMEWORK.DS.'helper');						// Path to Libraries users can use
 
 //---------- Core folders
 define('CORE_BOOTSTRAP', CORE_PATH.DS.'bootstrap');				// Path to bootstrap folder
@@ -58,10 +58,6 @@ define('CORE_CONTROLLER', CORE_BUILT_IN.DS.'controller');
 define('CORE_MODEL', CORE_BUILT_IN.DS.'model');
 define('CORE_VIEW', CORE_BUILT_IN.DS.'view');
 define('CORE_TABLE', CORE_BUILT_IN.DS.'tables');
-
-//---------- Lib folders
-define('LIB_HL_PATH', LIB_PATH.DS.'highlighter');				// Path to various code highlighters
-
 
 
 
@@ -167,8 +163,8 @@ if ( !\Sweany\Settings::initialize() )
 	echo \Sweany\Settings::getError();
 	exit();
 }
-\Sweany\SysLog::i('-- LOAD --', 'Framework files loaded in '.round($FILE_LOAD_TIME, 4).' seconds');
-\Sweany\SysLog::i('Core', 'Settings loaded successfully.');
+\Sweany\SysLog::i('core', 'Files', 'All Framework files loaded', null, $FILE_LOAD_TIME);
+\Sweany\SysLog::i('core', 'Settings', 'Settings loaded successfully.');
 
 
 
@@ -191,42 +187,42 @@ if ( !isset($GLOBALS['VALIDATION_MODE']) || $GLOBALS['VALIDATION_MODE'] == true 
 	// ----------   2.1) Initialize the Validator
 	if ( !\Sweany\Validator::initialize() )
 	{
-		\Sweany\SysLog::e('Validation', \Sweany\Validator::getError());
+		\Sweany\SysLog::e('core', 'Validation', \Sweany\Validator::getError());
 		\Sweany\SysLog::show();
 		exit();
 	}
-	\Sweany\SysLog::i('Core', 'Validation OK. Took '.sprintf('%.6F',microtime(true)-$timeBefore).' sec');
+	\Sweany\SysLog::i('core', 'Validation', 'Validation OK.', null, microtime(true)-$timeBefore);
 }
 
 
 // ----------   2.) Initialize the Session
 if ( !\Sweany\Session::initialize() )
 {
-	\Sweany\SysLog::e('Session', \Sweany\Session::getError());
+	\Sweany\SysLog::e('core', 'Session', \Sweany\Session::getError());
 	\Sweany\SysLog::show();
 	exit();
 }
-\Sweany\SysLog::i('Core', 'Session Initialized successfully');
+\Sweany\SysLog::i('core', 'Session', 'Session Initialized successfully');
 
 
 // ----------   3.) Initialize the Url
 if ( !\Sweany\Url::initialize() )
 {
-	\Sweany\SysLog::e('Url', \Sweany\Url::getError());
+	\Sweany\SysLog::e('core', 'Url', \Sweany\Url::getError());
 	\Sweany\SysLog::show();
 	exit();
 }
-\Sweany\SysLog::i('Core', 'Url loaded successfully, Request: '.\Sweany\Url::$request);
+\Sweany\SysLog::i('core', 'URL', 'Url loaded successfully, Request: '.\Sweany\Url::$request);
 
 
 // ----------   4.) Initialize the Framework Router
 if ( !\Sweany\Router::initialize() )
 {
-	\Sweany\SysLog::e('Router', \Sweany\Router::getError());
+	\Sweany\SysLog::e('core', 'Router', \Sweany\Router::getError());
 	\Sweany\SysLog::show();
 	exit();
 }
-\Sweany\SysLog::i('Core', 'Router Initialized successfully');
+\Sweany\SysLog::i('core', 'Router', 'Router Initialized successfully');
 
 
 // ----------   5.) Initialize the Language
@@ -234,11 +230,11 @@ if ( $GLOBALS['LANGUAGE_ENABLE'] == true )
 {
 	if ( !\Sweany\Language::initialize() )
 	{
-		\Sweany\SysLog::e('Language', \Sweany\Language::getError());
+		\Sweany\SysLog::e('core-module', 'Language', \Sweany\Language::getError());
 		\Sweany\SysLog::show();
 		exit();
 	}
-	\Sweany\SysLog::i('Core', 'Language Initialized successfully. Using: '.\Sweany\Language::getLangShort());
+	\Sweany\SysLog::i('core-module', 'Language', 'Language Initialized successfully. Using: '.\Sweany\Language::getLangShort());
 }
 
 // ----------   6.) Initialize MySQL
@@ -246,11 +242,11 @@ if ( $GLOBALS['SQL_ENABLE'] == true )
 {
 	if ( !\Sweany\Database::initialize() )
 	{
-		\Sweany\SysLog::e('Database', \Sweany\Database::getError());
+		\Sweany\SysLog::e('core-module', 'Database', \Sweany\Database::getError());
 		\Sweany\SysLog::show();
 		exit();
 	}
-	\Sweany\SysLog::i('Core', 'Database ('.$GLOBALS['SQL_ENGINE'].') Initialized successfully, using db: '.$GLOBALS['SQL_DB']);
+	\Sweany\SysLog::i('core-module', 'Database', 'Database ('.$GLOBALS['SQL_ENGINE'].') Initialized successfully, using db: '.$GLOBALS['SQL_DB']);
 
 
 	// ----------   7.) Initialize Users
@@ -258,11 +254,11 @@ if ( $GLOBALS['SQL_ENABLE'] == true )
 	{
 		if ( !\Sweany\Users::initialize() )
 		{
-			\Sweany\SysLog::e('Users', \Sweany\Users::getError());
+			\Sweany\SysLog::e('core-module', 'Users', \Sweany\Users::getError());
 			\Sweany\SysLog::show();
 			exit();
 		}
-		\Sweany\SysLog::i('Core', 'Users Initialized successfully, current user: (id: '.\Sweany\Users::id().') '.\Sweany\Users::name());
+		\Sweany\SysLog::i('core-module', 'Users', 'Users Initialized successfully, current user: (id: '.\Sweany\Users::id().') '.\Sweany\Users::name());
 	}
 
 	// ----------   8.) Post Settings
@@ -271,11 +267,12 @@ if ( $GLOBALS['SQL_ENABLE'] == true )
 	{
 		$logger = \Sweany\AutoLoader::loadCoreTable('Visitors');
 		$logger->save();
+		\Sweany\SysLog::i('core-module', 'Visitors', 'Logging Page Visitor');
 	}
 }
 
 $BOOTSTRAP_TIME = ( microtime(true) - ($_SERVER['REQUEST_TIME']+$SERVER_REACTION_TIME+$FILE_LOAD_TIME) );
-\Sweany\SysLog::i('-- BOOTSTRAP --', 'done in '.round($BOOTSTRAP_TIME, 4).' seconds');
+\Sweany\SysLog::i('core', 'BOOTSTRAP', 'Bootstrap finished successfully', null, $BOOTSTRAP_TIME);
 
 
 
@@ -298,7 +295,7 @@ $params	= $object['params'];
 $c		= new $class;
 
 
-\Sweany\SysLog::i('-- CALL --', 'calling <strong><font color="green">'.$class.'->'.$method.'("'.implode('", "',$params).'")</font></strong>');
+\Sweany\SysLog::i('user', '-- CALL --', 'Calling Controller <strong><font color="green">'.$class.'->'.$method.'("'.implode('", "',$params).'")</font></strong>');
 $CALL_START_TIME = microtime(true);
 
 // set language
@@ -331,7 +328,7 @@ switch ( $paramSize )
 
 
 $CALL_END_TIME = microtime(true) - $CALL_START_TIME;
-\Sweany\SysLog::i('-- CALL --', 'done in  '.sprintf('%.6F',$CALL_END_TIME).' sec.');
+\Sweany\SysLog::i('user', '-- CALL --', 'Controller Call finished successfully', null, $CALL_END_TIME);
 
 
 
@@ -352,10 +349,6 @@ if ( !$c->render )
 	\Sweany\Router::cleanup();
 	\Sweany\Session::cleanup();
 	if ( $GLOBALS['SQL_ENABLE'] ) {\Sweany\Database::cleanup();}
-
-	// Loggin
-	\Sweany\SysLog::i('End', 'Execution finished');
-	\Sweany\SysLog::i('Total Page Time', 'loaded in '.round(microtime(true) - $_SERVER['REQUEST_TIME'], 4).' seconds');
 	exit();
 }
 
@@ -393,22 +386,22 @@ else
 	// ------ RENDER VIEW
 	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ){ $start = microtime(true);}
 	$view = \Sweany\Render::view($c);
-	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ){ \Sweany\SysLog::i('Render View', 'Total Execution Time', null, $start);}
+	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ){ \Sweany\SysLog::i('user', 'Render View', 'Total Execution Time', null, null, $start);}
 
 	// ------ RENDER ADDITIONAL MULTIPLE VIEWS
 	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ){ $start = microtime(true); }
 	$views = \Sweany\Render::views($c);
-	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ){ \Sweany\SysLog::i('Render Views', 'Total Execution Time', null, $start);}
+	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ){ \Sweany\SysLog::i('user', 'Render Views', 'Total Execution Time', null, null, $start);}
 
 	// ------ RENDER LAYOUT
 	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ) {$start = microtime(true);}
 	$layout	= \Sweany\Render::layout($c, $view, $views);
-	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ) { \Sweany\SysLog::i('Render Layout', 'Total Execution Time', null, $start);}
+	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ) { \Sweany\SysLog::i('user', 'Render Layout', 'Total Execution Time', null, null, $start);}
 
 	// ------ RENDER SKELETON
 	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ) {$start = microtime(true);}
 	$skeleton	= \Sweany\Render::skeleton($layout);
-	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ) { \Sweany\SysLog::i('Render Skeleton', 'Total Execution Time', null, $start);}
+	if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 ) { \Sweany\SysLog::i('user', 'Render Skeleton', 'Total Execution Time', null, null, $start);}
 
 	// ------ OUTPUT TO SCREEN
 	echo $skeleton;

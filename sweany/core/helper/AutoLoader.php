@@ -46,19 +46,19 @@ Class AutoLoader
 	{
 		if ( isset(self::$configs[$plugin]) )
 		{
-			\Sweany\SysLog::i('Plugin Config', '['.$plugin.'] config.php already loaded');
+			\Sweany\SysLog::i('internal', 'Plugin Config', '['.$plugin.'] config.php already loaded');
 		}
 		else
 		{
 			if ( is_file(USR_PLUGINS_PATH.DS.$plugin.DS.'config.php') )
 			{
 				require(USR_PLUGINS_PATH.DS.$plugin.DS.'config.php');
-				\Sweany\SysLog::i('Plugin Config', '['.$plugin.'] loading config.php');
+				\Sweany\SysLog::i('internal', 'Plugin Config', '['.$plugin.'] loading config.php');
 				self::$configs[$plugin] = true;
 			}
 			else
 			{
-				\Sweany\SysLog::w('Plugin Config', '['.$plugin.'] config.php does not exist.');
+				\Sweany\SysLog::w('internal', 'Plugin Config', '['.$plugin.'] config.php does not exist.');
 
 				// Store it anyway for performance reasons.
 				// Plugin might not have a config, so we store it as true which will avoid to check for
@@ -167,7 +167,7 @@ Class AutoLoader
 
 		if (class_exists($sClassName))
 		{
-			\Sweany\SysLog::i('Auto-Loader', '(already loaded): <strong><font color="blue">' . $sClassName . '</font></strong>', null, $start);
+			\Sweany\SysLog::i('internal', 'Auto-Loader', '(already loaded): <strong><font color="blue">' . $sClassName . '</font></strong>', null, null, $start);
 			return;
 		}
 
@@ -182,7 +182,7 @@ Class AutoLoader
 		// Add internal library classes
 		$paths[]	= LIB_PATH.DS.$sClassName.$ext;
 		$paths[]	= USR_VENDORS_PATH.DS.$sClassName.$ext;
-		$paths[]	= LIB_HL_PATH.DS.$sClassName.$ext;
+		$paths[]	= LIB_PATH.DS.'lib'.DS.$sClassName.$ext;
 
 
 
@@ -202,17 +202,17 @@ Class AutoLoader
 
 				if (class_exists($sClassName, false))
 				{
-					\Sweany\SysLog::i('Auto-Loader', '(Round '.($i+1).'/'.($size+1).'): <strong><font color="blue">' . $sClassName . '</font></strong> from ' . $paths[$i], null, $start);
+					\Sweany\SysLog::i('internal', 'Auto-Loader', '(Round '.($i+1).'/'.($size+1).'): <strong><font color="blue">' . $sClassName . '</font></strong> from ' . $paths[$i], null, null, $start);
 					return;
 				}
 				else
 				{
-					\Sweany\SysLog::i('Auto-Loader', '(Round '.($i+1).'/'.($size+1).'): <strong><font color="#FF6903">' . $sClassName . '</font></strong> not found in ' . $paths[$i], null, $start);
+					\Sweany\SysLog::i('internal', 'Auto-Loader', '(Round '.($i+1).'/'.($size+1).'): <strong><font color="#FF6903">' . $sClassName . '</font></strong> not found in ' . $paths[$i], null, null, $start);
 					return;
 				}
 			}
 		}
-		\Sweany\SysLog::w('Auto-Loader', 'Class not found <strong><font color="red">' . $sClassName . '</font></strong> in all paths', debug_backtrace(), $start);
+		\Sweany\SysLog::w('internal', 'Auto-Loader', 'Class not found <strong><font color="red">' . $sClassName . '</font></strong> in all paths', null, null, $start);
     }
 
 
@@ -227,7 +227,7 @@ Class AutoLoader
 		//     improves speed drastically if having files declaring a single table multiple times
 		if ( array_key_exists($class, self::$classes) )
 		{
-			\Sweany\SysLog::i('load'.$type, '(Fast: If: 1/2):<font color="#FF6903"> '.$class . '</font> already declared, passing reference', null, $start);
+			\Sweany\SysLog::i('internal', 'load'.$type, '(Fast: If: 1/2):<font color="#FF6903"> '.$class . '</font> already declared, passing reference', null, null, $start);
 			return self::$classes[$class];
 		}
 
@@ -236,7 +236,7 @@ Class AutoLoader
 		//		Also set warning, so we might clean this problem later
 		else if ( class_exists($class, false) )
 		{
-			\Sweany\SysLog::w('load'.$type, '(Fast: If: 2/2):<font color="purple"> '.$class . '</font> already in Memory, but have to redeclare ', null, $start);
+			\Sweany\SysLog::w('internal', 'load'.$type, '(Fast: If: 2/2):<font color="purple"> '.$class . '</font> already in Memory, but have to redeclare ', null, null, $start);
 
 			$c = new $class;
 
@@ -265,7 +265,7 @@ Class AutoLoader
 				// TODO: class_exists check really needed???
 				if ( class_exists($class, false) )
 				{
-					\Sweany\SysLog::i('load'.$type, '(Slow: Round '.($i+1).'/'.($size+1).'):<font color="purple"> '.$class . '</font> in ' . $paths[$i], null, $start);
+					\Sweany\SysLog::i('internal', 'load'.$type, '(Slow: Round '.($i+1).'/'.($size+1).'):<font color="purple"> '.$class . '</font> in ' . $paths[$i], null, null, $start);
 
 					$c = new $class;
 
@@ -275,7 +275,7 @@ Class AutoLoader
 				}
 				else
 				{
-					\Sweany\SysLog::e('load'.$type, 'No such Class <font color="red">'.$class.'</font> in '.$paths[$i], debug_backtrace(), $start);
+					\Sweany\SysLog::e('internal', 'load'.$type, 'No such Class <font color="red">'.$class.'</font> in '.$paths[$i], null, null, $start);
 					\Sweany\SysLog::show();
 					exit;
 					return null;
@@ -284,7 +284,7 @@ Class AutoLoader
 		}
 
 		// Throw error, as nothing has been found
-		\Sweany\SysLog::e('load'.$type, 'No such file <font color="red"><ul>'.implode('<li>',$paths).'</ul></font>', debug_backtrace(), $start);
+		\Sweany\SysLog::e('internal', 'load'.$type, 'No such file <font color="red"><ul>'.implode('<li>',$paths).'</ul></font>', null, null, $start);
 		\Sweany\SysLog::show();
 		exit;
 		return null;

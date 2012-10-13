@@ -29,6 +29,7 @@
 Class Css
 {
 	private static $css_files	= array();
+	private static $css_inline	= array();
 
 
 	/********************************************************* A C T I O N   F U N C T I O N S *********************************************************/
@@ -49,6 +50,11 @@ Class Css
 		self::$css_files[$size] = '<link rel="stylesheet" type="text/css" href="'.$file.'" />';
 	}
 
+	public static function addInlineCss($css_code)
+	{
+		self::$css_inline[] = $css_code;
+	}
+
 	public static function getFiles()
 	{
 		$code	= '';
@@ -58,4 +64,16 @@ Class Css
 
 		return $code;
 	}
+
+	public static function getInlineCss()
+	{
+		$code	= implode("\n", self::$css_inline);
+		$pre	= '<style type="text/css">';
+		$post	= '</style>';
+
+		$code	= (strlen($code)) ? $pre.$code.$post : '';
+
+		return $code;
+	}
+
 }

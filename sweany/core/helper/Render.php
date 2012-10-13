@@ -47,7 +47,7 @@ class Render
 			$classtrace	= $backtrace[count($backtrace)-1];
 			$error		= '<br/><br/>[call] from: '.$classtrace['class'].'->'.$classtrace['function'];
 
-			SysLog::e('Render Block', '('.get_class($block).') '.$controllerName.'->'.$methodName.'('.implode(',', $params).') does not exist.'.$error, $backtrace);
+			SysLog::e('user', 'Render Block', '('.get_class($block).') '.$controllerName.'->'.$methodName.'('.implode(',', $params).') does not exist.'.$error);
 			SysLog::show();
 			exit();
 		}
@@ -84,7 +84,7 @@ class Render
 		}
 		if ( $ret === false )
 		{
-			SysLog::e('Render Block', '[Call] '.get_class($block).'->'.$methodName.'('.implode(',', $params).') returns FALSE', debug_backtrace());
+			SysLog::e('user', 'Render Block', '[Call] '.get_class($block).'->'.$methodName.'('.implode(',', $params).') returns FALSE');
 			SysLog::show();
 			exit();
 		}
@@ -118,7 +118,7 @@ class Render
 
 		if (!is_file($view_path))
 		{
-			SysLog::e('Render Block', 'Block View: '.$view_path. ' does not exist');
+			SysLog::e('user', 'Render Block', 'Block View: '.$view_path. ' does not exist');
 			$view_path = CORE_VIEW.DS.'missing.tpl.php';	// use error view
 		}
 
@@ -178,25 +178,25 @@ class Render
 			if ( !$plugin && is_file(PAGES_VIEW_PATH.DS.$class.DS.$viewName) )
 			{
 				$viewPath = PAGES_VIEW_PATH.DS.$class.DS.$viewName;
-				SysLog::i('Render Core View [overwrite]', 'Overwriting Core view, Using: '.$viewPath);
+				SysLog::i('user', 'Render Core View [overwrite]', 'Overwriting Core view, Using: '.$viewPath);
 			}
 			else
 			{
 				$viewPath	= CORE_VIEW.DS.$class.DS.$viewName;
-				SysLog::i('Render Core View', 'Using: '.$viewPath);
+				SysLog::i('user', 'Render Core View', 'Using: '.$viewPath);
 			}
 		}
 		else
 		{
 			$viewPath	= ($plugin) ? USR_PLUGINS_PATH.DS.$class.DS.'pages'.DS.'view'.DS.$viewName : PAGES_VIEW_PATH.DS.$class.DS.$viewName;
-			SysLog::i('Render View', 'Using: '.$viewPath);
+			SysLog::i('user', 'Render View', 'Using: '.$viewPath);
 		}
 
 
 		// ------- Check if view exists
 		if (!is_file($viewPath))
 		{
-			SysLog::e('Render View', 'view '.$viewPath. ' does not exist');
+			SysLog::e('user', 'Render View', 'view '.$viewPath. ' does not exist');
 			$viewPath = CORE_VIEW.DS.'missing.tpl.php';	// use error view
 		}
 
@@ -262,13 +262,13 @@ class Render
 		foreach ($viewNames as $key => $viewName)
 		{
 			$viewPaths[$key] = ($plugin) ? USR_PLUGINS_PATH.DS.$class.DS.'pages'.DS.'view'.DS.$viewName.'.tpl.php' : PAGES_VIEW_PATH.DS.$class.DS.$viewName.'.tpl.php';
-			SysLog::i('Render Views', 'Using: '.$viewPaths[$key]);
+			SysLog::i('user', 'Render Views', 'Using: '.$viewPaths[$key]);
 
 
 			// ------- Check if views exist
 			if (!is_file($viewPaths[$key]))
 			{
-				SysLog::e('Render Views', 'view '.$viewPaths[$key]. ' does not exist');
+				SysLog::e('user', 'Render Views', 'view '.$viewPaths[$key]. ' does not exist');
 				$viewPaths[$key] = CORE_VIEW.DS.'missing.tpl.php';	// use error view
 			}
 		}
@@ -369,7 +369,7 @@ class Render
 					}
 					if ( $ret === false )
 					{
-						SysLog::e('Render Layout', '[Call] '.get_class($layoutCtl).'->'.$methodName.'('.implode(',', $params).') returns FALSE', debug_backtrace());
+						SysLog::e('user', 'Render Layout', '[Call] '.get_class($layoutCtl).'->'.$methodName.'('.implode(',', $params).') returns FALSE');
 						SysLog::show();
 						exit();
 					}
@@ -393,14 +393,14 @@ class Render
 				}
 				else
 				{
-					SysLog::e('Render Layout', 'Class or Method does not exist. <'.$className.'> -> <'.$methodName.'>');
+					SysLog::e('user', 'Render Layout', 'Class or Method does not exist. <'.$className.'> -> <'.$methodName.'>');
 					SysLog::show();
 					exit;
 				}
 			}
 			else
 			{
-				SysLog::e('Render Layout', 'Class File does not exist: '.$classPath);
+				SysLog::e('user', 'Render Layout', 'Class File does not exist: '.$classPath);
 				SysLog::show();
 				exit;
 			}
@@ -408,7 +408,7 @@ class Render
 		// Use default layout
 		else
 		{
-			SysLog::i('Render Layout', 'Not set. Using default');
+			SysLog::i('user', 'Render Layout', 'Not set. Using default');
 			$layoutView	= USR_LAYOUTS_PATH.DS.'view'.DS.$GLOBALS['DEFAULT_LAYOUT'];
 
 			/*
@@ -428,13 +428,13 @@ class Render
 		}
 
 		//		$render_element = $view;
-		SysLog::i('Render Layout', 'Using Layout View: '.$layoutView);
+		SysLog::i('user', 'Render Layout', 'Using Layout View: '.$layoutView);
 
 
 		// ------- Check if layout exists
 		if (!is_file($layoutView))
 		{
-			SysLog::e('Render Layout', 'Layout View: '.$layoutView. ' does not exist');
+			SysLog::e('user', 'Render Layout', 'Layout View: '.$layoutView. ' does not exist');
 			$layoutView = CORE_VIEW.DS.'missing.tpl.php';	// use error view
 		}
 
@@ -474,7 +474,7 @@ class Render
 		}
 		else
 		{
-			SysLog::e('Render Skeleton', 'File does not exist: Class File does not exist: '.USR_SKELETONS_PATH.DS.$GLOBALS['HTML_DEFAULT_SKELETON']);
+			SysLog::e('user', 'Render Skeleton', 'File does not exist: Class File does not exist: '.USR_SKELETONS_PATH.DS.$GLOBALS['HTML_DEFAULT_SKELETON']);
 			SysLog::show();
 			exit;
 		}
@@ -486,7 +486,7 @@ class Render
 		// ------- Check if email skeleton exists
 		if (!is_file($skeletonPath))
 		{
-			SysLog::e('Render Email', 'Skeleton View: '.$skeletonPath. ' does not exist');
+			SysLog::e('user', 'Render Email', 'Skeleton View: '.$skeletonPath. ' does not exist');
 			SysLog::show();
 			exit;
 		}
@@ -532,7 +532,7 @@ class Render
 		 */
 		if ( is_file(PAGES_WRAPPER_PATH.DS.$pluginName.DS.$viewName) )
 		{
-			SysLog::i('Render View', 'Add Wrapper for '.$pluginName.'-plugin: '.$viewName);
+			SysLog::i('user', 'Render View', 'Add Wrapper for '.$pluginName.'-plugin: '.$viewName);
 
 			// -------- RENDER
 			if ( !in_array(\Sweany\Settings::$ob_callback, ob_list_handlers())  )
@@ -550,7 +550,7 @@ class Render
 		}
 		else
 		{
-			SysLog::i('Render View', 'No Wrapper for '.$pluginName.'-plugin: '.$viewName);
+			SysLog::i('user', 'Render View', 'No Wrapper for '.$pluginName.'-plugin: '.$viewName);
 			return $view;
 		}
 	}

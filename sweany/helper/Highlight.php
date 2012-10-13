@@ -28,7 +28,7 @@
  */
 class Highlight
 {
-	public static function apply($string, $options = array())
+	public static function custom($string, $options = array())
 	{
 		if ( isset($options['colors']) )
 		{
@@ -49,29 +49,25 @@ class Highlight
 		return $string;
 	}
 
-	private static function _colorize($string, $keys = array(), $color)
-	{
-		foreach ($keys as $key)
-			$string = str_replace($key, "<font color=$color><strong>$key</strong></font>", $string);
 
-		return $string;
+
+
+	public static function sql($string)
+	{
+		return HighlightSql::hl($string);
 	}
 
 
 
-	public static function generic($string)
+
+
+
+	/******************************************** PRIVATE FUNCTIONS ********************************************/
+	private static function _colorize($string, $keys = array(), $color)
 	{
-		// keywords
-		$string = self::_keysBold($string, array('Configuration index', 'Interface', 'Endpoint'), 'navy');
-		$string = self::_keysBold($string, array('Configuration index', 'Interface', 'Endpoint'), 'navy');
-
-		// numbers
-		$string = self::_hex($string, 'orange');
-//		$string = self::_int_float($string, 'orange');
-
-		// strings
-//		$string = self::_string($string, 'purple');
-
+		foreach ($keys as $key) {
+			$string = preg_replace('/'.$key.'\b/', '<span style="color :'.$color.'">'.$key.'</span>', $string);
+		}
 		return $string;
 	}
 

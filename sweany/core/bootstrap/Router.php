@@ -35,6 +35,9 @@ class Router extends aBootTemplate
 
 	private static $object	= array();
 
+	private static $log_section = 'core';
+	private static $log_title	= 'Router';
+
 	/**
 	 *
 	 * Holds the decision whether or not the page was
@@ -77,7 +80,7 @@ class Router extends aBootTemplate
 
 		if ( \Sweany\Url::$request == $GLOBALS['DEFAULT_INFO_MESSAGE_URL'] )
 		{
-			\Sweany\SysLog::i('Callback', 'Internal request: '.\Sweany\Url::$request);
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, 'Internal request: '.\Sweany\Url::$request);
 
 			// Load the Framework Default Page Controller
 			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
@@ -91,7 +94,7 @@ class Router extends aBootTemplate
 		}
 		else if ( $controller == $GLOBALS['DEFAULT_SETTINGS_URL'] )
 		{
-			\Sweany\SysLog::i('Callback', 'Internal request: '.\Sweany\Url::$request);
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, 'Internal request: '.\Sweany\Url::$request);
 
 			// Load the Framework Default Page Controller
 			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
@@ -109,7 +112,7 @@ class Router extends aBootTemplate
 		//------------- 01) No controller specified, so start with the default entry point
 		else if ( !$controller )
 		{
-			\Sweany\SysLog::w('Callback', 'no url request made - using default controller');
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, 'no url request made - using default controller');
 
 			require(PAGES_CONTROLLER_PATH.DS.$GLOBALS['DEFAULT_CONTROLLER'].'.php');
 
@@ -140,7 +143,7 @@ class Router extends aBootTemplate
 		}
 		else if ( !$controller::isAuthorized() )
 		{
-			\Sweany\SysLog::w('Callback', '[Not Authorized] - Faking Not Found in: class &lt;'.$controller.'&gt; and method &lt;'.$method.'&gt;');
+			\Sweany\SysLog::w(self::$log_section, self::$log_title, '[Not Authorized] - Faking Not Found in: class &lt;'.$controller.'&gt; and method &lt;'.$method.'&gt;');
 
 			// Load the Framework Default Page Controller
 			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
@@ -159,7 +162,7 @@ class Router extends aBootTemplate
 		// therefore let the error controller handle it
 		else if ( !self::_isCallable($controller, $method) )
 		{
-			\Sweany\SysLog::w('Callback', 'Wrong request: class &lt;'.$controller.'&gt; and method &lt;'.$method.'&gt; not found.');
+			\Sweany\SysLog::w(self::$log_section, self::$log_title, 'Wrong request: class &lt;'.$controller.'&gt; and method &lt;'.$method.'&gt; not found.');
 
 
 			// Load the Framework Default Page Controller
@@ -178,7 +181,7 @@ class Router extends aBootTemplate
 		// any other user-defined class
 		else if ( !self::_isControllerClass($controller) )
 		{
-			\Sweany\SysLog::w('Callback', 'Wrong request: class &lt;'.$controller.'&gt; is not a Controller class.');
+			\Sweany\SysLog::w(self::$log_section, self::$log_title, 'Wrong request: class &lt;'.$controller.'&gt; is not a Controller class.');
 
 			require(PAGES_CONTROLLER_PATH.DS.$GLOBALS['ERROR_CONTROLLER'].'.php');
 
@@ -194,7 +197,7 @@ class Router extends aBootTemplate
 		// the xxxController Class, but are not allowed to be called
 		else if ( self::_methodIsForbidden($method) )
 		{
-			\Sweany\SysLog::w('Callback', 'Method &lt;'.$method.'&gt; is not allowed to be called');
+			\Sweany\SysLog::w(self::$log_section, self::$log_title, 'Method &lt;'.$method.'&gt; is not allowed to be called');
 
 			// Load the Framework Default Page Controller
 			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
@@ -211,7 +214,7 @@ class Router extends aBootTemplate
 		// Everyhing went fine
 		else
 		{
-			\Sweany\SysLog::i('Callback', 'Normal Request');
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, 'Normal Request');
 
 			self::$object = array(
 				'class'		=> $controller,
@@ -246,12 +249,12 @@ class Router extends aBootTemplate
 	{
 		if (!class_exists($class))
 		{
-			\Sweany\SysLog::w('Callback', 'class &lt;'.$class.'&gt; does not exist.');
+			\Sweany\SysLog::w(self::$log_section, self::$log_title, 'class &lt;'.$class.'&gt; does not exist.');
 			return false;
 		}
 		if ( !method_exists($class, $method) )
 		{
-			\Sweany\SysLog::w('Callback', 'method &lt;'.$method.'&gt; does not exist in class &lt;'.$class.'&gt;');
+			\Sweany\SysLog::w(self::$log_section, self::$log_title, 'method &lt;'.$method.'&gt; does not exist in class &lt;'.$class.'&gt;');
 			return false;
 		}
 		/*
@@ -261,7 +264,7 @@ class Router extends aBootTemplate
 		 */
 		if ( !@is_callable(array($class, $method)) )
 		{
-			\Sweany\SysLog::w('Callback', 'method &lt;'.$method.'&gt; is not publically callable in class &lt;'.$class.'&gt;');
+			\Sweany\SysLog::w(self::$log_section, self::$log_title, 'method &lt;'.$method.'&gt; is not publically callable in class &lt;'.$class.'&gt;');
 			return false;
 		}
 
