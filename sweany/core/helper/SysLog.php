@@ -57,7 +57,6 @@ class SysLog
 
 
 
-
 	/******************************************  F U N C T I O N S  ******************************************/
 
 
@@ -77,19 +76,22 @@ class SysLog
 	public static function e($section, $title, $message, $description = null, $time = null, $start_time = null)
 	{
 		// Append information to logfile
-		if ( \Sweany\Settings::$logFwErrors ) {
+		if ( Settings::$logFwErrors || Settings::$logSqlErrors ) {
 			// calculate time
 			if ($time) {
 				$f_time = sprintf('%.'.self::$dec_digits.'F', $time).'s';
 			}
 			else if (!$time && $start_time) {
 				$f_time = sprintf('%.'.self::$dec_digits.'F',microtime(true)-$start_time).'s';
+			} else {
+				$f_time = null;
 			}
 			self::_logToFile('error', $section, $title, $message, $description, $f_time);
 		}
 
-		// Only return here if settings allow and also if we do not break on error
-		if ( !\Sweany\Settings::$showFwErrors && !$GLOBALS['BREAK_ON_ERROR'] ) {
+		// Do not put anything into the store, if we are in production mode or all error showing is turned off
+		if ( $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION ||
+			!(Settings::$showFwErrors>0 || Settings::$showPhpErrors>0 || !Settings::$showSqlErrors>0 || $GLOBALS['BREAK_ON_ERROR']) ) {
 			return;
 		}
 
@@ -141,20 +143,25 @@ class SysLog
 		$f_time = null;
 
 		// Append information to logfile
-		if ( \Sweany\Settings::$logFwErrors > 1 ) {
+		if ( Settings::$logFwErrors > 1 || Settings::$logSqlErrors > 1) {
 			// calculate time
 			if ($time) {
 				$f_time = sprintf('%.'.self::$dec_digits.'F', $time).'s';
 			}
 			else if (!$time && $start_time) {
 				$f_time = sprintf('%.'.self::$dec_digits.'F',microtime(true)-$start_time).'s';
+			} else {
+				$f_time = null;
 			}
 			self::_logToFile('warning', $section, $title, $message, $description, $f_time);
 		}
 
-		if ( !\Sweany\Settings::$showFwErrors > 1 ) {
+		// Do not put anything into the store, if we are in production mode or all error showing is turned off
+		if ( $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION ||
+			!(Settings::$showFwErrors>1 || Settings::$showPhpErrors>1 || Settings::$showSqlErrors>1) ) {
 			return;
 		}
+
 
 		// re-use time if has already been calculated
 		if ( !$f_time ) {
@@ -203,20 +210,25 @@ class SysLog
 		$f_time = null;
 
 		// Append information to logfile
-		if ( \Sweany\Settings::$logFwErrors > 2 ) {
+		if ( Settings::$logFwErrors > 2  || Settings::$logSqlErrors > 2) {
 			// calculate time
 			if ($time) {
 				$f_time = sprintf('%.'.self::$dec_digits.'F', $time).'s';
 			}
 			else if (!$time && $start_time) {
 				$f_time = sprintf('%.'.self::$dec_digits.'F',microtime(true)-$start_time).'s';
+			} else {
+				$f_time = null;
 			}
 			self::_logToFile('info', $section, $title, $message, $description, $f_time);
 		}
 
-		if ( !\Sweany\Settings::$showFwErrors > 2 ) {
+		// Do not put anything into the store, if we are in production mode or all error showing is turned off
+		if ( $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION ||
+			!(Settings::$showFwErrors>2 || Settings::$showPhpErrors>2 || Settings::$showSqlErrors>2) ) {
 			return;
 		}
+
 
 		// re-use time if has already been calculated
 		if ( !$f_time ) {
@@ -273,10 +285,15 @@ class SysLog
 	 */
 	public static function show($return = false)
 	{
-		if ( !(\Sweany\Settings::$showPhpErrors ||
-			 \Sweany\Settings::$showFwErrors ||
-			 \Sweany\Settings::$showSqlErrors ) )
+		// If we are in production mode, dont show anything
+		if ( $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION ) {
 			return;
+		}
+		// If all errors are turned off, dont show anything
+		if ( !Settings::$showPhpErrors && !Settings::$showFwErrors && !Settings::$showSqlErrors ) {
+			return;
+		}
+
 
 		$pre  	= '<style type="text/css">'.
 					'.sweanylog {'.
@@ -434,6 +451,35 @@ class SysLog
 			$err		= self::$store[$i]['error'];
 			$trace		= self::$store[$i]['trace'];
 
+
+			// Deactivate SQL Output, if desired by config
+			if ( $section == 'sql' || $section == 'sql-query' )
+			{
+				if ( $type == 'info' && Settings::$showSqlErrors < 3 )
+				{
+					continue;
+				}
+				if ( $type == 'warning' && Settings::$showSqlErrors < 2 )
+				{
+					continue;
+				}
+			}
+			// Deactivate Framework Output
+			else
+			{
+				if ( $type == 'info' && Settings::$showFwErrors < 3 )
+				{
+					continue;
+				}
+				if ( $type == 'warning' && Settings::$showFwErrors < 2 )
+				{
+					continue;
+				}
+			}
+
+
+
+
 			// format sql
 			if ( $section == 'sql-query' ) {
 				$message = \Highlight::sql($message);
@@ -501,94 +547,50 @@ class SysLog
 
 
 	/******************************************  P R I V A T E   F U N C T I O N S  ******************************************/
-
-	private static function _formatSQLMessageForHTML($message, $query, $output = null, $error = null)
+	private static function _logToFile($type, $section, $title, $message, $description, $time)
 	{
-		$err_msg	= '';
-		$title		= '<div style="font-weight:bold; color:blue;">'.$message.'</div>';
-//		$output		= '<pre>'.print_r($output, true).'</pre>';
-		$output		= '';
-
-		if ( count($error) )
+		// Deactivate SQL Logging, if desired by config
+		if ( $section == 'sql' || $section == 'sql-query' )
 		{
-			$err_msg = '<div style="font-weight:bold;color:red">'.$error[0].' '.$error[1].'</div>';
+
+			if ( $type == 'info' && Settings::$logSqlErrors < 3 )
+			{
+				return;
+			}
+			if ( $type == 'warning' && Settings::$logSqlErrors < 2 )
+			{
+				return;
+			}
 		}
-		return $title.$err_msg.self::_formatSQLQuery($query).$output;
-	}
-	private static function _formatSQLMessageForFile($message, $query, $output = null, $error = null)
-	{
-		return $query;
-	}
-
-	private static function _formatSQLQuery($query)
-	{
-		$pre	= '';//'<pre>';
-		$post	= '';//'</pre>';
-		$query	= preg_replace('/\s+/', ' ', $query);
-		$query	= trim($query);
-		$query	= self::_loopSQLQuery($query);
-		$query	= self::_highlightSQLQuery($query);
-
-		return $pre.$query.$post;
-	}
-	private static function _loopSQLQuery($query)
-	{
-		for ($i=0; $i<strlen($query); $i++)
+		// Deactivate Framework Logging
+		else
 		{
+			if ( $type == 'info' && Settings::$logFwErrors < 3 )
+			{
+				return;
+			}
+			if ( $type == 'warning' && Settings::$logFwErrors < 2 )
+			{
+				return;
+			}
 		}
-		return $query;
-	}
 
-	private static function _highlightSQLQuery($query)
-	{
-		$options['colors'] = array('#00A9FD' => array(
-			'MASTER_SSL_VERIFY_SERVER_CERT', 'SQL_CALC_FOUND_ROWS', 'SECOND_MICROSECOND', 'NO_WRITE_TO_BINLOG', 'MINUTE_MICROSECOND',
-			'CURRENT_TIMESTAMP', 'SQL_SMALL_RESULT', 'HOUR_MICROSECOND', 'DAY_MICROSECOND', 'LOCALTIMESTAMP', 'SQL_BIG_RESULT',
-			'DETERMINISTIC', 'MINUTE_SECOND', 'STRAIGHT_JOIN', 'UTC_TIMESTAMP', 'HIGH_PRIORITY', 'CURRENT_TIME', 'CURRENT_USER',
-			'VARCHARACTER', 'SQLEXCEPTION', 'CURRENT_DATE', 'LOW_PRIORITY', 'INSENSITIVE', 'HOUR_MINUTE', 'DISTINCTROW',
-			'HOUR_SECOND', 'CONSTRAINT', 'READ_WRITE', 'DAY_MINUTE', 'DAY_SECOND', 'OPTIONALLY', 'MEDIUMTEXT', 'MEDIUMBLOB',
-			'REFERENCES', 'YEAR_MONTH', 'ASENSITIVE', 'TERMINATED', 'ACCESSIBLE', 'SQLWARNING', 'CONDITION', 'PROCEDURE',
-			'DATABASES', 'MEDIUMINT', 'PRECISION', 'MIDDLEINT', 'LOCALTIME', 'VARBINARY', 'CHARACTER', 'SEPARATOR', 'SENSITIVE',
-			'TRAILING', 'INTERVAL', 'UNSIGNED', 'OPTIMIZE', 'RESTRICT', 'UTC_DATE', 'UTC_TIME', 'ZEROFILL', 'LONGBLOB', 'SMALLINT',
-			'MODIFIES', 'SPECIFIC', 'SQLSTATE', 'STARTING', 'TINYBLOB', 'TINYTEXT', 'LONGTEXT', 'FULLTEXT', 'DATABASE', 'DAY_HOUR',
-			'ENCLOSED', 'DISTINCT', 'CONTINUE', 'DESCRIBE', 'ITERATE', 'INTEGER', 'CONVERT', 'REQUIRE', 'REPLACE', 'RELEASE',
-			'DECLARE', 'PRIMARY', 'NUMERIC', 'DECIMAL', 'NATURAL', 'EXPLAIN', 'DEFAULT', 'DELAYED', 'OUTFILE', 'COLLATE', 'ESCAPED',
-			'VARYING', 'VARCHAR', 'FOREIGN', 'ANALYZE', 'TRIGGER', 'LEADING', 'TINYINT', 'BETWEEN', 'SCHEMAS', 'CASCADE', 'SPATIAL',
-			'UNIQUE', 'UNLOCK', 'CHANGE', 'CREATE', 'VALUES', 'DELETE', 'SELECT', 'COLUMN', 'OPTION', 'REVOKE', 'LINEAR', 'BIGINT',
-			'SCHEMA', 'BINARY', 'REPEAT', 'RENAME', 'RETURN', 'CURSOR', 'UPDATE', 'BEFORE', 'REGEXP', 'INSERT', 'HAVING', 'IGNORE',
-			'ELSEIF', 'EXISTS', 'FLOAT8', 'INFILE', 'FLOAT4', 'DOUBLE', 'RIGHT', 'CHECK', 'FETCH', 'PURGE', 'RANGE', 'FALSE', 'READS',
-			'LEAVE', 'CROSS', 'INNER', 'INOUT', 'INDEX', 'RLIKE', 'TABLE', 'LIMIT', 'OUTER', 'WHILE', 'ALTER', 'USING', 'USAGE', 'COUNT',
-			'WRITE', 'FLOAT', 'GRANT', 'WHERE', 'GROUP', 'LINES', 'UNION', 'FORCE', 'MATCH', 'ORDER', 'CASE', 'WITH', 'CHAR', 'BOTH',
-			'WHEN', 'CALL', 'BLOB', 'FROM', 'THEN', 'EXIT', 'TRUE', 'SHOW', 'LOOP', 'KILL', 'REAL', 'READ', 'LEFT', 'LIKE', 'NULL',
-			'LOAD', 'ELSE', 'LONG', 'EACH', 'LOCK', 'DUAL', 'DROP', 'KEYS', 'INT4', 'INT3', 'DESC', 'INT2', 'INT8', 'INT1', 'INTO',
-			'UNDO', 'JOIN', 'INT', 'NOT', 'SQL', 'ADD', 'FOR', 'ALL', 'XOR', 'MOD', 'SET', 'AND', 'DIV', 'SSL', 'OUT', 'DEC', 'ASC',
-			'KEY', 'USE', 'ON', 'IF', 'IS', 'TO', 'BY', 'OR', 'IN', 'AS'
-		));
-		$options['tags']['old_start']	= '`';
-		$options['tags']['old_end']		= '`';
-		$options['tags']['new_start']	= '<font color="purple">`</font><font color="navy">';
-		$options['tags']['new_end']		= '</font><font color="purple">`</font>';
-		return \Highlight::apply($query, $options);
-	}
+		if ($description) {
+			if ( is_array($description) ) {
+				$description = "\n\r".strip_tags(print_r($description, true));
+			} else {
+				$description = "\n\r".strip_tags($description);
+			}
+			$description = html_entity_decode($description);
+		}else {
+			$description = null;
+		}
 
-
-	private static function _logToFile($type, $title, $message)
-	{
 		// fopen, fwrite, fclose is the faster than file_put_contents (which isjust a wrapper for that)
 		// fopen, fputs, fclose is fastest
 		$fp	= fopen(LOG_PATH.DS.$GLOBALS['FILE_LOG_CORE'], 'a');
-		fputs($fp, date('Y-m-d H:i:s')."\t['.$type.'] [".$title."]\t".strip_tags($message)."\n\r");
+		fputs($fp, date('Y-m-d H:i:s')."\t[$type] [$section] [$title]\t".html_entity_decode(strip_tags($message)).$description."\n\r");
 		fclose($fp);
-	}
-	private static function _store($section, $type, $title, $message, $trace, $time)
-	{
-		$size = count(self::$$section);
-		self::${$section}[$size]['time']	= $time;
-		self::${$section}[$size]['type']	= $type;
-		self::${$section}[$size]['title']	= $title;
-		self::${$section}[$size]['message']	= $message;
-		self::${$section}[$size]['error']	= error_get_last();
-		self::${$section}[$size]['trace']	= $trace;
 	}
 
 
@@ -598,7 +600,7 @@ class SysLog
 			return;
 
 		$error = '';
-		$tab = self::_getSpace($depth*4);
+		$tab = \Html::nbsp($depth*4);
 
 		foreach ($arr as $key => $val)
 		{
@@ -617,13 +619,4 @@ class SysLog
 		}
 		return $error;
 	}
-	private static function _getSpace($num)
-	{
-		$space ='';
-		for ($i=0; $i<$num; $i++)
-			$space .= '&nbsp;';
-
-		return $space;
-	}
 }
-

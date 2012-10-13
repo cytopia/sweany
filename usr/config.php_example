@@ -37,7 +37,7 @@
  *
  ***************************************************************************/
 
-  
+
 /**
  *	Runtime Mode
  *
@@ -57,7 +57,7 @@
  *	  You should use this mode until you have fully developed
  *	  and thoroughly tested your application.
  *
- *	  The following options can be turned on in this mode: 
+ *	  The following options can be turned on in this mode:
  *		$VALIDATION_MODE		can be used	(runtime validator)
  *		$SHOW_PHP_ERRORS		can be used
  *		$SHOW_SQL_ERRORS		can be used
@@ -70,6 +70,7 @@
  *
  *	  The following function behaviour is available
  *	    debug($var)				will output $var to screen
+ *	    dump($var)				will output $var to screen
  *
  *
  *	SWEANY_PRODUCTION:
@@ -77,14 +78,9 @@
  *	  Once you have developed your application and THOROUGHLY tested it
  *	  you can switch to this mode.
  *
- *	  Keep in mind, that all runtime-error checking on user-defined code is removed
- *	  in order to speed things up drastically.
- *		+ no file_exists checks
- *		+ no function exists checks
- *		+ no db connection checks
- *		+ etc...
+ *	  In this mode, all SysLog, PHP error/warn/notice and SQL error/warn/notice output will be disabled.
  *
- *	  The following options will be auto turned off 
+ *	  The following options will be auto turned off
  *		$VALIDATION_MODE		off
  *		$SHOW_PHP_ERRORS		off
  *		$SHOW_SQL_ERRORS		off
@@ -92,8 +88,13 @@
  *		$BREAK_ON_ERROR			off
  *		$DEBUG_CSS				off
  *
+ *		$LOG_PHP_ERRORS			can be used
+ *		$LOG_SQL_ERRORS			can be used
+ *		$LOG_FRAMEWORK_ERRORS	can be used
+ *
  *	  The following function behaviour is available
  *	    debug($var)				will NOT output anything to screen
+ *	    dump($var)				will NOT output anything to screen
  *
  *
  *	SWEANY_PRODUCTION_FAST_CORE (TODO: reactivate fast-core mode):
@@ -102,6 +103,13 @@
  *	  The only difference is, that in this mode,
  *	  the framework only uses a single compressed file in order
  *	  to save disk loading times. This will improve overall performance
+ *
+ *	  Additionally all runtime-error checking is removed in order to speed things up drastically.
+ *		+ no file_exists checks
+ *		+ no function exists checks
+ *		+ no db connection checks
+ *		+ etc...
+ *
  *
  *
  *	SWEANY_PRODUCTION_DAEMON (TODO: not yet implemented):
@@ -166,6 +174,7 @@ $SHOW_FRAMEWORK_ERRORS	= 3;	// Framework errors (such as missing views)
 $SHOW_SQL_ERRORS		= 3;	// sql errors (wrong queries... etc)
 
 
+
 /*
  * Log Errors to a file
  *
@@ -191,7 +200,7 @@ $LOG_SQL_ERRORS			= 2;
  * as you could might miss some errors at the bottom of SysLog easily.
  *
  */
-$BREAK_ON_ERROR			= 0;
+$BREAK_ON_ERROR			= 1;
 
 
 /*

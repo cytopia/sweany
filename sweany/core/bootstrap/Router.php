@@ -141,20 +141,6 @@ class Router extends aBootTemplate
 			self::$visitablePage = true;
 			return true;
 		}
-		else if ( !$controller::isAuthorized() )
-		{
-			\Sweany\SysLog::w(self::$log_section, self::$log_title, '[Not Authorized] - Faking Not Found in: class &lt;'.$controller.'&gt; and method &lt;'.$method.'&gt;');
-
-			// Load the Framework Default Page Controller
-			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
-
-			self::$object = array(
-				'class'		=> 'FrameworkDefault',
-				'method'	=> 'url_not_found',
-				'params'	=> array(\Sweany\Url::$request),
-			);
-			return true;
-		}
 
 		//------------- 02) Controller does not have specified function
 		//
@@ -209,7 +195,20 @@ class Router extends aBootTemplate
 			);
 			return true;
 		}
+		else if ( !$controller::isAuthorized() )
+		{
+			\Sweany\SysLog::w(self::$log_section, self::$log_title, '[Not Authorized] - Faking Not Found in: class &lt;'.$controller.'&gt; and method &lt;'.$method.'&gt;');
 
+			// Load the Framework Default Page Controller
+			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
+
+			self::$object = array(
+					'class'		=> 'FrameworkDefault',
+					'method'	=> 'url_not_found',
+					'params'	=> array(\Sweany\Url::$request),
+			);
+			return true;
+		}
 		//------------- 05)  OK:
 		// Everyhing went fine
 		else

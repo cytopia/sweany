@@ -29,7 +29,7 @@ class ErrorHandler
 		// which will also lead to an error and nothing would be displayed
 		$GLOBALS['BREAK_ON_ERROR'] = 0;
 
-		\Sweany\SysLog::i('core', 'Output Buffering', 'Using ob_error_handler() from '.$from);
+		\Sweany\SysLog::i('user', 'Output Buffering', 'Using ob_error_handler() from '.$from);
 
 		// If error orrocured
 		if ($error)
@@ -38,7 +38,7 @@ class ErrorHandler
 						"\n".'Fatal error: '.$error['message'].' in '.$error['file'].' on line '.$error['line']."\n".
 						ini_get('error_append_string');
 
-			\Sweany\SysLog::e('core', 'Output Buffering', $error);
+			\Sweany\SysLog::e('user', 'Output Buffering', $error);
 
 			$error =\Sweany\SysLog::show(true);
 

@@ -57,6 +57,18 @@ class Settings extends aBootTemplate
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
 	public static function initialize($options = null)
 	{
+
+		if ( $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION )
+		{
+			$GLOBALS['VALIDATION_MODE']	= 0;
+			$GLOBALS['SHOW_PHP_ERRORS']	= 0;
+			$GLOBALS['SHOW_SQL_ERRORS']	= 0;
+			$GLOBALS['SHOW_FRAMEWORK_ERRORS'] = 0;
+			$GLOBALS['BREAK_ON_ERROR']	= 0;
+			$GLOBALS['DEBUG_CSS']		= 0;
+		}
+
+
 		// INITIALIZE VALUES
 		self::$showPhpErrors	= $GLOBALS['SHOW_PHP_ERRORS'];
 		self::$showSqlErrors	= $GLOBALS['SHOW_SQL_ERRORS'];

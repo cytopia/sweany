@@ -128,4 +128,14 @@ Class Html
 		}
 		return $switch;
 	}
+
+	public static function nbsp($number = 1)
+	{
+		$nbsp = '';
+		for ($i=0; $i<$number; ++$i)
+		{
+			$nbsp .= '&nbsp;';
+		}
+		return $nbsp;
+	}
 }

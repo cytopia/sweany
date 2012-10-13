@@ -209,11 +209,11 @@ Class Language extends aBootTemplate
 
 		if ($plugin)
 		{
-			\Sweany\SysLog::i(self::$log_section, self::$log_title, '[Plugin] Setting path for: ['.$type.'] to: '.$path);
+			\Sweany\SysLog::i('user', self::$log_title, '[Plugin] Setting path for: ['.$type.'] to: '.$path);
 		}
 		else
 		{
-			\Sweany\SysLog::i(self::$log_section, self::$log_title, 'Setting path for: ['.$type.'] to: '.$path);
+			\Sweany\SysLog::i('user', self::$log_title, 'Setting path for: ['.$type.'] to: '.$path);
 		}
 	}
 
@@ -435,12 +435,12 @@ Class Language extends aBootTemplate
 			if ( file_exists($xml_file) )
 			{
 				self::$language[$plugin] = simplexml_load_file($xml_file);
-				\Sweany\SysLog::i(self::$log_section, self::$log_title, '[Plugin] First Load of '.$lang_short.'.xml for ['.$plugin.'-plugin]');
+				\Sweany\SysLog::i('user', self::$log_title, '[Plugin] First Load of '.$lang_short.'.xml for ['.$plugin.'-plugin]');
 				return true;
 			}
 			else
 			{
-				\Sweany\SysLog::e(self::$log_section, self::$log_title, '[Plugin] File does not exist for ['.$plugin.'-plugin]: '.$xml_file);
+				\Sweany\SysLog::e('user', self::$log_title, '[Plugin] File does not exist for ['.$plugin.'-plugin]: '.$xml_file);
 				return false;
 			}
 		}

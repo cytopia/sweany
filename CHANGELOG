@@ -1,3 +1,9 @@
+2012-10-13
+-----------------
++ Implemented mode: SWEANY_PRODUCTION
++ SysLogger improved and now also behaves correctly in production mode
+
+
 2012-10-12
 -----------------
 + Changed required version to >= PHP 5.4.0
