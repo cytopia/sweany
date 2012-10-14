@@ -1,0 +1,43 @@
+By default, sweany requires a working mysql database
+for the plugins to work (see: "Core-Modules and Plugins" below
+to deactivate them)
+
+
+Required steps
+--------------------
++ go to usr
++ copy config.php_example to config.php
++ adjust database settings in config.php
++ import db.sql to your mysql database
+
+
+
+
+Missing Log Files
+-------------------
+Sweany assumes two logfiles in sweany/log
++ core.log
++ custom.log
+both have to be writable by the webserver.
+If they do not exist, create them.
+You can also change the names of them in usr/config.php
+
+
+
+Windows Users:
+-------------------
+If sweany complains about invalid locale in config.php,
+you either have to find out your current correct
+locale string or set $DEFAULT_LOCALE = 'C'; in config.php
+
+
+
+Core-Modules and Plugins
+--------------------
+If you intend to switch off core modules
+and sweany complains, that the plugins do need
+those core-modules, you can simple remove the plugins
+if you don't need them.
+
+Just remove the plugin folders of the plugins you want to remove from
+usr/plugins/<Plugin_Folder>
