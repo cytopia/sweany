@@ -380,16 +380,16 @@ class SysLog
 		$error	.= '<tr>';
 		$error	.=		'<td>'.sprintf('%f', round(self::$timeStore['sql'], 10)).'s</td>';
 		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
+		$error	.=		'<td><strong>sql</strong></td>';
 		$error	.=		'<td><strong>SQL</strong></td>';
-		$error	.=		'<td>Total SQL execution time</td>';
-		$error	.=		'<td></td>';
+		$error	.=		'<td>Total time of all executed sql queries</td>';
 		$error	.= '</tr>';
 		$error	.= '<tr>';
 		$error	.=		'<td>'.sprintf('%f', round(self::$timeStore['core'], 10)).'s</td>';
 		$error	.=		'<td><span style="color:#FFFFFF;">[Timing]</span></td>';
 		$error	.=		'<td><strong>core</strong></td>';
 		$error	.=		'<td><strong>Sweany Core</strong></td>';
-		$error	.=		'<td>Sweany core execution time<div style="position:relative;left:50px;">+ The time it takes until the whole sweany core has been fully executed<br/>+ Turn off VALIDATION_MODE to see the actual core speed!</div></td>';
+		$error	.=		'<td>Sweany core execution time<div style="position:relative;left:50px;">+ The time it takes until the whole sweany core has been fully executed<br/>+ Includes SQL queries executed by core<br/>+ Turn off VALIDATION_MODE to see the actual core speed!</div></td>';
 		$error	.=		'<td></td>';
 		$error	.= '</tr>';
 
