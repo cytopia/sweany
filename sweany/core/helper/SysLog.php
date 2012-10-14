@@ -112,7 +112,7 @@ class SysLog
 			'message'	=> $message,
 			'description'=>$description,
 			'error'		=> error_get_last(),
-			'trace'		=> debug_backtrace(),
+			'trace'		=> self::_getTrace(),
 		);
 		self::$store[] = $store;
 
@@ -182,6 +182,16 @@ class SysLog
 			'error'		=> error_get_last(),
 			'trace'		=> null,
 		);
+
+		if ( Settings::$showSqlErrors > 1 && ($section == 'sql' || $section == 'sql-query') )
+		{
+			$store['trace'] = self::_getTrace();
+		}
+		if ( Settings::$showFwErrors > 1 && ($section != 'sql' && $section != 'sql-query') )
+		{
+			$store['trace'] = self::_getTrace();
+		}
+
 		self::$store[] = $store;
 
 		if ( $store['error'] && $GLOBALS['BREAK_ON_ERROR'] ) {
@@ -249,6 +259,16 @@ class SysLog
 			'error'		=> error_get_last(),
 			'trace'		=> null,
 		);
+
+		if ( Settings::$showSqlErrors > 2 && ($section == 'sql' || $section == 'sql-query') )
+		{
+			$store['trace'] = self::_getTrace();
+		}
+		if ( Settings::$showFwErrors > 2 && ($section != 'sql' && $section != 'sql-query') )
+		{
+			$store['trace'] = self::_getTrace();
+		}
+
 		self::$store[] = $store;
 
 		if ( $store['error'] && $GLOBALS['BREAK_ON_ERROR'] ) {
@@ -490,9 +510,6 @@ class SysLog
 				}
 				$description = '<br/><br/>'.$description;
 			}
-			if ($trace) {
-				$trace = '<br/><br/><pre>'.print_r($trace, true).'</pre>';
-			}
 
 			switch ($type)
 			{
@@ -518,7 +535,7 @@ class SysLog
 			$error .=	'<td>'.$type.'</td>';
 			$error .=	'<td>'.$section.'</td>';
 			$error .=	'<td>'.$title.'</td>';
-			$error .=	'<td>'.$message/*.$description.$trace*/.'</td>';
+			$error .=	'<td>'.$message.$trace/*.$description.$trace*/.'</td>';
 			$error .=	'<td>'.$err.'</td>';
 			$error .= '</tr>';
 		}
@@ -618,5 +635,39 @@ class SysLog
 			}
 		}
 		return $error;
+	}
+
+
+
+	private static function _getTrace()
+	{
+		$trace	= debug_backtrace();
+
+		$start	= 2;
+		$count	= count($trace)-1;
+
+		$from	= '';
+
+		for ($i=$start; $i<$count; $i++)
+		{
+			if ( isset($trace[$i]) )
+			{
+				$from = $from.'<br/>From: ';
+
+				if ( isset($trace[$i]['class']) )
+				{
+					$from = $from.$trace[$i]['class'].'->';
+				}
+				if ( isset($trace[$i]['function']) )
+				{
+					$from = $from.$trace[$i]['function'];
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+		return $from ? '<br/>'.$from : '';
 	}
 }

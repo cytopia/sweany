@@ -29,19 +29,19 @@ Class Loader
 
 	public static function loadTable($class)
 	{
-		return \Sweany\AutoLoader::loadTable($class);
+		return \Sweany\AutoLoader::loadTable($class, 'user');
 	}
 
 
 	public static function loadCoreTable($class)
 	{
-		return \Sweany\AutoLoader::loadCoreTable($class);
+		return \Sweany\AutoLoader::loadCoreTable($class, 'user');
 	}
 
 
 	public static function loadPluginTable($class, $plugin)
 	{
-		return \Sweany\AutoLoader::loadPluginTable($class, $plugin);
+		return \Sweany\AutoLoader::loadPluginTable($class, $plugin, 'user');
 	}
 
 }

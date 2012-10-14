@@ -46,25 +46,38 @@ Class AutoLoader
 	{
 		if ( isset(self::$configs[$plugin]) )
 		{
-			\Sweany\SysLog::i('internal', 'Plugin Config', '['.$plugin.'] config.php already loaded');
+			if ( Settings::$showFwErrors > 2 || Settings::$logFwErrors > 2 )
+			{
+				SysLog::i('user', 'Plugin Config', '['.$plugin.'] config.php already loaded');
+			}
+			return;
 		}
 		else
 		{
 			if ( is_file(USR_PLUGINS_PATH.DS.$plugin.DS.'config.php') )
 			{
 				require(USR_PLUGINS_PATH.DS.$plugin.DS.'config.php');
-				\Sweany\SysLog::i('internal', 'Plugin Config', '['.$plugin.'] loading config.php');
 				self::$configs[$plugin] = true;
+
+				if ( Settings::$showFwErrors > 2 || Settings::$logFwErrors > 2 )
+				{
+					SysLog::i('user', 'Plugin Config', '['.$plugin.'] loading config.php');
+				}
+				return;
 			}
 			else
 			{
-				\Sweany\SysLog::w('internal', 'Plugin Config', '['.$plugin.'] config.php does not exist.');
-
 				// Store it anyway for performance reasons.
 				// Plugin might not have a config, so we store it as true which will avoid to check for
 				// the file every time this function is called.
 				// (which could be a lot if several blocks of that plugin will be rendered to a single page)
 				self::$configs[$plugin] = true;
+
+				if ( Settings::$showFwErrors > 1 || Settings::$logFwErrors > 1 )
+				{
+					SysLog::w('internal', 'Plugin Config', '['.$plugin.'] config.php does not exist.');
+				}
+				return;
 			}
 		}
 	}
@@ -79,57 +92,61 @@ Class AutoLoader
 			self::loadPluginConfig($plugin);
 		}
 
-		if ( ($return = self::__loadFast($class.'Block', $type.'Block')) )
+		if ( ($return = self::__loadFast($class.'Block', $type.'Block', 'user')) ) {
 			return $return;
+		}
 
 		$path = ($plugin) ? USR_PLUGINS_PATH.DS.$plugin.DS.'blocks'.DS.$class.'Block.php' : USR_BLOCKS_PATH.DS.$class.DS.$class.'Block.php';
 
-		return self::__loadSlow($class.'Block', array($path), 'Block');
+		return self::__loadSlow($class.'Block', array($path), 'Block', 'user');
 	}
 
 
 
-	public static function loadTable($class)
+	public static function loadTable($class, $log_section = 'internal')
 	{
 		$table	= $class.'Table';
 
 		// Try the fast way
-		if ( ($return = self::__loadFast($table, 'Table')) )
+		if ( ($return = self::__loadFast($table, 'Table', $log_section)) ) {
 			return $return;
+		}
 
 		// no success? Try the slow way
 		$paths[] = USR_TABLES_PATH.DS.$table.'.php';
 
-		return self::__loadSlow($table, $paths, 'Table');
+		return self::__loadSlow($table, $paths, 'Table', $log_section);
 	}
 
-	public static function loadCoreTable($class)
+	public static function loadCoreTable($class, $log_section = 'internal')
 	{
 		$table	= $class.'Table';
 
 		// Try the fast way
-		if ( ($return = self::__loadFast($table, 'Table')) )
+		if ( ($return = self::__loadFast($table, 'Table', $log_section)) ) {
 			return $return;
+		}
 
 		// no success? Try the slow way
 		$paths[] = CORE_TABLE.DS.$table.'.php';
 
-		return self::__loadSlow($table, $paths, 'Table');
+		return self::__loadSlow($table, $paths, 'Table', $log_section);
 	}
 
 
-	public static function loadPluginTable($class, $plugin)
+	public static function loadPluginTable($class, $plugin, $log_section = 'internal')
 	{
 		$table	= $class.'Table';
 
 		// Try the fast way
-		if ( ($return = self::__loadFast($table, 'PluginTable')) )
+		if ( ($return = self::__loadFast($table, 'PluginTable', $log_section)) ) {
 			return $return;
+		}
 
 		// no success? Try the slow way
 		$paths[] = USR_PLUGINS_PATH.DS.$plugin.DS.'tables'.DS.$table.'.php';
 
-		return self::__loadSlow($table, $paths, 'PluginTable');
+		return self::__loadSlow($table, $paths, 'PluginTable', $log_section);
 	}
 
 	public static function loadModel($class, $plugin = false)
@@ -143,16 +160,18 @@ Class AutoLoader
 		}
 
 		// Try the fast way
-		if ( ($return = self::__loadFast($model, $type.'Model')) )
+		if ( ($return = self::__loadFast($model, $type.'Model', 'user')) ) {
 			return $return;
+		}
 
 		// no success? Try the slow way
-		if ( $plugin )
+		if ( $plugin ) {
 			$paths[] = USR_PLUGINS_PATH.DS.$class.DS.'pages'.DS.'model'.DS.$model.'.php';
-		else
+		} else {
 			$paths[] = PAGES_MODEL_PATH.DS.$model.'.php';
+		}
 
-		return self::__loadSlow($model, $paths, $type.'Model');
+		return self::__loadSlow($model, $paths, $type.'Model', 'user');
 	}
 
 
@@ -167,7 +186,10 @@ Class AutoLoader
 
 		if (class_exists($sClassName))
 		{
-			\Sweany\SysLog::i('internal', 'Auto-Loader', '(already loaded): <strong><font color="blue">' . $sClassName . '</font></strong>', null, null, $start);
+			if ( Settings::$showFwErrors > 2 || Settings::$logFwErrors > 2 )
+			{
+				SysLog::i('internal', 'Auto-Loader', '(already loaded): <strong><font color="blue">' . $sClassName . '</font></strong>', null, null, $start);
+			}
 			return;
 		}
 
@@ -202,24 +224,34 @@ Class AutoLoader
 
 				if (class_exists($sClassName, false))
 				{
-					\Sweany\SysLog::i('internal', 'Auto-Loader', '(Round '.($i+1).'/'.($size+1).'): <strong><font color="blue">' . $sClassName . '</font></strong> from ' . $paths[$i], null, null, $start);
+					if ( Settings::$showFwErrors > 2 || Settings::$logFwErrors > 2 )
+					{
+						SysLog::i('internal', 'Auto-Loader', '(Round '.($i+1).'/'.($size+1).'):<br/><strong><font color="blue">' . $sClassName . '</font></strong> from ' . $paths[$i], null, null, $start);
+					}
 					return;
 				}
 				else
 				{
-					\Sweany\SysLog::i('internal', 'Auto-Loader', '(Round '.($i+1).'/'.($size+1).'): <strong><font color="#FF6903">' . $sClassName . '</font></strong> not found in ' . $paths[$i], null, null, $start);
+					if ( Settings::$showFwErrors > 1 || Settings::$logFwErrors > 1 )
+					{
+						SysLog::w('internal', 'Auto-Loader', '(Round '.($i+1).'/'.($size+1).'):<br/><strong><font color="#FF6903">' . $sClassName . '</font></strong> not found in ' . $paths[$i], null, null, $start);
+					}
 					return;
 				}
 			}
 		}
-		\Sweany\SysLog::w('internal', 'Auto-Loader', 'Class not found <strong><font color="red">' . $sClassName . '</font></strong> in all paths', null, null, $start);
+
+		if ( Settings::$showFwErrors > 1 || Settings::$logFwErrors > 1 )
+		{
+			SysLog::w('internal', 'Auto-Loader', 'Class not found <strong><font color="red">' . $sClassName . '</font></strong> in all paths', null, null, $start);
+		}
     }
 
 
 
 
 	/***************************************************** PRIVATE FUNCTIONS *****************************************************/
-	private static function __loadFast($class, $type)
+	private static function __loadFast($class, $type, $log_section = 'internal')
 	{
 	 	$start = microtime(true);
 
@@ -227,7 +259,11 @@ Class AutoLoader
 		//     improves speed drastically if having files declaring a single table multiple times
 		if ( array_key_exists($class, self::$classes) )
 		{
-			\Sweany\SysLog::i('internal', 'load'.$type, '(Fast: If: 1/2):<font color="#FF6903"> '.$class . '</font> already declared, passing reference', null, null, $start);
+			if ( Settings::$showFwErrors > 2 || Settings::$logFwErrors > 2 )
+			{
+				SysLog::i($log_section, 'load'.$type, '(Fast If: 1/2):<br/><font color="#FF6903"> '.$class . '</font> already declared, passing reference', null, null, $start);
+			}
+
 			return self::$classes[$class];
 		}
 
@@ -236,7 +272,10 @@ Class AutoLoader
 		//		Also set warning, so we might clean this problem later
 		else if ( class_exists($class, false) )
 		{
-			\Sweany\SysLog::w('internal', 'load'.$type, '(Fast: If: 2/2):<font color="purple"> '.$class . '</font> already in Memory, but have to redeclare ', null, null, $start);
+			if ( Settings::$showFwErrors > 1 || Settings::$logFwErrors > 1 )
+			{
+				SysLog::w($log_section, 'load'.$type, '(Fast If: 2/2):<br/><font color="purple"> '.$class . '</font> already in Memory, but have to redeclare', null, null, $start);
+			}
 
 			$c = new $class;
 
@@ -249,7 +288,7 @@ Class AutoLoader
 
 
 
-	private static function __loadSlow($class, $paths = array(), $type)
+	private static function __loadSlow($class, $paths = array(), $type, $log_section = 'internal')
 	{
 		$start	= microtime(true);
 		$size	= sizeof($paths);
@@ -265,8 +304,10 @@ Class AutoLoader
 				// TODO: class_exists check really needed???
 				if ( class_exists($class, false) )
 				{
-					\Sweany\SysLog::i('internal', 'load'.$type, '(Slow: Round '.($i+1).'/'.($size+1).'):<font color="purple"> '.$class . '</font> in ' . $paths[$i], null, null, $start);
-
+					if ( Settings::$showFwErrors > 2 || Settings::$logFwErrors > 2 )
+					{
+						SysLog::i($log_section, 'load'.$type, '(Slow: Round '.($i+1).'/'.($size+1).'):<br/><font color="purple"> '.$class . '</font> in ' . $paths[$i], null, null, $start);
+					}
 					$c = new $class;
 
 					// store reference to prevent re-declaration
@@ -275,19 +316,22 @@ Class AutoLoader
 				}
 				else
 				{
-					\Sweany\SysLog::e('internal', 'load'.$type, 'No such Class <font color="red">'.$class.'</font> in '.$paths[$i], null, null, $start);
-					\Sweany\SysLog::show();
-					exit;
+					SysLog::e($log_section, 'load'.$type, 'No such Class <font color="red">'.$class.'</font> in '.$paths[$i], null, null, $start);
+					// Do not exit here, SysLog has its own settings
+					//SysLog::show();
+					//exit;
 					return null;
 				}
 			}
 		}
 
 		// Throw error, as nothing has been found
-		\Sweany\SysLog::e('internal', 'load'.$type, 'No such file <font color="red"><ul>'.implode('<li>',$paths).'</ul></font>', null, null, $start);
-		\Sweany\SysLog::show();
-		exit;
+		SysLog::e($log_section, 'load'.$type, 'No such file <font color="red"><ul>'.implode('<li>',$paths).'</ul></font>', null, null, $start);
+		// Do not exit here, SysLog has its own settings
+		//SysLog::show();
+		//exit;
 		return null;
 	}
+
 }
 spl_autoload_register(array('\Sweany\AutoLoader', 'autoload'));
