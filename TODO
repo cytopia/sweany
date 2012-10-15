@@ -4,6 +4,10 @@
 
 High Priority
 -------------------------
+* Admin user in config.php (in case users module is disabled)
+  + also make sure admin controller validate against this
+  + store login in session
+  + make sure $this->user->is_admin() return it correctly
 * Multiple Primary keys for ORM Model
 * URL rewriting
 * Security testings
