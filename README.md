@@ -24,11 +24,10 @@ Features:
   * Integrated language support (via xml files and/or via t()-function with database backend)
   * Integrated Validator mode (validates a lot of the programmers written code on the fly)
   * Syslog (Internal Debug Mode to monitor performance and engine calls)
-  * Fast core (a single file holds everything to reduce disk loading times... needs to be pushed)
   * Integrated CSS Debugger
   * Automated ECSS inclusion (https://github.com/lockdoc/ecss)
   * Fully customizable (can deactivate all core modules if not needed, such as database, users, language, etc)
-
+  * Performance optimized (single-file-core, lazy loading, ...)
  
 Core Modules
 --------------------------
@@ -171,14 +170,6 @@ Advanced Features
 
     + There are various other scenarious where sweany will tell you about misconfigured arrays or missing stuff
 
-  * Fast Core Mode
-    + This mode is designed to be used for production.
-      Once you have finished your project and everything is working as expected, you can switch to this mode.
-      - The fast core mode removes all checking and logging functionality.
-      - It also uses a single core file (instead many separated files) without spaces and newlines
-        to reduce file size and the most important bottleneck of loading many files from disk
-      - The fast core is around 60kb and this is all that is needed to hold your web application
-
   * Custom Routing
     + Normal url calls are http://Domain.tld/<ControllerName>/<FunctionName>/<param1>/<param2>/<paramX>
     + In order to have more friendly looking url names you can change the names of controller and function
@@ -192,4 +183,30 @@ Advanced Features
         which will consider the routing, so that you can rewrite it any time without having broken links.
 
 
+Performance
+--------------------------
+  * Fast Core Mode (currently deactivated - will be back on beta-1)
+    + Note:
+      This mode is designed to be used for production only.
+      Once you have finished your project and everything is working as expected,
+      you can turn on this mode in config.php
+    + The fast core mode minimizes the core and combines it into a single file with removed lines and spaces
+    + All page visible debugging code, core- and project-checks are removed (file logging of errors is still available)
+    + Costy file_exist and checks others have been removed
+    + This core mode results in a single ~64kb file (rather than around 60 separete files ~350kb),
+      which eliminates the most important bottleneck of disk loading times.
+    + Fast core mode on a blank hello-world page has a performance gain of around 30% (tested by 100,000 page loads via wget)
+  * Daemon Mode (in development)
+  * Lazy Loading
+    + The implemented auto-loader is fast and only loads files on demand
+  * Most of the internal structure is implemented in static classes
+  * Some internal non-static classes that do need multiple instances (e.g. Tables), have been
+    implemented in a way, that they still use a single instance (by changing their property values on the fly)
+  * Reloading of classes (unintentionally loading it twice...) is not possible, due to internal caching of class pointers
+  * Controller Models can be deactivated for each Controller separately if they are not needed
+  * You can switch off all core-modules that you don't need, so they don't have to be loaded and bootsrapped 
+    
+
+
+ 
 And there is much more to discover!
