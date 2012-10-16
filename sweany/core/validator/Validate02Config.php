@@ -379,6 +379,19 @@ class Validate02Config extends aBootTemplate
 			self::$error  = '<b>$RUNTIME_MODE</b> has a wrong value in <b>config.php</b>. Can only be <b>SWEANY_DEVELOPMENT</b>, <b>SWEANY_PRODUCTION</b>, <b>SWEANY_PRODUCTION_FAST_CORE</b> or <b>SWEANY_PRODUCTION_DAEMON</b>.';
 			return false;
 		}
+		
+		// --------- TODO: implement PRODUCTION_FAST_CORE
+		if ( $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION_FAST_CORE )
+		{
+			self::$error  = '<b>$RUNTIME_MODE</b> is set to <b>SWEANY_PRODUCTION_FAST_CORE</b> in <b>config.php</b><br/>Sorry, the fast core mode has not yet been implemented.';
+			return false;
+		}
+		// --------- TODO: implement PRODUCTION_DAEMON
+		if ( $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION_DAEMON )
+		{
+			self::$error  = '<b>$RUNTIME_MODE</b> is set to <b>SWEANY_PRODUCTION_DAEMON</b> in <b>config.php</b><br/>Sorry, the daemon mode has not yet been implemented.';
+			return false;
+		}
 
 		// ---------- Validation Mode
 		if ( !($GLOBALS['VALIDATION_MODE'] == 0 || $GLOBALS['VALIDATION_MODE'] == 1) )
