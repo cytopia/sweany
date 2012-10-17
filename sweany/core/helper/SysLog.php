@@ -552,8 +552,57 @@ class SysLog
 		$error .= '</tr>';
 
 
+		// APPEND ALL LOADED FILES
+		$files	= get_included_files();
+		$total	= count($files);
+		$c_files= array();	// core files
+		$h_files= array();	// helper files
+		$u_files= array();	// user files
+		$tmp	= array();
+	
+		for ($i=0; $i<$total; $i++)
+		{
+			$files[$i]	= str_replace(ROOT, '', $files[$i]);
+			$tmp		= explode(DS, $files[$i]);
+			
+			if ( isset($tmp[1]) && $tmp[1] == 'usr' ) {
+				$u_files[] = $files[$i];
+			} else {
+				if ( isset($tmp[2]) && ($tmp[2] == 'lib' || $tmp[2] == 'helper') ) {
+					$h_files[] = $files[$i];
+				} else {
+					$c_files[] = $files[$i];
+				}
+			}
+		}
+
+		
+		$error .= '<tr>';
+		$error .= 	'<td>&nbsp;</td>';
+		$error .= 	'<td><span style="color:pink;">[Files]</span></td>';
+		$error .= 	'<td style="color:#28F0BE;"><strong>Files</strong></td>';
+		$error .= 	'<td>Loaded Files</td>';
+		$error .= 	'<td>';
+		$error .=		$total.' Files Loaded<br/><br/>';
+		
+		$error .=		'<strong>Core Files ('.count($c_files).')</strong><br/>';
+	
+		foreach ($c_files as $path) {
+			$error.= $path.'<br/>';
+		}
+		$error .=		'<br/><strong>Helper Files ('.count($h_files).')</strong><br/>';
+		foreach ($h_files as $path)	{
+			$error.= $path.'<br/>';
+		}
+		$error .=		'<br/><strong>User Files ('.count($u_files).')</strong><br/>';
+		foreach ($u_files as $path)	{
+			$error.= $path.'<br/>';
+		}
+		$error .=	'</td>';
+		$error .= '</tr>';
 
 		$error .= '</table>';
+		
 
 		if ($return)
 			return $pre.$error.$post;
