@@ -439,6 +439,10 @@ class SysLog
 		$error	.=		'<td></td>';
 		$error	.= '</tr>';
 
+
+
+
+		// ---------------- Logging
 		$error	.= '<tr>';
 		$error	.=		'<th><div style="width:82px;"></div></th>';
 		$error	.=		'<th><div style="width:82px;"></div></th>';
@@ -447,12 +451,6 @@ class SysLog
 		$error	.=		'<th></th>';
 		$error	.=		'<th></th>';
 		$error	.= '</tr>';
-
-
-
-
-
-		// ---------------- Logging
 		$error	.= '<tr><td colspan=6>';
 		$error	.= '<span style="font-size:18px; font-weight:bold;font-family:courier;">Work Cycle</span>';
 		$error	.= '</td></tr>';
@@ -539,7 +537,23 @@ class SysLog
 			$error .=	'<td>'.$err.'</td>';
 			$error .= '</tr>';
 		}
+		
+		
+		
+		// ---------------- Further Info
+		$error	.= '<tr>';
+		$error	.=		'<th><div style="width:82px;"></div></th>';
+		$error	.=		'<th><div style="width:82px;"></div></th>';
+		$error	.=		'<th><div style="width:142px;"></div></th>';
+		$error	.=		'<th></th>';
+		$error	.=		'<th></th>';
+		$error	.=		'<th></th>';
+		$error	.= '</tr>';
+		$error	.= '<tr><td colspan=6>';
+		$error	.= '<span style="font-size:18px; font-weight:bold;font-family:courier;">Further Info</span>';
+		$error	.= '</td></tr>';
 
+		
 		// APPEND SESSION
 		$error .= '<tr>';
 		$error .= 	'<td>&nbsp;</td>';
