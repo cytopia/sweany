@@ -3,3 +3,49 @@
  *    U S E R
  *
  **************************************************************************************************************/
+.plugin_user_edit_data_form {
+	padding:5px;
+}
+.plugin_user_edit_data_form input {
+	margin:3px;
+}
+.plugin_user_edit_data_form input[type=submit] {
+	background-color :         #00A9FD;
+	border :                   solid 1px #2F2F2F;
+	color :                    #D7D7D7;
+	font-size :                15px;
+	padding:2px;
+	margin:10px;
+}
+.plugin_user_edit_data_form label {
+	float :                    left;
+	width :                    180px;
+	margin-right :             0.5em;
+	padding-top :              0.2em;
+	text-align :               right;
+	font-weight :              bold;
+}
+
+.plugin_user_edit_data_fields{
+	margin-bottom: 10px;
+}
+
+.plugin_user_edit_data_fields label {
+	float :                    left;
+	width :                    200px;
+	margin-right :             0.5em;
+	padding-top :              0.2em;
+	text-align :               right;
+	font-weight :              bold;
+}
+
+
+.userLoginForm {
+	margin-bottom:10px;
+}
+
+.userRegistrationFormEnabled {
+}
+.userRegistrationFormDisabled {
+	color:gray;
+}

@@ -39,14 +39,17 @@ class Render
 	public static function block($pluginName, $controllerName, $methodName, $params)
 	{
 		// 01) Load in instantiate block
+
 		$block = \Sweany\AutoLoader::loadBlock($controllerName, $pluginName);
 
 		if ( !method_exists(get_class($block), $methodName) )
 		{
 			$backtrace	= debug_backtrace();
-			$classtrace	= $backtrace[count($backtrace)-1];
-			$error		= '<br/><br/>[call] from: '.$classtrace['class'].'->'.$classtrace['function'];
+			$thisTrace	= $backtrace[count($backtrace)-1];
+			$classTrace	= isset($thisTrace['class'])	? $thisTrace['class'].'->'	: '';
+			$funcTrace	= isset($thisTrace['function'])	? $thisTrace['function']	: '';
 
+			$error		= '<br/><br/>[call] from: '.$classTrace.$funcTrace;
 			SysLog::e('user', 'Render Block', '('.get_class($block).') '.$controllerName.'->'.$methodName.'('.implode(',', $params).') does not exist.'.$error);
 			SysLog::show();
 			exit();
@@ -57,7 +60,7 @@ class Render
 		//     to specify it itself.
 		if ( $GLOBALS['LANGUAGE_ENABLE'] )
 		{
-			$block->language->set($methodName);
+			$block->core->language->set($methodName);
 		}
 
 
@@ -94,25 +97,29 @@ class Render
 		 * This is the important part to determine whether the block itself will
 		 * hold a non renderable result, such as an ajax request.
 		 *
-		 * If so, we only need the return value here and break.
-		 * We also need to make sure, that we have to break the whole procedure of redering layouts, view
-		 * And other blocks. As This will be the only Pageoutput serving at the page controller that has included this block
-		 * TODO: break all actions in index.php, Render.php
+		 * If $this->render is set to false
+		 * The return value of the block will also be used as the output to show.
+		 * Not rendering only means, the block does not want to use a view (save some performance xD)
 		 */
 		if ( !$block->render )
 		{
-			return array('ret' => $ret, 'render' => false, 'html' => null);
+			return array('ret' => $ret, 'render' => false, 'html' => $ret);
 		}
 
 
-
-		// 04) set view variables
+		// 04) ------- set view variables
 		foreach ($bVars	= $block->getVars() as $name => $value)
 		{
 			$$name = $value;
 		}
+		// 05 ------- Set Blocks (defined by controller) - yes Blocks can also attach other blocks!
+		foreach ($bBlocks = $block->getBlocks() as $name => $value)
+		{
+			$$name = $value;
+		}
 
-		// 05) get View
+
+		// 06) get View
 		$view		= $block->getView().'.tpl.php';
 		$view_path	= strlen($pluginName) ? USR_PLUGINS_PATH.DS.$pluginName.DS.'blocks'.DS.'view'.DS.$view : USR_BLOCKS_PATH.DS.$controllerName.DS.'view'.DS.$view;
 
@@ -122,7 +129,7 @@ class Render
 			$view_path = CORE_VIEW.DS.'missing.tpl.php';	// use error view
 		}
 
-		// 06) RENDER
+		// 07) RENDER
 		if ( !in_array(\Sweany\Settings::$ob_callback, ob_list_handlers())  )
 		{
 			ob_start(\Sweany\Settings::$ob_callback);
@@ -134,10 +141,33 @@ class Render
 
 		include($view_path);
 
-		$content = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
+		$content = $GLOBALS['COMPRESS_HTML'] ? self::compress(ob_get_contents()) : ob_get_contents();
 
-		// 07) Clean (erase) the output buffer and turn off output buffering
+		// 08) Clean (erase) the output buffer and turn off output buffering
 		ob_end_clean();
+
+		// 09 Highlight Block for admins if desired
+		if ( Users::isAdmin() )
+		{
+			$highlight = \Sweany\Session::get(Settings::sessSweany, Settings::sessAdmin);
+
+			if ( isset($highlight['blocks']) && $highlight['blocks'] == 'highlight' )
+			{
+				$name = ($pluginName) ? $pluginName.'::' : '';
+				$name.= $controllerName.'->'.$methodName;
+				// TODO: important!! Link on syslog (if user is admin, to enable block showing via settings controller)!!!
+				$container = '<div style="border: solid 3px red;margin:-3px;z-index:100; position:relative;">';
+				$container.=	'<div style="background:red; color:white; position:absolute;margin:-3px;padding:3px;">';
+				$container.=	'<strong>'.$name.'</strong><br/>'.basename($view_path);
+				$container.=	'</div>';
+				$container.=	'%s';
+				$container.= '</div>';
+
+				$content = sprintf($container, $content);
+			}
+		}
+
+
 
 		// 09 Restore Header
 		//
@@ -146,7 +176,6 @@ class Render
 		// so we have to restore it
 		// TODO:
 		//header('Content-type: text/html; charset=UTF-8');
-
 
 		return array('ret' => $ret, 'render' => true, 'html' => $content);
 	}
@@ -173,16 +202,18 @@ class Render
 		// Core views for core controller reside in a different place
 		if ( $controller->isCore )
 		{
-			// If we are not in a plugin and have a view file
-			// with the same name of the core view, we overwrite it
-			if ( !$plugin && is_file(PAGES_VIEW_PATH.DS.$class.DS.$viewName) )
+			// Core view (such as 404.tpl.php, admin_emails.tpl.php, ...) can be
+			// overwritten in usr/pages/_core.
+			// If there is a view present in the users place,
+			// we will take that one instead of the core one.
+			if ( is_file(USR_PAGES_PATH.DS.'_core'.DS.$viewName) )
 			{
-				$viewPath = PAGES_VIEW_PATH.DS.$class.DS.$viewName;
+				$viewPath = USR_PAGES_PATH.DS.'_core'.DS.$viewName;
 				SysLog::i('user', 'Render Core View [overwrite]', 'Overwriting Core view, Using: '.$viewPath);
 			}
 			else
 			{
-				$viewPath	= CORE_VIEW.DS.$class.DS.$viewName;
+				$viewPath	= CORE_VIEW.DS.'FrameworkDefault'.DS.$viewName;
 				SysLog::i('user', 'Render Core View', 'Using: '.$viewPath);
 			}
 		}
@@ -223,7 +254,7 @@ class Render
 		}
 
 		@include($viewPath);
-		$content = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
+		$content = $GLOBALS['COMPRESS_HTML'] ? self::compress(ob_get_contents()) : ob_get_contents();
 		ob_end_clean();
 
 		// -------- PLUGIN VIEW WRAPPER
@@ -298,7 +329,7 @@ class Render
 			}
 
 			@include($viewPath);
-			$content[$key] = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
+			$content[$key] = $GLOBALS['COMPRESS_HTML'] ? self::compress(ob_get_contents()) : ob_get_contents();
 			ob_end_clean();
 
 			// -------- PLUGIN VIEW WRAPPER
@@ -329,11 +360,20 @@ class Render
 
 		// Only execute if an actual class/method has been specified
 		// Otherwise just take the default layout
-		if ( isset($layout[0]) && isset($layout[1]) )
+		if ( isset($layout[0]) && isset($layout[1]) || is_array($GLOBALS['DEFAULT_LAYOUT']) )
 		{
-			$className		= $layout[0];
-			$methodName		= $layout[1];
-			$params			= $layout[2];
+			if ( isset($layout[0]) && isset($layout[1]) )
+			{
+				$className		= $layout[0];
+				$methodName		= $layout[1];
+				$params			= $layout[2];
+			}
+			else
+			{
+				$className		= $GLOBALS['DEFAULT_LAYOUT'][0];
+				$methodName		= $GLOBALS['DEFAULT_LAYOUT'][1];
+				$params			= isset($GLOBALS['DEFAULT_LAYOUT'][2]) ? $GLOBALS['DEFAULT_LAYOUT'][2] : array();
+			}
 			$classPath		= USR_LAYOUTS_PATH.DS.$className.'.php';
 
 			if ( is_file($classPath) )
@@ -348,7 +388,7 @@ class Render
 					// set language
 					if ( $GLOBALS['LANGUAGE_ENABLE'] )
 					{
-						$layoutCtl->language->set($methodName);
+						$layoutCtl->core->language->set($methodName);
 					}
 
 					// execute method
@@ -448,8 +488,15 @@ class Render
 		{
 			ob_start();
 		}
+
+		// If you are the admin, show the administration panel, on top of everything
+		if ( Users::isAdmin() )
+		{
+			include(CORE_BUILT_IN.DS.'admin'.DS.'panel.tpl.php');
+		}
+
 		include($layoutView);
-		$content = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
+		$content = $GLOBALS['COMPRESS_HTML'] ? self::compress(ob_get_contents()) : ob_get_contents();
 		ob_end_clean();
 
 		return $content;
@@ -457,7 +504,7 @@ class Render
 
 	public static function skeleton($layout)
 	{
-		if ( is_file(USR_SKELETONS_PATH.DS.$GLOBALS['HTML_DEFAULT_SKELETON']) )
+		if ( is_file(USR_SKELETONS_PATH.DS.'default.tpl.php'/*$GLOBALS['HTML_DEFAULT_SKELETON']*/) )
 		{
 			// -------- RENDER
 			if ( !in_array(\Sweany\Settings::$ob_callback, ob_list_handlers())  )
@@ -468,13 +515,14 @@ class Render
 			{
 				ob_start();
 			}
-			include(USR_SKELETONS_PATH.DS.$GLOBALS['HTML_DEFAULT_SKELETON']);
-			$content = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
+
+			include(USR_SKELETONS_PATH.DS.'default.tpl.php'/*$GLOBALS['HTML_DEFAULT_SKELETON']*/);
+			$content = $GLOBALS['COMPRESS_HTML'] ? self::compress(ob_get_contents()) : ob_get_contents();
 			ob_end_clean();
 		}
 		else
 		{
-			SysLog::e('user', 'Render Skeleton', 'File does not exist: Class File does not exist: '.USR_SKELETONS_PATH.DS.$GLOBALS['HTML_DEFAULT_SKELETON']);
+			SysLog::e('user', 'Render Skeleton', 'File does not exist: Class File does not exist: '.USR_SKELETONS_PATH.DS.'default.tpl.php'/*$GLOBALS['HTML_DEFAULT_SKELETON']*/);
 			SysLog::show();
 			exit;
 		}
@@ -501,7 +549,7 @@ class Render
 			ob_start();
 		}
 		include($skeletonPath);
-		$content = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
+		$content = $GLOBALS['COMPRESS_HTML'] ? self::compress(ob_get_contents()) : ob_get_contents();
 		ob_end_clean();
 
 		return $content;
@@ -543,9 +591,29 @@ class Render
 			{
 				ob_start();
 			}
-			@include(PAGES_WRAPPER_PATH.DS.$pluginName.DS.$viewName);
-			$content = preg_replace('/^\s+|\n|\r|\s+$/m', '', ob_get_contents());
+			include(PAGES_WRAPPER_PATH.DS.$pluginName.DS.$viewName);
+			$content = $GLOBALS['COMPRESS_HTML'] ? self::compress(ob_get_contents()) : ob_get_contents();
 			ob_end_clean();
+
+			// 09 Highlight Wrapper for admins if desired
+			if ( Users::isAdmin() )
+			{
+				$highlight = \Sweany\Session::get(Settings::sessSweany, Settings::sessAdmin);
+
+				if ( isset($highlight['wrapper']) && $highlight['wrapper'] == 'highlight' )
+				{
+					// TODO: important!! Link on syslog (if user is admin, to enable block showing via settings controller)!!!
+					$container = '<div style="border: solid 3px green;margin:-3px;z-index:100; position:relative;">';
+					$container.=	'<div style="background:green; color:white; position:absolute;margin:-3px;padding:3px;">';
+					$container.=	'<strong>'.$pluginName.' wrapper</strong><br/>'.basename($viewName);
+					$container.=	'</div>';
+					$container.=	'%s';
+					$container.= '</div>';
+
+					$content = sprintf($container, $content);
+				}
+			}
+
 			return $content;
 		}
 		else
@@ -553,5 +621,10 @@ class Render
 			SysLog::i('user', 'Render View', 'No Wrapper for '.$pluginName.'-plugin: '.$viewName);
 			return $view;
 		}
+	}
+
+	private static function compress($html)
+	{
+		return preg_replace('/^\s+|\n|\r|\s+$/m', '', $html);
 	}
 }

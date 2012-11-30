@@ -128,14 +128,14 @@ class Forums extends PageController
 		if ( !isset($_POST['postId']) )				{return -1;	}	// If no post value is set, exit
 		if ( $_POST['postId'] != $post_id )			{return -2;	}	// basic check: if POST and GET values differ, return false
 		if ( !isset($_POST['body']))				{return -3; }	// Body is not set!!!
-		if ( !$this->user->isLoggedIn() )			{return -4;	}	// If not logged in you cannot edit post
-		if ( $Post->fk_user_id != $this->user->id() ) { return ''; }	// If it is not my post, I cannot edit it
+		if ( !$this->core->user->isLoggedIn() )			{return -4;	}	// If not logged in you cannot edit post
+		if ( $Post->fk_user_id != $this->core->user->id() ) { return ''; }	// If it is not my post, I cannot edit it
 
-		$Post = $this->model->ForumPosts->update($post_id, array('body' =>  $_POST['body']), 2);	// update and retrive updated Post
+		$this->model->ForumPosts->update($post_id, array('body' =>  $_POST['body']), 2);	// update and retrive updated Post
 
 		// return the new box
 		$box = '<strong>'.$Post->title.'</strong><br/><hr/><br/>';
-		$box.= Bbcode::parse($Post->body, '/plugins/Forums/img/smiley');
+		$box.= Bbcode::parse($_POST['body']);
 		$box.= '<br/><br/>';
 		return $box;
 	}
@@ -155,14 +155,14 @@ class Forums extends PageController
 		if ( !isset($_POST['threadId']) )				{return -1;}	// If no post value is set, exit
 		if ( $_POST['threadId'] != $thread_id )			{return -2;}	// basic check: if POST and GET values differ, return false
 		if ( !isset($_POST['body']))					{return -3;}	// Body is not set!!!
-		if ( !$this->user->isLoggedIn() )				{return -4;}	// If not logged in you cannot edit post
-		if ( $Thread->user_id != $this->user->id() )	{return -6;}	// If it is not my post, I cannot edit it
+		if ( !$this->core->user->isLoggedIn() )				{return -4;}	// If not logged in you cannot edit post
+		if ( $Thread->user_id != $this->core->user->id() )	{return -6;}	// If it is not my post, I cannot edit it
 
-		$Thread = $this->model->ForumThreads->update($thread_id, array('body' => $_POST['body']), 2);
+		$this->model->ForumThreads->update($thread_id, array('body' => $_POST['body']), 2);
 
 		// return the new box
 		$box = '<strong>'.$Thread->title.'</strong><br/><hr/><br/>';
-		$box.= Bbcode::parse($Thread->body, '/plugins/Forums/img/smiley');
+		$box.= Bbcode::parse($_POST['body']);
 		$box.= '<br/><br/>';
 		return $box;
 	}
@@ -182,16 +182,11 @@ class Forums extends PageController
 
 		if ( !isset($_POST['postId']) )				{ return ''; }	// If no post value is set, exit
 		if ( $_POST['postId'] != $post_id )			{ return ''; }	// basic check: if POST and GET values differ, return false
-		if ( !$this->user->isLoggedIn() )			{ return ''; }	// If not logged in you cannot edit post
-		if ( $Post->fk_user_id != $this->user->id() ) { return ''; }	// If it is not my post, I cannot edit it
+		if ( !$this->core->user->isLoggedIn() )			{ return ''; }	// If not logged in you cannot edit post
+		if ( $Post->fk_user_id != $this->core->user->id() ) { return ''; }	// If it is not my post, I cannot edit it
 
 		$box = '<div style="text-align:left; padding:8px; border:solid 1px black; width:505px; background-color:#FDFDFD;">';
-		$box.= 		'<div style="height:20px;">';
-		$box.=			$this->model->getMessageBBCodeIconBar('quickEditBoxText');
-		$box.= 		'</div>';
-		$box.= 		'<div>';
-		$box.= 			Form::textArea('body', 60, 5, $Post->body, array('id' => 'quickEditBoxText'));
-		$box.= 		'</div>';
+		$box.=		Form::editor('body', $Post->body, 60, 5, array('id' => 'quickEditBoxText'));
 		$box.=		'<button onclick=\'submitEditPost('.$post_id.')\'>&auml;ndern</button>';
 		$box.=		'<button onclick=\'cancelEdit()\'>abbrechen</button>';
 		$box.= '</div><br/>';
@@ -213,17 +208,12 @@ class Forums extends PageController
 
 		if ( !isset($_POST['threadId']) )				{return '';}	// If no post value is set, exit
 		if ( $_POST['threadId'] != $thread_id )			{return '';}	// basic check: if POST and GET values differ, return false
-		if ( !$this->user->isLoggedIn() )				{return '';}	// If not logged in you cannot edit post
-		if ( $Thread->user_id != $this->user->id() )	{return '';}	// If it is not my thread, I cannot edit it
+		if ( !$this->core->user->isLoggedIn() )				{return '';}	// If not logged in you cannot edit post
+		if ( $Thread->user_id != $this->core->user->id() )	{return '';}	// If it is not my thread, I cannot edit it
 
 
 		$box = '<div style="text-align:left; padding:8px; border:solid 1px black; width:505px; background-color:#FDFDFD;">';
-		$box.= 		'<div style="height:20px;">';
-		$box.=			$this->model->getMessageBBCodeIconBar('quickEditBoxText');
-		$box.= 		'</div>';
-		$box.= 		'<div>';
-		$box.= 			Form::textArea('body', 60, 5, $Thread->body, array('id' => 'quickEditBoxText'));
-		$box.= 		'</div>';
+		$box.=		Form::editor('body', $Thread->body, 60, 5, array('id' => 'quickEditBoxText'));
 		$box.=		'<button onclick=\'submitEditThread('.$thread_id.')\'>&auml;ndern</button>';
 		$box.=		'<button onclick=\'cancelEdit()\'>abbrechen</button>';
 		$box.= '</div><br/>';
@@ -244,17 +234,17 @@ class Forums extends PageController
 	{
 		$Categories = $this->model->ForumCategories->find('all', array('recursive' => 2));
 
-		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
+		$this->attachPluginBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 
 		// ADD TEMPLATE ELEMENTS
-		HtmlTemplate::setTitle($this->language->forum);
+		HtmlTemplate::setTitle($this->core->language->forum);
 
 		// ADD CSS
 		Css::addFile('/plugins/Forums/css/forum.css');
 
 		// VIEW VARIABLES
 		$this->set('Categories', $Categories);
-		$this->set('language', $this->language);
+		$this->set('language', $this->core->language);
 		$this->set('date_format', $this->dateFormat);
 		$this->set('time_format', $this->timeFormat);
 
@@ -289,25 +279,25 @@ class Forums extends PageController
 		// check wheter thread or post was last and sort by it accordingly
 		//usort($threads, array('ForumsModel', 'sortForumThreadsByLastEntry'));
 
-		$isAdmin		= $this->user->isAdmin();
+		$isAdmin		= $this->core->user->isAdmin();
 
 
 //		debug($Forum);
 
-		$navigation		= Html::l($this->language->forum, __CLASS__, '').' -&gt; '.$Forum->name;
+		$navigation		= Html::l($this->core->language->forum, __CLASS__).' -&gt; '.$Forum->name;
 
 		// ADD TEMPLATE ELEMENTS
-		HtmlTemplate::setTitle($Forum->name.' '.$this->language->forum);
+		HtmlTemplate::setTitle($Forum->name.' '.$this->core->language->forum);
 
 		// ADD CSS
 		Css::addFile('/plugins/Forums/css/forum.css');
 
 		// BLOCKS
-		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
+		$this->attachPluginBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 
 		// VIEW VARIABLES
 		$this->set('Forum', $Forum);
-		$this->set('language', $this->language);
+		$this->set('language', $this->core->language);
 		$this->set('isAdmin', $isAdmin);
 
 		$this->set('date_format', $this->dateFormat);
@@ -319,7 +309,7 @@ class Forums extends PageController
 
 		// VIEW OPTIONS
 		$this->set('navi', $navigation);
-		$this->set('headline', $Forum->name.' '.$this->language->forum);
+		$this->set('headline', $Forum->name.' '.$this->core->language->forum);
 		$this->view('show_forum');
 
 		// LAYOUT OPTIONS
@@ -350,7 +340,7 @@ class Forums extends PageController
 			$this->redirect(__CLASS__, __FUNCTION__, array($forum_id, $thread_id, $Thread->seo_url));
 		}
 
-		if ( !$this->user->isLoggedIn() )
+		if ( !$this->core->user->isLoggedIn() )
 		{
 			// SET SESSION
 			// Also inform user to log in, he will be redirected here afterwards
@@ -360,9 +350,9 @@ class Forums extends PageController
 
 		$this->model->updateThreadView($thread_id);
 
-		$this->attachBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
+		$this->attachPluginBlock('bOnlineUsers', 'Forums', 'Forum', 'onlineUsers');
 
-		$navigation = Html::l($this->language->forum, __CLASS__, 'index').' -&gt; '.Html::l($Thread->Forum->name, __CLASS__, 'showForum', array($forum_id, $Thread->Forum->seo_url));
+		$navigation = Html::l($this->core->language->forum, __CLASS__).' -&gt; '.Html::l($Thread->Forum->name, __CLASS__, 'showForum', array($forum_id, $Thread->Forum->seo_url));
 
 
 		// ADD TEMPLATE ELEMENTS
@@ -377,9 +367,8 @@ class Forums extends PageController
 
 		// VIEW VARIABLES
 		$this->set('Thread', $Thread);
-		$this->set('language', $this->language);
-		$this->set('user', $this->user);
-		$this->set('messageBBCodeIconBar', $this->model->getMessageBBCodeIconBar('postMessage'));
+		$this->set('language', $this->core->language);
+		$this->set('user', $this->core->user);
 		$this->set('date_format', $this->dateFormat);
 		$this->set('time_format', $this->timeFormat);
 
@@ -398,7 +387,7 @@ class Forums extends PageController
 
 		// VIEW OPTIONS
 		$this->set('navi', $navigation);
-		$this->set('headline', $Thread->Forum->name.' '.$this->language->forum);
+		$this->set('headline', $Thread->Forum->name.' '.$this->core->language->forum);
 		$this->view('show_thread');
 
 		// LAYOUT OPTIONS
@@ -419,11 +408,11 @@ class Forums extends PageController
 		{
 			$this->redirect(__CLASS__, 'index');
 		}
-		if ( ! ($Forum->can_create || $this->user->isAdmin()) )
+		if ( ! ($Forum->can_create || $this->core->user->isAdmin()) )
 		{
 			$this->redirect(__CLASS__, 'showForum', array($forum_id, $this->model->getForumSeoUrl($forum_id)));
 		}
-		if ( !$this->user->isLoggedIn() )
+		if ( !$this->core->user->isLoggedIn() )
 		{
 			// SET SESSION
 			// Also inform user to log in, he will be redirected here afterwards
@@ -432,7 +421,7 @@ class Forums extends PageController
 
 
 		// ------------------------- FORM SUBMITTED AND VALID -------------------------
-		if ( $this->validateForm('form_add_thread') && $this->user->isLoggedIn()  )
+		if ( $this->validateForm('form_add_thread') && $this->core->user->isLoggedIn()  )
 		{
 			// Note:
 			// need to check for the submit button of this form
@@ -443,10 +432,10 @@ class Forums extends PageController
 				$fields['forum_id']	= Form::getValue('forum_id');
 				$fields['title']	= Form::getValue('title');
 				$fields['body']		= Form::getValue('body');
-				$fields['user_id']	= $this->user->id();
-				$Thread	= $this->model->ForumThreads->save($fields,2);
+				$fields['user_id']	= $this->core->user->id();
+				$tid	= $this->model->ForumThreads->save($fields,2);
 
-				$this->redirect(__CLASS__, 'showThread', array($forum_id, $Thread->id, $Thread->seo_url));
+				$this->redirect(__CLASS__, 'showThread', array($forum_id, $tid));
 			}
 			else if ( Form::fieldIsSet('add_thread_preview') )
 			{
@@ -455,11 +444,11 @@ class Forums extends PageController
 			}
 		}
 
-		$navigation	= Html::l($this->language->forum, __CLASS__, 'index').' -&gt; '.Html::l($Forum->name, __CLASS__, 'showForum', array($forum_id, $Forum->seo_url));
+		$navigation	= Html::l($this->core->language->forum, __CLASS__).' -&gt; '.Html::l($Forum->name, __CLASS__, 'showForum', array($forum_id, $Forum->seo_url));
 
 
 		// ADD TEMPLATE ELEMENTS
-		HtmlTemplate::setTitle($Forum->name.' - '.$this->language->createThread);
+		HtmlTemplate::setTitle($Forum->name.' - '.$this->core->language->createThread);
 
 		// ADD CSS
 		Css::addFile('/plugins/Forums/css/forum.css');
@@ -468,10 +457,9 @@ class Forums extends PageController
 		Javascript::addFile('/plugins/Forums/js/forum.js');
 
 		// VIEW VARIABLES
-		$this->set('language', $this->language);
-		$this->set('user', $this->user);
+		$this->set('language', $this->core->language);
+		$this->set('user', $this->core->user);
 		$this->set('Forum', $Forum);
-		$this->set('messageBBCodeIconBar', $this->model->getMessageBBCodeIconBar('postBody'));
 
 		$this->set('userLoginCtl', $this->userLoginCtl);
 		$this->set('userLoginMethod', $this->userLoginMethod);
@@ -480,7 +468,7 @@ class Forums extends PageController
 
 		// VIEW OPTIONS
 		$this->set('navi', $navigation);
-		$this->set('headline', $Forum->name.' '.$this->language->forum);
+		$this->set('headline', $Forum->name.' '.$this->core->language->forum);
 		$this->view('add_thread');
 
 		// LAYOUT OPTIONS
@@ -509,7 +497,7 @@ class Forums extends PageController
 		}
 
 		// --------------- VALIDATE USER
-		if ( !$this->user->isLoggedIn() )
+		if ( !$this->core->user->isLoggedIn() )
 		{
 			// SET SESSION
 			// Also inform user to log in, he will be redirected here afterwards
@@ -517,7 +505,7 @@ class Forums extends PageController
 		}
 
 		// ------------------------- FORM SUBMITTED AND VALID -------------------------
-		if ( $this->validateForm('form_add_post') && $this->user->isLoggedIn() && !$Thread->is_closed && !$Thread->is_locked )
+		if ( $this->validateForm('form_add_post') && $this->core->user->isLoggedIn() && !$Thread->is_closed && !$Thread->is_locked )
 		{
 			// Note:
 			// need to check for the submit button of this form
@@ -529,7 +517,7 @@ class Forums extends PageController
 				$fields['fk_forum_thread_id']	= Form::getValue('thread_id');
 				$fields['title']				= Form::getValue('title');
 				$fields['body']					= Form::getValue('body');
-				$fields['fk_user_id']			= $this->user->id();
+				$fields['fk_user_id']			= $this->core->user->id();
 
 				$post_id = $this->model->ForumPosts->save($fields);
 
@@ -551,11 +539,11 @@ class Forums extends PageController
 		unset($_thread->LastPost);
 		$entries		= array_merge($posts, array($_thread));
 
-		$navigation	= Html::l($this->language->forum, __CLASS__, 'index').' -&gt; '.Html::l($Forum->name, __CLASS__, 'showForum', array($forum_id, $Forum->seo_url)).' -&gt; '.$Thread->title;
+		$navigation	= Html::l($this->core->language->forum, __CLASS__).' -&gt; '.Html::l($Forum->name, __CLASS__, 'showForum', array($forum_id, $Forum->seo_url)).' -&gt; '.$Thread->title;
 
 
 		// ADD TEMPLATE ELEMENTS
-		HtmlTemplate::setTitle($Forum->name.' - '.$this->language->reply);
+		HtmlTemplate::setTitle($Forum->name.' - '.$this->core->language->reply);
 
 		// ADD CSS
 		Css::addFile('/plugins/Forums/css/forum.css');
@@ -566,12 +554,10 @@ class Forums extends PageController
 		// VIEW VARIABLES
 		$this->set('Thread', $Thread);
 		$this->set('entries', $entries);
-		$this->set('language', $this->language);
-		$this->set('user', $this->user);
+		$this->set('language', $this->core->language);
+		$this->set('user', $this->core->user);
 		$this->set('date_format', $this->dateFormat);
 		$this->set('time_format', $this->timeFormat);
-
-		$this->set('messageBBCodeIconBar', $this->model->getMessageBBCodeIconBar('postBody'));
 
 		$this->set('userLoginCtl', $this->userLoginCtl);
 		$this->set('userLoginMethod', $this->userLoginMethod);
@@ -580,7 +566,7 @@ class Forums extends PageController
 
 		// VIEW OPTIONS
 		$this->set('navi', $navigation);
-		$this->set('headline', $Forum->name.' '.$this->language->forum);
+		$this->set('headline', $Forum->name.' '.$this->core->language->forum);
 		$this->view('add_post');
 
 		// LAYOUT OPTIONS

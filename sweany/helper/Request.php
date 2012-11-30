@@ -28,6 +28,15 @@
  */
 class Request
 {
+	public static function get($key, $default_val = null)
+	{
+		if ( isset($_REQUEST[$key]) ) {
+			return ( $_REQUEST[$key] );
+		} else {
+			return ( $default_val );
+		}
+	}
+
 	/**
 	 *
 	 *  Informs whether or not the controller request

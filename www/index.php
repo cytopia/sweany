@@ -10,7 +10,7 @@ define('SWEANY_PRODUCTION',0x2);
 define('SWEANY_PRODUCTION_FAST_CORE',0x3);
 define('SWEANY_PRODUCTION_DAEMON',0x4);
 require(ROOT.DIRECTORY_SEPARATOR.'usr'.DIRECTORY_SEPARATOR.'config.php');
-if(1 /* Sorry, No FAST_CORE mode yet $GLOBALS['RUNTIME_MODE']!=SWEANY_PRODUCTION_FAST_CORE*/){require(ROOT.DIRECTORY_SEPARATOR.'www'.DIRECTORY_SEPARATOR.'index_development.php');exit();}
+if(1 /* Sorry, No FAST_CORE mode yet $GLOBALS['RUNTIME_MODE']!=SWEANY_PRODUCTION_FAST_CORE*/){require(ROOT.DIRECTORY_SEPARATOR.'www'.DIRECTORY_SEPARATOR.'index_devel.php');exit();}
 /* FAST CORE MODE STARTS HERE */
 else{
 define('DS',DIRECTORY_SEPARATOR);
@@ -19,7 +19,7 @@ define('CORE_PATH',FRAMEWORK.DS.'core');
 define('LOG_PATH',FRAMEWORK.DS.'log');
 define('LIB_PATH',FRAMEWORK.DS.'lib');
 define('CORE_BOOTSTRAP',CORE_PATH.DS.'bootstrap');
-define('CORE_CACHE',CORE_PATH.DS.'cache');
+define('CORE_CACHE',FRAMEWORK.DS.'cache');
 define('CORE_DATABASE',CORE_PATH.DS.'database');
 define('CORE_HELPER',CORE_PATH.DS.'helper');
 define('CORE_PAGES',CORE_PATH.DS.'pages');

@@ -43,10 +43,10 @@ class Session extends aBootTemplate
 		{
 			switch (session_status())
 			{
-				case PHP_SESSION_DISABLED:	self::$error = 'PHP_SESSION_DISABLED';	return false; break;
-				case PHP_SESSION_NONE : 	self::$error = 'PHP_SESSION_NONE';		return false; break;
-				case PHP_SESSION_ACTIVE :	self::$error = 'PHP_SESSION_ACTIVE';	return false; break;
-				default: self::$error = 'Unknown Session Error '; return false;
+				case PHP_SESSION_DISABLED:	self::$error = 'PHP_SESSION_DISABLED';	return false;
+				case PHP_SESSION_NONE : 	self::$error = 'PHP_SESSION_NONE';		return false;
+				case PHP_SESSION_ACTIVE :	self::$error = 'PHP_SESSION_ACTIVE';	return false;
+				default:					self::$error = 'Unknown Session Error'; return false;
 			}
 		}
 	}
@@ -55,61 +55,108 @@ class Session extends aBootTemplate
 
 	/* ******************************************** GET ********************************************/
 
-	public static function getId()
+	public static function id()
 	{
-		return ( session_id() );
+		return session_id();
 	}
 
-	public static function get($key)
-	{
-		return ( isset($_SESSION[$key]) ) ? $_SESSION[$key] : NULL;
-	}
 
-	public static function getSubKey($section, $key, $position = NULL)
+	public static function get($key = null, $subKey = null, $subSubKey = null, $subSubSubKey = null)
 	{
-		if ( $position )
+		// TODO: change to NOT OR as it is faster!
+		if ( $subSubSubKey && $subSubKey && $subKey && $key )
 		{
-			$tmp = isset($_SESSION[$section][$position][$key]) ? $_SESSION[$section][$position][$key] : array();
+			return isset($_SESSION[$key][$subKey][$subSubKey][$subSubSubKey]) ? $_SESSION[$key][$subKey][$subSubKey][$subSubSubKey] : null;
+		}
+		else if ( $subSubKey && $subKey && $key )
+		{
+			return isset($_SESSION[$key][$subKey][$subSubKey]) ? $_SESSION[$key][$subKey][$subSubKey] : null;
+		}
+		else if ( $subKey && $key )
+		{
+			return isset($_SESSION[$key][$subKey]) ? $_SESSION[$key][$subKey] : null;
+		}
+		else if ( $key )
+		{
+			return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
 		}
 		else
 		{
-			$tmp = isset($_SESSION[$section][$key]) ? $_SESSION[$section][$key] : array();
+			return $_SESSION;
 		}
-
-		return ( $tmp );
 	}
 
 
-
 	/* ******************************************** SET ********************************************/
+	
+	/**
+	 *
+	 *	$key = 'string';
+	 *	$key = array('string' => 'string');
+	 */
 	public static function set($key, $val)
 	{
-		$_SESSION[$key] = $val;
+		if ( is_array($key) ) {
+			
+			$subKey = current($key);
+			$key	= key($key);
+			
+			$_SESSION[$key][$subKey] = $val;
+
+		} else {
+			$_SESSION[$key] = $val;
+		}
 	}
 
 
 
 	/* ******************************************** CHECK ********************************************/
-	public static function exists($key)
+	public static function exists($key, $subKey = null, $subSubKey = null, $subSubSubKey = null)
 	{
-		return isset($_SESSION[$key]);
+		// TODO: change to NOT OR as it is faster!
+		if ( $subSubSubKey && $subSubKey && $subKey )
+		{
+			return isset($_SESSION[$key][$subKey][$subSubKey][$subSubSubKey]);
+		}
+		else if ( $subSubKey && $subKey  )
+		{
+			return isset($_SESSION[$key][$subKey][$subSubKey]);
+		}
+		else if ( $subKey )
+		{
+			return isset($_SESSION[$key][$subKey]);
+		}
+		else
+		{
+			return isset($_SESSION[$key]);
+		}
 	}
 
 
 
 	/* ******************************************** DELETE ********************************************/
 
-	public static function del($key)
+	public static function del($key, $subKey = null, $subSubKey = null, $subSubSubKey = null)
 	{
-		if ( isset($_SESSION[$key]) )
+		// TODO: change to NOT OR as it is faster!
+		if ( $subSubSubKey && $subSubKey && $subKey && isset($_SESSION[$key][$subKey][$subSubKey][$subSubSubKey]) )
+		{
+			unset($_SESSION[$key][$subKey][$subSubKey][$subSubSubKey]);
+		}
+		else if ( $subSubKey && $subKey && isset($_SESSION[$key][$subKey][$subSubKey]) )
+		{
+			unset($_SESSION[$key][$subKey][$subSubKey]);
+		}
+		else if ( $subKey && isset($_SESSION[$key][$subKey]))
+		{
+			unset($_SESSION[$key][$subKey]);
+		}
+		else if (isset($_SESSION[$key]))
+		{
 			unset($_SESSION[$key]);
+		}
 	}
 
-	public static function delSubKey($key, $sub_key)
-	{
-		if ( isset($_SESSION[$key][$sub_key]) )
-			unset($_SESSION[$key][$sub_key]);
-	}
 
 	public static function destroy()
 	{

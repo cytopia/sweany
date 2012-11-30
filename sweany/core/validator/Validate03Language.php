@@ -30,6 +30,8 @@
 namespace Sweany;
 class Validate03Language extends aBootTemplate
 {
+	// TODO: also validate tables
+
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
 	public static function initialize($options = null)
 	{

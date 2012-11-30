@@ -56,14 +56,14 @@ class Validate06User extends aBootTemplate
 		}
 
 		// CHECK SQL TABLES
-		if ( count($db->select("show tables  from `$GLOBALS[SQL_DB]` like 'users'; ")) < 1 )
+		if ( count($db->select("show tables  from `$GLOBALS[SQL_DB]` like '".Settings::tblUsers."'; ")) < 1 )
 		{
-			self::$error  = 'Database: <b>users</b> table does not exist';
+			self::$error  = 'Database: <b>'.Settings::tblUsers.'</b> table does not exist';
 			return false;
 		}
-		if ( count($db->select("show tables  from `$GLOBALS[SQL_DB]` like 'failed_logins'; ")) < 1 )
+		if ( count($db->select("show tables  from `$GLOBALS[SQL_DB]` like '".Settings::tblFailedLogins."'; ")) < 1 )
 		{
-			self::$error  = 'Database: <b>user_failed_logins</b> table does not exist';
+			self::$error  = 'Database: <b>'.Settings::tblFailedLogins.'</b> table does not exist';
 			return false;
 		}
 		return true;

@@ -6,29 +6,23 @@
 		<div id="header">
 			<div class="topmenu">
 				<ul>
-					<li onclick="window.location='/'"><a href="/"><?php echo $language->home; ?></a></li>
-					<li onclick="window.location='/Forums'"><a href="/Forums"><?php echo $language->forums; ?></a></li>
-					<li onclick="window.location='/Contact'"><a href="/Contact"><?php echo $language->contact; ?></a></li>
-					<li onclick="window.location='/Test'"><a href="/Test"><?php echo $language->test; ?></a></li>
+					<li onclick="window.location='/'"><a href="/"><?php echo t('Home'); ?></a></li>
+					<li onclick="window.location='<?php echo Html::href('Forums');?>'"><a href="<?php echo Html::href('Forums');?>"><?php echo t('Forum'); ?></a></li>
+					<li onclick="window.location='<?php echo Html::href('Faq');?>'"><a href="<?php echo Html::href('Faq');?>"><?php echo t('FAQ'); ?></a></li>
+					<li onclick="window.location='<?php echo Html::href('Guestbook');?>'"><a href="<?php echo Html::href('Guestbook');?>"><?php echo t('Guestbook'); ?></a></li>
+					<li onclick="window.location='<?php echo Html::href('Contact');?>'"><a href="<?php echo Html::href('Contact');?>"><?php echo t('Contact'); ?></a></li>
+					<li onclick="window.location='<?php echo Html::href('Test');?>'"><a href="<?php echo Html::href('Test');?>"><?php echo t('Test'); ?></a></li>
 				</ul>
 			</div>
 			<div style="clear:both;"></div>
 		</div>
 		<div id="content">
-			<?php
-				//TODO: this is only a temporary table layout!!!
-			?>
 			<div style="float:left;">
 				<?php echo $view; ?>
 			</div>
 			<div style="float:right; width:15em;padding-top:64px;">
 				<div style="border:solid 1px black; height:180px;">
-					<?php /* TODO: need User helper, we do not want to access core Classes!!! */?>
-					<?php if ( $user->isLoggedIn() ): ?>
-						<?php echo $bLogoutBox;?><br/>
-					<?php else: ?>
-						<?php echo $bLoginBox; ?>
-					<?php endif; ?>
+					<?php echo $bLoginLogoutBox;?><br/>
 				</div>
 			</div>
 			<div style="clear:both;"></div>
@@ -36,7 +30,7 @@
 		</div>
 
 		<div id="footer">
-			<?php echo $language->copyright; ?>
+			Sweany PHP
 		</div>
 
 	</div><!--#wraper -->

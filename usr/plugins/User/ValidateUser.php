@@ -20,6 +20,82 @@ class ValidateUser extends \Sweany\aBootTemplate
 			return false;
 		}
 
+		// Validate Existance of Username and Password Length config defines
+		if ( !Config::exists('userNameMinLen', 'user') )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>userNameMinLen</i> is not defined. Add Config::set(\'userNameMinLen\', 5, \'user\'); to config.php';
+			return false;
+		}
+		if ( !Config::exists('userNameMaxLen', 'user') )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>userNameMaxLen</i> is not defined. Add Config::set(\'userNameMaxLen\', 15, \'user\'); to config.php';
+			return false;
+		}
+		if ( !Config::exists('passwordMinLen', 'user') )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>passwordMinLen</i> is not defined. Add Config::set(\'passwordMinLen\', 6, \'user\'); to config.php';
+			return false;
+		}
+		if ( !Config::exists('passwordMaxLen', 'user') )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>passwordMaxLen</i> is not defined. Add Config::set(\'passwordMaxLen\', 40, \'user\'); to config.php';
+			return false;
+		}
+
+		// Validate correct values of Username and Password Length defines
+		if ( !is_integer(Config::get('userNameMinLen', 'user'))  || Config::get('userNameMinLen', 'user') < 1 )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>userNameMinLen</i> must be a positive integer. See config.php';
+			return false;
+		}
+		if ( !is_integer(Config::get('userNameMaxLen', 'user'))  || Config::get('userNameMaxLen', 'user') < 1 )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>userNameMaxLen</i> must be a positive integer. See config.php';
+			return false;
+		}
+		if ( !is_integer(Config::get('passwordMinLen', 'user'))  || Config::get('passwordMinLen', 'user') < 1 )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>passwordMinLen</i> must be a positive integer. See config.php';
+			return false;
+		}
+		if ( !is_integer(Config::get('passwordMaxLen', 'user')) || Config::get('passwordMaxLen', 'user') < 1 )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>passwordMaxLen</i> must be a positive integer. See config.php';
+			return false;
+		}
+
+		// Validate stupid users
+		if ( Config::get('userNameMaxLen', 'user') <= Config::get('userNameMinLen', 'user') )
+		{
+			self::$error  = '<b>User Plugin:</b><br/>Noo! You are doing it wrong.<br/><i>userNameMinLen</i> must be smaller than <i>userNameMaxLen</i>. See config.php';
+			return false;
+		}
+		if ( Config::get('passwordMaxLen', 'user') <= Config::get('passwordMinLen', 'user') )
+		{
+			self::$error  = '<b>User Plugin:</b><br/>Noo! You are doing it wrong.<br/><i>passwordMinLen</i> must be smaller than <i>passwordMaxLen</i>. See config.php';
+			return false;
+		}
+
+		// Validate even more stupid users
+		if ( Config::get('passwordMinLen', 'user') < 6 )
+		{
+			self::$error  = '<b>User Plugin:</b><br/>Noo! You are doing it even wronger!<br/><i>passwordMinLen</i> should be greater than 6 characters. PLEASE!';
+			return false;
+		}
+		
+		// Validate disabled Registration
+		if ( !Config::exists('disableRegistration', 'user') )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>disableRegistration</i> is not defined. Add Config::set(\'disableRegistration\', 0, \'user\'); to config.php';
+			return false;
+		}
+		if ( !is_numeric(Config::get('disableRegistration', 'user')) || !( Config::get('disableRegistration', 'user') == 0 || Config::get('disableRegistration', 'user') == 1 ) )
+		{
+			self::$error  = '<b>User Plugin:</b> <i>disableRegistration</i> must be either set to <b>0</b> or <b>1</b> in config.php';
+			return false;
+		}
+
+
 		// Validate Layout if exists
 		if ( Config::exists('layout', 'user') )
 		{

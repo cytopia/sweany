@@ -40,13 +40,14 @@ Class Css
 
 		if ( $GLOBALS['ECSS_ENABLE'] )
 		{
-			$options = '';
-			$options.= ( $GLOBALS['ECSS_COMPRESSED'] )	? '&compressed' : '';
-			$options.= ( $GLOBALS['ECSS_COMMENTED'] )	? '&comment' : '';
+			$options	 = '';
+			$options	.= ( $GLOBALS['ECSS_COMPRESSED'] )	? '&compressed' : '';
+			$options	.= ( $GLOBALS['ECSS_COMMENTED'] )	? '&comment' : '';
 
-			$file	 = '/www/css/ecss.php?file=http://'.$_SERVER['HTTP_HOST'].$file.$options;
+			$protocol	= ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
+			$domain		= $_SERVER['HTTP_HOST'];
+			$file		= '/www/sweany/ecss.php?file='.$protocol.$domain.$file.$options;
 		}
-
 		self::$css_files[$size] = '<link rel="stylesheet" type="text/css" href="'.$file.'" />';
 	}
 
@@ -59,9 +60,9 @@ Class Css
 	{
 		$code	= '';
 
-		foreach (self::$css_files as $file)
+		foreach (self::$css_files as $file) {
 			$code .= "\t".$file."\n";
-
+		}
 		return $code;
 	}
 
@@ -71,9 +72,8 @@ Class Css
 		$pre	= '<style type="text/css">';
 		$post	= '</style>';
 
-		$code	= (strlen($code)) ? $pre.$code.$post : '';
+		$code	= isset($code[0]) ? $pre.$code.$post : '';
 
 		return $code;
 	}
-
 }

@@ -104,26 +104,9 @@ class Validate05Tables extends aBootTemplate
 
 
 					// ---------------- VALIDATE FIELDS
-					$sqlColumns	= $db->getColumnNames($tblClass->table);
-					$tblColumns	= $tblClass->fields;
-
-					// SQL -> Table
-					foreach ($sqlColumns as $col)
+					if ( !self::__checkFields($db, $file, $tblClass) )
 					{
-						if ( !in_array($col, $tblColumns) )
-						{
-							self::$error	= 'SQL Columns <b>'.$col.'</b> is missing in table: <b>'.$file.'->fields.';
-							return false;
-						}
-					}
-					// Table -> SQL
-					foreach ($tblColumns as $col)
-					{
-						if ( !in_array($col, $sqlColumns) )
-						{
-							self::$error	= 'Table Field '.$file.'->fields(<b>\''.$col.'\'</b>) is missing in sql table: <b>'.$tblClass->table;
-							return false;
-						}
+						return false;
 					}
 
 
@@ -195,26 +178,9 @@ class Validate05Tables extends aBootTemplate
 
 
 					// ---------------- VALIDATE FIELDS
-					$sqlColumns	= $db->getColumnNames($tblClass->table);
-					$tblColumns	= $tblClass->fields;
-
-					// SQL -> Table
-					foreach ($sqlColumns as $col)
+					if ( !self::__checkFields($db, $file, $tblClass) )
 					{
-						if ( !in_array($col, $tblColumns) )
-						{
-							self::$error	= 'SQL Columns <b>'.$col.'</b> is missing in table: <b>'.$file.'->fields.';
-							return false;
-						}
-					}
-					// Table -> SQL
-					foreach ($tblColumns as $col)
-					{
-						if ( !in_array($col, $sqlColumns) )
-						{
-							self::$error	= 'Table Field '.$file.'->fields(<b>\''.$col.'\'</b>) is missing in sql table: <b>'.$tblClass->table;
-							return false;
-						}
+						return false;
 					}
 
 					// ---------------- VALIDATE RELATIONS
@@ -292,28 +258,11 @@ class Validate05Tables extends aBootTemplate
 								// ---------------- VALIDATE CREATED/MODIFIED Fields
 								if ( !self::__checkCreatedModifiedFields($tblClass, $file, $db) ) {return false;}
 
+
 								// ---------------- VALIDATE FIELDS
-								$sqlColumns	= $db->getColumnNames($tblClass->table);
-								$tblColumns	= $tblClass->fields;
-
-								// SQL -> Table
-								foreach ($sqlColumns as $col)
+								if ( !self::__checkFields($db, $file, $tblClass) )
 								{
-									if ( !in_array($col, $tblColumns) )
-									{
-										self::$error	= 'SQL Columns <b>'.$col.'</b> is missing in table: <b>'.$file.'->fields.';
-										return false;
-									}
-								}
-
-								// Table -> SQL
-								foreach ($tblColumns as $col)
-								{
-									if ( !in_array($col, $sqlColumns) )
-									{
-										self::$error	= 'Table Field '.$file.'->fields(<b>\''.$col.'\'</b>) is missing in sql table: <b>'.$tblClass->table;
-										return false;
-									}
+									return false;
 								}
 
 
@@ -351,6 +300,40 @@ class Validate05Tables extends aBootTemplate
 
 	/* ******************************************* PRIVATE HELPERS ******************************************* */
 
+	private static function __checkFields($db, $file, $tblClass)
+	{
+		// ---------------- VALIDATE FIELDS
+		$sqlColumns	= $db->getColumnNames($tblClass->table);
+		$tblColumns	= $tblClass->fields;
+
+		// SQL -> Table
+		foreach ($sqlColumns as $field)
+		{
+			if ( !in_array($field, $tblColumns) )
+			{
+				self::$error	= 'SQL Columns <b>'.$field.'</b> is missing in table: <b>'.$file.'->fields.';
+				return false;
+			}
+		}
+		// Table -> SQL
+		foreach ($tblColumns as $alias => $field)
+		{
+			if ( !in_array($field, $sqlColumns) )
+			{
+				// If alias is specified and brackets are used as part of the field name, we are not using a name, but a function
+				// so do not show an error here
+				if ( strlen($alias) && strpos($field, '(') !== false && strpos($field, ')') !== false )
+				{}
+				else
+				{
+					echo $alias;
+					self::$error	= 'Table Field '.$file.'->fields(<b>\''.$field.'\'</b>) is missing in sql table: <b>'.$tblClass->table;
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 	private static function __checkCreatedModifiedFields($tblClass, $tblName, $db)
 	{
@@ -368,6 +351,7 @@ class Validate05Tables extends aBootTemplate
 					self::$error = $tblName.'Table.php $hasCreated = \''.$tblClass->hasCreated.'\';<br/>Only type has been set. Assuming field name to be <strong>created</strong>, but field \'created\' does not exist in sql table '.$tblClass->table.'.<br/>Consider using $hasCreated = array(\'sql_fieldName\' => \''.$tblClass->hasCreated.'\');';
 					return false;
 				}
+
 				if ( $tblClass->hasCreated == 'datetime' )
 				{
 					if ( strtolower($data['created']) != 'datetime' )
@@ -376,7 +360,7 @@ class Validate05Tables extends aBootTemplate
 						return false;
 					}
 				}
-				if ( $tblClass->hasCreated == 'timestamp' )
+				else if ( $tblClass->hasCreated == 'timestamp' )
 				{
 					if ( strtolower($data['created']) != 'timestamp' )
 					{
@@ -384,7 +368,7 @@ class Validate05Tables extends aBootTemplate
 						return false;
 					}
 				}
-				if ( $tblClass->hasCreated == 'integer' )
+				else if ( $tblClass->hasCreated == 'integer' )
 				{
 					if ( strtolower($data['created']) != 'int' )
 					{
@@ -410,6 +394,7 @@ class Validate05Tables extends aBootTemplate
 					self::$error = $tblName.'Table.php $hasCreated = array(\''.$name.'\' => \''.$type.'\');<br/>Field <strong>'.$name.'</strong> does not exist in sql table '.$tblClass->table;
 					return false;
 				}
+
 				if ( $type == 'datetime' )
 				{
 					if ( strtolower($data[$name]) != 'datetime' )
@@ -418,7 +403,7 @@ class Validate05Tables extends aBootTemplate
 						return false;
 					}
 				}
-				if ( $type == 'timestamp' )
+				else if ( $type == 'timestamp' )
 				{
 					if ( strtolower($data[$name]) != 'timestamp' )
 					{
@@ -426,7 +411,7 @@ class Validate05Tables extends aBootTemplate
 						return false;
 					}
 				}
-				if ( $type == 'integer' )
+				else if ( $type == 'integer' )
 				{
 					if ( strtolower($data[$name]) != 'int' )
 					{
@@ -458,6 +443,7 @@ class Validate05Tables extends aBootTemplate
 					self::$error = $tblName.'Table.php $hasModified = \''.$tblClass->hasModified.'\';<br/>Only type has been set. Assuming field name to be <strong>modified</strong>, but field \'modified\' does not exist in sql table '.$tblClass->table.'.<br/>Consider using $hasModified = array(\'sql_fieldName\' => \''.$tblClass->hasModified.'\');';
 					return false;
 				}
+
 				if ( $tblClass->hasModified == 'datetime' )
 				{
 					if ( strtolower($data['modified']) != 'datetime' )
@@ -466,7 +452,7 @@ class Validate05Tables extends aBootTemplate
 						return false;
 					}
 				}
-				if ( $tblClass->hasModified == 'timestamp' )
+				else if ( $tblClass->hasModified == 'timestamp' )
 				{
 					if ( strtolower($data['modified']) != 'timestamp' )
 					{
@@ -474,7 +460,7 @@ class Validate05Tables extends aBootTemplate
 						return false;
 					}
 				}
-				if ( $tblClass->hasModified == 'integer' )
+				else if ( $tblClass->hasModified == 'integer' )
 				{
 					if ( strtolower($data['created']) != 'int' )
 					{
@@ -500,6 +486,7 @@ class Validate05Tables extends aBootTemplate
 					self::$error = $tblName.'Table.php $hasModified = array(\''.$name.'\' => \''.$type.'\');<br/>Field <strong>'.$name.'</strong> does not exist in sql table '.$tblClass->table;
 					return false;
 				}
+
 				if ( $type == 'datetime' )
 				{
 					if ( strtolower($data[$name]) != 'datetime' )
@@ -508,7 +495,7 @@ class Validate05Tables extends aBootTemplate
 						return false;
 					}
 				}
-				if ( $type == 'timestamp' )
+				else if ( $type == 'timestamp' )
 				{
 					if ( strtolower($data[$name]) != 'timestamp' )
 					{
@@ -516,7 +503,7 @@ class Validate05Tables extends aBootTemplate
 						return false;
 					}
 				}
-				if ( $type == 'integer' )
+				else if ( $type == 'integer' )
 				{
 					if ( strtolower($data[$name]) != 'int' )
 					{
@@ -538,6 +525,7 @@ class Validate05Tables extends aBootTemplate
 		}
 		return true;
 	}
+
 
 
 
@@ -741,9 +729,14 @@ class Validate05Tables extends aBootTemplate
 	{
 		// Validate allowed fields
 		$allOptions	= array('table', 'class', 'core', 'plugin', 'primaryKey', 'foreignKey', 'fields', 'subQueries', 'condition', 'recursive', 'dependent');
-		$setFields	= array_keys($options);
-		// TODO:!!!
-		debug('IMPLEMENT ME IN Validate05Table.php -see __checkHasMany for example');
+		foreach (array_keys($options) as $opt)
+		{
+			if ( !in_array($opt, $allOptions) )
+			{
+				self::$error = 'Invalid Option: <strong>'.$opt.'</strong> in '.$tbl_name.'Table.php $hasOney[\''.$alias.'\']';
+				return false;
+			}
+		}
 
 		$tblFK		= (isset($options['foreignKey'])) ? $options['foreignKey'] : 'fk_'.$tblClass->table.'_id';
 		$sqlColumns	= $db->getColumnNames($options['table']);
@@ -871,7 +864,7 @@ class Validate05Tables extends aBootTemplate
 		$joinColumns = $db->getColumnNames($options['joinTable']);
 		if ( !isset($options['joinThisFK']) )
 		{
-			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinThisFK\'] not set.<br/>You have to specify foreign key of the associations table (\'joinTable\') that links to: <strong>'.$tblClass->table.'.'.$tblClass->primary_key.'</strong>';
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinThisFK\'] not set.<br/>You have to specify foreign key of the associations table <b>'.$options['joinTable'].'</b> (\'joinTable\') that links to: <strong>'.$tblClass->table.'.'.$tblClass->primary_key.'</strong>';
 			return false;
 		}
 		if ( !in_array($options['joinThisFK'], $joinColumns) )
@@ -884,7 +877,7 @@ class Validate05Tables extends aBootTemplate
 		$otherPK	= isset($options['primaryKey']) ? $options['primaryKey'] : 'id';
 		if ( !isset($options['joinOtherFK']) )
 		{
-			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinOtherFK\'] not set.<br/>You have to specify foreign key of the associations table (\'joinTable\') that links to: <strong>'.$options['table'].'.'.$otherPK.'</strong>';
+			self::$error = $tbl_name.'Table.php $hasAndBelongsToMany[\''.$alias.'\'][\'joinOtherFK\'] not set.<br/>You have to specify foreign key of the associations table <b>'.$options['joinTable'].'</b> (\'joinTable\') that links to: <strong>'.$options['table'].'.'.$otherPK.'</strong>';
 			return false;
 		}
 

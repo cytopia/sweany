@@ -14,18 +14,18 @@
 		<?php $user_link	= ($userProfileLink) ? Html::l($Thread->User->username, $userProfileCtl, $userProfileMethod, array($Thread->User->id)) : $Thread->User->username;	?>
 		<tr>
 			<td>
-				<div  style="font-weight:bold; font-size:12px;"><?php echo Html::l(Strings::shorten($Thread->title,30,true), 'Forums', 'showThread', array($Thread->Forum->id, $Thread->id, $Thread->seo_url), array('style' => 'text-decoration: underline;')); ?></div>
+				<div  style="font-weight:bold; font-size:12px;"><?php echo Html::l(Strings::shorten($Thread->title, 30, true), 'Forums', 'showThread', array($Thread->Forum->id, $Thread->id, $Thread->seo_url), array('style' => 'text-decoration: underline;')); ?></div>
 				<span style="font-size:10px; line-height:120%;"><?php echo $user_link;?></span>
 			</td>
 			<td style="width:100px;">
 				<div style="font-size:10px; line-height:120%; text-align:right;">
 				<?php if (isset($Thread->LastPost->id)): ?>
 					<?php $last_user_link = ($userProfileLink) ? Html::l($Thread->LastPost->username, $userProfileCtl, $userProfileMethod, array($Thread->LastPost->fk_user_id)) : $Thread->LastPost->username;?>
-					<?php echo TimeHelper::getFormattedDate($Thread->LastPost->created, 'd.m.Y', array($language->today, $language->yesterday)); ?> <span style="color:gray;"><?php echo date('H:i',$Thread->LastPost->created);?></span><br/>
+					<?php echo TimeHelper::getFormattedDate('d.m.Y', $Thread->LastPost->created, array($language->today, $language->yesterday)); ?> <span style="color:gray;"><?php echo TimeHelper::date('H:i',$Thread->LastPost->created);?></span><br/>
 					<?php echo $language->by;?> <?php echo $last_user_link;?>
 				<?php else: ?>
 					<?php $last_user_link = ($userProfileLink) ? Html::l($Thread->User->username, $userProfileCtl, $userProfileMethod, array($Thread->User->id)) : $Thread->User->username;?>
-					<?php echo TimeHelper::getFormattedDate($Thread->created, 'd.m.Y', array($language->today, $language->yesterday)); ?> <span style="color:gray"><?php echo date('H:i',$Thread->created);?></span><br/>
+					<?php echo TimeHelper::getFormattedDate('d.m.Y', $Thread->created, array($language->today, $language->yesterday)); ?> <span style="color:gray"><?php echo TimeHelper::date('H:i',$Thread->created);?></span><br/>
 					<?php echo $language->by;?> <?php echo $last_user_link;?>
 				<?php endif; ?>
 				</div>

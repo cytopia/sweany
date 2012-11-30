@@ -41,6 +41,51 @@
 					<passwordChanged>Passwort erfolgreich geändert</passwordChanged>
 					<passwordChangedText>Dein Passwort wurde erfolgreich geändert. Du kannst dich jetzt einloggen.</passwordChangedText>
 				</page>
+				<page id="validate">
+					<pageTitle>Konto Validierung</pageTitle>
+					<accountActivated>Benutzerkonto wurde aktiviert</accountActivated>
+					<accountActivatedText>Dein Benutzerkonto wurde erfolgreich aktiviert. Du kannst dich unter nachstehendem Link einloggen.</accountActivatedText>
+					<loginHere>Zum Login</loginHere>
+					<invalidKey>Ungültiger Aktivierungs-Key</invalidKey>
+					<invalidKeyText>Der angegebene Aktivierungs-Key ist ungültig oder bereits aktiviert worden.</invalidKeyText>
+				</page>
+				<page id="editData">
+					<pageTitle>Daten Ändern</pageTitle>
+					<currentPassword>Derzeitiges Passwort</currentPassword>
+					<changePassword>Passwort ändern (optional)</changePassword>
+					<newPassword>neues Passwort</newPassword>
+					<repeatNewPassword>Passwort wiederholen</repeatNewPassword>
+					<changeEmail>Email ändern (optional)</changeEmail>
+					<newEmail>neue Email</newEmail>
+					<repeatNewEmail>Email wiederholen</repeatNewEmail>
+					<edit>Ändern</edit>
+					<errInvalidEmail>keine gültige Email</errInvalidEmail>
+					<errEmailAlreadyUsed>Email wird bereits verwendet</errEmailAlreadyUsed>
+					<errEmailRepeatWrong>Die Emailwiederholung stimmt nicht überein.</errEmailRepeatWrong>
+					<errInvalidPassword>Ungültiges Passwort</errInvalidPassword>
+					<errPasswordTooShort>Das neue Passwort ist zu kurz.</errPasswordTooShort>
+					<errPasswordRepeatWrong>Die Passwortwiederholung stimmt nicht überein.</errPasswordRepeatWrong>
+					<passwordChanged>Email erfolgreich geändert</passwordChanged>
+					<passwordChangedText>Deine Email wurde erfolgreich geändert.</passwordChangedText>
+					<emailAndPasswordChanged>Email und Passwort erfolgreich geändert</emailAndPasswordChanged>
+					<emailAndPasswordChangedText>Deine Email und dein Passwort wurden erfolgreich geändert.</emailAndPasswordChangedText>
+				</page>
+				<page id="settings">
+					<pageTitle>Einstellungen</pageTitle>
+					<regionalSettings>Regionale Einstellungen</regionalSettings>
+					<timezone>Zeitzone</timezone>
+					<language>Sprache</language>
+					<edit>Ändern</edit>
+					<errTimezone>Keine gültige Zeitzone</errTimezone>
+					<errLanguage>Keine gültige Sprache</errLanguage>
+					<regionalSettingsChanged>Einstellungen gespeichert</regionalSettingsChanged>
+					<regionalSettingsChangedText>Die Standard Regions- und Spracheinstellungen wurden gespeichert.</regionalSettingsChangedText>
+				</page>
+				<page id="show">
+					<pageTitle>Benutzer Profil</pageTitle>
+					<writeMessage>Nachricht schreiben</writeMessage>
+					<userNotFound>Kein Benutzer gefunden.</userNotFound>
+				</page>
 			</PageSection>
 
 			<BlockSection>
@@ -66,6 +111,7 @@
 					<loginErrorUserIsNotEnabled>Der Benutzer wurde noch nicht aktiviert</loginErrorUserIsNotEnabled>
 				</block>
 				<block id="registerForm">
+					<registrationDisabled>Eine Registrierung ist derzeit leider nicht möglich.</registrationDisabled>
 					<username>Benutzername</username>
 					<email>Email</email>
 					<password>Passwort</password>
@@ -75,13 +121,13 @@
 					<register>Registrieren</register>
 					<registerForFree>Kostenlos registrieren</registerForFree>
 					<regErrorNameExists>Benutzername existiert bereits</regErrorNameExists>
-					<regErrorNameTooLong>Benutzername ist zu lang</regErrorNameTooLong>
+					<regErrorNameTooLong>Benutzername darf maximal aus %s Zeichen bestehen</regErrorNameTooLong>
 					<regErrorNameOnlyAlphaNum>Nur alphanumerische Zeichen erlaubt</regErrorNameOnlyAlphaNum>
-					<regErrorNameTooShort>Benutzername ist zu kurz</regErrorNameTooShort>
+					<regErrorNameTooShort>Benutzername sollte mindestens aus %s Zeichen bestehen</regErrorNameTooShort>
 					<regErrorEmailInvalid>Ungültige Email Adresse</regErrorEmailInvalid>
 					<regErrorEmailExists>Die Email Adresse existiert bereits</regErrorEmailExists>
-					<regErrorPasswordTooShort>Passwort ist zu kurz</regErrorPasswordTooShort>
-					<regErrorPasswordTooLong>Password ist zu lang</regErrorPasswordTooLong>
+					<regErrorPasswordTooShort>Das Passwort sollte mindestens aus %s Zeichen bestehen</regErrorPasswordTooShort>
+					<regErrorPasswordTooLong>Das Password darf maximal %s Zeichen lang sein</regErrorPasswordTooLong>
 					<regErrorAcceptTerms>Du must die Bedingungen akzeptieren, um dich zu registrieren.</regErrorAcceptTerms>
 					<registerEmailSubject>Anmeldung Bestätigen</registerEmailSubject>
 					<registerEmailBody><![CDATA[<strong>Hallo %s</strong>,<br/><br/>Bitte klick auf den folgenden Link, um deine Anmeldung zu bestätigen:<br/><br/>%s<br/><br/>Dein Team.]]></registerEmailBody>

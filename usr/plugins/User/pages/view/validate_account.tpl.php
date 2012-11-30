@@ -1,13 +1,8 @@
-﻿<div id="content_two_col_left">
-	<?php if ($success):?>
-		<h2>Benutzer Konto aktiviert</h2>
-
-		<p>Dein Konto wurde erfolgreich aktiviert. Du kannst dich jetzt <?php echo Link::userLogin('hier'); ?> einloggen.</p>
-	<?php else: ?>
-		<h2>Ung&uuml;ltiger Aktivierungskey</h2>
-
-		<p>Der angegebene Aktivierungsschl&uuml;ssel ist ung&uuml;ltig oder bereits aktiviert.</p>
-	<?php endif; ?>
-</div>
-<div id="content_two_col_right">
-</div>
+﻿<?php if ($success):?>
+	<h2><?php echo $language->accountActivated;?></h2>
+	<p><?php echo $language->accountActivatedText;?></p>
+	<?php echo Html::l($language->loginHere, 'User', 'login')?>
+<?php else: ?>
+	<h2><?php echo $language->invalidKey;?></h2>
+	<p><?php echo $language->invalidKeyText;?></p>
+<?php endif; ?>

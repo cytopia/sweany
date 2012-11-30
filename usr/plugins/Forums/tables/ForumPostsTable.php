@@ -23,7 +23,7 @@ class ForumPostsTable extends Table
 	// many to one
 	public $belongsTo = array(
 		'User' => array(
-			'table'			=> 'users',
+			'table'			=> 'core_users',
 			'core'			=> true,
 			'primaryKey'	=> 'id',
 			'foreignKey'	=> 'fk_user_id',
@@ -43,29 +43,30 @@ class ForumPostsTable extends Table
     );
 
 	/************************************************** GET FUNCTIONS **************************************************/
-/*
-	public function getMyPosts($user_id, $order = array('created' => 'ASC'), $limit_num = NULL)
+
+	public function countUserPosts($user_id)
 	{
-		$where	= sprintf('`fk_user_id` = %d', $user_id);
-		return $this->_get(null, $where, null, $order, $limit_num);
+		$condition = array('`fk_user_id` = :uid', array(':uid' => $user_id));
+		return $this->count($condition);
 	}
-*/
+
 	/************************************************** INSERT/UPDATE FUNCTIONS **************************************************/
 
 	/**
 	 *	@Override
 	 */
-	public function save($fields, $return = 1)
+	public function beforeSave(&$data)
 	{
-		$fields['title']	= Strings::removeTags($fields['title']);
-
-		$Post	= parent::save($fields, 2);
-
-		// Update the thread's last_post time and id (so we can order by it to get the last entries)
-		$updFields['last_post_created']	= $Post->created;
-		$updFields['last_post_id']		= $Post->id;
-		$this->db->updateRow('forum_threads', $updFields, $fields['fk_forum_thread_id']);
-
-		return $Post->id;
+		$data['title']		= Strings::removeTags($data['title']);
+	}
+	public function afterSave($Post)
+	{
+		$Thread = Loader::loadTable('ForumThreads', 'Forums');
+		$tid	= $Post->fk_forum_thread_id;
+		
+		$data['last_post_created']	= $Post->created;
+		$data['last_post_id']		= $Post->id;
+		
+		$Thread->update($tid, $data);
 	}
 }

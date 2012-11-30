@@ -116,8 +116,10 @@ class SysLog
 		);
 		self::$store[] = $store;
 
+		
+		
 		// Check for break on error!!!
-		if ( $GLOBALS['BREAK_ON_ERROR'] ) {
+		if ( Settings::$breakOnError ) {
 			echo '<h1 style="color:red">Break on Framework Error</h1>';
 			self::show();
 			exit();
@@ -194,7 +196,7 @@ class SysLog
 
 		self::$store[] = $store;
 
-		if ( $store['error'] && $GLOBALS['BREAK_ON_ERROR'] ) {
+		if ( $store['error'] && Settings::$breakOnError ) {
 			echo '<h1 style="color:red">Break on Framework Error</h1>';
 			self::show();
 			exit();
@@ -271,7 +273,7 @@ class SysLog
 
 		self::$store[] = $store;
 
-		if ( $store['error'] && $GLOBALS['BREAK_ON_ERROR'] ) {
+		if ( $store['error'] && Settings::$breakOnError ) {
 			echo '<h1 style="color:red">Break on Framework Error</h1>';
 			self::show();
 			exit();
@@ -504,9 +506,11 @@ class SysLog
 			}
 			if ($description) {
 				if ( is_array($description) ) {
-					$description = '<pre>'.print_r($description, true).'</pre>';
+					$description = '<pre>'.dump($description, true).'</pre>';
 				}
 				$description = '<br/><br/>'.$description;
+			} else {
+				$description = '';
 			}
 
 			switch ($type)
@@ -533,13 +537,20 @@ class SysLog
 			$error .=	'<td>'.$type.'</td>';
 			$error .=	'<td>'.$section.'</td>';
 			$error .=	'<td>'.$title.'</td>';
-			$error .=	'<td>'.$message.$trace/*.$description.$trace*/.'</td>';
-			$error .=	'<td>'.$err.'</td>';
+			$error .=	'<td>'.$message./*$description.*/$trace.'</td>';
+			$error .=	'<td>';
+//			if ( isset($err['message']) )
+//			{
+//				$error .= '<font color="red">';
+//				$error .= '<strong>'.$err['message'].'</strong><br/>';
+//				$error .= $err['file'].' on line '.$err['line'].'<strong>';
+//			}
+			$error .=	'</td>';
 			$error .= '</tr>';
 		}
-		
-		
-		
+
+
+
 		// ---------------- Further Info
 		$error	.= '<tr>';
 		$error	.=		'<th><div style="width:82px;"></div></th>';
@@ -553,7 +564,7 @@ class SysLog
 		$error	.= '<span style="font-size:18px; font-weight:bold;font-family:courier;">Further Info</span>';
 		$error	.= '</td></tr>';
 
-		
+
 		// APPEND SESSION
 		$error .= '<tr>';
 		$error .= 	'<td>&nbsp;</td>';
@@ -573,12 +584,12 @@ class SysLog
 		$h_files= array();	// helper files
 		$u_files= array();	// user files
 		$tmp	= array();
-	
+
 		for ($i=0; $i<$total; $i++)
 		{
 			$files[$i]	= str_replace(ROOT, '', $files[$i]);
 			$tmp		= explode(DS, $files[$i]);
-			
+
 			if ( isset($tmp[1]) && $tmp[1] == 'usr' ) {
 				$u_files[] = $files[$i];
 			} else {
@@ -590,7 +601,7 @@ class SysLog
 			}
 		}
 
-		
+
 		$error .= '<tr>';
 		$error .= 	'<td>&nbsp;</td>';
 		$error .= 	'<td><span style="color:pink;">[Files]</span></td>';
@@ -598,9 +609,9 @@ class SysLog
 		$error .= 	'<td>Loaded Files</td>';
 		$error .= 	'<td>';
 		$error .=		$total.' Files Loaded<br/><br/>';
-		
+
 		$error .=		'<strong>Core Files ('.count($c_files).')</strong><br/>';
-	
+
 		foreach ($c_files as $path) {
 			$error.= $path.'<br/>';
 		}
@@ -616,7 +627,7 @@ class SysLog
 		$error .= '</tr>';
 
 		$error .= '</table>';
-		
+
 
 		if ($return)
 			return $pre.$error.$post;
@@ -657,7 +668,7 @@ class SysLog
 
 		if ($description) {
 			if ( is_array($description) ) {
-				$description = "\n\r".strip_tags(print_r($description, true));
+				$description = "\n\r".strip_tags(serialize($description));
 			} else {
 				$description = "\n\r".strip_tags($description);
 			}
@@ -723,7 +734,11 @@ class SysLog
 				}
 				if ( isset($trace[$i]['function']) )
 				{
-					$from = $from.$trace[$i]['function'];
+					$from = $from.$trace[$i]['function'].'()';
+				}
+				if ( isset($trace[$i]['file']) && isset($trace[$i]['line']) )
+				{
+					$from = $from.' ['.basename($trace[$i]['file']).':'.$trace[$i]['line'].']';
 				}
 			}
 			else

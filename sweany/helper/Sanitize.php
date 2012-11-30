@@ -28,38 +28,15 @@
  */
 class Sanitize
 {
-
-	/**
-	 * Sanitize a string to use in seo url's
-	 *
-	 * @param string $url String to sanitize
-	 */
-	public static function seoUrl($url)
-	{
-		$url = preg_replace("/[^a-zA-Z0-9.\/_|+ -]/", '', $url);
-		$url = preg_replace("/[\/|+ -]+/", '-', $url);
-		return $url;
-	}
-
-
-	public static function escape($string)
-	{
-		// TODO!!
-		return '"'.$string.'"';
-	}
-
 	public static function html($string, $strip_tags = false)
 	{
 		$charset	= 'UTF-8';
 		$quotes		= ENT_QUOTES;	// will convert both double and single quotes.
 		$double		= true;			// encode existing html entities.
 
-		if ($strip_tags)
-		{
+		if ($strip_tags) {
 			$string = strip_tags($string);
 		}
-
 		return htmlentities($string, $quotes, $charset, $double);
 	}
-
 }

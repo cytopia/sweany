@@ -2,7 +2,7 @@
 class FailedLoginsTable extends Table
 {
 	// TABLE
-	public $table 	= 'failed_logins';
+	public $table;
 	public $alias	= 'FailedLogin';
 
 	// FIELDS
@@ -17,24 +17,28 @@ class FailedLoginsTable extends Table
 		'hostname',
 		'created',
 	);
-	
+
 	// AUTO FIELDS
 	public $hasCreated	= array('created' => 'integer');
-	
-	
+
+
 	/* ******************************************** O V E R R I D E S ******************************************** */
 
-	public function save($fields, $return = 0)
+	/**
+	 *	Constructor
+	 */
+	public function __construct()
 	{
-		$hostname	= gethostbyaddr($_SERVER['REMOTE_ADDR']);
+		parent::__construct();
+		$this->table = \Sweany\Settings::tblFailedLogins;
+	}
 
-		$data = array(
-			'referer'	=> isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
-			'useragent'	=> $_SERVER['HTTP_USER_AGENT'],
-			'ip'		=> $_SERVER['REMOTE_ADDR'],
-			'hostname'	=> $hostname,
-			'session_id'=> Session::getId(),
-		);
-		return parent::save(array_merge($fields, $data), $return);
+	public function beforeSave(&$data)
+	{
+		$data['referer']	= isset($_SERVER['HTTP_REFERER'])	? $_SERVER['HTTP_REFERER']		: '';
+		$data['useragent']	= isset($_SERVER['HTTP_USER_AGENT'])? $_SERVER['HTTP_USER_AGENT']	: '';
+		$data['ip']			= isset($_SERVER['REMOTE_ADDR'])	? $_SERVER['REMOTE_ADDR']		: '';
+		$data['hostname']	= isset($_SERVER['REMOTE_ADDR'])	? gethostbyaddr($_SERVER['REMOTE_ADDR']) : '';
+		$data['session_id']	= \Sweany\Session::id();
 	}
 }

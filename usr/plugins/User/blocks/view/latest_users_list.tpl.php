@@ -8,8 +8,10 @@
 			$index++;
 		?>
 		<li class="<?php echo $class;?>">
-			<?php echo Html::img('/img/member.png', $user['username'], array('title' => $user['username'])); ?>
-			<span class="block_user_latest_list_text"><?php echo Link::profilesView($user['username'], array($user['id']), array('title' => $user['username']));?></span>
+			<?php echo Html::img('/img/member.png', $user->username, array('title' => $user->username)); ?>
+			<span class="block_user_latest_list_text">
+				<?php echo Html::l($user->username, 'User', 'show', array($user->id), array('title' => $user->username)); ?>
+			</span>
 		</li>
 	<?php endforeach; ?>
 </ul>

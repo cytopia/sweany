@@ -90,23 +90,46 @@ class Strings
 		return htmlentities(trim($string), ENT_COMPAT, 'UTF-8');
 	}
 
-	public static function shorten($string, $length, $add_dots = false)
+	/**
+	 *
+	 *	Shorten String to a specified length.
+	 *	Can also preserve whole words and return the splitted part as well
+	 *
+	 *	@param	string	$string			The string itself
+	 *	@param	integer	$lenght			Maximum characters (will slightly decrease if $preserveWords is used)
+	 *	@param	boolean	$preserveWord	Preserve whole words (will remove broken words from end of string)
+	 *	@param 	string	$append			Append characters (to the cutted string only)
+	 *	@param	&string	&$rest			The removed string part (you might need it)
+	 *	@return	string					The shortened string
+	 */
+	public static function shorten($string, $length, $preserveWord = true, $append = '...', &$rest = '')
 	{
 		// return the string if it is shorter anyway
-		if ( strlen($string) <= $length )
+		if ( mb_strlen($string) <= $length )
+		{
+			$rest = '';
 			return $string;
+		}
 
-		// add dots if desirec;
-		$dots	= ($add_dots) ? '...': '';
-
-		// cut the string
-		$string = substr($string, 0, $length);
+		// Cut the string
+		$short	= mb_substr($string, 0, $length);
 
 		// This will remove the last word from the string
-		// as it might have been (99%) broken during cutting
-		$string = substr($string, 0, strrpos($string, " "));
-		return $string.$dots;
+		// as it might have been broken during cutting
+		if ( $preserveWord )
+		{
+			$wordEndPos = mb_strrpos($short, ' ');
+			$rest		= mb_substr($string, $wordEndPos);
+			$short		= mb_substr($short, 0, $wordEndPos);
+		}
+		else
+		{
+			$rest	= mb_substr($string, $length);
+			$short	= $string;
+		}
+		return $short.$append;
 	}
+
 
 	public static function removeLines($string, $needles = array())
 	{

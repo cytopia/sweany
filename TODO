@@ -7,12 +7,9 @@ High Priority
 * Admin user in config.php (in case users module is disabled)
   + also make sure admin controller validate against this
   + store login in session
-  + make sure $this->user->is_admin() return it correctly
+  + make sure $this->core->user->is_admin() return it correctly
 * Multiple Primary keys for ORM Model
-* URL rewriting
-* Security testings
 * Users: read data from session rather than from database (performance)
-* Function name freeze
 
 
 Medium Priority
@@ -29,7 +26,6 @@ Medium Priority
 
 Low Priority
 -------------------------
-* implement CLI core
 * Admin sections for plugins need to be programmed
    + Forum (create categories, forums|delete/move threads/posts)
    + Contact (view contact messages)

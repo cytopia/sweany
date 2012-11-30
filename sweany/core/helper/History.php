@@ -29,7 +29,6 @@
 namespace Sweany;
 class History
 {
-	private static $sessionKey	= 'history';
 	private static $lastPage	= array();
 
 	public static function track()
@@ -47,14 +46,14 @@ class History
 		}
 		$history = array('controller' => $controller, 'method' => $method, 'params' => $params);
 
-		\Sweany\Session::set(self::$sessionKey, $history);
+		\Sweany\Session::set(array(\Sweany\Settings::sessSweany => \Sweany\Settings::sessHistory), $history);
 	}
 
 	public static function getPrevPage()
 	{
-		if ( \Sweany\Session::exists(self::$sessionKey) )
+		if ( \Sweany\Session::exists(\Sweany\Settings::sessSweany, \Sweany\Settings::sessHistory) )
 		{
-			return \Sweany\Session::get(self::$sessionKey);
+			return \Sweany\Session::get(\Sweany\Settings::sessSweany, \Sweany\Settings::sessHistory);
 		}
 		// No previous page exists yet, so redirect to '/' by setting all params to null
 		else

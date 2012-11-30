@@ -44,20 +44,18 @@ class ContactBlock extends BlockController
 	public function addContact()
 	{
 		//------ Override Form validator with appropriate language
-		$this->formValidator['form_add_contact']['name']['minLen']['error']		= $this->language->form_err_name;
-		$this->formValidator['form_add_contact']['message']['minLen']['error']	= $this->language->form_err_message;
-		$this->formValidator['form_add_contact']['subject']['between']['error']	= $this->language->form_err_subject;
-		$this->formValidator['form_add_contact']['email']['isEmail']['error']	= $this->language->form_err_email;
+		$this->formValidator['form_add_contact']['name']['minLen']['error']		= $this->core->language->form_err_name;
+		$this->formValidator['form_add_contact']['message']['minLen']['error']	= $this->core->language->form_err_message;
+		$this->formValidator['form_add_contact']['subject']['between']['error']	= $this->core->language->form_err_subject;
+		$this->formValidator['form_add_contact']['email']['isEmail']['error']	= $this->core->language->form_err_email;
 
 		//------ Build subject Array
-		$subArr[0]['id']	= 0;
-		$subArr[0]['value'] = $this->language->form_input_subject;
+		$subArr[0]= $this->core->language->form_input_subject;
 
-		$size = sizeof($this->language->subjects);
+		$size = sizeof($this->core->language->subjects);
 		for($i=0; $i<$size; $i++)
 		{
-			$subArr[$i+1]['id']		= ($i+1);
-			$subArr[$i+1]['value']	= (string)$this->language->subjects->$i;
+			$subArr[$i+1] = (string)$this->core->language->subjects->$i;
 		}
 
 		//------ Adjust Subject Form Rule (according to the number of subjects)
@@ -73,22 +71,12 @@ class ContactBlock extends BlockController
 			$email		= Form::getValue('email');
 			$subject_id	= Form::getValue('subject');
 			$message	= Form::getValue('message');
-			$subject	= $subArr[$subject_id]['value'];
-
-			$name		= Strings::removeTags($name);
-			$email		= Strings::removeTags($email);
-			$message	= Strings::removeTags($message);
+			$subject	= $subArr[$subject_id];
 
 			$data['name']		= $name;
 			$data['email']		= $email;
 			$data['subject']	= $subject;
 			$data['message']	= $message;
-
-			if ( method_exists($this->user, 'id') )
-			{
-				$data['fk_user_id']	= $this->user->id();
-				$data['username']	= $this->user->name();
-			}
 
 			$tblContact->save($data);
 			$this->render = false;
@@ -96,7 +84,7 @@ class ContactBlock extends BlockController
 		}
 
 		// VIEW VARIABLES
-		$this->set('language', $this->language);
+		$this->set('language', $this->core->language);
 		$this->set('subject', $subArr);
 
 		// VIEW OPTIONS
@@ -116,7 +104,7 @@ class ContactBlock extends BlockController
 	public function adminShowAll($controller, $method)
 	{
 		$tblContact	= Loader::loadPluginTable('Contact', 'Contact');
-		$messages	= $tblContact->getAll(null, array('created' => 'DESC'));
+		$messages	= $tblContact->find('all', array('order' => array('created' => 'DESC')));
 
 		$this->set('controller', $controller);
 		$this->set('method', $method);
@@ -137,7 +125,7 @@ class ContactBlock extends BlockController
 	public function adminShowOne($id)
 	{
 		$tblContact	= Loader::loadPluginTable('Contact', 'Contact');
-		$message	= $tblContact->getRow($id);
+		$message	= $tblContact->load($id);
 
 		// Message does not exist
 		if ( !count($message) )

@@ -41,7 +41,6 @@ class ErrorHandler
 			\Sweany\SysLog::e('user', 'Output Buffering', $error);
 
 			$error =\Sweany\SysLog::show(true);
-
 			return $error;
 		}
 		return $str;
@@ -62,60 +61,66 @@ class ErrorHandler
 				echo	'<span style="color:red; font-weight:bold;">Fatal Error ['.$errno.']</span>: <strong>'.$error.'</strong><br/><br/>';
 				echo	'<strong>File:</strong> '.$file.'<br/>';
 				echo	'<strong>Line:</strong> '.$line.'<br/>';
-				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
+				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')';
 //				debug($context);
 				echo	'EXIT...<br/>';
+				echo	self::getTrace();
 				echo '</div>';
 
-//				break;
+				break;
 
 			case E_USER_WARNING:
 				echo '<div style="z-index:555;font-size:11px;font-family:arial;border:solid 1px #FFA500;padding:5px;background:gray;color:black;">';
 				echo	'<span style="color:#FFA500; font-weight:bold;">Warning ['.$errno.']</span>: <strong>'.$error.'</strong><br/><br/>';
 				echo	'<strong>File:</strong> '.$file.'<br/>';
 				echo	'<strong>Line:</strong> '.$line.'<br/>';
-				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
+				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')';
 //				debug($context);
+				echo	self::getTrace();
 				echo '</div>';
-//				break;
+				break;
 
 			case E_USER_NOTICE:
 				echo '<div style="z-index:555;font-size:11px; font-family:arial;border:solid 1px #FFA500;padding:5px;background:gray">';
 				echo	'<span style="color:#FFA500; font-weight:bold;">Notice ['.$errno.']</span>: <strong>'.$error.'</strong><br/><br/>';
 				echo	'<strong>File:</strong> '.$file.'<br/>';
 				echo	'<strong>Line:</strong> '.$line.'<br/>';
-				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
+				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')';
 //				debug($context);
+				echo	self::getTrace();
 				echo '</div>';
-//				break;
+				break;
 
 			case E_WARNING:
 				echo '<div style="z-index:555;font-size:11px;font-family:arial;border:solid 1px red;padding:5px;background:gray;color:black;">';
 				echo	'<span style="color:red; font-weight:bold;">Runtime Error ['.$errno.']</span>: <strong>'.$error.'</strong><br/><br/>';
 				echo	'<strong>File:</strong> '.$file.'<br/>';
 				echo	'<strong>Line:</strong> '.$line.'<br/>';
-				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
+				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')';
 //				debug($context);
+				echo	self::getTrace();
 				echo '</div>';
-//				break;
+				break;
 
 			case E_NOTICE:
 				echo '<div style="z-index:555;font-size:11px;font-family:arial;border:solid 1px #FFA500;padding:5px;background:gray;color:black;">';
 				echo	'<span style="color:#FFA500; font-weight:bold;">Runtime Notice ['.$errno.']</span>: <strong>'.$error.'</strong><br/><br/>';
 				echo	'<strong>File:</strong> '.$file.'<br/>';
 				echo	'<strong>Line:</strong> '.$line.'<br/>';
-				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
+				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')';
 //				debug($context);
+				echo	self::getTrace();
 				echo '</div>';
-//				break;
+				break;
 
 			default:
 				echo '<div style="z-index:555;font-size:11px;font-family:arial;border:solid 1px red;padding:5px;background:gray;color:black;">';
 				echo	'<span style="color:red; font-weight:bold;">Unknown Error ['.$errno.']</span>: <strong>'.$error.'</strong><br/><br/>';
 				echo	'<strong>File:</strong> '.$file.'<br/>';
 				echo	'<strong>Line:</strong> '.$line.'<br/>';
-				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')<br/><br/>';
+				echo	'<strong>PHP:</strong> ' . PHP_VERSION . ' (' . PHP_OS . ')';
 //				debug($context);
+				echo	self::getTrace();
 				echo '</div>';
 //				break;
 		}
@@ -147,7 +152,7 @@ class ErrorHandler
 		if( $error )
 		{
 			## IF YOU WANT TO CLEAR ALL BUFFER, UNCOMMENT NEXT LINE:
-			# ob_end_clean( );
+			#ob_end_clean( );
 
 			// Display content $error variable
 			echo '<pre>';
@@ -175,5 +180,40 @@ class ErrorHandler
 			ob_end_flush();
 		}
 		ob_start();
+	}
+	private static function getTrace()
+	{
+		$trace	= debug_backtrace();
+
+		$start	= 2;
+		$count	= count($trace)-1;
+
+		$from	= '';
+
+		for ($i=$start; $i<$count; $i++)
+		{
+			if ( isset($trace[$i]) )
+			{
+				$from = $from.'<br/><b>From:</b> ';
+
+				if ( isset($trace[$i]['class']) )
+				{
+					$from = $from.$trace[$i]['class'].'->';
+				}
+				if ( isset($trace[$i]['function']) )
+				{
+					$from = $from.$trace[$i]['function'].'()';
+				}
+				if ( isset($trace[$i]['file']) && isset($trace[$i]['line']) )
+				{
+					$from = $from.' ['.basename($trace[$i]['file']).':'.$trace[$i]['line'].']';
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+		return $from ? '<br/>'.$from : '';
 	}
 }

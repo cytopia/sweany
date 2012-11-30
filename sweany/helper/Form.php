@@ -87,13 +87,51 @@ Class Form
 		self::$css_error_text	= '<div style="'.$GLOBALS['DEFAULT_FORM_TEXT_ERR_CSS'].'">%s</div>';
 	}
 
+	/********************************************************* P R E P A R E   F U N C T I O N S *********************************************************/
+
+	public static function makeSelBoxArr($array, $nameKey, $valKey = null, $defName = null, $defVal = null)
+	{
+		$data = array();
+		$size = count($array);
+
+		// Add a default entry to the beginning of the array
+		if ( !is_null($defName) && !is_null($defVal) ) {
+			$data[$defVal] = $defName;
+		} else if ( !is_null($defName) && is_null($defVal) ) {
+			$data[] = $defName;
+		}
+
+		// Loop through
+		foreach ($array as $el)	{
+			// determine data type
+			if ( is_array($el) ) {
+				$key = $valKey ? $el[$valKey] : null;
+				$val = $el[$nameKey];
+			} else if ( is_object($el) )	{
+				$key = $valKey ? $el->$valKey : null;
+				$val = $el->$nameKey;
+			} else {
+				$key = null;
+				$val = $el;
+			}
+
+			// fill array
+			if ($key) {
+				$data[$key] = $val;
+			} else {
+				$data[] = $val;
+			}
+		}
+
+		return $data;
+	}
+
 
 	/********************************************************* A C T I O N   F U N C T I O N S *********************************************************/
 
 	public static function setError($id, $errText)
 	{
 		self::$formErrors[self::$formName][$id] = $errText;
-
 	}
 
 	public static function getError($id, $color = null)
@@ -246,8 +284,7 @@ Class Form
 	}
 
 	/**
-	* data[]['id']
-	* data[]['value']
+	* array('val' => 'display name')
 	*/
 	public static function selectBox($name, $data = array(), $default_value = null, $options = array())
 	{
@@ -259,10 +296,8 @@ Class Form
 		$default_value	= self::_getDefaultValue($name, $default_value);
 		$options		= self::_getOptions($options);
 
-		foreach ($data as $row)
+		foreach ($data as $row_val => $row_name)
 		{
-			$row_val	 = $row['id'];
-			$row_name	 = $row['value'];
 			$selected	 = ( $row_val == $default_value ) ? 'selected' : '';
 			$rows 		.= '<option value="'.$row_val.'" '.$selected.'>'.$row_name.'</option>';
 		}
@@ -300,7 +335,9 @@ Class Form
 		$def_val	= self::_getDefaultValue($name, $default_value);
 		$options	= self::_getOptions($options);
 
-		return	'<input '.$options.' '.$style.' '.$options.' type="text" name="'.$formName.'['.$name.']" value="'.$def_val.'" />';
+		// TODO: If reading POST array, we need to make sure this works... see admin/languages, if there a multiple translations
+		$name		= (strpos($name, '[') !== false) ? $formName.$name : $formName.'['.$name.']';
+		return	'<input '.$options.' '.$style.' '.$options.' type="text" name="'.$name.'" value="'.$def_val.'" />';
 	}
 
 	public static function inputFieldHinted($name, $hint = null, $default_value = null, $options = array())
@@ -313,9 +350,40 @@ Class Form
 		$def_val	= ($hint && !strlen($def_val)) ? $hint : $def_val;
 		$hint_script= ($hint) ? 'onblur="if (this.value == \'\') { this.value = \''.$hint.'\'; }" onfocus="if (this.value == \''.$hint.'\') { this.value = \'\'; }"' : '';
 
+		// TODO: If reading POST array, we need to make sure this works... see admin/languages, if there a multiple translations
+		$name		= (strpos($name, '[') !== false) ? $formName.$name : $formName.'['.$name.']';
 
-		return	'<input '.$options.' '.$style.' '.$options.' type="text" name="'.$formName.'['.$name.']" placeholder="'.$hint.'" value="'.$def_val.'" '.$hint_script.'/>';
+		return	'<input '.$options.' '.$style.' '.$options.' type="text" name="'.$name.'" placeholder="'.$hint.'" value="'.$def_val.'" '.$hint_script.'/>';
 	}
+
+
+	/**
+	 *
+	 * @param	string	$name			Name of the input field (also used for the id)
+	 * @param	string	$default_value	Default value to display
+	 * @param	string	$query_url		Path of the url to query against
+	 * @param	string	$post_var_name	Name of the variable to send via post to the above url
+	 * @param	mixed[]	$options		Options for the inputField
+	 * @return	string
+	 */
+	public static function liveSearch($name, $default_value = null, $query_url, $post_var_name, $options = array())
+	{
+		// Include Ajax functionality
+		Javascript::addFile('/sweany/ajax.js');
+
+		// Build parameters for liveSearch Function
+		$js_func	= "liveSearch('$query_url', '$post_var_name='+document.getElementById('$name').value, '$name', 'liveSearchResultId');";
+
+		// Add Keyup and Id options to input field
+		$options['onkeyup'] = $js_func;
+		$options['id']		= $name;
+
+		$inputField	= self::inputField($name, $default_value, $options);
+		$results	= '<div class="liveSearchResults" id="liveSearchResultId" style="visibility.hidden; display:none; position:absolute;"></div>';
+
+		return $inputField.$results;
+	}
+
 
 	public static function passwordField($name, $options = array())
 	{
@@ -336,6 +404,121 @@ Class Form
 
 		return '<textarea '.$options.' '.$style.' name="'.$formName.'['.$name.']" cols="'.$cols.'" rows="'.$rows.'">'.$def_val.'</textarea>';
 	}
+
+	public static function editor($name, $default_value = null, $cols = 50, $rows = 10, $options = array(), $icon_base_url = '/sweany/bbcode/img')
+	{
+		// Include Editor functionality
+		Javascript::addFile('/sweany/bbcode/js/bbeditor.js');
+
+		// If no Id has been specified, use the name with time() to be unique
+		$id	 = isset($options['id']) ? $options['id'] : $name.time();
+
+		$bar = '<a title="bold text" onClick="insertBBTag(\''.$id.'\',\'[b]\',\'[/b]\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/text/bold.png" alt="bold" /></a>';
+		$bar.= '<a title="italic text" onClick="insertBBTag(\''.$id.'\',\'[i]\',\'[/i]\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/text/italic.png" alt="italic" /></a>';
+		$bar.= '<a title="underlined text" onClick="insertBBTag(\''.$id.'\',\'[u]\',\'[/u]\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/text/underline.png" alt="underline" /></a>';
+		$bar.= '<a title="striked through text" onClick="insertBBTag(\''.$id.'\',\'[s]\',\'[/s]\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/text/strike.png" alt="strike through" /></a>';
+		$bar.= '<a title="insert link" onClick="document.getElementById(\''.$id.'\').value+=add_link();"><img class="bbCodeIcons" src="'.$icon_base_url.'/text/link.png" alt="link" /></a>';
+		$bar.= '<a title="insert picture" onClick="document.getElementById(\''.$id.'\').value+=add_img();"><img class="bbCodeIcons" src="'.$icon_base_url.'/text/image.png" alt="picture" /></a>';
+		$bar.= '<a title="insert code block" onClick="insertBBTag(\''.$id.'\',\'[code]\',\'[/code]\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/text/code.png" alt="code block" /></a>';
+
+		$bar.= '<a style="float:left;">&nbsp;&nbsp;|&nbsp;&nbsp;</a>';
+
+		$bar.= '<a title="smile" onClick="insertBBTag(\''.$id.'\',\':)\',\'\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/smiley/smile.png" alt="smile" /></a>';
+		$bar.= '<a title="grin" onClick="insertBBTag(\''.$id.'\',\':D\',\'\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/smiley/grin.png" alt="grin" /></a>';
+		$bar.= '<a title="roll eyes" onClick="insertBBTag(\''.$id.'\',\':roll:\',\'\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/smiley/roll.png" alt="roll eyes" /></a>';
+		$bar.= '<a title="unhappy" onClick="insertBBTag(\''.$id.'\',\':(\',\'\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/smiley/unhappy.png" alt="unhappy" /></a>';
+		$bar.= '<a title="show tongue" onClick="insertBBTag(\''.$id.'\',\':p\',\'\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/smiley/tongue.png" alt="show tongue" /></a>';
+		$bar.= '<a title="cry" onClick="insertBBTag(\''.$id.'\',\':cry:\',\'\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/smiley/cry.png" alt="cry" /></a>';
+		$bar.= '<a title="blush" onClick="insertBBTag(\''.$id.'\',\':red:\',\'\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/smiley/red.png" alt="blush" /></a>';
+		$bar.= '<a title="confused" onClick="insertBBTag(\''.$id.'\',\':confuse:\',\'\');"><img class="bbCodeIcons" src="'.$icon_base_url.'/smiley/confuse.png" alt="confused" /></a>';
+
+		// Add the id to the options, if no custom id was specified and get the text area source
+		if ( !isset($options['id']) ) {
+			$options['id'] = $id;
+		}
+
+		$textarea = self::textArea($name, $cols, $rows, $default_value, $options);
+
+		$editor = '<div class="bbEditorContainer">'.
+						'<div class="bbEditorIconBox" style="height:20px;">'.
+							$bar.
+						'</div>'.
+						'<div class="bbEditorTextArea">'.
+							$textarea.
+						'</div>'.
+					'</div>';
+
+		return $editor;
+	}
+
+	/**
+	 *
+	 * @param	string		$name1				Name of input field1
+	 * @param	string		$name2				Name of input field2
+	 * @param	timestring	$date1_default		Default Date timestring to show for field1 | format: YYYY-mm-dd [ date('Y-m-d', $timestamp) ]
+	 * @param	timestring	$date2_default		Default Date timestring to show for field2 | format: YYYY-mm-dd [ date('Y-m-d', $timestamp) ]
+	 * @param	int			$min_shown_year		Left Year intervall limit to show (do not show years below that limit)
+	 * @param	int			$max_shown_year		Right Year intervall limit to show (do not show years above that limit)
+	 * @param	timestring	$min_allowed_date	Do not allow dates to be picked below this date | format: YYYY-mm-dd [ date('Y-m-d', $timestamp) ]
+	 * @param	timestring	$max_allowed_date	Do not allow dates to be picked above this date | format: YYYY-mm-dd [ date('Y-m-d', $timestamp) ]
+	 * @return
+	 */
+	public static function dateTimespanPicker($name1, $name2, $date1_default, $date2_default, $min_shown_year , $max_shown_year , $min_allowed_date, $max_allowed_date)
+	{
+		require_once(ROOT.DS.'www'.DS.'sweany'.DS.'calendar'.DS.'classes'.DS.'tc_calendar.php');
+
+		// Include Calendar functionality
+		Javascript::addFile('/sweany/calendar/js/calendar.js');
+
+		$myCalendar = new tc_calendar($name1, true, false);
+		$myCalendar->setIcon("/sweany/calendar/img/iconCalendar.gif");
+		$myCalendar->setDate(date('d', strtotime($date1_default)), date('m', strtotime($date1_default)), date('Y', strtotime($date1_default)));
+		$myCalendar->setPath("/sweany/calendar/");
+		$myCalendar->setYearInterval($min_shown_year, $max_shown_year);
+		$myCalendar->dateAllow($min_allowed_date, $max_allowed_date, false);
+		$myCalendar->setAlignment('left', 'bottom');
+		$myCalendar->setDatePair($name1, $name2, $date2_default);
+		$myCalendar->startMonday(true);
+		//$myCalendar->writeScript();
+		$cal1 = $myCalendar->returnScript();
+
+		$myCalendar = new tc_calendar($name2, true, false);
+		$myCalendar->setIcon("/sweany/calendar/img/iconCalendar.gif");
+		$myCalendar->setDate(date('d', strtotime($date2_default)), date('m', strtotime($date2_default)), date('Y', strtotime($date2_default)));
+		$myCalendar->setPath("/sweany/calendar/");
+		$myCalendar->setYearInterval($min_shown_year, $max_shown_year);
+		$myCalendar->dateAllow($min_allowed_date, $max_allowed_date, false);
+
+		$myCalendar->setAlignment('left', 'bottom');
+		$myCalendar->setDatePair($name1, $name2, $date1_default);
+		$myCalendar->startMonday(true);
+		//$myCalendar->writeScript();
+		$cal2 = $myCalendar->returnScript();
+
+		return $cal1.$cal2;
+	}
+
+	public static function datePicker($name, $default_date = null, $min_shown_year = 1970 , $max_shown_year = 2050 , $min_allowed_date = '2008-01-01', $max_allowed_date)
+	{
+		require_once(ROOT.DS.'www'.DS.'sweany'.DS.'calendar'.DS.'classes'.DS.'tc_calendar.php');
+
+		// Include Calendar functionality
+		Javascript::addFile('/sweany/calendar/js/calendar.js');
+
+		$default_date = $default_date ? $default_date : TimeHelper::date('Y-m-d', time());
+
+		$myCalendar = new tc_calendar($name, true, false);
+		$myCalendar->setIcon("/sweany/calendar/img/iconCalendar.gif");
+		$myCalendar->setPath("/sweany/calendar/");
+		$myCalendar->setDate(date('d', strtotime($default_date)), date('m', strtotime($default_date)), date('Y', strtotime($default_date)));
+		$myCalendar->setYearInterval($min_shown_year, $max_shown_year);		// patu edit: only up to this year
+		$myCalendar->dateAllow($min_allowed_date, $max_allowed_date, false);// patu edit: not greater than today
+		$myCalendar->startMonday(true);
+		$myCalendar->showWeeks(true);
+
+		return $myCalendar->returnScript();
+	}
+
 
 	public static function inputHidden($name, $value, $options = array())
 	{

@@ -123,9 +123,9 @@ class Validate07UserOnlineCount extends aBootTemplate
 		$db = \Sweany\Database::getInstance();
 
 		// CHECK SQL TABLES
-		if ( count($db->select("show tables  from `$GLOBALS[SQL_DB]` like 'user_online'; ")) < 1 )
+		if ( count($db->select("show tables  from `$GLOBALS[SQL_DB]` like '".Settings::tblOnlineUsers."'; ")) < 1 )
 		{
-			self::$error  = 'MySQL: <b>user_online</b> table does not exist';
+			self::$error  = 'MySQL: <b>'.Settings::tblOnlineUsers.'</b> table does not exist';
 			return false;
 		}
 		return true;

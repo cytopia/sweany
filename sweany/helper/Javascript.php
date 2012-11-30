@@ -28,10 +28,12 @@
  */
 Class Javascript
 {
-	private static $js_files	= array();
-	private static $js_funcs	= array();
-	private static $js_vars		= array();
-	private static $onPageLoad	= null;
+	private static $js_files		= array();
+	private static $js_funcs		= array();
+	private static $js_vars			= array();
+	private static $js_code_bottom	= null;
+
+	private static $onPageLoad		= null;
 
 
 	/********************************************************* A C T I O N   F U N C T I O N S *********************************************************/
@@ -42,8 +44,8 @@ Class Javascript
 	}
 	public static function getOnPageLoadFunction()
 	{
-		if (!is_null(self::$onPageLoad))
-		{
+		// isset [0] is the fastest language construct to check against string
+		if ( isset(self::$onPageLoad[0]) ) {
 			return ' onload="'.self::$onPageLoad.'"';
 		}
 		return '';
@@ -55,11 +57,11 @@ Class Javascript
 		$size = sizeof(self::$js_vars);
 		foreach ($vars as $var => $value)
 		{
-			if ( is_numeric($value) )
+			if ( is_numeric($value) ) {
 				self::$js_vars[$size] = 'var '.$var.'='.$value.';';
-			else
+			} else {
 				self::$js_vars[$size] = 'var '.$var.'=\''.addslashes($value).'\';';
-
+			}
 			$size++;
 		}
 	}
@@ -69,13 +71,24 @@ Class Javascript
 		$size = sizeof(self::$js_funcs);
 		self::$js_funcs[$size] = $function;
 	}
+	
+	
+	public static function addToBottom($code)
+	{
+		self::$js_code_bottom .= $code;
+	}
 
 	public static function addFile($file)
 	{
-		$size = sizeof(self::$js_files);
-		self::$js_files[$size] = '<script type="text/javascript" src="'.$file.'"></script>';
+		// This makes it possible to override existing files
+		// and not having them included twice or more times.
+		self::$js_files[$file] = '';
 	}
 
+
+
+	/********************************************************* G E T T E R   F U N C T I O N S *********************************************************/	
+	
 	public static function getVars()
 	{
 		if ( !sizeof(self::$js_vars) )
@@ -100,8 +113,9 @@ Class Javascript
 		$post	= '</script>';
 		$code	= '';
 
-		foreach ( self::$js_funcs as $function )
+		foreach ( self::$js_funcs as $function ) {
 			$code .= $function."\n";
+		}
 
 		return "\t".$pre."\n".$code."\n\t".$post."\n";
 	}
@@ -110,50 +124,22 @@ Class Javascript
 	{
 		$code	= '';
 
-		foreach (self::$js_files as $file)
-			$code .= "\t".$file."\n";
-
+		foreach (self::$js_files as $file=>$null) {
+			$code .= "\t".'<script type="text/javascript" src="'.$file.'"></script>'."\n";
+		}
 		return $code;
 	}
 
-
-	/********************************************************* A J A X    F U N C T I O N S *********************************************************/
-
-	public static function loadLiveSearch($callback_url, $element_id)
+	public static function getBottomCode()
 	{
-		$js = <<<EOD
-		function showResult(str)
-		{
-			if (str.length==0)
-			{
-				document.getElementById("$element_id").innerHTML="";
-				document.getElementById("$element_id").style.border="0px";
-				return;
-			}
-			if (window.XMLHttpRequest)
-			{// code for IE7+, Firefox, Chrome, Opera, Safari
-				xmlhttp=new XMLHttpRequest();
-			}
-			else
-			{// code for IE6, IE5
-				xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-			}
-			xmlhttp.onreadystatechange=function()
-			{
-				if (xmlhttp.readyState==4 && xmlhttp.status==200)
-				{
-					document.getElementById("$element_id").innerHTML=xmlhttp.responseText;
-					document.getElementById("$element_id").style.border="1px solid #A5ACB2";
-					document.getElementById("$element_id").style.width="200px";
-				}
-			}
-			xmlhttp.open("GET","$callback_url"+str,true);
-			xmlhttp.send();
+		if ( !sizeof(self::$js_code_bottom) ) {
+			return '';
 		}
-EOD;
-		self::$addFunction($js);
+
+		$pre	= '<script type="text/javascript">';
+		$post	= '</script>';
+		$code	= self::$js_code_bottom;
+
+		return "\t".$pre."\n".$code."\n\t".$post."\n";
 	}
-
-
-
 }

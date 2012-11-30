@@ -34,6 +34,8 @@ class Arrays
 	 *	Prepend one or more associative elements
 	 *	to the beginning of an array.
 	 *
+	 *	Behaves like array_unshift(), but works with associative keys
+	 *
 	 *	@param	mixed[]	&$arr	Array
 	 *	@param	mixed	$key	Array key
 	 *	@param	mixed	$va		Array value

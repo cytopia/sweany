@@ -89,10 +89,10 @@
 			<BlockSection>
 				<block id="onlineUsers">
 					<currOnlineUsers>Derzeitige Online Benutzer</currOnlineUsers>
-					<regUser>registrierte Benutzer</regUser>
-					<regUsers>registrierter Benutzer</regUsers>
-					<guestUser>Gast Benutzer</guestUser>
-					<guestUsers>Gast Benutzer</guestUsers>
+					<regUser>registrierter Benutzer</regUser>
+					<regUsers>registrierte Benutzer</regUsers>
+					<guestUser>Gast</guestUser>
+					<guestUsers>Gäste</guestUsers>
 				</block>
 				<block id="ActivityOverview">
 					<title>Titel</title>
@@ -101,6 +101,11 @@
 					<answers>Antworten</answers>
 					<views>Hits</views>
 					<forum>Forum</forum>
+					<today>Heute</today>
+					<yesterday>Gestern</yesterday>
+					<by>von</by>
+				</block>
+				<block id="latestEntryList">
 					<today>Heute</today>
 					<yesterday>Gestern</yesterday>
 					<by>von</by>

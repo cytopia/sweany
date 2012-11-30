@@ -28,8 +28,15 @@
  */
 class Bbcode
 {
-	public static function parse($text, $smiley_path = null, $allowedTags = array('smilies', 'text', 'url', 'img', 'code', 'quote'))
+	public static function parse($text, $alt_smiley_path = null, $allowedTags = array('smilies', 'text', 'url', 'img', 'code', 'quote'))
 	{
+		// Sweany Default Path for smileys
+		$default_smiley_path = '/sweany/bbcode/img/smiley';
+
+		// Use custom smiley path if desired
+		$smiley_path = $alt_smiley_path ? $alt_smiley_path : $default_smiley_path;
+
+
 		// convert html entities, because html tags are not allowed
 		$str		= htmlentities($text, ENT_COMPAT, 'UTF-8');
 
@@ -140,31 +147,30 @@ class Bbcode
 		$str = str_replace(':roll:', '', $str);
 
 		// remove basic tags
-		$str = preg_replace('#\[b\](.*)\[/b\]#isU', "$1", $str);
-		$str = preg_replace('#\[i\](.*)\[/i\]#isU', "$1", $str);
-		$str = preg_replace('#\[u\](.*)\[/u\]#isU', "$1", $str);
-		$str = preg_replace('#\[s\](.*)\[/s\]#isU', "$1", $str);
+		$str = preg_replace('#\[b\](.*)\[/b\]#isU', '$1', $str);
+		$str = preg_replace('#\[i\](.*)\[/i\]#isU', '$1', $str);
+		$str = preg_replace('#\[u\](.*)\[/u\]#isU', '$1', $str);
+		$str = preg_replace('#\[s\](.*)\[/s\]#isU', '$1', $str);
 
-		$str = preg_replace('#\[url\](.*)\[/url\]#isU', "$1", $str);
-		$str = preg_replace('#\[url=(.*)\](.*)\[/url\]#isU', "$1", $str);
+		$str = preg_replace('#\[url\](.*)\[/url\]#isU', '$1 ', $str);
+		$str = preg_replace('#\[url=(.*)\](.*)\[/url\]#isU', '$1 ', $str);
 
 		$str = preg_replace('#\[img\](.*)\[/img\]#isU', "", $str);
 
-		$str = preg_replace('#\[code\](.*)\[/code\]#isU', '$1', $str);
-		$str = preg_replace('#\[code\](.*)\[/code\]#isU', '$1', $str);
-		$str = preg_replace('#\[code\](.*)\[/code\]#isU', '$1', $str);
+		$str = preg_replace('#\[code\](.*)\[/code\]#isU', '$1 ', $str);
+		$str = preg_replace('#\[code\](.*)\[/code\]#isU', '$1 ', $str);
+		$str = preg_replace('#\[code\](.*)\[/code\]#isU', '$1 ', $str);
 
 		// remove all quotes
-		$str = preg_replace('#\[quote\](.*)\[/quote\]#isU', '', $str);
-		$str = preg_replace('#\[quote\](.*)\[/quote\]#isU', '', $str);
-		$str = preg_replace('#\[quote\](.*)\[/quote\]#isU', '', $str);
-		$str = preg_replace('#\[quote=(.*)\](.*)\[/quote\]#isU', '', $str);
-		$str = preg_replace('#\[quote=(.*)\](.*)\[/quote\]#isU', '', $str);
-		$str = preg_replace('#\[quote=(.*)\](.*)\[/quote\]#isU', '', $str);
+		$str = preg_replace('#\[quote\](.*)\[/quote\]#isU', ' ', $str);
+		$str = preg_replace('#\[quote\](.*)\[/quote\]#isU', ' ', $str);
+		$str = preg_replace('#\[quote\](.*)\[/quote\]#isU', ' ', $str);
+		$str = preg_replace('#\[quote=(.*)\](.*)\[/quote\]#isU', ' ', $str);
+		$str = preg_replace('#\[quote=(.*)\](.*)\[/quote\]#isU', ' ', $str);
+		$str = preg_replace('#\[quote=(.*)\](.*)\[/quote\]#isU', ' ', $str);
 
 		return $str;
 	}
-
 
 
 	/*********************************************** PRIVATE FUNCTIONS ***********************************************/

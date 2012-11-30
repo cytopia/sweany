@@ -36,274 +36,284 @@
 class TimeHelper
 {
 
+	/* ********************************************  VARIABLES  ******************************************** */
+
+	/**
+	 * Cache to store all month names in a year,
+	 * so we do not have to fetch them multiple times
+	 * during a single page call
+	 *
+	 * @var unknown
+	 */
+	private static $allMonths	= null;
+
+	private static $allHours	= null;
+
+
+
+	/* ********************************************  G E T   B Y   T I M E S T A M P   F U N C T I O N S  ******************************************** */
+
 	/**
 	 * Returns a formatted date, or if names of past days are specified
 	 * it can also return 'yesterday' instead of the date
 	 *
-	 *
-	 * @param datetime	$dateTimeString
-	 * @param string	$format
-	 * @param mixed		$dayAgoNames
+	 * @param	string	$format
+	 * @param	float	$timestamp
+	 * @param	mixed	$dayAgoNames
 	 * 		array('Today', 'Yesterday', 'the day before yesterday', ...)
 	 * 		or noting. Depending on how many days ago you would like to display the daye
+	 * @param	string	$timezone
+	 * @return
 	 *
 	 */
-	public static function getFormattedDate($dateTimeString, $format = 'd.m.Y', $dayAgoNames = array())
+	public static function getFormattedDate($format, $timestamp, $dayAgoNames = array(), $timezone = null)
 	{
 		$day		= 86400;	// (60*60*24) seconds
 		$agoDays	= count($dayAgoNames);
-		$checkDate	= date('Ymd',self::toTimeStamp($dateTimeString));
+		$checkDate	= self::date('Ymd', $timestamp, $timezone);
 
-		for ( $i=0; $i<$agoDays; $i++ ) {
-			if ( $checkDate == date('Ymd', time()-($day*$i)) ) {
+		for ( $i=0; $i<$agoDays; $i++ )
+		{
+			if ( $checkDate == self::date('Ymd', time()-($day*$i), $timezone) )
+			{
 				return $dayAgoNames[$i];
 			}
 		}
-		return date($format, self::toTimeStamp($dateTimeString));
+		return self::date($format, $timestamp, $timezone);
 	}
 
-
-
 	/**
+	 * Returns formatted date from unix timestamp.
+	 * The date is also adjusted to the choosen timezone.
 	 *
-	 * @param timestamp $timestamp
+	 * @param	string		$format
+	 * @param	float		$timestamp
+	 * @param	string		$timezone
+	 * @return	string
 	 */
-	public static function date($timestamp)
+	public static function date($format, $timestamp, $timezone = null)
 	{
-		// TODO:
-		return date('d.m.Y', $timestamp);
+		$timezone	= ($timezone) ? $timezone : self::getUserTimezone($timezone);
+		$date		= new DateTime('@'.$timestamp);
+
+		$date->setTimezone(new DateTimeZone($timezone));
+		return $date->format($format);
 	}
 
-
-
 	/**
-	 * returns the localized name of the week depending
+	 * Returns the localized long name of the week depending
 	 * on the language used.
 	 *
-	 * @param timestamp $timestamp
-	 * @return string
+	 * @param	float	$timestamp
+	 * @return	string
 	 */
-	public static function weekDay($timestamp)
+	public static function weekDay($timestamp, $timezone = null)
 	{
+		$timezone	= self::getUserTimezone($timezone);
+		$timestamp	= $timestamp + self::getTimestampOffset($timezone);
+
 		return strftime('%A', $timestamp);
 	}
 
 	/**
-	 * returns the localized short name of the week depending
+	 * Returns the localized short name of the week depending
 	 * on the language used.
 	 *
-	 * @param timestamp $timestamp
-	 * @return string
+	 * @param	float	$timestamp
+	 * @return	string
 	 */
-	public static function weekDayShort($timestamp)
+	public static function weekDayShort($timestamp, $timezone = null)
 	{
+		$timezone	= self::getUserTimezone($timezone);
+		$timestamp	= $timestamp + self::getTimestampOffset($timezone);
+
 		return strftime('%a', $timestamp);
 	}
 
 	/**
-	 * returns the localized name of the month depending
+	 * Returns the localized long name of the month depending
 	 * on the language used.
 	 *
-	 * @param timestamp $timestamp
-	 * @return string
+	 * @param	float	$timestamp
+	 * @return	string
 	 */
-	public static function month($timestamp)
+	public static function month($timestamp, $timezone = null)
 	{
+		$timezone	= self::getUserTimezone($timezone);
+		$timestamp	= $timestamp + self::getTimestampOffset($timezone);
+
 		return strftime('%B', $timestamp);
 	}
 
-	public static function monthShort($timestamp)
+	/**
+	 * Returns localized short month name depending
+	 * on the language used.
+	 *
+	 * @param	float		$timestamp
+	 * @param	string		$timezone
+	 * @return	string
+	 */
+	public static function monthShort($timestamp, $timezone = null)
 	{
+		$timezone	= self::getUserTimezone($timezone);
+		$timestamp	= $timestamp + self::getTimestampOffset($timezone);
+
 		return strftime('%b', $timestamp);
 	}
 
 
+	/* ********************************************  G E T    A L L   F U N C T I O N S  ******************************************** */
+
+	public static function getAllMonthNames()
+	{
+		// Cache already filled?
+		if (self::$allMonths) {
+			return self::$allMonths;
+		}
+
+		self::$allMonths = array();
+
+		for ($i=1; $i<=12; $i++) {
+			$timestamp	= mktime(0, 0, 0, $i, 1, 2000);
+			$name		= strftime('%B', $timestamp);
+
+			self::$allMonths[] = $name;
+		}
+
+		return self::$allMonths;
+	}
+
+	public static function getHours()
+	{
+		// Cache already filled?
+		if (self::$allHours) {
+			return self::$allHours;
+		}
+
+		self::$allHours = array();
+
+		for ($i=0; $i<24; $i++) {
+			self::$allHours[] = sprintf('%02d:00', $i);
+		}
+
+		return self::$allHours;
+	}
+
+
+
+
+	/* ********************************************  M I S C   F U N C T I O N S  ******************************************** */
+
+	public static function getHourSpan($hour_from, $hour_to)
+	{
+		return sprintf('%02d:00 - %02d:00', $hour_from, $hour_to);
+	}
+
+
+
+
+	/* ********************************************  C H E C K   D A T E   F U N C T I O N S  ******************************************** */
 
 
 	/**
-	 * Returns a UNIX timestamp, given either a UNIX timestamp or a valid strtotime() date string.
-	 *
-	 * @param integer|string $date UNIX timestamp, strtotime() valid string
-	 * @param string|DateTimeZone $timezone Timezone string or DateTimeZone object
-	 * @return string Parsed timestamp
+	 *	Is the timestamp from today?
 	 */
-	public static function toTimeStamp($date, $timezone = null)
+	public static function isToday($timestamp, $timezone = null)
 	{
-		if (empty($date)) {
-			return false;
+		return ( self::date('Y-m-d', $timestamp, $timezone) == self::date('Y-m-d', time(), $timezone) );
+	}
+
+	/**
+	 *	Is the timestamp from this week?
+	 */
+	public static function isThisWeek($timestamp, $timezone = null)
+	{
+		return ( self::date('W o', $timestamp, $timezone) == self::date('W o', time(), $timezone) );
+	}
+
+	/**
+	 *	Is the timestamp from this month?
+	 */
+	public static function isThisMonth($timestamp, $timezone = null)
+	{
+		return ( self::date('m Y', $timestamp, $timezone) == self::date('m Y', time(), $timezone) );
+	}
+
+	/**
+	 *	Is the timestamp from this year?
+	 */
+	public static function isThisYear($timestamp, $timezone = null)
+	{
+		return ( self::date('Y', $timestamp, $timezone) == self::date('Y', time(), $timezone) );
+	}
+
+	/**
+	 *	Is the timestamp from yesterday?
+	 */
+	public static function wasYesterday($timestamp, $timezone = null)
+	{
+		$oneDay		= 86400;	// (60*60*24) seconds
+		return ( self::date('Y', $timestamp, $timezone) == self::date('Y', time()-$oneDay, $timezone) );
+	}
+
+	/**
+	 *	Is the timestamp from tomorrow?
+	 */
+	public static function isTomorrow($timestamp, $timezone = null)
+	{
+		$oneDay		= 86400;	// (60*60*24) seconds
+		return ( self::date('Y', $timestamp, $timezone) == self::date('Y', time()+$oneDay, $timezone) );
+	}
+
+
+
+
+
+
+
+	/* ********************************************  P R I V A T E S  ******************************************** */
+
+	private static function getServerTimezone()
+	{
+		return $GLOBALS['DEFAULT_TIME_ZONE'];
+	}
+
+	private static function getUserTimezone($timezone)
+	{
+		if ( $timezone && !is_numeric($timezone) && in_array($timezone, timezone_identifiers_list()) ) {
+			return $timezone;
+		}
+		$timezone = \Sweany\Users::timezone();
+
+		if ( $timezone && !is_numeric($timezone) && in_array($timezone, timezone_identifiers_list()) ) {
+			return $timezone;
 		}
 
-		if (is_integer($date) || is_numeric($date)) {
-			$date = intval($date);
+		return self::getServerTimezone();
+	}
+
+	/**
+	 * Get Unix Timestamp offset between
+	 * the server timezone and the user's timezone.
+
+	 * @param	string	$userTimezone		Timezone
+	 * @return	long	Unix Timestamp Offset
+	 */
+	private static function getTimestampOffset($userTimezone)
+	{
+		$serverTz	= new DateTimeZone(self::getServerTimezone());
+		$serverDt	= new DateTime("now", $serverTz);
+		$serverOff	= $serverTz->getOffset($serverDt); // offset from GMT
+
+		$userTz		= new DateTimeZone($userTimezone);
+		$userDt		= new DateTime("now", $userTz);
+		$userOff	= $userTz->getOffset($userDt);
+
+		// both numbers either positive or both negative
+		if ( ($serverOff >= 0 && $userOff >= 0) || $serverOff < 0 && $userOff < 0 ) {
+			return abs($serverOff - $userOff);
 		} else {
-			$date = strtotime($date);
+			return abs($serverOff) + abs($userOff);
 		}
-
-		if ($date === -1 || empty($date)) {
-			return false;
-		}
-
-		if ($timezone === null) {
-			//$timezone = $GLOBALS['$DEFAULT_TIME_ZONE'];
-		}
-
-		if ($timezone !== null) {
-			return self::convert($date, $timezone);
-		}
-
-		return $date;
 	}
-
-
-
-	/**
-	 * Converts given time (in server's time zone) to user's local time, given his/her timezone.
-	 *
-	 * @param string $serverTime UNIX timestamp
-	 * @param string|DateTimeZone $timezone User's timezone string or DateTimeZone object
-	 * @return integer UNIX timestamp
-	 * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/time.html#formatting
-	 */
-	public static function convert($serverTime, $timezone)
-	{
-		static $serverTimezone = null;
-
-		if (is_null($serverTimezone) || (date_default_timezone_get() !== $serverTimezone->getName()))
-		{
-			$serverTimezone = new DateTimeZone(date_default_timezone_get());
-		}
-
-		$serverOffset = $serverTimezone->getOffset(new DateTime('@' . $serverTime));
-		$gmtTime = $serverTime - $serverOffset;
-
-		if (is_numeric($timezone))
-		{
-			$userOffset = $timezone * (60 * 60);
-		}
-		else
-		{
-			$timezone = self::timezone($timezone);
-			$userOffset = $timezone->getOffset(new DateTime('@' . $gmtTime));
-		}
-		$userTime = $gmtTime + $userOffset;
-		return (int)$userTime;
-	}
-
-	/**
-	 * Returns a timezone object from a string or the user's timezone object
-	 *
-	 * @param string|DateTimeZone $timezone Timezone string or DateTimeZone object
-	 * 	If null it tries to get timezone from 'Config.timezone' config var
-	 * @return DateTimeZone Timezone object
-	 */
-	public static function timezone($timezone = null)
-	{
-		static $tz = null;
-
-		if (is_object($timezone))
-		{
-			if ($tz === null || $tz->getName() !== $timezone->getName())
-			{
-				$tz = $timezone;
-			}
-		}
-		else
-		{
-			if ($timezone === null)
-			{
-				$timezone = $GLOBALS['$DEFAULT_TIME_ZONE'];
-
-				if ($timezone === null)
-				{
-					$timezone = date_default_timezone_get();
-				}
-			}
-			if ($tz === null || $tz->getName() !== $timezone)
-			{
-				$tz = new DateTimeZone($timezone);
-			}
-		}
-		return $tz;
-	}
-
-
-	/**
-	 * Returns true if given datetime string is today.
-	 *
-	 * @param integer|string|DateTime $dateString UNIX timestamp, strtotime() valid string or DateTime object
-	 * @param string|DateTimeZone $timezone Timezone string or DateTimeZone object
-	 * @return boolean True if datetime string is today
-	 * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/time.html#testing-time
-	 */
-	public static function isToday($dateString, $timezone = null) {
-		$date = self::toTimeStamp($dateString, $timezone);
-		return date('Y-m-d', $date) == date('Y-m-d', time());
-	}
-
-	/**
-	 * Returns true if given datetime string is within this week.
-	 *
-	 * @param integer|string|DateTime $dateString UNIX timestamp, strtotime() valid string or DateTime object
-	 * @param string|DateTimeZone $timezone Timezone string or DateTimeZone object
-	 * @return boolean True if datetime string is within current week
-	 * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/time.html#testing-time
-	 */
-	public static function isThisWeek($dateString, $timezone = null) {
-		$date = self::toTimeStamp($dateString, $timezone);
-		return date('W o', $date) == date('W o', time());
-	}
-
-	/**
-	 * Returns true if given datetime string is within this month
-	 * @param integer|string|DateTime $dateString UNIX timestamp, strtotime() valid string or DateTime object
-	 * @param string|DateTimeZone $timezone Timezone string or DateTimeZone object
-	 * @return boolean True if datetime string is within current month
-	 * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/time.html#testing-time
-	 */
-	public static function isThisMonth($dateString, $timezone = null) {
-		$date = self::toTimeStamp($dateString, $timezone);
-		return date('m Y', $date) == date('m Y', time());
-	}
-
-	/**
-	 * Returns true if given datetime string is within current year.
-	 *
-	 * @param integer|string|DateTime $dateString UNIX timestamp, strtotime() valid string or DateTime object
-	 * @param string|DateTimeZone $timezone Timezone string or DateTimeZone object
-	 * @return boolean True if datetime string is within current year
-	 * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/time.html#testing-time
-	 */
-	public static function isThisYear($dateString, $timezone = null) {
-		$date = self::toTimeStamp($dateString, $timezone);
-		return date('Y', $date) == date('Y', time());
-	}
-
-	/**
-	 * Returns true if given datetime string was yesterday.
-	 *
-	 * @param integer|string|DateTime $dateString UNIX timestamp, strtotime() valid string or DateTime object
-	 * @param string|DateTimeZone $timezone Timezone string or DateTimeZone object
-	 * @return boolean True if datetime string was yesterday
-	 * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/time.html#testing-time
-	 *
-	 */
-	public static function wasYesterday($dateString, $timezone = null) {
-		$date = self::toTimeStamp($dateString, $timezone);
-		return date('Y-m-d', $date) == date('Y-m-d', strtotime('yesterday'));
-	}
-
-	/**
-	 * Returns true if given datetime string is tomorrow.
-	 *
-	 * @param integer|string|DateTime $dateString UNIX timestamp, strtotime() valid string or DateTime object
-	 * @param string|DateTimeZone $timezone Timezone string or DateTimeZone object
-	 * @return boolean True if datetime string was yesterday
-	 * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/time.html#testing-time
-	 */
-	public static function isTomorrow($dateString, $timezone = null) {
-		$date = self::toTimeStamp($dateString, $timezone);
-		return date('Y-m-d', $date) == date('Y-m-d', strtotime('tomorrow'));
-	}
-
-
 }

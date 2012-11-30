@@ -103,6 +103,11 @@
 					<yesterday>Yesterday</yesterday>
 					<by>by</by>
 				</block>
+				<block id="latestEntryList">
+					<today>Today</today>
+					<yesterday>Yesterday</yesterday>
+					<by>by</by>
+				</block>
 				<block id="latestPostsByUser">
 					<post>Post</post>
 					<thread>Thread</thread>

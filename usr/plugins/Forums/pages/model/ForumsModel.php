@@ -1,11 +1,6 @@
 <?php
 class ForumsModel extends PageModel
 {
-	/**
-	 *  This is a plugin
-	 */
-	protected $plugin	= true;
-
 	protected $tables	= array('Forums' => array('ForumCategories', 'ForumForums', 'ForumThreads', 'ForumPosts'));
 
 

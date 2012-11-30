@@ -29,7 +29,7 @@ class ForumThreadsTable extends Table
 
 	public $subQueries	= array(
 		'post_count'		=> 'SELECT COUNT(id) FROM forum_posts WHERE Thread.id=fk_forum_thread_id',
-		'username'			=> 'SELECT username FROM users WHERE Thread.fk_user_id=users.id',
+		'username'			=> 'SELECT username FROM core_users WHERE Thread.fk_user_id=core_users.id',
 	);
 
 	public $order = array('Thread.created' => 'DESC');
@@ -37,7 +37,7 @@ class ForumThreadsTable extends Table
 	// many to one
 	public $belongsTo = array(
 		'User' => array(
-			'table'			=> 'users',
+			'table'			=> 'core_users',
 			'core'			=> true,
 			'primaryKey'	=> 'id',
 //			'primaryKey'	=> 'id',			// primary key in the current model
@@ -67,7 +67,7 @@ class ForumThreadsTable extends Table
 			'condition'		=> '',								# String of conditions
 			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created', 'modified'),
 			'subQueries'	=> array(
-				'username'		=> 'SELECT username FROM users WHERE users.id=Post.fk_user_id',
+				'username'		=> 'SELECT username FROM core_users WHERE core_users.id=Post.fk_user_id',
 				'num_entries'	=> 'SELECT (SELECT COUNT(*) FROM forum_threads WHERE forum_threads.fk_user_id = Post.fk_user_id) + (SELECT COUNT(*) FROM forum_posts WHERE forum_posts.fk_user_id = Post.fk_user_id)',
 			),
 			'order'			=> array('Post.created'=>'ASC'),	# Array of order clauses on the given table
@@ -81,10 +81,10 @@ class ForumThreadsTable extends Table
 			'foreignKey'	=> 'fk_forum_thread_id',			# Foreign key in other table (<table_name>) (defaults to: 'fk_<$this->table>_id')
 //			'condition'		=> '',								# String of conditions
 			'fields'		=> array('id', 'title', 'body', 'fk_user_id', 'created'),									# Array of fields to fetch
-			'subQueries'	=> array('username' => 'SELECT username FROM users WHERE users.id=LastPost.fk_user_id'),	# Array of subqueries to append
+			'subQueries'	=> array('username' => 'SELECT username FROM core_users WHERE core_users.id=LastPost.fk_user_id'),	# Array of subqueries to append
 			'order'			=> array('LastPost.created'=>'DESC'),# Array of order clauses on the given table
 			'limit'			=> 1,
-			'flatten'		=> true,							# As we only receive one element, we will flatten it down $data = $data[0]
+			'flatten'		=> true,							# As we only receive one element, we will flatten it down from $data to $data[0]
 			'dependent'		=> false,
 			'recursive'		=> true,							# true|false or array('hasMany' => array('Alias1', 'Alias2')) <= from Post-Table
 		),
@@ -95,7 +95,8 @@ class ForumThreadsTable extends Table
 
 	public $hasAndBelongsToMany = array(
 		'UserHasRead'	=> array(
-			'table'			=> 'users',
+			'table'			=> 'core_users',
+			'core'			=> true,
 			'joinTable'		=> 'forum_thread_is_read',
 			'joinThisFK'	=> 'fk_forum_thread_id',
 			'joinOtherFK'	=> 'fk_user_id',
@@ -116,7 +117,7 @@ class ForumThreadsTable extends Table
 	 * This can be used for an overview page
 	 * to Always have the most active thread up
 	 */
-	public function getLatestActiveThreads($fields = null, $limit = 10)
+	public function getLatestActiveThreads($fields = null, $limit = 10, $return = 'object')
 	{
 		return $this->find('all', array(
 			'fields'	=> $fields,
@@ -126,20 +127,25 @@ class ForumThreadsTable extends Table
 				'hasMany'	=> array('LastPost'),
 				'belongsTo' => array('User', 'Forum')
 			),
+			'return'	=> $return,
 		));
 	}
-
-/*********************************************** ADD/UPDATE FUNCTIONS **************************************************/
-
-	/**
-	 *	@Override
-	 */
-	public function save($fields, $return = 1)
+	
+	public function countUserThreads($user_id)
 	{
-		$fields['title']	= Strings::removeTags($fields['title']);
-		$fields['seo_url']	= Url::cleanUrlParams($fields['title']).'.html';
-
-		return parent::save($fields, $return);
+		$condition = array('`fk_user_id` = :uid', array(':uid' => $user_id));
+		return $this->count($condition);
 	}
 
+
+	/*********************************************** OVERRIDES **************************************************/
+
+ 	/**
+	 *	@Override
+	 */
+	public function beforeSave(&$data)
+	{
+		$data['title']		= Strings::removeTags($data['title']);
+		$data['seo_url']	= Url::cleanUrlParams($data['title']).'.html';
+	}
 }

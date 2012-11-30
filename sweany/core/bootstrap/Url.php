@@ -42,6 +42,7 @@ class Url extends aBootTemplate
 	private static $log_section = 'core';
 	private static $log_title	= 'URL';
 
+
 	/* ******************************************** OVERRIDE INITIALIZE ********************************************/
 
 	public static function initialize($options = null)
@@ -79,24 +80,50 @@ class Url extends aBootTemplate
 
 		// No request exist, return null for frontpage
 		if ( !isset(self::$urlParams[0]) )
-			return null;
+		{
+			return $GLOBALS['DEFAULT_CONTROLLER'];
+		}
+		
+		$controller = self::$urlParams[0];
 
 		// Custom seo controller name :-)
-		if ( isset($CUSTOM_ROUTING[self::$urlParams[0]]['controller']) && strlen($CUSTOM_ROUTING[self::$urlParams[0]]['controller']) )
+		if ( isset($CUSTOM_ROUTING[$controller]['controller']) && strlen($CUSTOM_ROUTING[$controller]['controller']) )
 		{
-			\Sweany\SysLog::i(self::$log_section, self::$log_title, '[SEO] <span style="color:yellow;">'.self::$urlParams[0].'</span> =&gt; <strong style="color:white;">class</strong> <strong style="color:green;">'.$CUSTOM_ROUTING[self::$urlParams[0]]['controller'].'</strong>');
-			return $CUSTOM_ROUTING[self::$urlParams[0]]['controller'];
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, '[SEO] <span style="color:yellow;">'.$controller.'</span> =&gt; <strong style="color:white;">class</strong> <strong style="color:green;">'.$CUSTOM_ROUTING[$controller]['controller'].'</strong>');
+			return $CUSTOM_ROUTING[$controller]['controller'];
 		}
 
-		return self::$urlParams[0];
+		return $controller;
 	}
 
 
 	public static function getMethod()
 	{
+		global $CUSTOM_ROUTING;
+
 		// if no method has been supplied as url parameter
 		// try the default method (usually 'index'), but can be set in config
-		return isset(self::$urlParams[1]) ? self::$urlParams[1] : $GLOBALS['ANY_CONTROLLER_DEFAULT_METHOD'];
+		if ( !isset(self::$urlParams[1]) )
+		{
+			return $GLOBALS['ANY_CONTROLLER_DEFAULT_METHOD'];
+		}
+
+		$controller = self::$urlParams[0];
+		$method		= self::$urlParams[1];
+
+		// Check if a different Controller Name is specified in CUSTOM_ROUTING in config.php
+		if ( isset($CUSTOM_ROUTING[$controller]['methods']) && is_array($CUSTOM_ROUTING[$controller]['methods']) )
+		{
+			$rule = $CUSTOM_ROUTING[$controller]['methods'];
+
+			if ( isset($rule[$method]) )
+			{
+				\Sweany\SysLog::i(self::$log_section, self::$log_title, '[SEO] <span style="color:yellow;">'.$method.'</span> =&gt; <strong style="color:white;">method</strong> <strong style="color:green;">'.$rule[$method].'()</strong>');
+				return $rule[$method];
+			}
+		}
+		
+		return $method;
 	}
 
 	public static function getParams()
@@ -123,7 +150,7 @@ class Url extends aBootTemplate
 	 * @param string $method		(optional)
 	 * @param array  $params		(optional)
 	 */
-	public static function ControllerMethodAndParamsToUrlLink($controller = null, $method = null, $params = array())
+/*	public static function ControllerMethodAndParamsToUrlLink($controller = null, $method = null, $params = array())
 	{
 		// path is: '/' (root page)
 		if ( is_null($controller) )
@@ -144,7 +171,7 @@ class Url extends aBootTemplate
 		}
 		return $link;
 	}
-
+*/
 
 	public static function changeSingleParam($param_position, $value)
 	{

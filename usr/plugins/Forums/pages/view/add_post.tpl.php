@@ -18,7 +18,7 @@
 				<tr>
 					<td>
 						<div class="forumPostTitle"><?php echo $postPreview['title']; ?></div>
-						<div class="forumPostBody"><?php echo Bbcode::parse($postPreview['body'], '/plugins/Forums/img/smiley'); ?></div>
+						<div class="forumPostBody"><?php echo Bbcode::parse($postPreview['body']); ?></div>
 					</td>
 				</tr>
 			</tbody>
@@ -51,12 +51,7 @@
 						echo $language->message.':';
 						echo Form::getError('body');	?>
 						<div style="text-align:left; padding:8px; border:solid 1px black; width:505px; background-color:#FDFDFD;">
-							<div style="height:20px;">
-								<?php echo $messageBBCodeIconBar; ?>
-							</div>
-							<div>
-								<?php echo Form::textArea('body', 60, 14, null, array('id' => 'postBody'));?>
-							</div>
+							<?php echo Form::editor('body', null, 60, 14, array('id' => 'postBody')); ?>
 						</div><br/>
 						<?php
 						echo Form::inputHidden('forum_id', $Thread->Forum->id);
@@ -82,9 +77,8 @@
 
 	<?php foreach ($entries as $entry): ?>
 		<?php
-			$timestamp	= strtotime($entry->created);
-			$date		= date($date_format, $timestamp);
-			$time		= date($time_format, $timestamp);
+			$date		= TimeHelper::date($date_format, $entry->created);
+			$time		= TimeHelper::date($time_format, $entry->created);
 		?>
 		<table class="forum">
 			<tbody>
@@ -97,7 +91,7 @@
 					</td>
 					<td>
 						<div class="forumPostBody">
-							<?php echo Bbcode::parse($entry->body, '/plugins/Forums/img/smiley'); ?>
+							<?php echo Bbcode::parse($entry->body); ?>
 						</div>
 					</td>
 				</tr>

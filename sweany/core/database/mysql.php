@@ -114,9 +114,10 @@ class mysql extends aBootTemplate implements iDBO
 	 *
 	 *	@param	string		$query
 	 *	@param	function	$callback = function ($row, &$data){}
+	 *	@param	string		$return	(object|array) if no callback is given, how do you want to retrieve the results?
 	 *	@return	mixed[]		$data
 	 */
-	public function select($query,  $callback = null)
+	public function select($query,  $callback = null, $return = 'object')
 	{
 		self::$query = $query;
 
@@ -132,6 +133,7 @@ class mysql extends aBootTemplate implements iDBO
 			return (-1);
 		}
 
+		if ( is_resource($result) ) {
 		if ( $callback )
 		{
 			while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -141,16 +143,25 @@ class mysql extends aBootTemplate implements iDBO
 		}
 		else
 		{
-			while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
+			if ( $return == 'object' )
 			{
-				$data[] = $row;
+				while ($row = mysql_fetch_object($result))
+				{
+					$data[] = $row;
+				}
+			}
+			else
+			{
+				while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
+				{
+					$data[] = $row;
+				}
 			}
 		}
-
 		if (!mysql_free_result($result)) {
-			SysLog::sqlError('sql', 'Cannot Free Result', $query, 'mysql_free_result failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
+			SysLog::e('sql', 'Cannot Free Result', $query, 'mysql_free_result failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
 		}
-
+		}
 		SysLog::time('sql', $time);
 		SysLog::i('sql-query', 'select', $query, $data, $time);
 
@@ -181,7 +192,7 @@ class mysql extends aBootTemplate implements iDBO
 	{
 		$where	= $condition ? 'WHERE '.$this->prepare($condition) : '';
 		$query	= sprintf('SELECT `%s` FROM `%s` %s;', $field, $table, $where);
-		$data	= $this->select($query);
+		$data	= $this->select($query, null, 'array');
 
 		if ( !isset($data[0][$field]) )
 		{
@@ -232,7 +243,7 @@ class mysql extends aBootTemplate implements iDBO
 	{
 		$where	= $condition ? 'WHERE '.$this->prepare($condition) : '';
 		$query	= sprintf('SELECT COUNT(*) AS counter FROM `%s` %s;', $table, $where);
-		$data	= $this->select($query);
+		$data	= $this->select($query, null, 'array');
 
 		return (isset($data[0]['counter'])) ? $data[0]['counter'] : 0;
 	}
@@ -258,7 +269,7 @@ class mysql extends aBootTemplate implements iDBO
 	{
 		$where	= $condition ? 'WHERE '.$this->prepare($condition) : '';
 		$query	= sprintf('SELECT COUNT(DISTINCT `%s`) AS counter FROM `%s` %s;', $field, $table, $where);
-		$data	= $this->select($query);
+		$data	= $this->select($query, null, 'array');
 
 		return (isset($data[0]['counter'])) ? $data[0]['counter'] : 0;
 	}
@@ -598,10 +609,11 @@ class mysql extends aBootTemplate implements iDBO
 	 *
 	 *		example:
 	 *		Array (
-	 *			[0]	=>	'`id` = :id AND `username` LIKE %:name%',
+	 *			[0]	=>	'SELECT `id` FROM `::table` WHERE `id` = :id AND `username` LIKE %:name%',
 	 *			[1]	=>	Array (
-	 *				':id' 	=> $id,
-	 *				':name'	=> $name
+					'::table'	=> $table_name		// not quoted with '
+	 *				':id' 		=> $id,				// quoted with '
+	 *				':name'		=> $name			// quoted with '
 	 *			),
 	 *		);
 	 *
@@ -624,8 +636,10 @@ class mysql extends aBootTemplate implements iDBO
 		}
 
 		$fPrepare = function(&$value, $key) {
-			if ($key[0]==':') {
-				$value = $this->escape($value, true);
+			if ($key[0]==':' && $key[1] != ':') {
+				$value = $this->escape($value, true);	// with quoting
+			} else if ($key[0]==':' && $key[1]== ':') {
+				$value = $this->escape($value, false);	// without quoting
 			}
 		};
 		array_walk($vars, $fPrepare);

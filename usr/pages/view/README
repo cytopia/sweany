@@ -1,9 +1,3 @@
-Folder Layout:
--------------------
-<ControllerName>/<view_name>.tpl.php
+Folder Layout
 
-Note:
--------------------
-Do not delete 'FrameworkDefault' or its contents,
-you can however edit the containing views.
-See FrameworkDefault/README for further details.
+<ControllerName>/<view_name>.tpl.php

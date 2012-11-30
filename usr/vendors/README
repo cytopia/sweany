@@ -1,6 +1,10 @@
 Vendor created custom classes/functionality.
 Please use namespaces for your classes to not collide with core or project classes.
 
+Place php class files directly inside this folder.
+<class_name>.php must match class name of class itself.
+If so, everything else will be taken care of by the auto-loader (lazy loading)
+
 TODO:
 + description how to use vendors
 + example vendor

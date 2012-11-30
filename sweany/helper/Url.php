@@ -32,25 +32,41 @@
  *        and rewritten!
  *
  */
-class Url extends \Sweany\Url
+class Url
 {
 	public static function getController()
 	{
-		return parent::getController();
+		return \Sweany\Url::getController();
 	}
 
 	public static function getMethod()
 	{
-		return parent::getMethod();
+		return \Sweany\Url::getMethod();
 	}
 
 	public static function getParams()
 	{
-		return parent::getParams();
+		return \Sweany\Url::getParams();
 	}
 	public static function getRequest()
 	{
-		return parent::getRequest();
+		return \Sweany\Url::getRequest();
+	}
+
+	/**
+	 *
+	 * Get http|https and domain
+	 */
+	public static function getSiteUrl()
+	{
+		$protocol	= ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
+		$domainName	= $_SERVER['HTTP_HOST'];
+		return $protocol.$domainName;
+	}
+
+	public static function getFullUrl()
+	{
+		return self::getSiteUrl().$_SERVER['REQUEST_URI'];
 	}
 
 	public static function cleanUrlParams($urlParamString)
@@ -59,5 +75,4 @@ class Url extends \Sweany\Url
 		$clean = preg_replace("/[\/|+ -]+/", '-', $clean);
 		return ($clean);
 	}
-
 }

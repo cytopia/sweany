@@ -1,6 +1,6 @@
 ﻿<?php
-$thread_date= date($date_format, $Thread->created);
-$thread_time= date($time_format, $Thread->created);
+$thread_date= TimeHelper::date($date_format, $Thread->created);
+$thread_time= TimeHelper::date($time_format, $Thread->created);
 ?>
 
 
@@ -24,7 +24,7 @@ $thread_time= date($time_format, $Thread->created);
 			<td>
 				<div>
 					<div style="float:left;">
-						<?php echo ($Thread->modified>0)? $language->editedOn.' '.date($date_format, $Thread->modified).' '.$language->atTime.' '.date($time_format, $Thread->modified).' ':''; ?>
+						<?php echo ($Thread->modified>0)? $language->editedOn.' '.TimeHelper::date($date_format, $Thread->modified).' '.$language->atTime.' '.TimeHelper::date($time_format, $Thread->modified).' ':''; ?>
 					</div>
 					<div style="float:right;">
 						<?php if ( $Thread->fk_user_id == $user->id() ):?>
@@ -77,7 +77,7 @@ $thread_time= date($time_format, $Thread->created);
 			<td>
 				<div id="startThread">
 					<div class="forumThreadTitle"><?php echo $Thread->title; ?></div>
-					<div class="forumThreadBody"><?php echo Bbcode::parse($Thread->body, '/plugins/Forums/img/smiley'); ?></div>
+					<div class="forumThreadBody"><?php echo Bbcode::parse($Thread->body); ?></div>
 				</div>
 			</td>
 		</tr>
@@ -87,8 +87,8 @@ $thread_time= date($time_format, $Thread->created);
 <?php foreach ($Thread->Post as $Post): ?>
 	<?php
 		$timestamp	= $Post->created;
-		$date		= date($date_format, $timestamp);
-		$time		= date($time_format, $timestamp);
+		$date		= TimeHelper::date($date_format, $timestamp);
+		$time		= TimeHelper::date($time_format, $timestamp);
 	?>
 	<table class="forum">
 		<thead>
@@ -104,7 +104,7 @@ $thread_time= date($time_format, $Thread->created);
 				<td>
 					<div>
 						<div style="float:left;">
-							<?php echo ($Post->modified>0)? $language->editedOn.' '.date($date_format, $Post->modified).' '.$language->atTime.' '.date($time_format, $Post->modified).'':''; ?>
+							<?php echo ($Post->modified>0)? $language->editedOn.' '.TimeHelper::date($date_format, $Post->modified).' '.$language->atTime.' '.TimeHelper::date($time_format, $Post->modified).'':''; ?>
 						</div>
 						<div style="float:right;">
 							<?php if ( $Post->fk_user_id == $user->id() ):?>
@@ -159,7 +159,7 @@ $thread_time= date($time_format, $Thread->created);
 						<?php if (strlen($Post->title)): ?>
 							<div class="forumPostTitle"><?php echo $Post->title; ?></div>
 						<?php endif; ?>
-						<div class="forumPostBody"><?php echo Bbcode::parse($Post->body, '/plugins/Forums/img/smiley'); ?></div>
+						<div class="forumPostBody"><?php echo Bbcode::parse($Post->body); ?></div>
 					</div>
 				</td>
 			</tr>
@@ -204,12 +204,7 @@ $thread_time= date($time_format, $Thread->created);
 						echo Form::getError('body'); ?>
 						<?php echo $language->message; ?>:
 						<div style="text-align:left; padding:8px; border:solid 1px black; width:505px; background-color:#FDFDFD;">
-							<div style="height:20px;">
-								<?php echo $messageBBCodeIconBar; ?>
-							</div>
-							<div>
-								<?php echo Form::textArea('body', 60, 5, null, array('id' => 'postMessage'));	?>
-							</div>
+							<?php echo Form::editor('body', null, 60, 5, array('id' => 'postMessage'))?>
 						</div><br/>
 						<?php
 						echo Form::inputHidden('forum_id', $Thread->Forum->id);

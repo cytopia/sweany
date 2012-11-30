@@ -26,21 +26,21 @@ class ContactTable extends Table
 
 	public $hasCreated	= array('created' => 'integer');
 
-	/**
-	 *	@Override
-	 *	@param	mixed[]			$data
-	 *	@return	integer|null	$return
-	 */
-	public function save($data, $return = 0)
-	{
-		$data['referer']	= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-		$data['referer']	= isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-		$data['useragent']	= $_SERVER['HTTP_USER_AGENT'];
-		$data['ip']			= $_SERVER['REMOTE_ADDR'];
-		$data['host']		= gethostbyaddr($_SERVER['REMOTE_ADDR']);
-		$data['session_id']	= Session::getId();
 
-		return parent::save($data, $return);
+	public function beforeSave(&$data)
+	{
+		$data['name']		= isset($data['name'])		? Strings::removeTags($data['name'])	: '';
+		$data['email']		= isset($data['email'])		? Strings::removeTags($data['email'])	: '';
+		$data['message']	= isset($data['message'])	? Strings::removeTags($data['message'])	: '';
+
+		$data['fk_user_id']	= \Sweany\Users::id();
+		$data['username']	= \Sweany\Users::name();
+
+		$data['referer']	= Client::referer();
+		$data['useragent']	= Client::useragent();
+		$data['ip']			= Client::ip();
+		$data['host']		= Client::host();
+		$data['session_id']	= Session::id();
 	}
 
 	/**
@@ -69,7 +69,7 @@ class ContactTable extends Table
 	public function countNew()
 	{
 		$condition = array('`is_read` = :read', array(':read' => 0));
-		return $this->find('count', array('condition' => $condition));
+		return $this->count($condition);
 	}
 
 	public function markRead($id)

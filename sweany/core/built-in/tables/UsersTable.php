@@ -2,7 +2,7 @@
 class UsersTable extends Table
 {
 	// TABLE
-	public $table 	= 'users';
+	public $table;
 	public $alias	= 'User';
 
 	// FIELDS
@@ -31,14 +31,22 @@ class UsersTable extends Table
 		'last_failed_login_count',
 		'created',
 		'modified',
+		'deleted',
 	);
 
 	public $hasCreated	= 'integer';
 	public $hasModified	= 'integer';
 
-
-
 	/************************************************** OVERRIDES **************************************************/
+
+	/**
+	 *	Constructor
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->table = \Sweany\Settings::tblUsers;
+	}
 
 	public function delete($id, $related = true, $force = false)
 	{

@@ -1,7 +1,7 @@
 ﻿<h1 class="forum"><?php echo $headline; ?></h1>
 
 <?php if ( ($Forum->can_create || $isAdmin) ) : ?>
-	<?php echo Html::l($language->newThread, NULL, 'addThread', array($Forum->id)); ?><br/>
+	<?php echo Html::l($language->newThread, 'Forums', 'addThread', array($Forum->id)); ?><br/>
 <?php else : ?>
 	<p><?php echo $language->cantNewThread; ?></p>
 <?php endif; ?>
@@ -39,8 +39,8 @@
 				if ( $Thread->post_count > 0 )
 				{
 					$timestamp		= $Thread->last_post_created;
-					$last_date		= date($date_format, $timestamp);
-					$last_time		= date($time_format, $timestamp);
+					$last_date		= TimeHelper::date($date_format, $timestamp);
+					$last_time		= TimeHelper::date($time_format, $timestamp);
 					$last_user		= ($Thread->LastPost->fk_user_id > 0) ? $Thread->LastPost->username : 'anonymous';
 
 					if ( ($userProfileLink) )
@@ -59,8 +59,8 @@
 				$locked		= ($Thread->is_locked) ? Html::img('/plugins/Forums/img/threads/is_locked.png', $language->threadIsLocked, array('title' => $language->threadIsLocked)) : '';
 				$closed		= ($Thread->is_closed) ? Html::img('/plugins/Forums/img/threads/is_closed.png', $language->threadIsClosed, array('title' => $language->threadIsClosed)) : '';
 				$timestamp	= $Thread->created;
-				$date		= date($date_format, $timestamp);
-				$time		= date($time_format, $timestamp);
+				$date		= TimeHelper::date($date_format, $timestamp);
+				$time		= TimeHelper::date($time_format, $timestamp);
 
 				$author_name= ($Thread->fk_user_id > 0) ? $Thread->username : 'anonymous';
 				$author_link= ($userProfileLink) ? Html::l($author_name, $userProfileCtl, $userProfileMethod, array($Thread->fk_user_id)) : $author_name;

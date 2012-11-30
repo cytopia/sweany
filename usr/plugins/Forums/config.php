@@ -35,7 +35,7 @@ Config::set('registerMethod', 'login', 'forum');
  * that will show the profile of user <user_id>.
  */
 Config::set('userProfileLinkEnable', true, 'forum');
-Config::set('userProfileCtl', 'Profiles', 'forum');
+Config::set('userProfileCtl', 'User', 'forum');
 Config::set('userProfileMethod', 'show', 'forum');
 
 
@@ -50,5 +50,5 @@ Config::set('userProfileMethod', 'show', 'forum');
  * that will provide an interface to write a message to <user_id>.
  */
 Config::set('writeMessageLinkEnable', true, 'forum');
-Config::set('writeMessageCtl', 'Messages', 'forum');
+Config::set('writeMessageCtl', 'Message', 'forum');
 Config::set('writeMessageMethod', 'write', 'forum');

@@ -239,9 +239,16 @@ class Validate02Config extends aBootTemplate
 		 ***************************************************************************/
 
 		// ---------- Skeleton File
-		if ( !isset($GLOBALS['HTML_DEFAULT_SKELETON']) )
+//		if ( !isset($GLOBALS['HTML_DEFAULT_SKELETON']) )
+//		{
+//			self::$error = '<b>$HTML_DEFAULT_SKELETON</b> not defined in <b>config.php</b>';
+//			return false;
+//		}
+
+		// ---------- Compression
+		if ( !isset($GLOBALS['COMPRESS_HTML']) )
 		{
-			self::$error = '<b>$HTML_DEFAULT_SKELETON</b> not defined in <b>config.php</b>';
+			self::$error = '<b>$COMPRESS_HTML</b> not defined in <b>config.php</b>';
 			return false;
 		}
 
@@ -379,7 +386,7 @@ class Validate02Config extends aBootTemplate
 			self::$error  = '<b>$RUNTIME_MODE</b> has a wrong value in <b>config.php</b>. Can only be <b>SWEANY_DEVELOPMENT</b>, <b>SWEANY_PRODUCTION</b>, <b>SWEANY_PRODUCTION_FAST_CORE</b> or <b>SWEANY_PRODUCTION_DAEMON</b>.';
 			return false;
 		}
-		
+
 		// --------- TODO: implement PRODUCTION_FAST_CORE
 		if ( $GLOBALS['RUNTIME_MODE'] == SWEANY_PRODUCTION_FAST_CORE )
 		{
@@ -456,6 +463,13 @@ class Validate02Config extends aBootTemplate
 			return false;
 		}
 
+		// ---------- Cache Dir
+		if ( !is_writable(CORE_CACHE) )
+		{
+			self::$error  = 'Cache Dir <b>cache</b> not writable in '.CORE_CACHE;
+			return false;
+		}
+
 		// ---------- Error Behaviour
 		if ( !($GLOBALS['BREAK_ON_ERROR'] == 0 || $GLOBALS['BREAK_ON_ERROR'] == 1) )
 		{
@@ -467,9 +481,9 @@ class Validate02Config extends aBootTemplate
 			self::$error  = '<b>$DEBUG_CSS</b> in <b>config.php</b> has a wrong value, can only be <b>0</b> or <b>1</b>.';
 			return false;
 		}
-		if ( !file_exists(ROOT.DS.'www'.DS.'js'.DS.'debug.js') )
+		if ( !file_exists(ROOT.DS.'www'.DS.'sweany'.DS.'debug.js') )
 		{
-			self::$error  = 'CSS Debug File <b>'.$GLOBALS['DEBUG_CSS'].'</b> does not exist in '.ROOT.DS.'www'.DS.'js'.DS.'debug.js';
+			self::$error  = 'CSS Debug File <b> debug.js</b> does not exist in '.ROOT.DS.'www'.DS.'sweany'.DS.'debug.js';
 			return false;
 		}
 
@@ -488,10 +502,29 @@ class Validate02Config extends aBootTemplate
 		}
 
 		// ---------- Layout
-		if ( !is_file(USR_LAYOUTS_PATH.DS.'view'.DS.$GLOBALS['DEFAULT_LAYOUT']) )
+		if ( is_string($GLOBALS['DEFAULT_LAYOUT']) )
 		{
-			self::$error = '$DEFAULT_LAYOUT: '.USR_LAYOUTS_PATH.DS.'view'.DS.$GLOBALS['DEFAULT_LAYOUT'].' does not exist';
-			return false;
+			if ( !is_file(USR_LAYOUTS_PATH.DS.'view'.DS.$GLOBALS['DEFAULT_LAYOUT']) )
+			{
+				self::$error = '$DEFAULT_LAYOUT: '.USR_LAYOUTS_PATH.DS.'view'.DS.$GLOBALS['DEFAULT_LAYOUT'].' does not exist';
+				return false;
+			}
+		}
+		else if ( isset($GLOBALS['DEFAULT_LAYOUT'][0]) && isset($GLOBALS['DEFAULT_LAYOUT'][1]) )
+		{
+			$lCtrlName = $GLOBALS['DEFAULT_LAYOUT'][0];
+			$lMethName = $GLOBALS['DEFAULT_LAYOUT'][1];
+
+			if ( !is_file(USR_LAYOUTS_PATH.DS.$lCtrlName.'.php') )
+			{
+				self::$error = '$DEFAULT_LAYOUT: Layout Controller does not exist'.USR_LAYOUTS_PATH.DS.$lCtrlName.'.php';
+				return false;
+			}
+		}
+		else
+		{
+				self::$error = '$DEFAULT_LAYOUT in config.php must either be a string or an array. See description in config.php';
+				return false;
 		}
 
 
@@ -553,10 +586,17 @@ class Validate02Config extends aBootTemplate
 		 *
 		 ***************************************************************************/
 
-		// ---------- Skeleton File
-		if ( !file_exists(USR_SKELETONS_PATH.DS.$GLOBALS['HTML_DEFAULT_SKELETON']) )
+		 // ---------- Compression
+		if ( !is_numeric($GLOBALS['COMPRESS_HTML']) || $GLOBALS['COMPRESS_HTML']<0 || $GLOBALS['COMPRESS_HTML']>1 )
 		{
-			self::$error  = 'Html skeleton <b>'.$GLOBALS['HTML_DEFAULT_SKELETON'].'</b> does not exist in '.USR_SKELETONS_PATH.DS;
+			self::$error = '<b>$COMPRESS_HTML</b> must be <b>0</b> or <b>1</b> in <b>config.php</b>';
+			return false;
+		}
+
+		// ---------- Skeleton File
+		if ( !file_exists(USR_SKELETONS_PATH.DS.'default.tpl.php'/*$GLOBALS['HTML_DEFAULT_SKELETON']*/) )
+		{
+			self::$error  = 'Html skeleton <b>default.tpl.php'./*$GLOBALS['HTML_DEFAULT_SKELETON'].*/'</b> does not exist in '.USR_SKELETONS_PATH.DS;
 			return false;
 		}
 
@@ -589,9 +629,9 @@ class Validate02Config extends aBootTemplate
 		 *  Included Technology Defines
 		 *
 		 ***************************************************************************/
-		if ( !is_file(ROOT.DS.'www'.DS.'css'.DS.'ecss.php') )
+		if ( !is_file(ROOT.DS.'www'.DS.'sweany'.DS.'ecss.php') )
 		{
-			self::$error = '<b>ecss.php</b> is missing in www/css/';
+			self::$error = '<b>ecss.php</b> is missing in www/sweany/';
 			return false;
 		}
 		if ( $GLOBALS['ECSS_ENABLE'] !== true && $GLOBALS['ECSS_ENABLE'] !== false )

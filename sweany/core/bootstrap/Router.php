@@ -71,13 +71,6 @@ class Router extends aBootTemplate
 		$params		= \Sweany\Url::getParams();
 
 		//------------- 00) Check if this is a framework internal call structure
-		/* TODO
-		if ( Router::isDefined($controller, $method) )
-		{
-			\Log::setInfo('Callback', 'Internal request caught by Router: '.$controller.'->'.$method);
-		}
-		*/
-
 		if ( \Sweany\Url::$request == $GLOBALS['DEFAULT_INFO_MESSAGE_URL'] )
 		{
 			\Sweany\SysLog::i(self::$log_section, self::$log_title, 'Internal request: '.\Sweany\Url::$request);
@@ -109,6 +102,21 @@ class Router extends aBootTemplate
 			);
 			return true;
 		}
+		else if ( $controller == $GLOBALS['DEFAULT_ADMIN_URL'] )
+		{
+			\Sweany\SysLog::i(self::$log_section, self::$log_title, 'Internal request: '.\Sweany\Url::$request);
+
+			// Load the Framework Default Page Controller
+			require_once(CORE_CONTROLLER.DS.'FrameworkDefault.php');
+
+			self::$object = array(
+				'class'		=> 'FrameworkDefault',
+				'method'	=> 'admin',
+				'params'	=> array(\Sweany\Url::$request),
+			);
+			return true;
+		}
+		
 		//------------- 01) No controller specified, so start with the default entry point
 		else if ( !$controller )
 		{
@@ -261,7 +269,8 @@ class Router extends aBootTemplate
 		 *
 		 * produces E_STRICT WARNING on older PHP Versions, so we need the '@'
 		 */
-		if ( !@is_callable(array($class, $method)) )
+		 // TODO: I have removed @is_callable, because it is slow!, check if it is still working
+		if ( !is_callable(array($class, $method)) )
 		{
 			\Sweany\SysLog::w(self::$log_section, self::$log_title, 'method &lt;'.$method.'&gt; is not publically callable in class &lt;'.$class.'&gt;');
 			return false;

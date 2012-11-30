@@ -28,17 +28,18 @@ class ForumBlock extends BlockController
 
 		$Threads = $tblThreads->getLatestActiveThreads(null, $numEntries);
 
-		$this->set('language', $this->language);
+		$this->set('language', $this->core->language);
 		$this->set('userProfileLink', $this->userProfileLink);
 		$this->set('userProfileCtl', $this->userProfileCtl);
 		$this->set('userProfileMethod', $this->userProfileMethod);
 
 		$this->set('Threads', $Threads);
 
-		if ( $detailed )
+		if ( $detailed ) {
 			$this->view('activity_overview');
-		else
+		} else {
 			$this->view('activity_overview_list');
+		}
 	}
 
 	/**
@@ -50,10 +51,11 @@ class ForumBlock extends BlockController
 	public function latestEntryList($numEntries, $css = null)
 	{
 		$tblThreads	= Loader::loadPluginTable('ForumThreads', $this->plugin);
-		$entries	= $tblThreads->getLatestActiveThreads(null, $numEntries);
+		$entries	= $tblThreads->getLatestActiveThreads(null, $numEntries, 'array');
 
 		$this->set('entries', $entries);
 		$this->set('css', $css);
+		$this->set('language', $this->core->language);
 		$this->set('userProfileLink', $this->userProfileLink);
 		$this->set('userProfileCtl', $this->userProfileCtl);
 		$this->set('userProfileMethod', $this->userProfileMethod);
@@ -69,9 +71,22 @@ class ForumBlock extends BlockController
 	public function NewsOverview($numEntries, $forum_id)
 	{
 		$tblThreads	= Loader::loadPluginTable('ForumThreads', $this->plugin);
-		$threads	= $tblThreads->getByForum($forum_id, $numEntries);
+		
+		// TODO: check what relations are needed here!!!
+		$threads 	= $tblThreads->find('all', array(
+			'limit'		=> $numEntries,
+			'relation'	=> array(
+//				'hasMany'	=> array('LastPost'),
+//				'belongsTo' => array('User', 'Forum')
+			),
+			'return'	=> 'array',
+			'condition'	=> 'Thread.fk_forum_forums_id = '.(int)$forum_id,
+		));
 
-		$this->set('language', $this->language);
+
+//		$threads	= $tblThreads->getByForum($forum_id, $numEntries);
+
+		$this->set('language', $this->core->language);
 		$this->set('userProfileLink', $this->userProfileLink);
 		$this->set('userProfileCtl', $this->userProfileCtl);
 		$this->set('userProfileMethod', $this->userProfileMethod);
@@ -88,7 +103,7 @@ class ForumBlock extends BlockController
 		$tblPosts	= Loader::loadPluginTable('ForumPosts', $this->plugin);
 		$posts		= $tblPosts->getMyPosts($user_id, array('created' => 'ASC'), $numEntries);
 
-		$this->set('language', $this->language);
+		$this->set('language', $this->core->language);
 		$this->set('posts', $posts);
 
 		$this->view('latest_posts_by_user');
@@ -97,11 +112,11 @@ class ForumBlock extends BlockController
 
 	public function onlineUsers()
 	{
-		$this->set('language', $this->language);
-		$this->set('countOnlineUsers', $this->user->countOnlineUsers());
-		$this->set('countLoggedInOnlineUsers', $this->user->countLoggedInOnlineUsers());
-		$this->set('countAnonymousOnlineUsers', $this->user->countAnonymousOnlineUsers());
-		$this->set('LoggedInOnlineUsers', $this->user->getLoggedInOnlineUsers());
+		$this->set('language', $this->core->language);
+		$this->set('countOnlineUsers', $this->core->online->countAllUsers());
+		$this->set('countLoggedInOnlineUsers', $this->core->online->countLoggedInUsers());
+		$this->set('countAnonymousOnlineUsers', $this->core->online->countAnonymousUsers());
+		$this->set('LoggedInOnlineUsers', $this->core->online->getLoggedInUsers());
 
 		$this->set('userProfileLink', $this->userProfileLink);
 		$this->set('userProfileCtl', $this->userProfileCtl);

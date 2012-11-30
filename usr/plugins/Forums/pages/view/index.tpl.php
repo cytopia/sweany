@@ -31,7 +31,7 @@
 				if ( $Forum->thread_count > 0 )
 				{
 					$last_entry_created 	= $Forum->LastThread->created;
-					$last_entry_title		= Strings::shorten($Forum->LastThread->title,40, true);
+					$last_entry_title		= Strings::shorten($Forum->LastThread->title, 40, true);
 					$last_entry_user		= ($Forum->LastThread->fk_user_id > 0) ? $Forum->LastThread->username : 'anonymous';
 
 					if ( ($userProfileLink) )
@@ -57,8 +57,8 @@
 					}
 
 					$timestamp	= $last_entry_created;
-					$date		= date($date_format, $timestamp);
-					$time		= date($time_format, $timestamp);
+					$date		= TimeHelper::date($date_format, $timestamp);
+					$time		= TimeHelper::date($time_format, $timestamp);
 				}
 				else
 				{

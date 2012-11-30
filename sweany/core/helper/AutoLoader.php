@@ -243,7 +243,7 @@ Class AutoLoader
 
 		if ( Settings::$showFwErrors > 1 || Settings::$logFwErrors > 1 )
 		{
-			SysLog::w('internal', 'Auto-Loader', 'Class not found <strong><font color="red">' . $sClassName . '</font></strong> in all paths', null, null, $start);
+			SysLog::w('internal', 'Auto-Loader', 'Class not found <strong><font color="red">' . $sClassName . '</font></strong> in all paths:<br/>'.implode($paths, '<br/>'), null, null, $start);
 		}
     }
 

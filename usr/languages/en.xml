@@ -7,6 +7,7 @@
 			<lang_name>English</lang_name>
 			<lang_short>en</lang_short>
 			<lang_long>en-US</lang_long>
+			<locale>en_US.UTF-8</locale>
 			<date_format>Y-m-d</date_format>
 		</settings>
 		<default>
@@ -26,107 +27,35 @@
 	</core>
 	<!-- /do not delete the core part -->
 
+	<!-- global accessable keys from anywhere -->
+	<global>
+		<projectName>Sweany PHP</projectName>
+	</global>
+	<!-- /global accessable keys from anywhere -->
 
 	<!-- Normal Page Controller Defines -->
 	<usr>
 		<PageSection>
-			<Test>
-				<page id="index">
-					<fieldsetName>Fieldset</fieldsetName>
-				</page>
-			</Test>
-			<Site>
-				<page id="index">
-					<html_title>Home</html_title>
-					<menu_contact>Contact us</menu_contact>
-				</page>
-			</Site>
-			<User>
-				<page id="logout">
-					<title>Logging out...</title>
-					<note>Thank you for using this site</note>
-				</page>
-				<page id="login">
-					<title>Login / Register</title>
-					<login>Login</login>
-					<username>Username</username>
-					<password>Password</password>
-					<lostPassword>lost password?</lostPassword>
-					<registerFree>Register for free</registerFree>
-					<email>Email</email>
-					<tos>Terms of Service</tos>
-					<acceptTos>I hereby accept the %s and the %s.</acceptTos>
-					<register>Register</register>
-					<dataPolicy>Data Policy</dataPolicy>
-					<loginError>Wrong Username or Password</loginError>
-					<loginTooShortError>Username too short</loginTooShortError>
-					<regUserNameExists>Username already exists</regUserNameExists>
-					<regUserNameMaxLen>max 12 characters</regUserNameMaxLen>
-					<regUserNamealphaNum>Only alphanumerical characters</regUserNamealphaNum>
-					<regUserNameMinLen>min 3 characters</regUserNameMinLen>
-					<regEmailInvalid>This is not a valid email</regEmailInvalid>
-					<regEmailExists>Email address already exists</regEmailExists>
-					<regPasswordMinLen>min 5 characters</regPasswordMinLen>
-					<regPasswordMaxLen>max 30 characters</regPasswordMaxLen>
-					<regAgb>To join this site you have to accept the data policy and terms of service</regAgb>
-					<accountLocked>This user account has been locked</accountLocked>
-					<accountDeleted>This user account has been deleted</accountDeleted>
-					<accountDisabled>This user account has not been enabled yet.</accountDisabled>
-					<registerCompleteTitle>Registration successful</registerCompleteTitle>
-					<registerCompleteBody>We have sent you an email with a validation link to complete your registration. Please check your inbox.</registerCompleteBody>
-				</page>
-				<page id="validate">
-					<accountActivatedTitle>User account has been activated</accountActivatedTitle>
-					<accountActivatedBody>Your account has been activated successfully. You can now login</accountActivatedBody>
-					<invalidKeyTitle>Invalid activation key</invalidKeyTitle>
-					<invalidKeyBody>The supplied activation key is invalid or already activated.</invalidKeyBody>
-					<here>here</here>
-				</page>
-			</User>
 		</PageSection>
 
 		<BlockSection>
-			<UserBlock>
-				<block id="loginLink">
-					<welcome>Welcome to</welcome>
-					<site_name>this site</site_name>
-					<login>Log In</login>
-					<signup>Sign Up</signup>
-					<or>or</or>
-				</block>
-				<block id="logoutLink">
-					<logout>logout</logout>
-				</block>
-			</UserBlock>
 		</BlockSection>
 
 		<LayoutSection>
-			<Layouts>
-				<layout id="FrontPage">
-					<home>Home</home>
-					<forums>Forums</forums>
-					<contact>Contact</contact>
-					<test>Test</test>
-					<copyright>© 2012 Copyright note.</copyright>
-				</layout>
-			</Layouts>
 		</LayoutSection>
 	</usr>
 	<!-- /Normal Page Controller Defines -->
 
 
-
-
 	<!-- Custom path to add stuff that does not fit anywhere else, can also be named differently (anything you like). -->
-	<!-- Access this via $this->language->getCustom(full_path_with_id, key). -->
+	<!-- Access this via $this->core->language->getCustom(full_path_with_id, key). -->
 	<!-- e.g. -->
-	<!-- $this->language->getCustom('/root/custom/MailSection/mail[@id="welcome"]', 'subject'); -->
+	<!-- $this->core->language->getCustom('/root/custom/SectionName/sec[@id="test"]', 'subject'); -->
 	<custom>
-		<MailSection>
-			<mail id="welcome">
-				<subject>Confirm Registration</subject>
-				<body>Hi %s,\n\nTo complete your registration, please click on the following link to confirm your registration.\n\n%s</body>
-			</mail>
-		</MailSection>
+		<SectionName>
+			<sec id="test">
+				<tag1>Tag1</tag1>
+			</sec>
+		</SectionName>
 	</custom>
 </root>

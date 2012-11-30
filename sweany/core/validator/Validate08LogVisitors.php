@@ -59,9 +59,9 @@ class Validate08LogVisitors extends aBootTemplate
 			return false;
 		}
 		// CHECK SQL TABLES
-		if ( count($db->select("show tables  from `$GLOBALS[SQL_DB]` like 'visitors'; ")) < 1 )
+		if ( count($db->select("show tables  from `$GLOBALS[SQL_DB]` like 'core_visitors'; ")) < 1 )
 		{
-			self::$error  = 'MySQL: <b>visitors</b> table does not exist';
+			self::$error  = 'MySQL: <b>core_visitors</b> table does not exist';
 			return false;
 		}
 		return true;

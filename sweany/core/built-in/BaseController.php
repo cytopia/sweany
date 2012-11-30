@@ -157,24 +157,13 @@ abstract Class BaseController
 	protected $formValidator = array();
 
 
-
 	/**
-	 *
-	 *	Core Module placeholders (User)
-	 *
-	 *	@param	object|null		$user
-	 */
-	protected $user		= null;
-
-
-
-	/**
-	 *
-	 *	Core Module placeholders (Language)
+	 *	Core class placeholder
 	 *
 	 *	@param	object|null
 	 */
-	public $language	= null;
+	 public $core = null;
+
 
 
 
@@ -203,7 +192,17 @@ abstract Class BaseController
 		// Attach the user class (if enabled in config.php)
 		if ( $GLOBALS['SQL_ENABLE'] && $GLOBALS['USER_ENABLE'] )
 		{
-			$this->user		= new \Sweany\Users;
+			if (!$this->core) {
+				$this->core = new stdClass;
+			}
+
+			$this->core->user	= new \Sweany\Users;
+
+			if ( $GLOBALS['USER_ONLINE_COUNT_ENABLE'] )
+			{
+				$this->core->online	= new \Sweany\OnlineUsers;
+			}
+
 		}
 
 		// Core Module
@@ -212,7 +211,11 @@ abstract Class BaseController
 		// make it available to the controller.
 		if ( $GLOBALS['LANGUAGE_ENABLE'] )
 		{
-			$this->language	= new \Sweany\Language($this->plugin, $this->ctrl_type, get_class($this));
+			if (!$this->core) {
+				$this->core = new stdClass;
+			}
+
+			$this->core->language	= new \Sweany\Language($this->plugin, $this->ctrl_type, get_class($this));
 		}
 
 
@@ -257,20 +260,39 @@ abstract Class BaseController
 
 	/**
 	 *
-	 *	Attach blocks to the layout and return the return value
-	 *	of the block function itself.
+	 *	Attach a block and return the return value
+	 *	of the block function's return value itself.
 	 *
 	 *	@param string	$varName
-	 *	@param string	$blockPluginName
 	 *	@param string	$blockControllerName
 	 *	@param string	$blockMethodName
 	 *	@param mixed[]  $blockMethodParams
 	 *	@return mixed	Return value of the block function
 	 */
-	protected function attachBlock($varName, $blockPluginName, $blockControllerName, $blockMethodName, $blockMethodParams = array())
+	protected function attachBlock($varName, $blockControllerName, $blockMethodName, $blockMethodParams = array())
+	{
+		return $this->attachPluginBlock($varName, null, $blockControllerName, $blockMethodName, $blockMethodParams);
+	}
+
+
+	/**
+	*
+	*	Attach a plugin block (block provided by a plugin) and return the return value
+	*	of the block function's return value itself.
+	*
+	*	@param string	$varName
+	*	@param string	$blockPluginName
+	*	@param string	$blockControllerName
+	*	@param string	$blockMethodName
+	*	@param mixed[]  $blockMethodParams
+	*	@return mixed	Return value of the block function
+	*/
+	protected function attachPluginBlock($varName, $blockPluginName, $blockControllerName, $blockMethodName, $blockMethodParams = array())
 	{
 		if ( \Sweany\Settings::$showFwErrors > 2 || \Sweany\Settings::$logFwErrors > 2 )
+		{
 			$start = microtime(true);
+		}
 
 		$output = \Sweany\Render::block($blockPluginName, $blockControllerName, $blockMethodName, $blockMethodParams);
 
@@ -278,8 +300,9 @@ abstract Class BaseController
 		{
 			$time	= microtime(true)-$start;
 			$plugin = ($blockPluginName) ? $blockPluginName.':' : '';
+			$type	= ($blockPluginName) ? 'plugin ' : '';
 			$params	= '';//@implode(',', $blockMethodParams);
-			\Sweany\SysLog::i('user', 'Attach Block', '(rendered) from: '.$plugin.$blockControllerName.'->'.$blockMethodName.'('.$params.')', null, $time);
+			\Sweany\SysLog::i('user', 'Attach '.$type.'Block', '(rendered) from: '.$plugin.$blockControllerName.'->'.$blockMethodName.'('.$params.')', null, $time);
 			\Sweany\SysLog::time(array($plugin.$blockControllerName.'->'.$blockMethodName), $time);
 		}
 
@@ -289,7 +312,6 @@ abstract Class BaseController
 		// Return block functions return value
 		return $output['ret'];
 	}
-
 
 
 
@@ -354,7 +376,7 @@ abstract Class BaseController
 					foreach ($options as  $opt)
 					{
 						// If language key is defined, rather use that instead
-						$err = isset($opt['language']) ? $this->language->$opt['language'] : $opt['error'];
+						$err = isset($opt['language']) ? $this->core->language->$opt['language'] : $opt['error'];
 
 						if ( isset($opt['rule']) )
 						{

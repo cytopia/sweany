@@ -1,7 +1,0 @@
-The files in here overwrite the core views in sweany/core/built-in/view/FrameworkDefault.
-
-If you want to overwrite a specific view,
-just place a file with the exact same name as the core view file in here.
-
-If those files (in here) or the folder is not present,
-we will use the pre-defined core-views.

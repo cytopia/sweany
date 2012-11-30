@@ -97,9 +97,9 @@ class LogCat
 	private static function _getChars($num, $char)
 	{
 		$space ='';
-		for ($i=0; $i<$num; $i++)
+		for ($i=0; $i<$num; $i++) {
 			$space .= $char;
-
+		}
 		return $space;
 	}
 }

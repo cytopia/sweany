@@ -42,7 +42,7 @@ Class HtmlTemplate
 
 	public static function addXmlNameSpace($subNs = null, $value)
 	{
-		self::$xmlNs .= !is_null($subNs) ? ' xmlns:'.$subNs.'="'.$value.'"' : ' xmlns="'.$value.'"';
+		self::$xmlNs .= isset($subNs[0]) ? ' xmlns:'.$subNs.'="'.$value.'"' : ' xmlns="'.$value.'"';
 	}
 	public static function getXmlNameSpace()
 	{
@@ -99,7 +99,7 @@ Class HtmlTemplate
 	}
 	public static function getTitle()
 	{
-		return !is_null(self::$title) ? self::$title : $GLOBALS['HTML_DEFAULT_PAGE_TITLE'];
+		return isset(self::$title[0]) ? self::$title : $GLOBALS['HTML_DEFAULT_PAGE_TITLE'];
 	}
 
 
@@ -109,7 +109,7 @@ Class HtmlTemplate
 	}
 	public static function getKeywords()
 	{
-		return !is_null(self::$keywords) ?  self::$keywords : $GLOBALS['HTML_DEFAULT_PAGE_KEYWORDS'];
+		return isset(self::$keywords[0]) ?  self::$keywords : $GLOBALS['HTML_DEFAULT_PAGE_KEYWORDS'];
 	}
 
 
@@ -119,6 +119,6 @@ Class HtmlTemplate
 	}
 	public static function getDescription()
 	{
-		return !is_null(self::$description) ? self::$description : $GLOBALS['HTML_DEFAULT_PAGE_DESCRIPTION'];
+		return isset(self::$description[0]) ? self::$description : $GLOBALS['HTML_DEFAULT_PAGE_DESCRIPTION'];
 	}
 }

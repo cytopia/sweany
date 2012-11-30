@@ -28,7 +28,7 @@ class ForumCategoriesTable extends Table
 				'post_count'	=> 'SELECT COUNT(*) FROM forum_posts WHERE forum_posts.fk_forum_thread_id IN (SELECT id FROM forum_threads WHERE forum_threads.fk_forum_forums_id = Forum.id)',
 			),
 			'order'			=> array('Forum.sort' => 'ASC'),
-			'limit'			=> 5,
+//			'limit'			=> 5,
 			'dependent'		=> false,
 			'recursive'		=> array('hasMany' => array('LastThread')),	// only follow LastThread in $hasMany of ForumForumsTable | instead of TRUE (which follows all relations)
 		),

@@ -80,6 +80,13 @@ Class Language extends aBootTemplate
 	 */
 	private static $_sstore	= null;
 
+	
+	
+	/*
+	 * static Language Store (from database)
+	 *
+	 */
+	private static $sql_lang_store = null;
 
 	/*
 	 * In case the instance is a Plugin,
@@ -120,6 +127,13 @@ Class Language extends aBootTemplate
 			return false;
 		}
 
+		// Only load from SQL if we are not on the default language
+		if ($short != Settings::$defaultLanguage )
+		{
+			// Initialize SQL Language
+			$tblLang = \Sweany\AutoLoader::loadCoreTable('Language');
+			self::$sql_lang_store = $tblLang->loadBySection($short);
+		}
 		return true;
 	}
 
@@ -179,7 +193,7 @@ Class Language extends aBootTemplate
 	public static function changeLanguage($short_lang = 'en')
 	{
 		\Sweany\SysLog::i(self::$log_section, self::$log_title, 'Change to '.$short_lang);
-		\Sweany\Session::set('language', array('short' => $short_lang));
+		\Sweany\Session::set(array(Settings::sessSweany => Settings::sessLanguage), array('short' => $short_lang));
 
 		// Need to reload the file (as it has changed)
 		$short = self::chooseLanguage();
@@ -187,6 +201,10 @@ Class Language extends aBootTemplate
 	}
 
 
+	public static function getSqlTranslation($text)
+	{
+		return isset(self::$sql_lang_store[$text]) ? self::$sql_lang_store[$text] : $text;
+	}
 
 
 	/********************************************  C O N S T R U C T O R  ********************************************/
@@ -196,13 +214,12 @@ Class Language extends aBootTemplate
 		if ($plugin)
 		{
 			$this->_plugin = $plugin;
-
 			self::loadPluginFile(self::$langShort, $plugin);
 		}
 
-		$section	= (strlen($plugin)) ? 'plugins/'.$plugin : 'usr';
+		$section	= $plugin ? 'plugins/'.$plugin : 'usr';
 		$sub		= ($type == 'page') ? 'PageSection' : (($type == 'layout') ? 'LayoutSection' : 'BlockSection');
-		$sub		= (strlen($plugin)) ? $sub : $sub.'/'.$controller;
+		$sub		= $plugin ? $sub : $sub.'/'.$controller;
 
 		$path		= '/root/'.$section.'/'.$sub.'/'.$type;
 		$this->_path= $path;
@@ -289,21 +306,24 @@ Class Language extends aBootTemplate
 			\Sweany\SysLog::e(self::$log_section, self::$log_title, '['.$path.'"]['.$key.'] does not exist');
 
 			// return empty string to prevent php notice, if debugging is off
-			if ( \Sweany\Settings::$showPhpErrors == 0)
+			if ( \Sweany\Settings::$showPhpErrors == 0) {
 				return '';
+			}
 		}
 		if ( !count($tmp[0]->$key ) )
 		{
 			\Sweany\SysLog::e(self::$log_section, self::$log_title, '['.$path.'"]['.$key.'] does not exist');
 
 			// return empty string to prevent php notice, if debugging is off
-			if ( \Sweany\Settings::$showPhpErrors == 0)
+			if ( \Sweany\Settings::$showPhpErrors == 0) {
 				return '';
+			}
 		}
-		if ( count($tmp[0]->$key) > 1)
+		if ( count($tmp[0]->$key) > 1) {
 			return (Array)$tmp[0]->$key;
-		else
+		} else {
 			return (String)$tmp[0]->$key;
+		}
 	}
 
 
@@ -318,37 +338,42 @@ Class Language extends aBootTemplate
 		// As it is still an object, we will need to cast it into
 		// a string. This is necessary for serialization,
 		// otherwise there will be a lot of errors and strange results
-		if ( !isset($this->_store[0]) )
+		if ( !isset($this->_store[0]->$key) && !isset(self::$_sstore[0]->$key) )
 		{
-			\Sweany\SysLog::e(self::$log_section, self::$log_title, '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
+			if ( !isset($this->_store[0]->$key) )
+			{
+				\Sweany\SysLog::e(self::$log_section, self::$log_title, '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
+			}
+			else if ( !isset(self::$_sstore[0]->$key) )
+			{
+				\Sweany\SysLog::e(self::$log_section, self::$log_title, '[/root/global id="'.$this->_id.'"]['.$key.'] does not exist');
+			}
 
 			// return empty string to prevent php notice, if debugging is off
 			if ( \Sweany\Settings::$showPhpErrors == 0)
+			{
 				return '';
+			}
 		}
-		if ( !count($this->_store[0]->$key) && !count(self::$_sstore[0]->$key) )
+		else
 		{
-			\Sweany\SysLog::e(self::$log_section, self::$log_title, '['.$this->_path.' id="'.$this->_id.'"]['.$key.'] does not exist');
-
-			// return empty string to prevent php notice, if debugging is off
-			if ( \Sweany\Settings::$showPhpErrors == 0)
-				return '';
-		}
-
-		// Check if the value is available in specific store
-		if ( count($this->_store[0]->$key) )
-		{
-			if ( count($this->_store[0]->$key) > 1)
-				return $this->_store[0]->$key;
-			else
-				return (String)$this->_store[0]->$key;
-		}
-		else // otherwise use value from global store
-		{
-			if ( count(self::$_sstore[0]->$key) > 1)
-				return self::$_sstore[0]->$key;
-			else
-				return (String)self::$_sstore[0]->$key;
+			// Check if the value is available in specific store
+			if ( isset($this->_store[0]->$key) && count($this->_store[0]->$key) )
+			{
+				if ( count($this->_store[0]->$key) > 1) {
+					return $this->_store[0]->$key;
+				} else {
+					return (String)$this->_store[0]->$key;
+				}
+			}
+			else // otherwise use value from global store
+			{
+				if ( count(self::$_sstore[0]->$key) > 1) {
+					return self::$_sstore[0]->$key;
+				} else {
+					return (String)self::$_sstore[0]->$key;
+				}
+			}
 		}
 	}
 
@@ -364,9 +389,9 @@ Class Language extends aBootTemplate
 	private static function chooseLanguage()
 	{
 		// Session already exists, so we use it
-		if ( \Sweany\Session::exists('language') )
+		if ( \Sweany\Session::exists(Settings::sessSweany, Settings::sessLanguage) )
 		{
-			$lang	= \Sweany\Session::get('language');
+			$lang	= \Sweany\Session::get(Settings::sessSweany, Settings::sessLanguage);
 			$short	= $lang['short'];
 			$file	= USR_LANGUAGES_PATH.DS.$short.'.xml';
 
@@ -375,15 +400,15 @@ Class Language extends aBootTemplate
 			if ( !file_exists($file) )
 			{
 				\Sweany\SysLog::w(self::$log_section, self::$log_title, '[Choose] File does not exist - Using default');
-				$short = $GLOBALS['LANGUAGE_DEFAULT_SHORT'];
+				$short = Settings::$defaultLanguage;
 			}
 		}
 		// No Session yet, so create it based on the default language
 		else
 		{
 			\Sweany\SysLog::w(self::$log_section, self::$log_title, '[Choose] Session does not exist - Using default');
-			$short	= $GLOBALS['LANGUAGE_DEFAULT_SHORT'];
-			\Sweany\Session::set('language', array('short' => $short));
+			$short	= Settings::$defaultLanguage;
+			\Sweany\Session::set(array(Settings::sessSweany => Settings::sessLanguage), array('short' => $short));
 		}
 		return $short;
 	}

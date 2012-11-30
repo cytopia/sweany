@@ -31,78 +31,46 @@ class Session
 
 	/* ******************************************** GET ********************************************/
 
-	public static function getId()
+	public static function id()
 	{
-		return ( session_id() );
+		return session_id();
 	}
 
-	public static function get($key)
+	public static function get($key = null, $subKey = null, $subSubKey = null, $subSubSubKey = null)
 	{
-		return ( isset($_SESSION[$key]) ) ? $_SESSION[$key] : NULL;
+		return \Sweany\Session::get($key, $subKey, $subSubKey, $subSubSubKey);
 	}
 
-	public static function getSubKey($section, $key, $position = NULL)
-	{
-		if ( $position )
-		{
-			$tmp = isset($_SESSION[$section][$position][$key]) ? $_SESSION[$section][$position][$key] : array();
-		}
-		else
-		{
-			$tmp = isset($_SESSION[$section][$key]) ? $_SESSION[$section][$key] : array();
-		}
-
-		return ( $tmp );
-	}
 
 
 
 	/* ******************************************** SET ********************************************/
 	public static function set($key, $val)
 	{
-		$_SESSION[$key] = $val;
+		return \Sweany\Session::set($key, $val);
 	}
 
 
 
 	/* ******************************************** CHECK ********************************************/
-	public static function exists($key)
+
+	public static function exists($key, $subKey = null, $subSubKey = null, $subSubSubKey = null)
 	{
-		return isset($_SESSION[$key]);
+		return \Sweany\Session::exists($key, $subKey, $subSubKey, $subSubSubKey);
 	}
 
 
 
 	/* ******************************************** DELETE ********************************************/
 
-	public static function del($key)
+	public static function del($key, $subKey = null, $subSubKey = null, $subSubSubKey = null)
 	{
-		if ( isset($_SESSION[$key]) )
-			unset($_SESSION[$key]);
+		\Sweany\Session::del($key, $subKey, $subSubKey, $subSubSubKey);
 	}
 
-	public static function delSubKey($key, $sub_key)
-	{
-		if ( isset($_SESSION[$key][$sub_key]) )
-			unset($_SESSION[$key][$sub_key]);
-	}
 
 	public static function destroy()
 	{
-		// Delete the whole session and the session cookie (with its file)
-		if ( ini_get("session.use_cookies") )
-		{
-			$params = session_get_cookie_params();
-			setcookie(
-				session_name(),
-				'',
-				time() - 42000,
-				$params['path'],
-				$params['domain'],
-				$params['secure'],
-				$params['httponly']
-			);
-		}
-		session_destroy();
+		\Sweany\Session::destroy();
 	}
 }

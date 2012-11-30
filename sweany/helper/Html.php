@@ -33,7 +33,7 @@ Class Html
 {
 	/**
 	 *
-	 * Build internal <a href></a> construct
+	 * Build internal <a>...</a> construct
 	 *
 	 * You should use this function to build all links, if you intend
 	 * to enable url rewriting later, otherwise your links will break down.
@@ -50,23 +50,56 @@ Class Html
 	 */
 	public static function l($name, $controller = null, $method = null, $params = array(), $attributes = array(), $anchor = null)
 	{
-		if (is_null($controller))
-			$controller	= Url::getController();
+		$attributes	= $attributes ? $attributes : array();
+		$attr		= implode(' ', array_map(create_function('$key, $val', 'return $key."=\"".$val."\"";'), array_keys($attributes), array_values($attributes)));
+		$href		= self::href($controller, $method, $params, $anchor);
 
-		if (is_null($method))
-			$method	= Url::getMethod();
+		return '<a href="'.$href.'"'.$attr.'>'.$name.'</a>';
+	}
 
-		$params		= (!is_array($params))		? array() : $params;
-		$attributes	= (!is_array($attributes))	? array() : $attributes;
+	public static function href($controller, $method = null, $params = array(), $anchor = null)
+	{
+		global $CUSTOM_ROUTING;
 
+
+		// Make sure it is an array, if nothing has been specified
+		$params = $params ? $params : array();
 
 		// TODO: maybe need to escape the params for url - keep an eye on it
 		$args = implode('/', array_map(create_function('$param', 'return ($param);'), array_values($params)));
-		$attr = implode(' ', array_map(create_function('$key, $val', 'return $key."=\"".$val."\"";'), array_keys($attributes), array_values($attributes)));
-		$link = '/'.$controller.'/'.$method.'/'.$args.$anchor;
 
-		return '<a href="'.$link.'"'.$attr.'>'.$name.'</a>';
+		// Revert controller and method into aliases if they exist
+		foreach ($CUSTOM_ROUTING as $ctlAlias => $routes) {
+			if ( $routes['controller'] == $controller ) 	{
+				// We found the controller and will use its alias from the current array position
+				$controller = $ctlAlias;
+
+				if (isset($method[0])) {
+					// Continue looking for method aliase
+					foreach ( $routes['methods'] as $methodAlias => $ctlMethod ) {
+						if ( $ctlMethod == $method ) {
+							$method = $methodAlias;
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+
+		$href = '/';
+		$href.= $controller	? $controller	: '';
+
+		if ($args || $method) {
+			$href.= $method		? '/'.$method	: '';
+			$href.= $args		? '/'.$args		: '';
+		}
+		$href.= $anchor		? '#'.$anchor	: '';
+
+		return $href;
 	}
+
+
 
 	/**
 	 *
@@ -132,8 +165,7 @@ Class Html
 	public static function nbsp($number = 1)
 	{
 		$nbsp = '';
-		for ($i=0; $i<$number; ++$i)
-		{
+		for ($i=0; $i<$number; ++$i) {
 			$nbsp .= '&nbsp;';
 		}
 		return $nbsp;

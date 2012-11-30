@@ -55,9 +55,8 @@ class Rules
 			case 7:  return Rules::$function($value[0], $value[1], $value[2], $value[3], $value[4], $value[5], $value[6], $params); break;
 			case 8:  return Rules::$function($value[0], $value[1], $value[2], $value[3], $value[4], $value[5], $value[6], $value[7], $params); break;
 			case 9:  return Rules::$function($value[0], $value[1], $value[2], $value[3], $value[4], $value[5], $value[6], $value[7], $value[8], $params); break;
-			default:
-				$value[$size] = $params;	// append params to array
-				return call_user_func_array(array(Rules, $function), $params); break;
+			default: $value[$size] = $params;	// append params to array
+					 return call_user_func_array(array(Rules, $function), $params); break;
 		}
 	}
 
@@ -66,10 +65,11 @@ class Rules
 
 	public static function equalsUrlParam($value, $paramPosition)
 	{
-		$urlParams	= Url::getParams();
+		$urlParams	= \Sweany\Url::getParams();
 
-		if ( !isset($urlParams[$paramPosition]) )
+		if ( !isset($urlParams[$paramPosition]) ) {
 			return false;
+		}
 
 		return ( $value == $urlParams[$paramPosition] );
 	}
@@ -105,16 +105,12 @@ class Rules
 	public static function strcmpOr($value, $strArr)
 	{
 		return in_array($value, $strArr);
-		/**
-		 * @deprecated: the above is faster
-		$equals = false;
+	}
 
-		foreach ($strArr as $needle)
-			if ($value == $needle)
-				return true;
-
-		return $equals;
-		*/
+	public static function minLenIfNotEmpty($value, $min)
+	{
+		$len = mb_strlen($value);
+		return $len ? $len >= $min : true;
 	}
 
 	public static function minLen($value, $min)
@@ -157,14 +153,16 @@ class Rules
 	}
 	public static function isAlphabetOnly($value)
 	{
-		if (!strlen($value))
+		if (!isset($value[0])) {
 			return true;
+		}
 		return (bool) preg_match('/^[A-Za-z ]+$/', $value);
 	}
 	public static function isAlphabetWithoutSpace($value)
 	{
-		if (!strlen($value))
+		if (!isset($value[0])) {
 			return true;
+		}
 		return (bool) preg_match('/^[A-Za-z]+$/', $value);
 	}
 

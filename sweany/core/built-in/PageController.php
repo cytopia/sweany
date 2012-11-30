@@ -40,8 +40,8 @@ abstract Class PageController extends BaseController
 	 *	@param	boolean	$isBuiltIn
 	 */
 	public $isCore = false;
-	
-	
+
+
 	/*
 	 * Defines the type of the controller
 	 * page, layout or block.
@@ -69,6 +69,8 @@ abstract Class PageController extends BaseController
 	 * 	$views['key'] = 'view name'
 	 */
 	private $views	= null;
+
+
 
 	/*
 	 * DO USE a model by default in page controllers
@@ -161,6 +163,7 @@ abstract Class PageController extends BaseController
 		return $this->views;
 	}
 
+
 	public function isPlugin()
 	{
 		return $this->plugin;
@@ -185,6 +188,7 @@ abstract Class PageController extends BaseController
 			}
 		}
 		// Always authorize if users are not integrated via config.php
+		// TODO: add static user to config.php
 		else
 		{
 			return true;
@@ -192,8 +196,42 @@ abstract Class PageController extends BaseController
 	}
 
 
+	protected function error($error = '404', $send_headers = false, $options = array())
+	{
+		// Set core section of language xml
+		$this->core->language->setCore('notFound');
+
+		// VIEW VARIABLES
+		$this->set('language', $this->core->language);
+
+		// This is a core page (which changes the view path)
+		$this->isCore = true;
+
+		// Choose the view depending on the error
+		switch ($error)
+		{
+			// TODO: Also set headers accordingly
+			// TODO: read new url from $options (controller/method/params or URI)
+			case '301'	:	$this->view('301'); break;	// Moved Permanently.
+			case '307'	:	$this->view('307'); break;	// Temporary Redirect. In this case, the request should be repeated with another URI; however, future requests should still use the original URI
+			case '308'	:	$this->view('308'); break;	// Permanent Redirect. The request, and all future requests should be repeated using another URI
+
+			// TODO: Also set headers accordingly
+			case '403'	:	$this->view('403'); break;	// Forbidden
+			case '404'	:	$this->view('404'); break;	// Not Found
+			case '410'	:	$this->view('410'); break;	// Gone! No longer avail and won't be avail in the future. Useful to tell Search Engines to not visit again
+			case '415'	:	$this->view('415'); break;	// Unsupported Media Type! For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
+			default		:	$this->view('404'); break;
+		}
+	}
+
 
 	/* ***************************************************** REDIRECTS ***************************************************** */
+
+	protected function refresh()
+	{
+		$this->redirect(\Sweany\Url::getController(), \Sweany\Url::getMethod(), \Sweany\Url::getParams());
+	}
 
 	/**
 	 * Instant/transparent redirects via php-header().
@@ -213,10 +251,9 @@ abstract Class PageController extends BaseController
 	 * @param array $params (optional)
 	 * 		params array
 	 */
-	protected function redirect($controller = null, $method = null, $params = array())
+	protected function redirect($controller = null, $method = null, $params = array(), $anchor = null)
 	{
-		$link = \Sweany\Url::ControllerMethodAndParamsToUrlLink($controller, $method, $params);
-
+		$link = Html::href($controller, $method, $params,$anchor);
 		// if debug is on, do not redirect, but show the link instead
 		if ( \Sweany\Settings::$showFwErrors )
 		{
@@ -294,14 +331,14 @@ abstract Class PageController extends BaseController
 	 */
 	protected function redirectDelayed($controller = null, $method = null, $params = array(), $title, $body, $delay = 5)
 	{
-		$link = \Sweany\Url::ControllerMethodAndParamsToUrlLink($controller, $method, $params);
+		$link = Html::href($controller, $method, $params);
 
 		$info['url']	= $link;
 		$info['delay']	= $delay;
 		$info['title']	= $title;
 		$info['body']	= $body;
 
-		\Sweany\Session::set('info_message_data', $info);
+		\Sweany\Session::set(array(\Sweany\Settings::sessSweany => \Sweany\Settings::sessInfo), $info);
 
 		$this->redirect($GLOBALS['DEFAULT_INFO_MESSAGE_URL']);
 	}

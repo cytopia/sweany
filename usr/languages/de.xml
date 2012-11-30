@@ -7,6 +7,7 @@
 			<lang_name>Deutsch</lang_name>
 			<lang_short>de</lang_short>
 			<lang_long>de-DE</lang_long>
+			<locale>de_DE.UTF-8</locale>
 			<date_format>d.m.Y</date_format>
 		</settings>
 		<default>
@@ -26,106 +27,35 @@
 	</core>
 	<!-- /do not delete the core part -->
 
+	<!-- global accessable keys from anywhere -->
+	<global>
+		<projectName>Sweany PHP</projectName>
+	</global>
+	<!-- /global accessable keys from anywhere -->
 
 	<!-- Normal Page Controller Defines -->
 	<usr>
 		<PageSection>
-			<Test>
-				<page id="index">
-					<fieldsetName>Feldsatz</fieldsetName>
-				</page>
-			</Test>
-			<Site>
-				<page id="index">
-					<html_title>Home</html_title>
-					<menu_contact>Kontakt</menu_contact>
-				</page>
-			</Site>
-			<User>
-				<page id="logout">
-					<title>Ausloggen...</title>
-					<note>Danke fuer den Besuch</note>
-				</page>
-				<page id="login">
-					<title>Einloggen / Registrieren</title>
-					<login>Einloggen</login>
-					<username>Benutzername</username>
-					<password>Passwort</password>
-					<lostPassword>Passwort vergessen?</lostPassword>
-					<registerFree>Kostenlos Registrieren</registerFree>
-					<email>Email</email>
-					<tos>Nutzungsbedingungen</tos>
-					<acceptTos>Hiermit akzeptiere ich die  %s und die %s.</acceptTos>
-					<register>Registrieren</register>
-					<dataPolicy>Datenschutzerklaerung</dataPolicy>
-					<loginError>Falscher Benutzername oder Passwort</loginError>
-					<loginTooShortError>Benutzername zu kurs</loginTooShortError>
-					<regUserNameExists>Benutzername existiert bereits</regUserNameExists>
-					<regUserNameMaxLen>max 12 Zeichen</regUserNameMaxLen>
-					<regUserNamealphaNum>Nur alphanumerische Zeichen</regUserNamealphaNum>
-					<regUserNameMinLen>min 3 Zeichen</regUserNameMinLen>
-					<regEmailInvalid>Dies ist keine gueltige Email</regEmailInvalid>
-					<regEmailExists>Emailadresse existiert bereits</regEmailExists>
-					<regPasswordMinLen>min 5 Zeichen</regPasswordMinLen>
-					<regPasswordMaxLen>max 30 Zeichen</regPasswordMaxLen>
-					<regAgb>Um dieser Seite beizutreten musst du die Datenschutzbestimmungen und Nutzungsbedingungen akzeptieren</regAgb>
-					<accountLocked>Das Benutzerkonto wurde gesperrt</accountLocked>
-					<accountDeleted>Das Benutzerkonto wurde geloescht</accountDeleted>
-					<accountDisabled>Das Benutzerkonto wurde noch nicht aktiviert</accountDisabled>
-					<registerCompleteTitle>Registration erfolgreich</registerCompleteTitle>
-					<registerCompleteBody>Wir haben dir eine Email mit dem Validierungs Link gesendet, um deine Registrierung abzuschliesse. Bitte schaue in deinem Postfach nach.</registerCompleteBody>
-				</page>
-				<page id="validate">
-					<accountActivatedTitle>Benutzerkonto wurde aktiviert</accountActivatedTitle>
-					<accountActivatedBody>Dein Konto wurde erfolgreich aktiviert. Du kannst dich jetzt einloggen.</accountActivatedBody>
-					<invalidKeyTitle>Ungueltiger Schluessel</invalidKeyTitle>
-					<invalidKeyBody>Der angegebene Aktivierungscode ist ungueltig oder wurde bereits aktiviert.</invalidKeyBody>
-					<here>hier</here>
-				</page>
-			</User>
 		</PageSection>
 
 		<BlockSection>
-			<UserBlock>
-				<block id="loginLink">
-					<welcome>Wilkommen bei</welcome>
-					<site_name>dieser Seite</site_name>
-					<login>Einloggen</login>
-					<signup>Registrieren</signup>
-					<or>oder</or>
-				</block>
-				<block id="logoutLink">
-					<logout>Ausloggen</logout>
-				</block>
-			</UserBlock>
 		</BlockSection>
 
 		<LayoutSection>
-			<Layouts>
-				<layout id="FrontPage">
-					<home>Anfang</home>
-					<forums>Forum</forums>
-					<contact>Kontakt</contact>
-					<test>Test</test>
-					<copyright>© 2012 Copyright Notiz.</copyright>
-				</layout>
-			</Layouts>
 		</LayoutSection>
 	</usr>
 	<!-- /Normal Page Controller Defines -->
 
 
-
 	<!-- Custom path to add stuff that does not fit anywhere else, can also be named differently (anything you like). -->
-	<!-- Access this via $this->language->getCustom(full_path_with_id, key). -->
+	<!-- Access this via $this->core->language->getCustom(full_path_with_id, key). -->
 	<!-- e.g. -->
-	<!-- $this->language->getCustom('/root/custom/MailSection/mail[@id="welcome"]', 'subject'); -->
+	<!-- $this->core->language->getCustom('/root/custom/SectionName/sec[@id="test"]', 'subject'); -->
 	<custom>
-		<MailSection>
-			<mail id="welcome">
-				<subject>Registrierung bestaetigen</subject>
-				<body>Hi %s,\n\num deine Registrierung zu bestaetigen klicke bitte auf den folgenden Link.\n\n%s</body>
-			</mail>
-		</MailSection>
+		<SectionName>
+			<sec id="test">
+				<tag1>Tag1</tag1>
+			</sec>
+		</SectionName>
 	</custom>
 </root>

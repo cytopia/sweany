@@ -616,7 +616,24 @@ class Table
 	}
 
 
-
+	/**
+	 * Count entities by condition
+	 *
+	 * @param string|mixed[]	$condition	Escapeable Condition
+	 *		Array (
+	 *			[0]	=>	'`id` = :foo AND `username` LIKE %:bar%',
+	 *			[1]	=>	Array (
+	 *				':foo' 	=> $id,
+	 *				':bar'	=> $name
+	 *			),
+	 *		);
+	 *
+	 * @return integer	Number of matches
+	 */
+	public function count($condition = null)
+	{
+		return $this->db->count($this->table, $condition);
+	}
 
 	/**
 	 *
@@ -662,7 +679,7 @@ class Table
 	 * @return	mixed		$value		Value of the field
 	 *
 	 */
-	public function field($name, $id)
+	public function field($id, $name)
 	{
 		// 1.) converts field aliases to field names
 		// 2.) removes all fields not available in this table
@@ -670,7 +687,7 @@ class Table
 
 		if ( !isset($fields[0]) ) {
 			\Sweany\SysLog::e('user', '[Table] Alias to field rewrite', 'field(): Failed to rewrite alias: <strong>'.$name.'</strong>');
-			return -9999999;
+			return;
 		}
 
 		$name	= $fields[0];
@@ -695,7 +712,7 @@ class Table
 	 *		);
 	 * @return	mixed		$value		Value of the field
 	 */
-	public function fieldBy($name, $condition)
+	public function fieldBy($condition, $name)
 	{
 		// 1.) converts field aliases to field names
 		// 2.) removes all fields not available in this table
@@ -703,7 +720,7 @@ class Table
 
 		if ( !isset($fields[0]) ) {
 			\Sweany\SysLog::e('user', '[Table] Alias to field rewrite', 'field(): Failed to rewrite alias: <strong>'.$name.'</strong>');
-			return -9999999;
+			return;
 		}
 
 		$name	= $fields[0];
@@ -734,39 +751,61 @@ class Table
 	 *
 	 *		Array = (
 	 *			'<field1>	=> '<value1>',
-	 *			'<field2>	=> '<value2>',
-	 *			'<alias1>	=> '<value3>',
+	 *			'<alias1>	=> '<value2>',
 	 *		);
 	 *
-	 *	@param	integer	$return			(0-2) Whether or not to return anything
-	 *		0:	return boolean	Success
-	 *		1:	return integer	Last insert id
-	 *		2:	return mixed[]	Updated row
 	 *
-	 *	@return	boolean|integer|mixed[]	Depending on $return param
+	 *	@return	integer		Returns last insert id
 	 */
-	public function save($data, $return = 1)
+	public function save($data)
 	{
+		// Call user overrideable beforeSave function
+		// User can use field-names and/or field-aliases
+		$this->beforeSave($data);
+
 		// 1.) converts field aliases to field names
 		// 2.) removes all fields not available in this table
 		$data	= $this->_prepareDataFields($data);
 
-		$data = $this->_appendCreatedFieldIfExist($data);
-		$ret	= $this->db->insert($this->table, $data, (($return) ? true : false));
+		$data 	= $this->_appendCreatedFieldIfExist($data);
+		$id		= $this->db->insert($this->table, $data, true);
 
-		switch ($return)
+		// Only if a derived table has implemented an afterSave function
+		// we have to load the object and pass it on
+		if ( method_exists($this, 'afterSave') )
 		{
-			// return non-recursive row
-			case 2:
-				return $this->load($ret, 0);
-
-			// [DEFAULT] return success of operation or last insert id
-			default:
-				return $ret;
+			$object	= $this->load($id, 0);
+			$this->afterSave($object);
 		}
+
+		return $id;
 	}
 
+	/**
+	 *	beforeSave()
+	 *
+	 *	@param	mixed[]	&$data	Data to be saved
+	 *
+	 *	Override this function to handle data escaping or
+	 *	anything else before the data gets saved
+	 */
+	public function beforeSave(&$data)
+	{
+	}
 
+	/**
+	 *	afterSave()
+	 *
+	 *	@param	object	$object		Non-recursive saved entity
+	 *
+	 *	Override this function to handle events after this entity
+	 *	has been saved. Such as update/insert other entities
+	 */
+	 // Note: The method has been outcomment, so we can check via method_exist()
+	 // if a derived table class has implemented an afterSave function or not
+//	public function afterSave($object)
+//	{
+//	}
 
 
 	/* ************************************************************************************************************************** *
@@ -795,15 +834,14 @@ class Table
 	 *			'<alias1>	=> '<value3>',
 	 *		);
 	 *
-	 * @param	integer	$return		(0-2) Whether or not to return anything
-	 *		0:	return boolean	Success
-	 *		1:	return integer	Last insert id
-	 *		2:	return mixed[]	Updated row
-	 *
-	 * @return	boolean|integer|mixed[]
+	 * @return	boolean		Success
 	 */
-	public function update($id, $data, $return = 0)
+	public function update($id, $data)
 	{
+		// Call user overrideable beforeUpdate function
+		// User can use field-names and/or field-aliases
+		$this->beforeUpdate($data);
+
 		// 1.) converts field aliases to field names
 		// 2.) removes all fields not available in this table
 		$data	= $this->_prepareDataFields($data);
@@ -812,19 +850,44 @@ class Table
 
 		$success= $this->db->updateRow($this->table, $data, $id);
 
-		switch ($return)
-		{
-			case 1:		return $id;
-			case 2:		return $this->load($id, 0);
-			default:	return $success;
-		}
+		// TODO: only load, if the afterUpdate method has been overwritten
+		$object	= $this->load($id, 0);
+		$this->afterUpdate($object);
+
+		return $success;
 	}
 
+	/**
+	 *	beforeUpdade()
+	 *
+	 *	@param	mixed[]	&$data	Data to be updated
+	 *
+	 *	Override this function to handle data escaping or
+	 *	anything else before the data gets updated
+	 */
+	public function beforeUpdate(&$data)
+	{
+	}
+
+	/**
+	 *	afterUpdate()
+	 *
+	 *	@param	object	$object		Non-recursive updated entity
+	 *
+	 *	Override this function to handle events after this entity
+	 *	has been updated. Such as update/insert other entities
+	 */
+	public function afterUpdate($object)
+	{
+	}
 
 
 	/**
 	 *
 	 * Update many entities (rows) by condition
+	 *
+	 * Note: There is no afterUpdate() Call here!!
+	 *
 	 *
 	 * @param	mixed[]		$condition	Escapable condition
 	 *		Array (
@@ -845,7 +908,6 @@ class Table
 	 *
 	 *		Array = (
 	 *			'<field1>	=> '<value1>',
-	 *			'<field2>	=> '<value2>',
 	 *			'<alias1>	=> '<value3>',
 	 *		);
 	 *
@@ -853,6 +915,10 @@ class Table
 	 */
 	public function updateAll($condition, $data)
 	{
+		// Call user overrideable beforeUpdate function
+		// User can use field-names and/or field-aliases
+		$this->beforeUpdate($data);
+
 		// 1.) converts field aliases to field names
 		// 2.) removes all fields not available in this table
 		$data	= $this->_prepareDataFields($data);
@@ -878,8 +944,7 @@ class Table
 	 *
 	 *		Array = (
 	 *			'<field1>	=> '<value1>',
-	 *			'<field2>	=> '<value2>',
-	 *			'<alias1>	=> '<value3>',
+	 *			'<alias1>	=> '<value2>',
 	 *		);
 	 *
 	 * @return	boolean	success
@@ -1155,6 +1220,7 @@ class Table
 		$getArray = function($row, &$data) use (&$count, $relation, $recursive) {
 
 			$many	= array();
+			$habtm	= array();
 
 			foreach ($row as $field => $value)
 			{
@@ -1164,10 +1230,27 @@ class Table
 				// --------------------------------------- Primary Key ---------------------------------------
 				if ($size == 1 && $recursive )
 				{
-					if ( $recursive>0  || (is_array($relation) && in_array('hasMany', array_keys($relation))) )
+					if ( $recursive>0 || (is_array($relation) && in_array('hasMany', array_keys($relation))) )
 					{
-						$pk		= $value;
-						$many	= $this->_retrieveHasMany($relation, $pk, $recursive);
+						$pk			= $value;
+
+						// If recursive is set to 3 (force all, not only those which are specified)
+						// We need to destroy the limitations
+						$relation	= ($recursive == 3) ? null : $relation;
+
+						// Get the hasMany Relations
+						$many		= $this->_retrieveHasMany($relation, $pk, $recursive, 'array');
+					}
+					if ( $recursive>0 || (is_array($relation) && in_array('hasAndBelongsToMAny', array_keys($relation))) )
+					{
+						$pk			= $value;
+
+						// If recursive is set to 3 (force all, not only those which are specified)
+						// We need to destroy the limitations
+						$relation	= ($recursive == 3) ? null : $relation;
+
+						// Get the hasMany Relations
+						$habtm		= $this->_retrieveHasAndBelongsToMany($relation, $pk, $recursive, 'array');
 					}
 				}
 				// --------------------------------------- Flat Entries ---------------------------------------
@@ -1199,7 +1282,11 @@ class Table
 					}
 				}
 			}
-			$data[$count] = array_merge($data[$count], $many);
+			// merge hasMany with hasAndBelongsToMany
+			$tmp = array_merge($many, $habtm);
+
+			// merge results with the above merge
+			$data[$count] = array_merge($data[$count][$alias1], $tmp);
 			$count++;
 		};
 
@@ -1288,13 +1375,8 @@ class Table
 			$tmp = (object)array_merge((array)$many, (array)$habtm);
 
 			// merge results with the above merge
-			$data[$count] = (object)array_merge((array)$data[$count]->$alias1, (array)$tmp);	// merge hasMany
+			$data[$count] = (object)array_merge((array)$data[$count]->$alias1, (array)$tmp);
 
-//			debug($tmp);
-//			$data[$count] = (object)array_merge((array)$data[$count]->$alias1, (array)$many);	// merge hasMany
-//			$data[$count] = (object)array_merge((array)$data[$count]->$alias1, (array)$habtm);	// merge hasAndBelongsToMany
-//			debug($habtm);
-//			debug($many);
 			$count++;
 		};
 
@@ -1490,7 +1572,7 @@ class Table
 			}
 		}
 	}
-	private function _retrieveHasMany($limitAliase = false, $mainPKValue, $recursive)
+	private function _retrieveHasMany($limitAliase = false, $mainPKValue, $recursive, $return = 'object')
 	{
 		$data = array();
 
@@ -1523,6 +1605,7 @@ class Table
 				$options['order']		= $thisOrder;
 				$options['limit']		= $thisLimit;
 				$options['recursive']	= $recursive;
+				$options['return']		= $return;
 
 
 				// Normalize wrong recursive values
@@ -1576,8 +1659,9 @@ class Table
 
 				// Apply FLATTENING if specified
 				// This is only useful, if you know that you will receive only one element
-				if ( isset($properties['flatten']) && $properties['flatten'] === true ) {
-					$result = isset($result[0]) ? $result[0] : new stdClass();
+				if ( isset($properties['flatten']) && $properties['flatten'] === true )
+				{
+					$result = isset($result[0]) ? $result[0] : ( $return == 'object' ? new stdClass() : array() );
 				}
 
 				$data[$alias] = $result;
@@ -1586,7 +1670,7 @@ class Table
 		return $data;
 	}
 
-	private function _retrieveHasAndBelongsToMany($limitAliase = false, $mainPKValue, $recursive)
+	private function _retrieveHasAndBelongsToMany($limitAliase = false, $mainPKValue, $recursive, $return = 'object')
 	{
 		$data = array();
 
@@ -1652,7 +1736,7 @@ class Table
 					$order.' '.
 					$limit;
 
-				$result = $this->retrieveResults($query, 0, null, 'object');
+				$result = $this->retrieveResults($query, 0, null, $return);
 
 				// Apply LISTING if specified
 				// This is only useful, if you know that you will receive only one element
@@ -1663,8 +1747,9 @@ class Table
 				}
 				// Apply FLATTENING if specified
 				// This is only useful, if you know that you will receive only one element
-				if ( isset($properties['flatten']) && $properties['flatten'] === true ) {
-					$result = isset($result[0]) ? $result[0] : new stdClass();
+				if ( isset($properties['flatten']) && $properties['flatten'] === true )
+				{
+					$result = isset($result[0]) ? $result[0] : ( $return == 'object' ? new stdClass() : array() );
 				}
 				$data[$alias] = $result;
 			}
@@ -1678,8 +1763,16 @@ class Table
 	{
 		if ( $this->hasModified )
 		{
-			$field_name		= key($this->hasModified);
-			$sqlDataType	= $this->hasModified[$field_name];
+			if ( is_array($this->hasModified) )
+			{
+				$field_name		= key($this->hasModified);
+				$sqlDataType	= $this->hasModified[$field_name];
+			}
+			else
+			{
+				$field_name		= 'modified';
+				$sqlDataType	= $this->hasModified;
+			}
 
 			switch ($sqlDataType)
 			{
@@ -1698,8 +1791,16 @@ class Table
 	{
 		if ( $this->hasCreated )
 		{
-			$field_name		= key($this->hasCreated);
-			$sqlDataType	= $this->hasCreated[$field_name];
+			if ( is_array($this->hasCreated) )
+			{
+				$field_name		= key($this->hasCreated);
+				$sqlDataType	= $this->hasCreated[$field_name];
+			}
+			else
+			{
+				$field_name		= 'created';
+				$sqlDataType	= $this->hasCreated;
+			}
 
 			switch ($sqlDataType)
 			{
@@ -1731,19 +1832,23 @@ class Table
 	 */
 	private function _prepareDataFields($data)
 	{
-		$availFields	= array_values($this->fields);
-		$availAliase	= array_keys($this->fields);
+		if ( !is_array($data) )
+		{
+			return array();
+		}
 
 		$valid			= array();
 
 		foreach ($data as $field => $value)
 		{
 			// Field-Value-Pair is valid by default
-			if ( in_array($field, $availFields) ) {
+			if ( in_array($field, $this->fields) )
+			{
 				$valid[$field] = $value;
 			}
 			// Field-Value-Pair is using an alias, so we need to rewrite it
-			else if ( in_array($field, $availAliase) ) {
+			else if ( isset($this->fields[$field]) )
+			{
 				// get actualy field by alias
 				$real_name = $this->fields[$field];
 				$valid[$real_name] = $value;

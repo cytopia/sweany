@@ -1,3 +1,68 @@
+2012-11-30
+-----------------
++ Core Improvements
++ User module now loads most of the stuff from session rather than from database
+
+
+2012-11-29
+-----------------
++ new Plugin: Guestbook
++ new function in PageController to send error codes (404, 403, etc)
++ new function in PageController refresh()
+
+
+2012-11-25
+-----------------
++ new Form-helper: datePicker
++ new Form-helper: timespanPicker
++ new Form-helper: liveSearch
++ user plugin: registration can be disabled via config.php
++ administration panel: toggle plugin wrapper
++ administration panel: visitors
++ cli: password generator (it is not md5 and uses sha-512 salt hashes)
+
+
+2012-11-24
+-----------------
++ Integrated administration panel section for:
+  users, translations and sent emails
++ SQL language Database implementation finished
+
+
+2012-11-21
+-----------------
++ SQL language Database implementation
++ more upcoming features added for integrated administration panel
+
+
+2012-11-18
+-----------------
++ Finally!! TimeHelper now works flawlessly with different timezones (even with timestamps)
++ Message Plugin ported
+
+
+2012-11-17
+-----------------
++ Syslog shows detailed trace
++ Error handler shows detailed trace
++ new config switch COMPRESS_HTML
++ further work on Message Plugin 
++ User Plugin has new Page call to change email/password
++ User Plugin has new Page call to change timezone/language
++ simple FAQ Plugin
+
+
+2012-11-16
+-----------------
++ bugfixing in ORM module
++ started work on new message plugin
++ further improvements on syslog output
++ TimeHelper bugfixing
++ new Helper: FaceBook
++ Implemented custom SEO URLs (no database required to work xD)
++ added administration panel (currently able to toggle block highlighting)
+
+
 2012-10-13
 -----------------
 + Implemented mode: SWEANY_PRODUCTION
@@ -7,7 +72,7 @@
 2012-10-12
 -----------------
 + Changed required version to >= PHP 5.4.0
-+ Added mor timing output to syslog
++ Added more timing output to syslog
 + updated db.sql
 
 
@@ -21,7 +86,7 @@
 
 2012-10-10
 -----------------
-+ ORM Rewritten (object and array based now)
++ ORM Rewritten (object and array based now | not a single query anymore due to mysql row number limitations)
 + More validation on user defined tables
 + Even more validation...
 + Migrated Forum and Contacts module to new ORM

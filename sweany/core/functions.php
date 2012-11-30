@@ -63,19 +63,44 @@
  */
 if ( $GLOBALS['LANGUAGE_SQL_ENABLE'] )
 {
-	function t($text, $placeholder = array())
+	if ( $GLOBALS['LANGUAGE_SQL_LEARNING_MODE'] )
 	{
-		// TODO: Do translations
-		$sanitize = function(&$value, $key) {
-			if ($key[0]=='@') {
-				$value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-			}
-			else if ($key[0]=='%') {
-				$value = '<em class="placeholder">'.htmlspecialchars($value, ENT_QUOTES, 'UTF-8').'</em>';
-			}
-		};
-		array_walk($placeholder, $sanitize);
-		return str_replace(array_keys($placeholder), array_values($placeholder), $text);
+		function t($text, $placeholder = array())
+		{
+			$tbl	= \sweany\AutoLoader::loadCoreTable('Language');
+			$tbl->learn($text);
+
+			$text	= \sweany\Language::getSqlTranslation($text);
+
+			$sanitize = function(&$value, $key) {
+				if ($key[0]=='@') {
+					$value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+				}
+				else if ($key[0]=='%') {
+					$value = '<em class="placeholder">'.htmlspecialchars($value, ENT_QUOTES, 'UTF-8').'</em>';
+				}
+			};
+			array_walk($placeholder, $sanitize);
+			return str_replace(array_keys($placeholder), array_values($placeholder), $text);
+		}
+	}
+	else
+	{
+		function t($text, $placeholder = array())
+		{
+			$text = \sweany\Language::getSqlTranslation($text);
+
+			$sanitize = function(&$value, $key) {
+				if ($key[0]=='@') {
+					$value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+				}
+				else if ($key[0]=='%') {
+					$value = '<em class="placeholder">'.htmlspecialchars($value, ENT_QUOTES, 'UTF-8').'</em>';
+				}
+			};
+			array_walk($placeholder, $sanitize);
+			return str_replace(array_keys($placeholder), array_values($placeholder), $text);
+		}
 	}
 }
 else
@@ -99,15 +124,29 @@ else
 /**
  * print_r improvement for html
  */
-function debug($arr)
+function debug($arr, $return = false)
 {
-	echo '<pre>';
-	print_r($arr);
-	echo '</pre>';
+	if ($return)
+	{
+		return '<pre>'.print_r($arr, true).'</pre>';
+	}
+	else
+	{
+		echo '<pre>';
+		print_r($arr);
+		echo '</pre>';
+	}
 }
-function dump($arr)
+function dump($arr, $return = false)
 {
-	echo '<pre>';
-	var_dump($arr);
-	echo '</pre>';
+	if ($return)
+	{
+		return '<pre>'.var_export($arr, true).'</pre>';
+	}
+	else
+	{
+		echo '<pre>';
+		var_dump($arr);
+		echo '</pre>';
+	}
 }

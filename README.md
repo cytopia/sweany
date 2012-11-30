@@ -59,7 +59,7 @@ The core modules are as follows:
     + the database engine to use can be
 	
   * Users module (requires database)
-     + user functionality is available in every controller (page, block and layout) via $this->user and can also be parsed to the views
+     + user functionality is available in every controller (page, block and layout) via $this->core->user and can also be parsed to the views
 	 + user functionality is also vailable in rules for formhelper, in order to check input against users table (such as already existing email addresses)
 	 + page controller can specify public $admin_area = true; which will allow only users of type administrator to access it, all others will see a 404
 	 + Sweany also ships with a plugin that handles login, registration, validation and lost password for users (including sending of emails)
@@ -76,7 +76,7 @@ The core modules are as follows:
      + multi-languages have been made available through two different concepts (which can also be used together)
 	 + XML-Files:
 	   - create an xml file for each language
-	     - you can then access it in all controller (page, block, layout) via $this->language
+	     - you can then access it in all controller (page, block, layout) via $this->core->language
 		 - Sweany will also automatically self-validate the correctness and availability of all xml files on the fly
 	 + t()-function (database approach):
 	   - simply put all text to be translated inside the t()-function (in english language)
