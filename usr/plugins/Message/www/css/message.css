@@ -1,0 +1,85 @@
+/*************************************************************************************************************
+ *
+ *    M E S S A G E   P L U G I N
+ *
+ **************************************************************************************************************/
+
+ .messageBox {
+	font-size:			11px;
+	line-height:		140%;
+	background-color:	#FFF;
+	border:				solid 1px #2F2F2F;
+	padding:			10px;
+}
+
+.messageBoxMenu {
+	font-size:			11px;
+	line-height:		140%;
+	float:				left;
+	position:			relative;
+	top:				1px;
+	width:				60px;
+	padding:			10px;
+	padding-top:		9px;
+	margin-right:		5px;
+	font-weight:		bold;
+	text-align:			center;
+	background-color:	#FFF;
+	border:				solid 1px #2F2F2F;
+	border-bottom:		none;
+}
+
+.messageBoxMenuActive {
+	padding-top:		10px;
+}
+
+.msgActionButtons {
+	float:				left;
+	vertical-align:		middle;
+	text-align:			center;
+	font-size:			11px;
+	font-weight:		normal;
+	border:				none;
+	margin:				1px;
+	padding:			2px;
+	width:				60px;
+}
+
+.msgActionButtons:hover {
+	cursor:				hand;
+	border:				solid 1px #FF6903;
+	margin:				0px;
+}
+
+.msgBodyDisplayBox {
+	background-color:	white;
+	color:				black;
+	padding:			10px;
+	border:				solid 2px #2F2F2F;
+	min-height:			100px;
+}
+
+.msgBoxIcons {
+	float:				left;
+	vertical-align:		middle;
+	text-align:			center;
+	height:				90px;
+	width:				90px;
+	border:				none;
+	margin:				1px;
+}
+
+.msgBoxIcons:hover {
+	cursor:				hand;
+	border:				solid 1px #FF6903;
+	margin:				0px;
+}
+
+/* Ajax Live Search Result Box for searching usernames */
+.liveSearchResults {
+	width:				160px;
+	padding:			2px;
+	background-color:	#1C1C1C;
+	border:				1px solid #2F2F2F;
+	cursor:				pointer;
+}

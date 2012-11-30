@@ -1,0 +1,4 @@
+Sweany PHP has a couple of core views in sweany\core\built-in\view\FrameworkDefault
+
+You can overwrite any/some/none of them by placing a file with the same name from the above
+folder into this directory and put your custom code into it.

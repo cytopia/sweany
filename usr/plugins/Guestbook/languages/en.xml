@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- Do not delete the core part,      -->
+	<!-- But feel free to adjust the text. -->
+	<core>
+		<settings>
+			<lang_name>English</lang_name>
+			<lang_short>en</lang_short>
+			<lang_long>en-US</lang_long>
+			<date_format>Y-m-d</date_format>
+		</settings>
+	</core>
+	<!-- /do not delete the core part -->
+
+	<!-- Framework Plugins -->
+	<plugins>
+		<Guestbook>
+			<PageSection>
+				<page id="index">
+					<add_entry>Add entry</add_entry>
+					<redirect_title>Entry added successfully</redirect_title>
+					<redirect_message>Thank you for your gustbook comment. The entry will be visible after reviewing.</redirect_message>
+				</page>
+			</PageSection>
+			<BlockSection>
+				<block id="addEntryUnsigned">
+					<fieldset_name>Write a guestbook comment</fieldset_name>
+					<author>Author</author>
+					<email>Email</email>
+					<avatar>Avatar</avatar>
+					<choose>Choose</choose>
+					<entry>Entry</entry>
+					<captcha>Captcha</captcha>
+					<captcha_text>Enter the above listed Characters here</captcha_text>
+					<add>Add</add>
+					<form_err_author>At least 3 characters</form_err_author>
+					<form_err_message>You should write something</form_err_message>
+					<form_err_avatar>The chosen avatar is not valid</form_err_avatar>
+					<form_err_captcha>Wrong captcha</form_err_captcha>
+					<form_err_bot>No bots allowed</form_err_bot>
+				</block>
+				<block id="addEntrySigned">
+					<fieldset_name>Add guestbook entry</fieldset_name>
+					<avatar>Avatar</avatar>
+					<choose>Choose</choose>
+					<entry>Entry</entry>
+					<add>Add</add>
+					<form_err_message>You should write sommething</form_err_message>
+					<form_err_avatar>The chosen avatar is not valid</form_err_avatar>
+				</block>
+			</BlockSection>
+		</Guestbook>
+	</plugins>
+</root>

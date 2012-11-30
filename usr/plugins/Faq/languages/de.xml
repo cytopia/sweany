@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- Do not delete the core part,      -->
+	<!-- But feel free to adjust the text. -->
+	<core>
+		<settings>
+			<lang_name>Deutsch</lang_name>
+			<lang_short>de</lang_short>
+			<lang_long>de-DE</lang_long>
+			<date_format>d.m.Y</date_format>
+		</settings>
+	</core>
+	<!-- /do not delete the core part -->
+
+
+
+	<!-- Framework Plugins -->
+	<plugins>
+		<Faq>
+			<PageSection>
+				<page id="index">
+					<pageTitle>FAQ</pageTitle>
+				</page>
+			</PageSection>
+
+			<BlockSection>
+			</BlockSection>
+		</Faq>
+	</plugins>
+</root>

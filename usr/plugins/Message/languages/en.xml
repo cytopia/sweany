@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- Do not delete the core part,      -->
+	<!-- But feel free to adjust the text. -->
+	<core>
+		<settings>
+			<lang_name>English</lang_name>
+			<lang_short>en</lang_short>
+			<lang_long>en-US</lang_long>
+			<date_format>Y-m-d</date_format>
+		</settings>
+	</core>
+	<!-- /do not delete the core part -->
+
+
+	<!-- Framework Plugins -->
+	<plugins>
+		<Message>
+			<PageSection>
+				<page id="inbox">
+					<pageTitle>Received Messages</pageTitle>
+					<new>New</new>
+					<inbox>Inbox</inbox>
+					<alerts>Alerts</alerts>
+					<archive>Archive</archive>
+					<trash>Trash</trash>
+					<outbox>Outbox</outbox>
+					<moveToTrash>Trash</moveToTrash>
+					<moveToArchive>Archive</moveToArchive>
+					<from>From</from>
+					<subject>Subject</subject>
+					<received>Received</received>
+					<newMessage>new Message</newMessage>
+					<readMessage>read Message</readMessage>
+					<repliedMessage>replied Message</repliedMessage>
+				</page>
+				<page id="outbox">
+					<pageTitle>Sent Nachrichten</pageTitle>
+					<new>New</new>
+					<inbox>Inbox</inbox>
+					<alerts>Alerts</alerts>
+					<archive>Archive</archive>
+					<trash>Trash</trash>
+					<outbox>Outbox</outbox>
+					<delete>Delete</delete>
+					<to>To</to>
+					<subject>Subject</subject>
+					<sent>Sent</sent>
+					<newMessage>new Message</newMessage>
+					<readMessage>read Message</readMessage>
+					<repliedMessage>replied Message</repliedMessage>
+				</page>
+				<page id="alerts">
+					<pageTitle>Alerts</pageTitle>
+					<new>New</new>
+					<inbox>Inbox</inbox>
+					<alerts>Alerts</alerts>
+					<archive>Archive</archive>
+					<trash>Trash</trash>
+					<outbox>Outbox</outbox>
+					<moveToTrash>Trash</moveToTrash>
+					<moveToArchive>Archive</moveToArchive>
+					<from>From</from>
+					<subject>Subject</subject>
+					<received>Received</received>
+					<newAlert>new Alert</newAlert>
+					<readAlert>read Alert</readAlert>
+				</page>
+				<page id="archive">
+					<pageTitle>Archive</pageTitle>
+					<new>New</new>
+					<inbox>Inbox</inbox>
+					<alerts>Alerts</alerts>
+					<archive>Archive</archive>
+					<trash>Trash</trash>
+					<outbox>Outbox</outbox>
+					<moveToTrash>Trash</moveToTrash>
+					<from>From</from>
+					<subject>Subject</subject>
+					<received>Received</received>
+					<newMessage>new Message</newMessage>
+					<readMessage>read Message</readMessage>
+					<repliedMessage>replied Message</repliedMessage>
+				</page>
+				<page id="trash">
+					<pageTitle>Trash</pageTitle>
+					<new>New</new>
+					<inbox>Inbox</inbox>
+					<alerts>Alerts</alerts>
+					<archive>Archive</archive>
+					<trash>Trash</trash>
+					<outbox>Outbox</outbox>
+					<restore>Restore</restore>
+					<delete>Delete</delete>
+					<deletePermanently>Delete</deletePermanently>
+					<trash>Trash</trash>
+					<from>From</from>
+					<subject>Subject</subject>
+					<received>Received</received>
+					<newMessage>new Message</newMessage>
+					<readMessage>read Message</readMessage>
+					<repliedMessage>replied Message</repliedMessage>
+				</page>
+				<page id="alert">
+					<pageTitle>Alert</pageTitle>
+					<new>New</new>
+					<inbox>Inbox</inbox>
+					<alerts>Alerts</alerts>
+					<archive>Archive</archive>
+					<trash>Trash</trash>
+					<outbox>Outbox</outbox>
+					<from>From</from>
+					<subject>Subject</subject>
+					<received>Received</received>
+				</page>
+				<page id="read">
+					<pageTitle>Read</pageTitle>
+					<new>New</new>
+					<inbox>Inbox</inbox>
+					<alerts>Alerts</alerts>
+					<archive>Archive</archive>
+					<trash>Trash</trash>
+					<outbox>Outbox</outbox>
+					<reply>Reply</reply>
+					<delete>Delete</delete>
+					<restore>Restore</restore>
+					<moveToTrash>Trash</moveToTrash>
+					<from>From</from>
+					<to>To</to>
+					<subject>Subject</subject>
+					<received>Received</received>
+					<sent>Sent</sent>
+				</page>
+				<page id="reply">
+					<pageTitle>Relply</pageTitle>
+					<new>New</new>
+					<inbox>Inbox</inbox>
+					<alerts>Alerts</alerts>
+					<archive>Archive</archive>
+					<trash>Trash</trash>
+					<outbox>Outbox</outbox>
+					<on>on</on>
+					<reply>Reply</reply>
+					<to>To</to>
+					<subject>Subject</subject>
+					<errFillOutSubject>Write a subject.</errFillOutSubject>
+					<errFillOutBody>Write some text.</errFillOutBody>
+				</page>
+				<page id="write">
+					<pageTitle>Write</pageTitle>
+					<new>New</new>
+					<inbox>Inbox</inbox>
+					<alerts>Alerts</alerts>
+					<archive>Archive</archive>
+					<trash>Trash</trash>
+					<outbox>Outbox</outbox>
+					<to>To</to>
+					<username>Username</username>
+					<subject>Subject</subject>
+					<send>Send</send>
+					<errUserNameDoesNotExist>This user does not exist!</errUserNameDoesNotExist>
+					<errFillOutSubject>Write a subject.</errFillOutSubject>
+					<errFillOutBody>Write some text.</errFillOutBody>
+				</page>
+			</PageSection>
+
+			<BlockSection>
+				<block id="getMyNewMessageCountLink">
+					<noNewMessages>no new Messages</noNewMessages>
+					<aNewMessage>new Message</aNewMessage>
+					<NewMessages>new Messages</NewMessages>
+					<aNewAlert>new Alert</aNewAlert>
+					<NewAlerts>new Alerts</NewAlerts>
+				</block>
+			</BlockSection>
+		</Message>
+	</plugins>
+</root>

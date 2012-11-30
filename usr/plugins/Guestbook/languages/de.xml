@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<!-- Do not delete the core part,      -->
+	<!-- But feel free to adjust the text. -->
+	<core>
+		<settings>
+			<lang_name>Deutsch</lang_name>
+			<lang_short>de</lang_short>
+			<lang_long>de-DE</lang_long>
+			<date_format>d.m.Y</date_format>
+		</settings>
+	</core>
+	<!-- /do not delete the core part -->
+
+	<!-- Framework Plugins -->
+	<plugins>
+		<Guestbook>
+			<PageSection>
+				<page id="index">
+					<add_entry>Eintrag hinzufügen</add_entry>
+					<redirect_title>Eintrag erfolgreich hinzugefügt</redirect_title>
+					<redirect_message>Vielen Dank für deinen Gästebuch-Eintrag. Dieser wird so schnell wie möglich freigeschaltet.</redirect_message>
+				</page>
+			</PageSection>
+			<BlockSection>
+				<block id="addEntryUnsigned">
+					<fieldset_name>Gästebuch Eintrag schreiben</fieldset_name>
+					<author>Author</author>
+					<email>Email</email>
+					<avatar>Avatar</avatar>
+					<choose>Auswählen</choose>
+					<entry>Eintrag</entry>
+					<captcha>Captcha</captcha>
+					<captcha_text>Gib die obigen Zahlen/Buchstaben hier ein</captcha_text>
+					<add>Hinzufügen</add>
+					<form_err_author>Gibt bitte mindestens 3 Zeichen ein</form_err_author>
+					<form_err_message>Du solltest schon etwas schreiben</form_err_message>
+					<form_err_avatar>Der ausgewählte Avatar ist ungültig</form_err_avatar>
+					<form_err_captcha>Das eingegebene Captcha war leider falsch</form_err_captcha>
+					<form_err_bot>Bots sind nicht erlaubt</form_err_bot>
+				</block>
+				<block id="addEntrySigned">
+					<fieldset_name>Gästebuch Eintrag schreiben</fieldset_name>
+					<avatar>Avatar</avatar>
+					<choose>Auswählen</choose>
+					<entry>Eintrag</entry>
+					<add>Hinzufügen</add>
+					<form_err_message>Du solltest schon etwas schreiben</form_err_message>
+					<form_err_avatar>Der ausgewählte Avatar ist ungültig</form_err_avatar>
+				</block>
+			</BlockSection>
+		</Guestbook>
+	</plugins>
+</root>

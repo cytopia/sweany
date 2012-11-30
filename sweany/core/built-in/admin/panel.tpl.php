@@ -1,0 +1,3 @@
+<div class="sweany_admin sweany_admin_panel">
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Admin Panel</strong> | <a href="/<?php echo $GLOBALS['DEFAULT_ADMIN_URL'];?>/users">Users</a> | <a href="/<?php echo $GLOBALS['DEFAULT_ADMIN_URL'];?>/translations">Translations</a> | <a href="/<?php echo $GLOBALS['DEFAULT_ADMIN_URL'];?>/visitors">Visitors</a> | <a href="/<?php echo $GLOBALS['DEFAULT_ADMIN_URL'];?>/emails">Emails</a> | <a href="/<?php echo $GLOBALS['DEFAULT_SETTINGS_URL'];?>/blocks">toggle Blocks</a> | <a href="/<?php echo $GLOBALS['DEFAULT_SETTINGS_URL'];?>/wrapper">toggle Wrapper</a> | <a href="/<?php echo $GLOBALS['DEFAULT_SETTINGS_URL'];?>/rebuild-cache">rebuild Cache</a>
+</div>
