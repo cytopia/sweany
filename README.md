@@ -79,9 +79,10 @@ The core modules are as follows:
 	     - you can then access it in all controller (page, block, layout) via $this->core->language
 		 - Sweany will also automatically self-validate the correctness and availability of all xml files on the fly
 	 + t()-function (database approach):
-	   - simply put all text to be translated inside the t()-function (in english language)
+	   - simply put all text to be translated inside the t()-function
 	   - you can then add translations for all text via the backend
-	   - if no translation is found, the original english text will be outputted
+	   - if no translation is found, the original text will be outputted
+       - the up-coming cache functionality will make this work without database fetching
 	  
   * ECSS integration
       + you can activate ECSS (Extended CSS) via the config file and all included CSS files
@@ -95,8 +96,12 @@ A few examples are shown below:
 
   * Form Helper
     + lets you build validatable forms
+	+ includes BB-Editor, Datepicker, Livesearch, Timespan-picker, etc (with just one line of code)
   * HTML/CSS/JS Helper
     + used to add css/js files, set html title, keywords, namespaces etc on-the-fly
+    + Do use Html::l() and Html::href for all links!
+    + If you do, you will not have to worry about broken links when you turn
+      on custom seo urls
   * Mail Helper
     + send emails
 	+ store sent emails in database
@@ -110,7 +115,13 @@ A few examples are shown below:
     + project specific file logging functionality
   * BBCode
     + translate BBCode to nice-looking html code
-  * and many more
+  * TinyUrl/Facbook
+    + Helper to generate social media stuff
+  * TimeHelper
+    + Wrap all your date specific functions by only using those from the Helper.
+    + It will then automatically take care about timezone difference calculations
+      and display correct date/time output according to the user's settings.
+ * and many more
 
 
 Plugins
@@ -134,6 +145,9 @@ These plugins are also highly configurable via their respecting config files.
   * user management (login, register, validate, lost password)
   * bb-code forum
   * site contact form
+  * guestbook
+  * user message/system alert plugin
+  * faq plugin
   
   
 Advanced Features
