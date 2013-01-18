@@ -9,7 +9,7 @@ High Priority
   + store login in session
   + make sure $this->core->user->is_admin() return it correctly
 * Multiple Primary keys for ORM Model
-* Users: read data from session rather than from database (performance)
+
 
 
 Medium Priority
