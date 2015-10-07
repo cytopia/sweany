@@ -724,7 +724,7 @@ class tc_calendar{
 	}
 
 
-	// patu add:
+	// cytopia add:
 	// return hidden components
 	function returnHidden()
 	{

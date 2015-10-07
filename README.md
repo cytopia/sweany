@@ -10,7 +10,7 @@ Requirements:
   )
 
 Documentation:
-  * https://github.com/lockdoc/sweany/wiki
+  * https://github.com/cytopia/sweany/wiki
 
 Features:
   * Pages, Blocks, Layouts (all Model, View Controller based)
@@ -25,16 +25,16 @@ Features:
   * Integrated Validator mode (validates a lot of the programmers written code on the fly)
   * Syslog (Internal Debug Mode to monitor performance and engine calls)
   * Integrated CSS Debugger
-  * Automated ECSS inclusion (https://github.com/lockdoc/ecss)
+  * Automated ECSS inclusion (https://github.com/cytopia/ecss)
   * Fully customizable (can deactivate all core modules if not needed, such as database, users, language, etc)
   * Performance optimized (single-file-core, lazy loading, ...)
- 
+
 Core Modules
 --------------------------
 Sweany contains a couple of core modules that can all be completely disabled,
 via the config file, to even support and boost performance for static, light-weight web-pages.
 The core modules are as follows:
-  
+
   * Database module
     + the whole database structure (and all its relations: one-one, one-many, many-one, many-many)
       is completely mapped in so called table files
@@ -55,16 +55,16 @@ The core modules are as follows:
       - all X-to-one relations (even recursive) are done in a single query via row_numbers (row_number emulation with variables for mysql)
       - all X-to-many relations (also recursive) need to be done by iteration as multiple relations on the same level that want to limit
         the number of rows do not support row_numbers
-      - Sweany will also notify you about missing sql field indexes needed to speed up join 
+      - Sweany will also notify you about missing sql field indexes needed to speed up join
     + the database engine to use can be
-	
+
   * Users module (requires database)
      + user functionality is available in every controller (page, block and layout) via $this->core->user and can also be parsed to the views
 	 + user functionality is also vailable in rules for formhelper, in order to check input against users table (such as already existing email addresses)
 	 + page controller can specify public $admin_area = true; which will allow only users of type administrator to access it, all others will see a 404
 	 + Sweany also ships with a plugin that handles login, registration, validation and lost password for users (including sending of emails)
 	 + user passwords are stored as sha-512 hashes with a unique salt per user
-	 
+
   * Users Online module (requires database, requires users)
      + is able to count the amount of users (logged in and anonymous) on the current page
 	 + you can also add X fake anonymous users via the config
@@ -83,10 +83,10 @@ The core modules are as follows:
 	   - you can then add translations for all text via the backend
 	   - if no translation is found, the original text will be outputted
        - the up-coming cache functionality will make this work without database fetching
-	  
+
   * ECSS integration
       + you can activate ECSS (Extended CSS) via the config file and all included CSS files
-        can automatically use the syntax and features of ECSS (no need for special inclusion, just one switch)	  
+        can automatically use the syntax and features of ECSS (no need for special inclusion, just one switch)
 
 
 Helper
@@ -139,7 +139,7 @@ Key features:
   * plugins have their own separate www directory for images, css and js files via htaccess routing
   * plugins have their own language files (if desired)
   * each plugin view can be wrapped by the main project separetely
-  
+
 Sweany already ships with a couple of plugins that are useful to many sites.
 These plugins are also highly configurable via their respecting config files.
   * user management (login, register, validate, lost password)
@@ -148,8 +148,8 @@ These plugins are also highly configurable via their respecting config files.
   * guestbook
   * user message/system alert plugin
   * faq plugin
-  
-  
+
+
 Advanced Features
 --------------------------
   * SysLog
@@ -218,9 +218,9 @@ Performance
     implemented in a way, that they still use a single instance (by changing their property values on the fly)
   * Reloading of classes (unintentionally loading it twice...) is not possible, due to internal caching of class pointers
   * Controller Models can be deactivated for each Controller separately if they are not needed
-  * You can switch off all core-modules that you don't need, so they don't have to be loaded and bootsrapped 
-    
+  * You can switch off all core-modules that you don't need, so they don't have to be loaded and bootsrapped
 
 
- 
+
+
 And there is much more to discover!

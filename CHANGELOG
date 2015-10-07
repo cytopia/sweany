@@ -46,7 +46,7 @@
 + Syslog shows detailed trace
 + Error handler shows detailed trace
 + new config switch COMPRESS_HTML
-+ further work on Message Plugin 
++ further work on Message Plugin
 + User Plugin has new Page call to change email/password
 + User Plugin has new Page call to change timezone/language
 + simple FAQ Plugin
@@ -99,7 +99,7 @@
 	+ Now a single query can work on all (even recursive) relations
 	+ Building result array has also improved drastically on speed (replaced loops by if/else)
 + ORM: auto-modified/auto-created on update/insert:
-	+ sql field names do not have to be 'created'/'modified' anymore, but can be 
+	+ sql field names do not have to be 'created'/'modified' anymore, but can be
 	  named independently in each table seperately
 	+ not limited to datetime anymore, but also supports unix timestamp, timestamp and datetime
 	  specified in each table seperately

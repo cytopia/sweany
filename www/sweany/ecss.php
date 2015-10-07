@@ -1,7 +1,7 @@
 <?php
 /**
  * Extended CSS (ECSS)
- * Copyright (C) 2012-2012 Patrick Plocke.
+ * Copyright (C) 2012-2012 cytopia.
  *
  * ECSS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with ECSS. If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright	Copyright 2012-2012, Patrick Plocke <patrick[dot]plocke[at]mailbox[dot]tu-berlin[dot]de>
- * @link		https://github.com/lockdoc/ecss
- * @package		sweany.www (https://github.com/lockdoc/sweany)
- * @author		Patrick Plocke <patrick[dot]plocke[at]mailbox[dot]tu-berlin[dot]de>
+ * @copyright	Copyright 2012-2012, cytopia <cytopia@everythingcli.org>
+ * @link		https://github.com/cytopia/ecss
+ * @package		sweany.www (https://github.com/cytopia/sweany)
+ * @author		cytopia <cytopia@everythingcli.org>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @version		0.9 2012-08-22 09:37
  *
@@ -40,7 +40,7 @@
  *  $bar : this is 111 still 33 the value;
  *  $foo : 100px;
  *
- * ECSS is a side-product by sweany (https://github.com/lockdoc/sweany) and comes
+ * ECSS is a side-product by sweany (https://github.com/cytopia/sweany) and comes
  * under the same license.
  *
  * Note about the code:

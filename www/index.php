@@ -1,6 +1,6 @@
 <?php
 /* Sweany MVC PHP framework
- * Copyright (C) 2011-2012 Patu.
+ * Copyright (C) 2011-2012 cytopia.
  * Frontend for handling everything */
 $SCRIPT_START_TIME=microtime(true);
 $SERVER_REACTION_TIME=($SCRIPT_START_TIME-$_SERVER['REQUEST_TIME']);

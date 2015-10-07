@@ -1,7 +1,7 @@
 <?php
 /**
  * Sweany MVC PHP framework
- * Copyright (C) 2011-2012 Patu.
+ * Copyright (C) 2011-2012 cytopia.
  *
  * Sweany is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Sweany. If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright	Copyright 2011-2012, Patu
+ * @copyright	Copyright 2011-2012, cytopia
  * @link		none yet
  * @package		sweany.core
- * @author		Patu <pantu39@gmail.com>
+ * @author		cytopia <cytopia@everythingcli.org>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @version		0.9 2012-08-17 13:25
  *

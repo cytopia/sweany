@@ -1,7 +1,7 @@
 <?php
 /**
  * Sweany MVC PHP framework
- * Copyright (C) 2011-2012 Patu.
+ * Copyright (C) 2011-2012 cytopia.
  *
  * Sweany is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Sweany. If not, see <http://www.gnu.org/licenses/>.
  *
- * @copyright	Copyright 2011-2012, Patu
+ * @copyright	Copyright 2011-2012, cytopia
  * @link		none yet
  * @package		sweany.core.lib
- * @author		Patu <pantu39@gmail.com>
+ * @author		cytopia <cytopia@everythingcli.org>
  * @license		GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @version		0.7 2012-07-29 13:25
  *
@@ -511,8 +511,8 @@ Class Form
 		$myCalendar->setIcon("/sweany/calendar/img/iconCalendar.gif");
 		$myCalendar->setPath("/sweany/calendar/");
 		$myCalendar->setDate(date('d', strtotime($default_date)), date('m', strtotime($default_date)), date('Y', strtotime($default_date)));
-		$myCalendar->setYearInterval($min_shown_year, $max_shown_year);		// patu edit: only up to this year
-		$myCalendar->dateAllow($min_allowed_date, $max_allowed_date, false);// patu edit: not greater than today
+		$myCalendar->setYearInterval($min_shown_year, $max_shown_year);		// cytopia edit: only up to this year
+		$myCalendar->dateAllow($min_allowed_date, $max_allowed_date, false);// cytopia edit: not greater than today
 		$myCalendar->startMonday(true);
 		$myCalendar->showWeeks(true);
 

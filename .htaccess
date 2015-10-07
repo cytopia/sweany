@@ -2,7 +2,7 @@ php_flag magic_quotes_gpc Off
 
 <IfModule mod_rewrite.c>
     RewriteEngine on
-	
+
 	# ---- redirect to plugin's www folder if requested
 	# http://domain.tld/plugins/<PluginFolder>/(css|js|img|html)/<file>.(css|js|gif|jpg|jpeg|png|htm|html|php)
 	# css
@@ -17,7 +17,7 @@ php_flag magic_quotes_gpc Off
 	# ---- if it is not a file or directory, move on to normal redirect
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-	
+
 	# redirect anything else to www/
 	RewriteRule    (.*) www/$1 [L]
 	RewriteRule    ^$   www/   [L]
