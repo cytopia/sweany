@@ -1,3 +1,5 @@
+# SweanyPHP
+
 Sweany is a performance-orientated, programmer-friendly and self-validating MVC framework for PHP.
 The current downloadable version comes with three pre-coded plugins:
 A user registration/login plugin, a bb-code forum and a site-contact form.
