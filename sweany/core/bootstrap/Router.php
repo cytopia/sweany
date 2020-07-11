@@ -116,7 +116,7 @@ class Router extends aBootTemplate
 			);
 			return true;
 		}
-		
+
 		//------------- 01) No controller specified, so start with the default entry point
 		else if ( !$controller )
 		{

@@ -71,8 +71,8 @@ Class Javascript
 		$size = sizeof(self::$js_funcs);
 		self::$js_funcs[$size] = $function;
 	}
-	
-	
+
+
 	public static function addToBottom($code)
 	{
 		self::$js_code_bottom .= $code;
@@ -87,8 +87,8 @@ Class Javascript
 
 
 
-	/********************************************************* G E T T E R   F U N C T I O N S *********************************************************/	
-	
+	/********************************************************* G E T T E R   F U N C T I O N S *********************************************************/
+
 	public static function getVars()
 	{
 		if ( !sizeof(self::$js_vars) )
