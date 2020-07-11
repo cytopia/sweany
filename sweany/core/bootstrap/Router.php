@@ -269,12 +269,14 @@ class Router extends aBootTemplate
 		 *
 		 * produces E_STRICT WARNING on older PHP Versions, so we need the '@'
 		 */
-		 // TODO: I have removed @is_callable, because it is slow!, check if it is still working
+		// TODO: I have removed @is_callable, because it is slow!, check if it is still working
+		/*
 		if ( !is_callable(array($class, $method)) )
 		{
 			\Sweany\SysLog::w(self::$log_section, self::$log_title, 'method &lt;'.$method.'&gt; is not publically callable in class &lt;'.$class.'&gt;');
 			return false;
 		}
+		*/
 
 		return true;
 	}
