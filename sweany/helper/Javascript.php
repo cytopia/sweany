@@ -132,7 +132,7 @@ Class Javascript
 
 	public static function getBottomCode()
 	{
-		if ( !sizeof(self::$js_code_bottom) ) {
+		if ( !strlen(self::$js_code_bottom) ) {
 			return '';
 		}
 
