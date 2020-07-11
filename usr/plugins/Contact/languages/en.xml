@@ -36,7 +36,7 @@
 					<form_err_subject>invalid choice</form_err_subject>
 					<form_err_message>Please write a message</form_err_message>
 
-					<!-- array, feel free to add more, but also make sure to have the same values in all language files -->					
+					<!-- array, feel free to add more, but also make sure to have the same values in all language files -->
 					<subjects>General Inquiry</subjects>
 					<subjects>Feedback</subjects>
 					<subjects>Feature Request</subjects>

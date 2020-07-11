@@ -130,7 +130,7 @@ class ForumThreadsTable extends Table
 			'return'	=> $return,
 		));
 	}
-	
+
 	public function countUserThreads($user_id)
 	{
 		$condition = array('`fk_user_id` = :uid', array(':uid' => $user_id));

@@ -14,7 +14,7 @@ function insertBBTag(elId, aTag, eTag)
 {
 	var input = document.getElementById(elId);
 	input.focus();
-	
+
 	/* Internet Explorer */
 	if (typeof document.selection != 'undefined')
 	{
@@ -24,14 +24,14 @@ function insertBBTag(elId, aTag, eTag)
 		range.text	= aTag + insText + eTag;
 		/* 02) Adjust cursor position */
 		range		= document.selection.createRange();
-		
+
 		if (insText.length == 0)
 		{
 			range.move('character', -eTag.length);
 		}
 		else
 		{
-			range.moveStart('character', aTag.length + insText.length + eTag.length);      
+			range.moveStart('character', aTag.length + insText.length + eTag.length);
 		}
 		range.select();
 	}

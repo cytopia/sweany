@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $thread_date= TimeHelper::date($date_format, $Thread->created);
 $thread_time= TimeHelper::date($time_format, $Thread->created);
 ?>

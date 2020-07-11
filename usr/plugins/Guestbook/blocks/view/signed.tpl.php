@@ -1,4 +1,4 @@
-﻿<?php echo Form::start('guestbook_signed');?>
+<?php echo Form::start('guestbook_signed');?>
 	<?php echo Form::fieldsetStart($language->fieldset_name); ?>
 		<?php echo Form::getError('avatar');?>
 		<?php echo Form::label('avatar', $language->avatar)?>

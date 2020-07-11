@@ -1,4 +1,4 @@
-﻿<h1 class="forum"><?php echo $headline; ?></h1>
+<h1 class="forum"><?php echo $headline; ?></h1>
 
 
 <?php if (!$user->isLoggedIn()):?>

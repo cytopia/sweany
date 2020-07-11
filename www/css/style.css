@@ -92,7 +92,7 @@
  *    C U S T O M   P R O J E C T   S P E C I F I C   D E F I N E S
  *
  **************************************************************************************************************/
- 
+
  #whole
 {
 margin:auto;
@@ -142,7 +142,7 @@ margin-top:0px;
 /*  TOP MENU */
 .topmenu {
 	width: 100%;
-	
+
 	margin: 0;
 	padding: 0;
 
@@ -167,15 +167,15 @@ margin-top:0px;
 	padding-top: 0.3em;
 	padding-bottom: 0.3em;
 	float: left;
-	
+
 	font-size: 1.2em;
 	color: #aaa;
 	text-decoration: none;
 	border-top:1px solid #333;
 }
 
-.topmenu ul li a:hover 
-{	
+.topmenu ul li a:hover
+{
 	border:none;
 	border-top:1px solid #333;
 	background-color:#555;
@@ -197,13 +197,13 @@ padding-left:3em;
 padding:0.5em 1em;
 }
 .userMessagesBlock a{}
- 
- 
- 
+
+
+
 
 /**************************************************************************************************************
  *
- *    FRAMEWORK 
+ *    FRAMEWORK
  *
  **************************************************************************************************************/
 /* For ajax.js */
@@ -213,12 +213,12 @@ padding:0.5em 1em;
 .livesearchResultRows:hover{
 	cursor:pointer;
 	cursor:hand;
-	color:#FF6903; 	
+	color:#FF6903;
 }
 
 /**************************************************************************************************************
  *
- *     H T M L 
+ *     H T M L
  *
  **************************************************************************************************************/
 
@@ -234,7 +234,7 @@ body{
 	color:#000;
 	background-color:#f8f8f8;
 	text-shadow: rgba(0, 0, 0, .01) 0 0 1px
-	
+
 }
 h1, h2, h3, h4, h5, h6, p, blockquote {
 	margin: 0;
@@ -245,7 +245,7 @@ h1, h2, h3, h4, h5, h6, p, blockquote {
 h1 {
 	color: #333;
 	font-size: 1.7em;
-	
+
 
 }
 h2 {
@@ -289,7 +289,7 @@ a:hover		{ color: #777; border-bottom:1px solid red}
 .fakeOnClickLink:hover {
 	cursor:pointer;
 	cursor:hand;
-	color: #FF6903; 
+	color: #FF6903;
 }
 
 
@@ -317,7 +317,7 @@ fieldset {
 	border:1px solid #BBB;
 }
 
-	
+
 /*************************** FORMS - FIELDS ****************************/
 input {background-color:#333;padding:0.1em 0.3em;width:15em;color: #FFF; height:1.5em;border: solid 1px #333;}
 
@@ -378,17 +378,17 @@ img {
  *
  **************************************************************************************************************/
 
- 
+
 
 /*************************** fake hover box link (put border around) ***************************/
 .borderMe {
-	border:1px dotted #2F2F2F; 
- 
+	border:1px dotted #2F2F2F;
+
 }
 .borderMe:hover {
 	cursor:pointer;
 	cursor:hand;
-	border: solid 1px #F00; 	
+	border: solid 1px #F00;
 }
 
 .txthighlight {

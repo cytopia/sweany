@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  *	Used for redirect messages
  */

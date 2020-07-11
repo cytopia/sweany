@@ -1,7 +1,7 @@
 function quickEditThread(threadId)
 {
 	var threadEl = document.getElementById('startThread');
-	
+
 	MakePOSTRequest("/Forums/ajax_get_quick_edit_thread_box/"+threadId, "threadId="+threadId, function(quickEditBox)
 	{
 		if (quickEditBox.length>3)
@@ -34,7 +34,7 @@ function submitEditThread(threadId)
 function quickEditPost(postId)
 {
 	var postEl = document.getElementById('post_'+postId);
-	
+
 	MakePOSTRequest("/Forums/ajax_get_quick_edit_post_box/"+postId, "postId="+postId, function(quickEditBox)
 	{
 		if (quickEditBox.length>3)

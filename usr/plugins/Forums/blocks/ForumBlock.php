@@ -71,7 +71,7 @@ class ForumBlock extends BlockController
 	public function NewsOverview($numEntries, $forum_id)
 	{
 		$tblThreads	= Loader::loadPluginTable('ForumThreads', $this->plugin);
-		
+
 		// TODO: check what relations are needed here!!!
 		$threads 	= $tblThreads->find('all', array(
 			'limit'		=> $numEntries,
@@ -124,4 +124,3 @@ class ForumBlock extends BlockController
 		$this->view('online_users');
 	}
 }
-

@@ -1,4 +1,4 @@
-﻿<?php if ($success):?>
+<?php if ($success):?>
 	<h2><?php echo $language->accountActivated;?></h2>
 	<p><?php echo $language->accountActivatedText;?></p>
 	<?php echo Html::l($language->loginHere, 'User', 'login')?>

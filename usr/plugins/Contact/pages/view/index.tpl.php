@@ -1,1 +1,1 @@
-﻿<?php echo $bContactForm; ?>
+<?php echo $bContactForm; ?>

@@ -52,7 +52,7 @@ class FaceBook
 	 *		$args['ogImageHeight'];
 	 *
 	 */
-	 
+
 	 /**
 	  *	TODO: Please do not use yet. Still unstable and needs some redesign
 	  */
@@ -109,7 +109,7 @@ class FaceBook
 					d.getElementsByTagName(\'head\')[0].appendChild(js);
 				}(document));
 			//-->';
-		
+
 		Javascript::addToBottom($js);
 
 		return $element;

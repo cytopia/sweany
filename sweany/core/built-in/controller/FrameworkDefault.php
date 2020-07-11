@@ -187,8 +187,8 @@ class FrameworkDefault extends PageController
 					$this->redirectHome();
 					break;
 				}
-				
-				
+
+
 			default:
 				// There is nothing to see here.
 				// Go away
@@ -223,16 +223,16 @@ class FrameworkDefault extends PageController
 					break;
 
 				case $DEFAULT_ADMIN_URL.'/translations':
-					
+
 					if ( Form::isSubmitted('translations') )
 					{
 						$groups		= Form::getValue('group');
 						$Language	=\Sweany\AutoLoader::loadCoreTable('Language');
-						
+
 						$Language->saveTranslations($groups);
 						$this->refresh();
 					}
-				
+
 					// Get all available translation
 					$def	= $GLOBALS['LANGUAGE_DEFAULT_SHORT'];
 					$def_name=$GLOBALS['LANGUAGE_AVAILABLE'][$def];
@@ -246,7 +246,7 @@ class FrameworkDefault extends PageController
 
 					// Set everything for the view
 					$this->set('default', $def_name);
-					
+
 					$this->set('trans', $trans);
 					$this->view('admin_translations');
 					break;
@@ -256,7 +256,7 @@ class FrameworkDefault extends PageController
 					$this->set('emails', $Email->find('all'));
 					$this->view('admin_emails');
 					break;
-				
+
 				default:
 					$this->url_not_found();
 					return;
