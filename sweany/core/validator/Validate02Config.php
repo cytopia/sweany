@@ -454,7 +454,7 @@ class Validate02Config extends aBootTemplate
 		}
 		if ( !file_exists(LOG_PATH.DS.$GLOBALS['FILE_LOG_USER']) )
 		{
-			self::$error  = 'Logfile <b>'.$GLOBALS['FILE_LOG_USER'].'</b> does not exist in '.self::$logDir.DS;
+			self::$error  = 'Logfile <b>'.$GLOBALS['FILE_LOG_USER'].'</b> does not exist in '.LOG_PATH.DS;
 			return false;
 		}
 		if ( !is_writable(LOG_PATH.DS.$GLOBALS['FILE_LOG_USER']) )

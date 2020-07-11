@@ -52,7 +52,7 @@ class ErrorHandler
 	 * Allows a nicer screen output for errors.
 	 * This function is called internally by php.
 	 */
-	public static function php_error_handler($errno, $error, $file, $line, $context)
+	public static function php_error_handler($errno, $error, $file, $line, $context = array())
 	{
 		switch ($errno)
 		{

@@ -34,7 +34,7 @@ class mysql extends aBootTemplate implements iDBO
 		$user		= $options['user'];
 		$pass		= $options['pass'];
 
-		self::$link	= mysql_connect($host, $user, $pass);
+		self::$link	= mysqli_connect($host, $user, $pass);
 
 		if (!self::$link)
 		{
@@ -42,19 +42,19 @@ class mysql extends aBootTemplate implements iDBO
 			return false;
 		}
 
-		if (!mysql_select_db($db, self::$link))
+		if (!mysqli_select_db(self::$link, $db))
 		{
 			self::$error = 'Database, '.'Coult not select db: '.$db;
 			return false;
 		}
 
 		// activate total utf-8
-		if (!mysql_set_charset('utf8', self::$link))
+		if (!mysqli_set_charset(self::$link, 'utf8'))
 		{
 			self::$error = 'Charset, Coult not be set to utf8';
 			return false;
 		}
-		if (!mysql_query("SET character_set_results = 'utf8', character_set_client = 'utf8', character_set_connection = 'utf8', character_set_database = 'utf8', character_set_server = 'utf8'", self::$link))
+		if (!mysqli_query(self::$link, "SET character_set_results = 'utf8', character_set_client = 'utf8', character_set_connection = 'utf8', character_set_database = 'utf8', character_set_server = 'utf8'"))
 		{
 			self::$error = 'Encodings and Connections could not be set to utf8';
 			return false;
@@ -67,7 +67,7 @@ class mysql extends aBootTemplate implements iDBO
 	public static function cleanup()
 	{
 		if (is_object(self::$link)) {
-			mysql_close(self::$link);
+			mysqli_close(self::$link);
 		}
 	}
 
@@ -91,7 +91,7 @@ class mysql extends aBootTemplate implements iDBO
 	public function escape($string, $quote = false)
 	{
 		$q = ($quote) ? "'" : '';
-		return $q.mysql_real_escape_string($string, self::$link).$q;
+		return $q.mysqli_real_escape_string(self::$link, $string).$q;
 	}
 
 
@@ -122,45 +122,43 @@ class mysql extends aBootTemplate implements iDBO
 		self::$query = $query;
 
 		$start	= microtime(true);
-		$result = mysql_query($query, self::$link);
+		$result = mysqli_query(self::$link, $query);
 		$time	= microtime(true) - $start;
 
 		$data	= array();
 
 		if (!$result)
 		{
-			SysLog::e('sql', 'select', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
+			SysLog::e('sql', 'select', $query, 'mysqli_query failed:<br/>'.mysqli_errno(self::$link).' '.mysqli_error(self::$link), $time);
 			return (-1);
 		}
 
-		if ( is_resource($result) ) {
-		if ( $callback )
-		{
-			while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
+		if ( is_object($result) ) {
+			if ( $callback )
 			{
-				$callback($row, $data);
-			}
-		}
-		else
-		{
-			if ( $return == 'object' )
-			{
-				while ($row = mysql_fetch_object($result))
+				while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
 				{
-					$data[] = $row;
+					$callback($row, $data);
 				}
 			}
 			else
 			{
-				while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
+				if ( $return == 'object' )
 				{
-					$data[] = $row;
+					while ($row = mysqli_fetch_object($result))
+					{
+						$data[] = $row;
+					}
+				}
+				else
+				{
+					while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
+					{
+						$data[] = $row;
+					}
 				}
 			}
-		}
-		if (!mysql_free_result($result)) {
-			SysLog::e('sql', 'Cannot Free Result', $query, 'mysql_free_result failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
-		}
+			mysqli_free_result($result);
 		}
 		SysLog::time('sql', $time);
 		SysLog::i('sql-query', 'select', $query, $data, $time);
@@ -309,18 +307,18 @@ class mysql extends aBootTemplate implements iDBO
 	 */
 	public function insert($table, $fields, $ret_ins_id)
 	{
-		$names	= implode(',', array_map( create_function('$key', 'return "`".$key."`";'), array_keys($fields)));
-		$values = implode(',', array_map( function($val) {return $this->escape($val, true);}, array_values($fields)));
+		$names	= implode(',', array_map( function($key){return "`".$key."`";}, array_keys($fields)));
+		$values = implode(',', array_map( function($val){return $this->escape($val, true);}, array_values($fields)));
 
 		$query	= sprintf('INSERT INTO `%s` (%s) VALUES(%s);', $table, $names, $values);
 
 		$start	= microtime(true);
-		$result	= mysql_query($query, self::$link);
+		$result	= mysqli_query(self::$link, $query);
 		$time	= microtime(true) - $start;
 
 		if (!$result)
 		{
-			SysLog::e('sql', 'insert', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
+			SysLog::e('sql', 'insert', $query, 'mysqli_query failed:<br/>'.mysqli_errno(self::$link).' '.mysqli_error(self::$link), $time);
 			return false;
 		}
 		SysLog::time('sql', $time);
@@ -357,17 +355,17 @@ class mysql extends aBootTemplate implements iDBO
 		$where		= $condition ? 'WHERE '.$this->prepare($condition) : '';
 
 		// Prepare fields
-		$fields	= implode(',', array_map( create_function('$key, $val', 'return "`".$key."`=\'".mysql_real_escape_string($val)."\'";'), array_keys($fields), array_values($fields)));
+		$fields	= implode(',', array_map( function($key, $val){return "`".$key."`=\'".mysqli_real_escape_string($val)."\'";}, array_keys($fields), array_values($fields)));
 
 		$query	= sprintf('UPDATE `%s` SET %s %s;', $table, $fields, $where);
 
 		$start	= microtime(true);
-		$result	= mysql_query($query, self::$link);
+		$result	= mysqli_query(self::$link, $query);
 		$time	= microtime(true) - $start;
 
 		if (!$result)
 		{
-			SysLog::e('sql', 'update', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
+			SysLog::e('sql', 'update', $query, 'mysqli_query failed:<br/>'.mysqli_errno(self::$link).' '.mysqli_error(self::$link), $time);
 			return false;
 		}
 
@@ -433,12 +431,12 @@ class mysql extends aBootTemplate implements iDBO
 
 		// Fire!
 		$start		= microtime(true);
-		$result		= mysql_query($query, self::$link);
+		$result		= mysqli_query(self::$link, $query);
 		$time		= microtime(true) - $start;
 
 		if (!$result)
 		{
-			SysLog::e('sql', 'incrementField', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
+			SysLog::e('sql', 'incrementField', $query, 'mysqli_query failed:<br/>'.mysqli_errno(self::$link).' '.mysqli_error(self::$link), $time);
 			return false;
 		}
 
@@ -474,12 +472,12 @@ class mysql extends aBootTemplate implements iDBO
 		$query	= sprintf('DELETE FROM `%s` %s;', $table, $where);
 
 		$start	= microtime(true);
-		$result	= mysql_query($query, self::$link);
+		$result	= mysqli_query(self::$link, $query);
 		$time	= microtime(true) - $start;
 
 		if (!$result)
 		{
-			SysLog::e('sql', 'delete', $query, 'mysql_query failed:<br/>'.mysql_errno(self::$link).' '.mysql_error(self::$link), $time);
+			SysLog::e('sql', 'delete', $query, 'mysqli_query failed:<br/>'.mysqli_errno(self::$link).' '.mysqli_error(self::$link), $time);
 			return false;
 		}
 
@@ -593,8 +591,8 @@ class mysql extends aBootTemplate implements iDBO
 
 	private function _getLastInsertId()
 	{
-		$result	= mysql_query('SELECT LAST_INSERT_ID() AS `id`');
-		$row	= mysql_fetch_array($result, MYSQL_ASSOC);
+		$result	= mysqli_query(self::$link, 'SELECT LAST_INSERT_ID() AS `id`');
+		$row	= mysqli_fetch_array($result, MYSQLI_ASSOC);
 		$id		= $row['id'];
 		SysLog::i('sql', 'lastInsertId', $id);
 		return $id;
