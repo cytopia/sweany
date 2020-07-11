@@ -46,7 +46,7 @@ Class Css
 
 			$protocol	= ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
 			$domain		= $_SERVER['HTTP_HOST'];
-			$file		= '/www/sweany/ecss.php?file='.$protocol.$domain.$file.$options;
+			$file		= '/sweany/ecss.php?file='.$protocol.$domain.$file.$options;
 		}
 		self::$css_files[$size] = '<link rel="stylesheet" type="text/css" href="'.$file.'" />';
 	}
