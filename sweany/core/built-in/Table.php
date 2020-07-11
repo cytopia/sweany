@@ -1152,7 +1152,7 @@ class Table
 		$allFields	= array_merge($fields, $subQueries);
 
 		$where		= ($where) ? 'WHERE '	.$where : '';
-		$order		= ($order) ? 'ORDER BY '.implode(',', array_map(create_function('$key, $dir', 'return $key." ".$dir;'), array_keys($order), array_values($order))) : '';
+		$order		= ($order) ? 'ORDER BY '.implode(',', array_map(function($key, $dir){return $key." ".$dir;}, array_keys($order), array_values($order))) : '';
 		$limit		= ($limit) ? 'LIMIT '	.$limit : '';
 
 
@@ -1713,7 +1713,7 @@ class Table
 				$limit		= isset($properties['limit'])		? $properties['limit']		: null;
 
 				$where		= ($where) ? 'WHERE '	.$condition.' AND '.$where : $condition;
-				$order		= ($order) ? 'ORDER BY '.implode(',', array_map(create_function('$key, $dir', 'return $key." ".$dir;'), array_keys($order), array_values($order))) : '';
+				$order		= ($order) ? 'ORDER BY '.implode(',', array_map(function($key, $dir){return $key." ".$dir;}, array_keys($order), array_values($order))) : '';
 				$limit		= ($limit) ? 'LIMIT '	.$limit : '';
 
 

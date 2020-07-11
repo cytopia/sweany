@@ -559,7 +559,7 @@ Class Form
 	 */
 	private static function _getOptions($options = array())
 	{
-		return (is_array($options)) ? implode('', array_map( create_function('$key, $val', 'return " ".$key."=\"".$val."\"";'), array_keys($options), array_values($options))) : '';
+		return (is_array($options)) ? implode('', array_map( function($key, $val){return " ".$key."=\"".$val."\"";}, array_keys($options), array_values($options))) : '';
 	}
 
 	/**

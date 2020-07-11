@@ -51,7 +51,7 @@ Class Html
 	public static function l($name, $controller = null, $method = null, $params = array(), $attributes = array(), $anchor = null)
 	{
 		$attributes	= $attributes ? $attributes : array();
-		$attr		= implode(' ', array_map(create_function('$key, $val', 'return $key."=\"".$val."\"";'), array_keys($attributes), array_values($attributes)));
+		$attr		= implode(' ', array_map(function($key, $val){return $key."=\"".$val."\"";}, array_keys($attributes), array_values($attributes)));
 		$href		= self::href($controller, $method, $params, $anchor);
 
 		return '<a href="'.$href.'"'.$attr.'>'.$name.'</a>';
@@ -66,7 +66,7 @@ Class Html
 		$params = $params ? $params : array();
 
 		// TODO: maybe need to escape the params for url - keep an eye on it
-		$args = implode('/', array_map(create_function('$param', 'return ($param);'), array_values($params)));
+		$args = implode('/', array_map(function($param){return $param;}, array_values($params)));
 
 		// Revert controller and method into aliases if they exist
 		foreach ($CUSTOM_ROUTING as $ctlAlias => $routes) {
@@ -110,7 +110,7 @@ Class Html
 	 */
 	public static function el($name, $link, $attributes = array())
 	{
-		$attr	= implode(' ', array_map( create_function('$key, $val', 'return $key."=\"".$val."\"";'), array_keys($attributes), array_values($attributes)));
+		$attr	= implode(' ', array_map( function($key, $val){return $key."=\"".$val."\"";}, array_keys($attributes), array_values($attributes)));
 
 		return '<a '.$attr.' href="'.$link.'">'.$name.'</a>';
 	}
@@ -125,7 +125,7 @@ Class Html
 	 */
 	public static function img($src, $alt = null, $options = array())
 	{
-		$opts = implode(' ', array_map( create_function('$key, $val', 'return $key."=\"".$val."\"";'), array_keys($options), array_values($options)));
+		$opts = implode(' ', array_map( function($key, $val){return $key."=\"".$val."\"";}, array_keys($options), array_values($options)));
 
 		return '<img border="0" src="'.$src.'" alt="'.$alt.'"' .$opts.' />';
 	}
