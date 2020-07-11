@@ -7,11 +7,13 @@ push_local.sh
 
 # do not upload backup dirs
 _bak/
+/log/
 
 # do not upload local config or logs
 usr/config.php
 sweany/log/core.log
 sweany/log/debug.log
+sweany/log/custom.log
 
 # win/mac auto-generated files
 Thumbs.db
