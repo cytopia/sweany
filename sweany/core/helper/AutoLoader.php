@@ -243,7 +243,7 @@ Class AutoLoader
 
 		if ( Settings::$showFwErrors > 1 || Settings::$logFwErrors > 1 )
 		{
-			SysLog::w('internal', 'Auto-Loader', 'Class not found <strong><font color="red">' . $sClassName . '</font></strong> in all paths:<br/>'.implode($paths, '<br/>'), null, null, $start);
+			SysLog::w('internal', 'Auto-Loader', 'Class not found <strong><font color="red">' . $sClassName . '</font></strong> in all paths:<br/>'.implode('<br/>', $paths), null, null, $start);
 		}
     }
 
@@ -326,7 +326,7 @@ Class AutoLoader
 		}
 
 		// Throw error, as nothing has been found
-		SysLog::e($log_section, 'load'.$type, 'No such file <font color="red"><ul>'.implode('<li>',$paths).'</ul></font>', null, null, $start);
+		SysLog::e($log_section, 'load'.$type, 'No such file <font color="red"><ul>'.implode($paths, '<li>').'</ul></font>', null, null, $start);
 		// Do not exit here, SysLog has its own settings
 		//SysLog::show();
 		//exit;
