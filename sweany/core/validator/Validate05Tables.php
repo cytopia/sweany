@@ -282,7 +282,7 @@ class Validate05Tables extends aBootTemplate
 					}
 					else
 					{
-						self::$error	= $path.' is not a directory!';
+						self::$error	= USR_PLUGINS_PATH.DS.$plugin.DS.'tables is not a directory!';
 						return false;
 					}
 				}
