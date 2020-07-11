@@ -201,9 +201,9 @@ class tc_calendar{
 
 	var $show_week = false;
 	var $week_hdr = "";
-	
+
 	var $interval = 1;
-	
+
 	var $auto_hide = 1;
 	var $auto_hide_time = 1000;
 
@@ -299,7 +299,7 @@ class tc_calendar{
 	function returnScript()
 	{
 		$myString = '';
-		
+
 		//check valid default date
 		if(!$this->checkDefaultDateValid()){
 			//unset default date
@@ -340,7 +340,7 @@ class tc_calendar{
 		}
 		return $myString;
 	}
-	
+
 	function writeScript(){
 		//check valid default date
 		if(!$this->checkDefaultDateValid()){
@@ -414,11 +414,11 @@ class tc_calendar{
 		$params[] = "str=".$this->startDate;
 		$params[] = "rtl=".$this->rtl;
 
-		$params[] = "wks=".$this->show_week;		
+		$params[] = "wks=".$this->show_week;
 		$params[] = "int=".$this->interval;
-		
+
 		$params[] = "hid=".$this->auto_hide;
-		$params[] = "hdt=".$this->auto_hide_time;		
+		$params[] = "hdt=".$this->auto_hide_time;
 
 		$paramStr = (sizeof($params)>0) ? "?".implode("&", $params) : "";
 
@@ -461,9 +461,9 @@ class tc_calendar{
 			$div_position = "relative";
 			$div_align = "";
 		}
-				
+
 		$mout_str = ($this->auto_hide && $this->date_picker) ? " onmouseout=\"javascript:prepareHide('$this->objname', $this->auto_hide_time);\"" : "";
-		
+
 		$mover_str = " onmouseover=\"javascript:cancelHide('$this->objname');\"";
 
 		//write the calendar container
@@ -508,11 +508,11 @@ class tc_calendar{
 		$params[] = "str=".$this->startDate;
 		$params[] = "rtl=".$this->rtl;
 
-		$params[] = "wks=".$this->show_week;		
+		$params[] = "wks=".$this->show_week;
 		$params[] = "int=".$this->interval;
-		
+
 		$params[] = "hid=".$this->auto_hide;
-		$params[] = "hdt=".$this->auto_hide_time;		
+		$params[] = "hdt=".$this->auto_hide_time;
 
 		$paramStr = (sizeof($params)>0) ? "?".implode("&", $params) : "";
 
@@ -555,9 +555,9 @@ class tc_calendar{
 			$div_position = "relative";
 			$div_align = "";
 		}
-				
+
 		$mout_str = ($this->auto_hide && $this->date_picker) ? " onmouseout=\"javascript:prepareHide('$this->objname', $this->auto_hide_time);\"" : "";
-		
+
 		$mover_str = " onmouseover=\"javascript:cancelHide('$this->objname');\"";
 
 		//write the calendar container
@@ -566,8 +566,8 @@ class tc_calendar{
 		$myString .= ("</div>");
 		return $myString;
 	}
-	
-	
+
+
 	//write the select box of days
 	function writeDay(){
 		$total_days = $this->total_days($this->month, $this->year);
@@ -664,7 +664,7 @@ class tc_calendar{
 			$myString .= ("<option value=\"".str_pad($i, 2, "0", STR_PAD_LEFT)."\"$selected".($this->rtl ? " dir=\"rtl\"" : "").">".$monthnames[$i-1]."</option>");
 		}
 		$myString .= ("</select> ");
-		
+
 		return $myString;
 	}
 
@@ -710,14 +710,14 @@ class tc_calendar{
 		$myString .= ("</select> ");
 		return $myString;
 	}
-	
-	
+
+
 	function returneHidden($suffix, $value)
 	{
 		if($suffix) $suffix = "_".$suffix;
 		return("<input type=\"hidden\" name=\"".$this->objname.$suffix."\" id=\"".$this->objname.$suffix."\" value=\"".$value."\" />");
 	}
-	
+
 	function eHidden($suffix, $value) {
 		if($suffix) $suffix = "_".$suffix;
 		echo("<input type=\"hidden\" name=\"".$this->objname.$suffix."\" id=\"".$this->objname.$suffix."\" value=\"".$value."\" />");
@@ -757,9 +757,9 @@ class tc_calendar{
 		$myString .= $this->returneHidden('och', urlencode($this->tc_onchanged));
 		$myString .= $this->returneHidden('str', $this->startDate);
 		$myString .= $this->returneHidden('rtl', $this->rtl);
-		$myString .= $this->returneHidden('wks', $this->show_week);		
+		$myString .= $this->returneHidden('wks', $this->show_week);
 		$myString .= $this->returneHidden('int', $this->interval);
-		
+
 		$myString .= $this->returneHidden('hid', $this->auto_hide);
 		$myString .= $this->returneHidden('hdt', $this->auto_hide_time);
 		return $myString;
@@ -796,9 +796,9 @@ class tc_calendar{
 		$this->eHidden('och', urlencode($this->tc_onchanged));
 		$this->eHidden('str', $this->startDate);
 		$this->eHidden('rtl', $this->rtl);
-		$this->eHidden('wks', $this->show_week);		
+		$this->eHidden('wks', $this->show_week);
 		$this->eHidden('int', $this->interval);
-		
+
 		$this->eHidden('hid', $this->auto_hide);
 		$this->eHidden('hdt', $this->auto_hide_time);
 	}
@@ -1047,7 +1047,7 @@ class tc_calendar{
 		if(function_exists("json_encode")){
 			return json_encode($obj);
 		}else{
-			//only array is assumed for now			
+			//only array is assumed for now
 			if(is_array($obj)){
 				$return_arr = array();
 				foreach($obj as $arr){
@@ -1069,15 +1069,15 @@ class tc_calendar{
 			$str = trim($str);
 			if($str && strlen($str) > 2){
 				$str = substr($str, 1, strlen($str)-2);
-				
+
 				$return_arr = array();
-				
+
 				$offset = 0;
 				for($i=0; $i<3; $i++){
 					//find first '['
 					$start_pos = strpos($str, "[", $offset);
 					if($start_pos !== false){
-						//find next ']'	
+						//find next ']'
 						$end_pos = strpos($str, "]", $offset);
 						if($end_pos !== false){
 							$return_str = substr($str, $start_pos+1, ($end_pos-$start_pos-1));
@@ -1098,7 +1098,7 @@ class tc_calendar{
 	function showWeeks($flag){
 		$this->show_week = $flag;
 	}
-	
+
 	function setAutoHide($auto, $time = ""){
 		$this->auto_hide = ($auto) ? 1 : 0;
 		if($time != "" && $time >= 0){

@@ -48,12 +48,12 @@ class Database extends aBootTemplate
 
 		$engine					= self::$engine;
 		$class					= self::$class;
-		
+
 		// TODO: if validator mode is on
 		// check if file exists
 		require_once(CORE_DATABASE.DS.'iDBO.php');
 		require_once(CORE_DATABASE.DS.$engine.'.php');
-		
+
 		// Check if the database engine implements required interface class
 		if ( !$class::_implemented )
 		{
@@ -79,7 +79,7 @@ class Database extends aBootTemplate
 		$class = self::$class;
 		$class::cleanup();
 	}
-	
+
 	public static function getInstance()
 	{
 		if ( !self::$db )

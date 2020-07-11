@@ -83,4 +83,3 @@
 		</table>
 	<?php echo Form::end(); ?>
 </div>
-

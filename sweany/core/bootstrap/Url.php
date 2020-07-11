@@ -83,7 +83,7 @@ class Url extends aBootTemplate
 		{
 			return $GLOBALS['DEFAULT_CONTROLLER'];
 		}
-		
+
 		$controller = self::$urlParams[0];
 
 		// Custom seo controller name :-)
@@ -122,7 +122,7 @@ class Url extends aBootTemplate
 				return $rule[$method];
 			}
 		}
-		
+
 		return $method;
 	}
 

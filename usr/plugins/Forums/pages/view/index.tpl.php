@@ -1,4 +1,4 @@
-﻿<table class="forum">
+<table class="forum">
 	<thead>
 		<tr>
 			<th></th>

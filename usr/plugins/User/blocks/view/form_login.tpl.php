@@ -1,4 +1,4 @@
-﻿<?php echo Form::start('block_form_login'); ?>
+<?php echo Form::start('block_form_login'); ?>
 	<?php echo Form::fieldSetStart($language->login); ?>
 		<table style="border: 0px solid black; margin-left:70px; padding:10px;">
 			<tbody>

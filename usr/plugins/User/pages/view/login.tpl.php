@@ -1,4 +1,4 @@
-﻿<div class="userLoginForm">
+<div class="userLoginForm">
 	<?php echo $bLoginForm; ?>
 </div>
 <div class="userRegisterForm">

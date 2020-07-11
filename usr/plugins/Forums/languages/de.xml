@@ -40,9 +40,9 @@
 				</page>
 				<page id="showThread">
 					<forum>Forum</forum>
-					<date>Datum</date>	
-					<atTime>um</atTime>	
-					<editedOn>Bearbeitet am</editedOn>					
+					<date>Datum</date>
+					<atTime>um</atTime>
+					<editedOn>Bearbeitet am</editedOn>
 					<entries>Eintraege</entries>
 					<message>Nachricht</message>
 					<answer>Antworten</answer>

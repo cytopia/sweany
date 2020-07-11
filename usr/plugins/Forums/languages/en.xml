@@ -38,9 +38,9 @@
 				</page>
 				<page id="showThread">
 					<forum>Forum</forum>
-					<date>Date</date>	
-					<atTime>at</atTime>	
-					<editedOn>Edited on</editedOn>					
+					<date>Date</date>
+					<atTime>at</atTime>
+					<editedOn>Edited on</editedOn>
 					<entries>Entries</entries>
 					<message>Message</message>
 					<answer>Answer</answer>

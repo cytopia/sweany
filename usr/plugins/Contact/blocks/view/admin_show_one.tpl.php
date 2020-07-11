@@ -1,4 +1,4 @@
-﻿<div class="adm_contact">
+<div class="adm_contact">
 	<table class="adm_contact">
 		<thead>
 			<tr>

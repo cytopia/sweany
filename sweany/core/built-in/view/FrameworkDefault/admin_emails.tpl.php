@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
 This file must be here for the admin panel
 */

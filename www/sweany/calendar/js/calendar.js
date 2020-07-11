@@ -11,7 +11,7 @@ function toggleCalendar(objname, auto_hide, hide_timer){
 		if (div_obj.style.visibility=="hidden") {
 		  div_obj.style.visibility = 'visible';
 		  document.getElementById(objname+'_frame').contentWindow.adjustContainer();
-		  
+
 		  //auto hide if inactivities with calendar after open
 		  if(auto_hide){
 			  if(hide_timer < 3000) hide_timer = 3000; //put default 3 secs
@@ -34,15 +34,15 @@ function showCalendar(objname){
 function hideCalendar(objname){
 	var div_obj = document.getElementById('div_'+objname);
 	if(div_obj != null){
-		div_obj.style.visibility = 'hidden';	
+		div_obj.style.visibility = 'hidden';
 	}
 }
 
 function prepareHide(objname, timeout){
 	cancelHide(objname);
-	
+
 	var timer = setTimeout(function(){ hideCalendar(objname) }, timeout);
-	
+
 	var found = false;
 	for(i=0; i<this.hideCalendarTimer.length; i++){
 		if(this.hideCalendarTimer[i].objname == objname){
@@ -50,11 +50,11 @@ function prepareHide(objname, timeout){
 			this.hideCalendarTimer[i].timers[this.hideCalendarTimer[i].timers.length] = timer;
 		}
 	}
-	
+
 	if(!found){
 		var obj = new calendarTimer(objname);
 		obj.timers[obj.timers.length] = timer;
-		
+
 		this.hideCalendarTimer[this.hideCalendarTimer.length] = obj;
 	}
 }
@@ -86,8 +86,8 @@ function setValue(objname, d){
 	//calling calendar_onchanged script
 	if(document.getElementById(objname+"_och").value != "" && changed)
 		calendar_onchange(objname);
-		
-	var date_array = document.getElementById(objname).value.split("-");	
+
+	var date_array = document.getElementById(objname).value.split("-");
 	tc_submitDate(objname, date_array[2], date_array[1], date_array[0]);
 }
 
@@ -154,9 +154,9 @@ function tc_submitDate(objname, dvalue, mvalue, yvalue){
 	var och = document.getElementById(objname+'_och').value;
 	var str = document.getElementById(objname+'_str').value;
 	var rtl = document.getElementById(objname+'_rtl').value;
-	var wks = document.getElementById(objname+'_wks').value;	
+	var wks = document.getElementById(objname+'_wks').value;
 	var int = document.getElementById(objname+'_int').value;
-	
+
 	var hid = document.getElementById(objname+'_hid').value;
 	var hdt = document.getElementById(objname+'_hdt').value;
 
@@ -191,10 +191,10 @@ function tc_setDay(objname, dvalue){
 	}
 
 	checkPairValue(objname, obj.value);
-	
+
 	//compare if value is changed
 	var changed = (document.getElementById(objname).value != d) ? true : false;
-	
+
 	//calling calendar_onchanged script
 	if(document.getElementById(objname+"_och").value != "" && changed)
 		calendar_onchange(objname);
@@ -221,10 +221,10 @@ function tc_setMonth(objname, mvalue){
 	}
 
 	checkPairValue(objname, obj.value);
-	
+
 	//compare if value is changed
 	var changed = (document.getElementById(objname).value != d) ? true : false;
-	
+
 	//calling calendar_onchanged script
 	if(document.getElementById(objname+"_och").value != "" && changed)
 		calendar_onchange(objname);
@@ -251,10 +251,10 @@ function tc_setYear(objname, yvalue){
 	}
 
 	checkPairValue(objname, obj.value);
-	
+
 	//compare if value is changed
 	var changed = (document.getElementById(objname).value != d) ? true : false;
-	
+
 	//calling calendar_onchanged script
 	if(document.getElementById(objname+"_och").value != "" && changed)
 		calendar_onchange(objname);
@@ -521,56 +521,56 @@ function tc_updateDay(objname, yearNum, monthNum, daySelected){
 }
 
 
-function checkPairValue(objname, d){	
+function checkPairValue(objname, d){
 	var dp1 = document.getElementById(objname+"_pr1").value;
 	var dp2 = document.getElementById(objname+"_pr2").value;
-	
+
 	var this_value = document.getElementById(objname).value;
 	//var this_time2 = Date.parse(this_value)/1000;
 	//var this_time1 = Date.parse(this_value.replace(/-/g,'/'))/1000;
-	
+
 	var this_dates = this_value.split('-');
 	var this_time = new Date(this_dates[0], this_dates[1]-1, this_dates[2]).getTime()/1000;
-	
+
 	//implementing dp2
-	if(dp1 != "" && document.getElementById(dp1) != null){ //imply to date_pair1		
+	if(dp1 != "" && document.getElementById(dp1) != null){ //imply to date_pair1
 		//set date pair value to date selected
 		document.getElementById(dp1+"_prv").value = d;
-	
+
 		var dp1_value = document.getElementById(dp1).value;
 		//var dp1_time = Date.parse(dp1_value)/1000;
 		//var dp1_time = Date.parse(dp1_value.replace(/-/g,'/'))/1000;
-		
+
 		var dp1_dates = dp1_value.split('-');
 		var dp1_time = new Date(dp1_dates[0], dp1_dates[1]-1, dp1_dates[2]).getTime()/1000;
 
 		if(this_time < dp1_time){
-			//set self date pair value to null			
+			//set self date pair value to null
 			document.getElementById(objname+"_prv").value = "";
-			
+
 			tc_submitDate(dp1, "00", "00", "0000");
 		}else{
-			//var date_array = document.getElementById(dp1).value.split("-");	
+			//var date_array = document.getElementById(dp1).value.split("-");
 			tc_submitDate(dp1, dp1_dates[2], dp1_dates[1], dp1_dates[0]);
 		}
 	}
 
 	//implementing dp1
-	if(dp2 != "" && document.getElementById(dp2) != null){ //imply to date_pair2		
-		//set date pair value to date selected		
+	if(dp2 != "" && document.getElementById(dp2) != null){ //imply to date_pair2
+		//set date pair value to date selected
 		document.getElementById(dp2+"_prv").value = d;
-	
+
 		var dp2_value = document.getElementById(dp2).value;
 		//var dp2_time = Date.parse(dp2_value)/1000;
 		//var dp2_time = Date.parse(dp2_value.replace(/-/g,'/'))/1000;
-		
+
 		var dp2_dates = dp2_value.split('-');
 		var dp2_time = new Date(dp2_dates[0], dp2_dates[1]-1, dp2_dates[2]).getTime()/1000;
-		
-		if(this_time > dp2_time){			
-			//set self date pair value to null			
+
+		if(this_time > dp2_time){
+			//set self date pair value to null
 			document.getElementById(objname+"_prv").value = "";
-			
+
 			tc_submitDate(dp2, "00", "00", "0000");
 		}else{
 			//var date_array = document.getElementById(dp2).value.split("-");

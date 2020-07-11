@@ -5,7 +5,7 @@
 function createXmlHttpRequest()
 {
 	var xmlHttp = null;
-	
+
 	try
 	{
 		//Firefox, Opera 8.0+, Safari
@@ -47,7 +47,7 @@ function MakeGETRequest(url, callback)
 	{
 		return false;
 	}
-	
+
 	request.onreadystatechange = function()
 	{
 		if (request.readyState == 4 && request.status == 200)
@@ -55,7 +55,7 @@ function MakeGETRequest(url, callback)
 			callback(request.responseText);
 		}
 	};
-	request.open("GET", url, true); 
+	request.open("GET", url, true);
 	try
 	{
 		request.send(null);
@@ -71,7 +71,7 @@ function MakePOSTRequest(url, params, callback)
 	{
 		return false;
 	}
-	
+
 	request.onreadystatechange = function()
 	{
 		if (request.readyState == 4 && request.status == 200)
@@ -79,13 +79,13 @@ function MakePOSTRequest(url, params, callback)
 			callback(request.responseText);
 		}
 	};
-	
-	request.open("POST", url, true); 
+
+	request.open("POST", url, true);
 
 	//Send the proper header information along with the request
 	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	request.setRequestHeader("Content-length", params.length);
-	request.setRequestHeader("Connection", "close");	
+	request.setRequestHeader("Connection", "close");
 
 	try
 	{
@@ -103,7 +103,7 @@ function liveSearch(url, params, textBoxId, resultId)
 		el.style.visibility ='visible';	// show
 		el.style.display='block';
 		el.innerHTML = '';				// empty element
-		
+
 		var result = eval('(' + response + ')');
 		for (var i=0;i<result.length; i++)
 		{
@@ -148,12 +148,12 @@ function setCaretPosition (oField, iCaretPos)
 	{
 		// Set focus on the element
 		oField.focus ();
-	
+
 		// Create empty selection range
 		var oSel = document.selection.createRange ();
 		// Move selection start and end to 0 position
 		oSel.moveStart ('character', -oField.value.length);
-	
+
 		// Move selection start and end to desired position
 		oSel.moveStart ('character', iCaretPos);
 		oSel.moveEnd ('character', 0);

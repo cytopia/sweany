@@ -88,7 +88,7 @@ class Session extends aBootTemplate
 
 
 	/* ******************************************** SET ********************************************/
-	
+
 	/**
 	 *
 	 *	$key = 'string';
@@ -97,10 +97,10 @@ class Session extends aBootTemplate
 	public static function set($key, $val)
 	{
 		if ( is_array($key) ) {
-			
+
 			$subKey = current($key);
 			$key	= key($key);
-			
+
 			$_SESSION[$key][$subKey] = $val;
 
 		} else {

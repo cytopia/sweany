@@ -116,8 +116,8 @@ class SysLog
 		);
 		self::$store[] = $store;
 
-		
-		
+
+
 		// Check for break on error!!!
 		if ( Settings::$breakOnError ) {
 			echo '<h1 style="color:red">Break on Framework Error</h1>';

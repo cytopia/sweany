@@ -80,8 +80,8 @@ Class Language extends aBootTemplate
 	 */
 	private static $_sstore	= null;
 
-	
-	
+
+
 	/*
 	 * static Language Store (from database)
 	 *

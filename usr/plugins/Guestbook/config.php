@@ -57,4 +57,3 @@
 // This CSS File will be in www/css of sweany root, not the plugin folder
 //Config::set('customCssEnable', false, 'guestbook');
 //Config::set('customCssName', 'test.css', 'guestbook');
-

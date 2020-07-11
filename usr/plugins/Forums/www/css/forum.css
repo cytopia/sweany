@@ -53,18 +53,18 @@ table.forum td{/*
 
 /******************************* Classes ********************/
 
-.forumPostTitle {	
+.forumPostTitle {
 
 }
 
 .forumThreadTitle {
-	
+
 	font-weight:bold;
 	color:black;
 	margin:1em 0.2em;
 	padding-bottom:0.3em;
 	border-bottom:1px dotted black
-	
+
 }
 
 .forumThreadTitleLink {

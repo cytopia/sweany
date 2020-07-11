@@ -82,7 +82,7 @@ class ValidateUser extends \Sweany\aBootTemplate
 			self::$error  = '<b>User Plugin:</b><br/>Noo! You are doing it even wronger!<br/><i>passwordMinLen</i> should be greater than 6 characters. PLEASE!';
 			return false;
 		}
-		
+
 		// Validate disabled Registration
 		if ( !Config::exists('disableRegistration', 'user') )
 		{

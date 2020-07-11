@@ -79,4 +79,3 @@ Config::set('userCssName', 'user.css', 'user');
 // This CSS File will be in www/css of sweany root, not the plugin folder
 Config::set('customCssEnable', false, 'user');
 Config::set('customCssName', 'test.css', 'user');
-

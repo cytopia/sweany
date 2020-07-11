@@ -1,4 +1,4 @@
-﻿<a href="#addEntry"><?php echo $language->add_entry; ?></a>
+<a href="#addEntry"><?php echo $language->add_entry; ?></a>
 <br/>
 <hr/>
 <br/>

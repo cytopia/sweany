@@ -93,7 +93,7 @@ class OnlineUsers extends aBootTemplate
 	 */
 	public static function countLoggedInUsers()
 	{
-		$query = 
+		$query =
 			'SELECT
 				COUNT(*) AS counter
 			FROM(
@@ -120,7 +120,7 @@ class OnlineUsers extends aBootTemplate
 	public static function countAnonymousUsers($include_faked_online_guests = true)
 	{
 		$fake	= ($include_faked_online_guests) ? self::$fakeOnlineGuests : 0;
-		$query	= 
+		$query	=
 			'SELECT
 				COUNT(DISTINCT session_id) AS counter
 			FROM

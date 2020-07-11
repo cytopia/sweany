@@ -1,4 +1,4 @@
-﻿<div class="plugin_user">
+<div class="plugin_user">
 	<?php if ($exists): ?>
 		<div class="plugin_user_details">
 			<div class="plugin_user_username"><?php echo $user_name; ?></div>

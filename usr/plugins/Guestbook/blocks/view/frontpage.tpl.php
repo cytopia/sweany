@@ -1,4 +1,4 @@
-﻿<table>
+<table>
 <?php foreach($entries as $entry): ?>
 	<?php $user = $entry->fk_user_id ? Html::l($entry->username, 'User', 'show', array($entry->fk_user_id)) : $entry->author; ?>
 	<tr>

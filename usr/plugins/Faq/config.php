@@ -9,4 +9,3 @@
  * array('LayoutControllerName', 'LayoutMethodName', [optional]paramsArray);
  */
 //Config::set('layout', array('Layouts', 'FrontPage'), 'faq');
-

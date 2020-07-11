@@ -63,10 +63,10 @@ class ForumPostsTable extends Table
 	{
 		$Thread = Loader::loadTable('ForumThreads', 'Forums');
 		$tid	= $Post->fk_forum_thread_id;
-		
+
 		$data['last_post_created']	= $Post->created;
 		$data['last_post_id']		= $Post->id;
-		
+
 		$Thread->update($tid, $data);
 	}
 }

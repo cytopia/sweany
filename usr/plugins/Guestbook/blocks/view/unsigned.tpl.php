@@ -1,10 +1,10 @@
-﻿<?php echo Form::start('guestbook_unsigned');?>
+<?php echo Form::start('guestbook_unsigned');?>
 	<?php echo Form::fieldsetStart($language->fieldset_name); ?>
 
 		<?php /* inputfield (hidden) for bot protection */ ?>
 		<?php echo Form::getError('username'); ?>
 		<?php echo Form::inputField('username', null, array('style' => 'display:none;')); ?>
-		
+
 		<?php echo Form::getError('author');?>
 		<?php echo Form::label('author', $language->author.' (*)')?>
 		<?php echo Form::inputField('author'); ?><br/><br/>

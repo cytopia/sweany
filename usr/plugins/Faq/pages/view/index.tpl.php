@@ -1,4 +1,4 @@
-﻿<div class="plugin_faq">
+<div class="plugin_faq">
 	<?php /*** Questions ***/ ?>
 	<div class="plugin_faq_questions">
 		<?php foreach ($entries as $entry): ?>

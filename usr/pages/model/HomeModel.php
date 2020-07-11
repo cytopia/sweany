@@ -1,1 +1,5 @@
-<?phpclass HomeModel extends PageModel{	protected $tables = array();}
+<?php
+class HomeModel extends PageModel
+{
+	protected $tables = array();
+}

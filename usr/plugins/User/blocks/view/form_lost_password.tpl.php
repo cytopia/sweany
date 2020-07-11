@@ -1,4 +1,4 @@
-﻿<?php echo Form::start('block_form_lost_password'); ?>
+<?php echo Form::start('block_form_lost_password'); ?>
 	<?php echo Form::fieldSetStart($language->resetPassword); ?>
 		<table style="border: 0px solid black; margin-left:10px; padding:10px;">
 			<tbody>

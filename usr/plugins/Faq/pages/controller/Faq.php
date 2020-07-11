@@ -23,7 +23,7 @@ class Faq extends PageController
 
 		// VIEW
 		$this->view('index');
-		
+
 		// LAYOUT OPTIONS
 		if  ( Config::exists('layout', 'faq') )
 		{

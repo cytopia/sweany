@@ -1,4 +1,4 @@
-﻿<h1 class="forum"><?php echo $headline; ?></h1>
+<h1 class="forum"><?php echo $headline; ?></h1>
 
 <?php if ( ($Forum->can_create || $isAdmin) ) : ?>
 	<?php echo Html::l($language->newThread, 'Forums', 'addThread', array($Forum->id)); ?><br/>

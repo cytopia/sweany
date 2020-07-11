@@ -1,4 +1,4 @@
-﻿<?php echo Form::start('form_add_contact'); ?>
+<?php echo Form::start('form_add_contact'); ?>
 
 	<?php echo Form::fieldSetStart($language->form_legend); ?>
 

@@ -82,7 +82,7 @@ function getColor(count)
 	/* reset to beginning if count exceeds size of color array */
 	count	 = (count >= size) ? count-size : count;
 	return colors[count];
-	
+
 //	return colors[rand(0,size-1)];
 }
 
@@ -98,4 +98,3 @@ function debugDiv()
 		divs[i].style.backgroundColor = getColor(i); /*"#" + d2h(rand(0,16))+d2h(rand(0,16))+d2h(rand(0,16));*/
 	}
 }
-

@@ -213,11 +213,11 @@ for($day=1; $day<=$total_thismonth; $day++){
 	$is_selected = strtotime($y."-".$m."-".$day) - strtotime($sly."-".$slm."-".$sld);
 	if($is_selected == 0) $htmlClass[] = "select";
 	*/
-	
+
 	if(in_array($currentTime, $select_days)){
-		$htmlClass[] = "select";	
+		$htmlClass[] = "select";
 	}
-	
+
 
 	//check date allowed
 	if($ta1_set && $ta2_set){
@@ -263,7 +263,7 @@ for($day=1; $day<=$total_thismonth; $day++){
 			//check on monthly recursive
 			if(isset($sp_dates[1]) && is_array($sp_dates[1]) && !$sp_found){
 				foreach($sp_dates[1] as $sp_time){
-					if($sp_time != "" && $sp_time > 0){ 
+					if($sp_time != "" && $sp_time > 0){
 						$sp_time_d = date('d', $sp_time);
 						if($sp_time_d == $day){
 							$sp_found = true;
@@ -502,11 +502,11 @@ function padString(stringToPad, padLength, padString) {
 function loading(){
 	if(this.ccWidth > 0 && this.ccHeight > 0){
 		var ccobj = getObject('calendar-container');
-		
+
 		ccobj.style.width = this.ccWidth+'px';
 		ccobj.style.height = this.ccHeight+'px';
 	}
-	
+
 	document.getElementById('calendar-container').innerHTML = "<div id=\"calendar-body\"><div class=\"refresh\"><div align=\"center\" class=\"txt-container\">Refreshing Calendar...</div></div></div>";
 	adjustContainer();
 }
@@ -534,8 +534,8 @@ function adjustContainer(){
 			div_obj.style.width = tc_obj.offsetWidth+'px';
 			div_obj.style.height = tc_obj.offsetHeight+'px';
 			//alert(div_obj.style.width+','+div_obj.style.height);
-			
-			
+
+
 			var ccsize = getObject('calendar-container');
 			this.ccWidth = ccsize.offsetWidth;
 			this.ccHeight = ccsize.offsetHeight;
@@ -613,9 +613,9 @@ window.onload = function(){
 
             <input name="str" type="hidden" id="str" value="<?php echo($startDate);?>" />
             <input name="rtl" type="hidden" id="rtl" value="<?php echo($rtl);?>" />
-            <input name="wks" type="hidden" id="wks" value="<?php echo($show_weeks);?>" />            
+            <input name="wks" type="hidden" id="wks" value="<?php echo($show_weeks);?>" />
             <input name="int" type="hidden" id="int" value="<?php echo($interval);?>" />
-            
+
             <input name="hid" type="hidden" id="hid" value="<?php echo($auto_hide);?>" />
             <input name="hdt" type="hidden" id="hdt" value="<?php echo($auto_hide_time);?>" />
       </form>
@@ -653,7 +653,7 @@ window.onload = function(){
 					$this_link = isset($column[1]) ? $column[1] : "";
 					$this_class = isset($column[2]) ? $column[2] : "";
 					$this_id = isset($column[3]) ? $column[3] : "";
-					
+
 					$id_str = ($this_id) ? " id=\"$this_id\"" : "";
 
 					if($this_link){

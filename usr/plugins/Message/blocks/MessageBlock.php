@@ -40,4 +40,3 @@ class MessageBlock extends BlockController
 		}
 	}
 }
-

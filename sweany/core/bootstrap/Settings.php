@@ -49,9 +49,9 @@ class Settings extends aBootTemplate
 	const sessUser				= 'user';
 	const sessInfo				= 'info';
 	const sessAdmin				= 'admin';	// Admin settings store (e.g., show blocks highlighted)
-	
+
 	/* ******************************************** OTHER CONSTANTS ********************************************/
-	
+
 	/*
 	 * How many rounds to loop through the password generation hashing.
 	 * The higher the number, the longer the key stretching-time which
@@ -59,13 +59,13 @@ class Settings extends aBootTemplate
 	 * as the password generation will take some time.
 	 */
 	 const hashRounds			= 20;
-	
-	
+
+
 	public static $defaultTimezone;
 	public static $defaultLanguage;
-	
-	
-	
+
+
+
 	/* ******************************************** VARIABLES ********************************************/
 	public static $showPhpErrors	= false;
 	public static $showSqlErrors	= false;
@@ -74,11 +74,11 @@ class Settings extends aBootTemplate
 	public static $logPhpErrors		= false;
 	public static $logSqlErrors		= false;
 	public static $logFwErrors		= false;
-	
+
 	public static $breakOnError		= false;
-	
-	
-	
+
+
+
 	private static $coreLogFile		= null;
 	private static $userLogFile		= null;
 
@@ -107,13 +107,13 @@ class Settings extends aBootTemplate
 
 		self::$defaultTimezone	= $GLOBALS['DEFAULT_TIME_ZONE'];
 		self::$defaultLanguage	= $GLOBALS['LANGUAGE_ENABLE'] ? $GLOBALS['LANGUAGE_DEFAULT_SHORT'] : $GLOBALS['HTML_DEFAULT_LANG_SHORT'];
-		
+
 
 		// INITIALIZE VALUES
 		self::$showPhpErrors	= $GLOBALS['SHOW_PHP_ERRORS'];
 		self::$showSqlErrors	= $GLOBALS['SHOW_SQL_ERRORS'];
 		self::$showFwErrors		= $GLOBALS['SHOW_FRAMEWORK_ERRORS'];
-		
+
 		self::$breakOnError		= $GLOBALS['BREAK_ON_ERROR'];
 
 		self::$logPhpErrors		= $GLOBALS['LOG_PHP_ERRORS'];
