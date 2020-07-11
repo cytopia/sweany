@@ -366,7 +366,7 @@ Class Form
 	 * @param	mixed[]	$options		Options for the inputField
 	 * @return	string
 	 */
-	public static function liveSearch($name, $default_value = null, $query_url, $post_var_name, $options = array())
+	public static function liveSearch($name, $default_value, $query_url, $post_var_name, $options = array())
 	{
 		// Include Ajax functionality
 		Javascript::addFile('/sweany/ajax.js');
@@ -498,7 +498,7 @@ Class Form
 		return $cal1.$cal2;
 	}
 
-	public static function datePicker($name, $default_date = null, $min_shown_year = 1970 , $max_shown_year = 2050 , $min_allowed_date = '2008-01-01', $max_allowed_date)
+	public static function datePicker($name, $default_date, $min_shown_year, $max_shown_year, $min_allowed_date, $max_allowed_date)
 	{
 		require_once(ROOT.DS.'www'.DS.'sweany'.DS.'calendar'.DS.'classes'.DS.'tc_calendar.php');
 

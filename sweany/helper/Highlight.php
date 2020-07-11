@@ -63,7 +63,7 @@ class Highlight
 
 
 	/******************************************** PRIVATE FUNCTIONS ********************************************/
-	private static function _colorize($string, $keys = array(), $color)
+	private static function _colorize($string, $keys, $color)
 	{
 		foreach ($keys as $key) {
 			$string = preg_replace('/'.$key.'\b/', '<span style="color :'.$color.'">'.$key.'</span>', $string);
@@ -83,14 +83,14 @@ class Highlight
 		return preg_replace($find, $replace, $string);
 	}
 
-	protected static function _keysBold($string, $keys = array(), $color)
+	protected static function _keysBold($string, $keys, $color)
 	{
 		foreach ($keys as $key)
 			$string = str_replace($key, "<font color=$color><strong>$key</strong></font>", $string);
 
 		return $string;
 	}
-	protected static function _keysNormal($string, $keys = array(), $color)
+	protected static function _keysNormal($string, $keys, $color)
 	{
 		foreach ($keys as $key)
 			$string = preg_replace("/(\W)($key)(\W)/", "\\1<font color=$color>\\2</font>\\3", $string);

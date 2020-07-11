@@ -1401,7 +1401,7 @@ class Table
 	 * ************************************************************************************************************************** */
 
 
-	private function _buildHasOneQuery($limitAliase = false, &$allFields, &$joins, $recursive, $prefix)
+	private function _buildHasOneQuery($limitAliase, &$allFields, &$joins, $recursive, $prefix)
 	{
 		$joinType	= 'LEFT JOIN';
 
@@ -1488,7 +1488,7 @@ class Table
 
 
 	// prefix is used for inner calls to append prefix to alias: Users.Thread.id
-	private function _buildBelongsToQuery($limitAliase = false, &$allFields, &$joins, $recursive, $prefix)
+	private function _buildBelongsToQuery($limitAliase, &$allFields, &$joins, $recursive, $prefix)
 	{
 		$joinType	= 'JOIN';	// maybe LEFT JOIN if the belongint entity does not exist...
 
@@ -1572,7 +1572,7 @@ class Table
 			}
 		}
 	}
-	private function _retrieveHasMany($limitAliase = false, $mainPKValue, $recursive, $return = 'object')
+	private function _retrieveHasMany($limitAliase, $mainPKValue, $recursive, $return = 'object')
 	{
 		$data = array();
 
@@ -1670,7 +1670,7 @@ class Table
 		return $data;
 	}
 
-	private function _retrieveHasAndBelongsToMany($limitAliase = false, $mainPKValue, $recursive, $return = 'object')
+	private function _retrieveHasAndBelongsToMany($limitAliase, $mainPKValue, $recursive, $return = 'object')
 	{
 		$data = array();
 

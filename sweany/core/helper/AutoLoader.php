@@ -288,7 +288,7 @@ Class AutoLoader
 
 
 
-	private static function __loadSlow($class, $paths = array(), $type, $log_section = 'internal')
+	private static function __loadSlow($class, $paths, $type, $log_section = 'internal')
 	{
 		$start	= microtime(true);
 		$size	= sizeof($paths);
